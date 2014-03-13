@@ -3,7 +3,7 @@ Markdown是一种网络书写语言，其目标是实现易读易写，且兼容
 Markdown的流行得益于[Github](www.github.com)和[Stackoverflow](www.stackoverflow.com)，Stackoverflow的代码块以及Github上的README.md文件格式都是通过Markdown表现的。
 从这里您可以很直观的看到Markdown的效果:[https://github.com/adam-p/markdown-here](https://github.com/adam-p/markdown-here)。
 
-# Markdown与自由书籍
+## Markdown与自由书籍
 使用Markdown可以书写自由书籍，关于此，您可以参看文章用Markdown来写自由书籍-开源技术的方案，开源书和开源技术-Markdown篇一文也介绍了一些Markdown与开源书和开源技术之间的渊源。
 
 已经有一些开源书籍使用Markdown书写了，亚嵌教育的开源书籍源码开放学ARM、蒋鑫老师的GotGithub一书，这些开源书籍都给学习者提供很大帮助。Markdown书写已经是一种开源精神体现。好了，既然Markdown与自由书写这么默契，我们怎么用Markdown来写自己的README.md，自己的博客甚至自己的开源书籍呢？
