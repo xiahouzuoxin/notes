@@ -1,3 +1,6 @@
+[<font size=4>←返回主目录<font>](./README.md)
+</br></br></br>
+
 # 1 小侃GCC
 
 在正式使用gcc之前，我们先来侃侃gcc是啥玩意儿？
@@ -472,7 +475,7 @@ gcc提供几个默认的环境变量：
 
 
 
-# 参考资源
+# 5 参考资源
 1. GCC Manual "Using the GNU Compiler Collection (GCC)" @ http://gcc.gnu.org/onlinedocs.
 2. GNU 'make' manual @ http://www.gnu.org/software/make/manual/make.html.
 3. GCC and Make http://www3.ntu.edu.sg/home/ehchua/programming/cpp/gcc_make.html
