@@ -467,6 +467,11 @@ gcc提供几个默认的环境变量：
 
 
 # 3 GDB的使用
+gdb是一个调试工具，与gcc一样，gdb可调试包括C、C++、Java、Fortran、汇编等多种语言。gdb的原始开发者是Richard M.Stallman也是开源运动中的一位领袖级级人物。
+
+### 内存布局及栈结构
+如果你还在用Visual C++
+
 
 
 
@@ -495,6 +500,9 @@ gcc提供几个默认的环境变量：
 [Cygwin]:http://www.mingw.org/
 [gcc-man]:http://linux.die.net/man/1/gcc
 
+
+[gdb]:http://www.gnu.org/software/gdb/gdb.html
+[Peter's gdb]:http://www.dirac.org/linux/gdb/
 
 [gcc-v]:../images/实例学习gcc+gdb+make/gcc-v.png
 [gcc-process]:../images/实例学习gcc+gdb+make/GCC_CompilationProcess.png
