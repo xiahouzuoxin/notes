@@ -8,8 +8,10 @@
 
 > Let x(t) be a band-limited signal with X(jw) = 0 for |w|> w<SUB>M</SUB>. 
 > Then x(t) is uniquely determined by its samples x(nT),n=1,±1,±2,...,if
+
 > <center>w<SUB>s</SUB> > 2w<SUB>M</SUB> </center>
 > where w<SUB>s</SUB> = 2 pi/T.
+
 > Given these samples, we can reconstruct x(t) by generating a periodic impluse train in which successive impluse have amplitudes that are successive sample values. This impluse train is then processed through an ideal lowpass filter with gain T and cutoff frequency greater than w<SUB>M</SUB> and less than w<SUB>s</SUB>-w<SUB>M</SUB>. The resulting output signal will exactly equal x(t).
 
 来捋一捋，几个点：
@@ -115,7 +117,7 @@ SNR<SUB>q</SUB> = (6.02N + 4.77) dB
 N=12, SNR<SUB>q</SUB> ≈ 70dB
 N=16, SNR<SUB>q</SUB> ≈ 94dB
 
-从中可以看出：__每增加1bit量化位数，SNR<SUB>q</SUB>将提高6.02dB，在设计过程中，如果对方有信噪比的要求，则在ADC选型时就要选择合适位数的ADC芯片。
+从中可以看出：每增加1bit量化位数，SNR<SUB>q</SUB>将提高6.02dB，在设计过程中，如果对方有信噪比的要求，则在ADC选型时就要选择合适位数的ADC芯片。
 
 明显的，并不是量化位数越高越好，量化位数的提高将对成本、转换速度、存储空间与数据吞吐量等众多方面提出更高的要求。同时，我们尽量提高量化噪声的前提是信号的SNR已经比较低了，如果信号的SNR比量化噪声还高，努力提高量化噪声将是舍本求末的做法。
 
