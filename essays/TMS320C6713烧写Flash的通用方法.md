@@ -610,6 +610,9 @@ main()
 更多烧写内容请参考[2]，里面是我烧写程序用的CCS工程，烧写不同的应用程序只需要替换里面的text.h和boot.h即可。
 
 
+后注：烧写Flash要注意以上的任何一个细节，某个细节出错都可能造成烧写不成功！
+
+
 ## 5 参考
 
 [1] Creating a Second-Level Bootloader for FLASH Bootloading on TMS320C6000 Platform With Code Composer Studio
