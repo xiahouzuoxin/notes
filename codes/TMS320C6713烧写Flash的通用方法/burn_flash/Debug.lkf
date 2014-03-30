@@ -1,0 +1,7 @@
+-z -c -m"./Debug/burn_flash.map" -o"./Debug/burn_flash.out" -w -x -i"C:/CCStudio_v3.3/C6000/csl/lib" -i"C:/CCStudio_v3.3/C6000/xdais/lib" -i"C:/CCStudio_v3.3/bios_5_31_02/packages/ti/bios/lib" -i"C:/CCStudio_v3.3/bios_5_31_02/packages/ti/rtdx/lib/c6000" -i"C:/CCStudio_v3.3/C6000/cgtools/lib"
+"E:\DSP\FD6713\burn_flash\DSP6713.cmd"
+"E:\DSP\FD6713\burn_flash\Debug\BSP.obj"
+"E:\DSP\FD6713\burn_flash\Debug\FLASH.obj"
+"E:\DSP\FD6713\burn_flash\Debug\main.obj"
+"E:\DSP\FD6713\burn_flash\Debug\vecs.obj"
+"E:\DSP\FD6713\burn_flash\csl6713.lib"
