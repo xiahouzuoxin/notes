@@ -306,7 +306,7 @@ user_size      .equ  0x00001798
 user_ld_start  .equ  0x90000400
 user_rn_start  .equ  0x00000400
 ```
-进行修改，user_size表示用户程序段的字节大小，user_ld_start表示用户代码的Flash起始地址（我默认使用0x90000400，一般不改），user_rn_start表示用户代码要存放到RAM的起始地址（从之前的图看，这个我也一般不改）。小程序我一般只修改用户程序段的字节大小。大程序可能要对copyTable（复制表）进行调整。
+进行修改，user_size表示用户程序段的字节大小，我们将在下一节看到可以通过查看*.map文件进行修改；user_ld_start表示用户代码的Flash起始地址（我默认使用0x90000400，一般不改），user_rn_start表示用户代码要存放到RAM的起始地址（从之前的图看，这个我也一般不改）。小程序我一般只修改用户程序段的字节大小。大程序可能要对copyTable（复制表）进行调整。
 
 要满足上面的地址的分布，修改用户应用程序的cmd文件如下：
 
@@ -362,13 +362,21 @@ Address都是上面的cmd文件设定好的。
 - boot.dat: Address=0x00000000, Length=0x00000100
 - text.dat: Address=0x00000400, Length=?
 
-喔？用户代码的长度怎么知道？还有，不是说一级Bootloader会拷贝1KB长度吗，上面怎么是Length=0x00000100?
+喔？用户代码的长度怎么知道？还有，不是说一级Bootloader会拷贝1KB长度吗，上面怎么是Length=0x000001000
 
 请到CCS工程的Debug目录下打开.map文件（如下图），详细的解答在下图的注释中。
 
 ![][map]
 
-好了，给大家看看保存后的boot.dat文件，
+好了，No，别忘了，前一节中我们没办法设定User Code的长度，回头去改，
+
+```asm
+user_size      .equ  0x00001798 (这里改为上图中的0x00001798)
+user_ld_start  .equ  0x90000400
+user_rn_start  .equ  0x00000400
+```
+
+改完后重新编译应用程序的工程，这就好了。给大家看看保存后的boot.dat文件，
 
 ![][bootdat]
 
