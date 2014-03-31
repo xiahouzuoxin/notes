@@ -368,7 +368,11 @@ Address都是上面的cmd文件设定好的。
 
 ![][map]
 
-好了，No，别忘了，前一节中我们没办法设定User Code的长度，回头去改，
+上面图中计算烧写长度时/4就是因为CCS中保存*.dat长度的单位为4字节，但要注意，程序的大小可能并不一定是4字节的整数倍，因此在除以4时，“宁可多烧，也不少一个字节”，使用向上取整的运算。
+
+	Length = ceil( Length(Used in *.map) / 4) );
+
+好了？No，别忘了，前一节中我们没办法设定User Code的长度，回头去改，
 
 ```asm
 user_size      .equ  0x00001798 (这里改为上图中的0x00001798)
@@ -618,7 +622,13 @@ main()
 更多烧写内容请参考[2]，里面是我烧写程序用的CCS工程，烧写不同的应用程序只需要替换里面的text.h和boot.h即可。
 
 
-后注：烧写Flash要注意以上的任何一个细节，某个细节出错都可能造成烧写不成功！
+昨天烧写小段代码测试成功，今天尝试用该方法烧写大段代码，除了改变在2 Level Bootloader的程序中改变use_code_Size外，无任何其它改变，成功烧写300KB以上的代码，如下：
+
+
+![][test2]
+
+- 后注：烧写Flash要注意以上的任何一个细节，某个细节出错都可能造成烧写不成功！
+
 
 
 ## 5 参考
@@ -642,3 +652,4 @@ main()
 [texth]:../images/TMS320C6713烧写Flash的通用方法/texth.png
 [Burn]:../images/TMS320C6713烧写Flash的通用方法/Burn.png
 [burnflash]:../codes/TMS320C6713烧写Flash的通用方法/burn_flash
+[test2]:../images/TMS320C6713烧写Flash的通用方法/test2.png
