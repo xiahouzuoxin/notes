@@ -264,6 +264,8 @@ gdb main
 
 ### 多文件编译
 
+好吧，我们写个多文件小程序：Example2。
+
 _main.c_
 ```C
 #include <stdio.h>
@@ -477,7 +479,581 @@ gdb是一个调试工具，与gcc一样，gdb可调试包括C、C++、Java、Fortran、汇编等多种语言
 
 # 4 使用Makefile构建工程
 
+Make是构建工程的工具，Make工具对用户编写的Makefile进行解析，实现只需要一个命令就可以编译、链接整个工程。大部分熟悉VC++的人都漠视了Make工具的存在（VC++的Make工具叫nmake），这就是为什么使用VC++多文件编译链接能一步搞定的原因所在。
 
+我们这里当然不是去讨论VC++的nmake，而要讨论的是GNU Make的Makefile。Makefile文件用于描述整个工程的编译、链接的规则。
+
+### 编写Makefile
+
+仍以Example2为例，源代码目录下新建Makefile文件（对了，文件名就是“Makefile”，没.txt等任何后缀），
+
+```shell
+vim Makefile
+```
+
+Makefile文件内容为
+
+```
+main:main.o add.o sub.o                 # 目标:依赖
+	gcc main.o add.o sub.o -o main      # 命令（必需以TAB开头）
+
+main.o:main.c
+	gcc -c -D_DEBUG main.c -o main.o
+add.o:add.c
+	gcc -c -D_DEBUG add.c -o add.o
+sub.o:sub.c
+	gcc -c -D_DEBUG sub.c -o sub.o
+
+
+.PHONY:clean
+clean:
+	-rm main *.o
+```
+
+好了，回到命令行，使用make命令看看Makefile的效果：
+
+```shell
+make 
+./main 
+```
+
+什么，输出了正确的结果，那就对了。下面我们来分析下上面的Makefile。
+
+- Makefile的格式
+
+```
+目标：依赖
+	命令（以TAB开头）
+```
+目标是链接后的可执行文件名；依赖是工程中的用于编译的c文件和用于连接的*.o文件的集合；就用gcc编译的工程而言，命令就是gcc命令，可以使用任意的gcc参数。
+
+- 使用make命令解析Makefile文件，解析的文件名可以是Makefile或makefile，如果是其它名称，则需要使用make -f [filename]指定文件名。强烈建议使用Makefile作为文件名（符合Linux的哲学——简洁、首字母大写容易突出文件位置）。
+
+- Makefile可以有多个目标（main.o add.o sub.o），但只能有一个最终目标（main）。Makefile文件中第一条规则中的目标将确定为最终目标。make命令默认执行最终目标，若只执行Makefile中其它目标，使用make [Target]，如要清除工程下的目标文件，使用
+
+```
+make clean
+```
+
+- Makefile中将那些没有任何依赖只有执行动作的目标称伪目标（clean），使用.PHONY声明。伪目标不能作为最终目标。
+
+- Makefile中使用变量：Makefile中的变量将是按字符串的方式进行替换，下面是一些系统特殊的变量。
+
+```
+$^: 代表所有依赖文件
+$@：代表目标
+$<：代表依赖文件中的第一个依赖文件
+```
+
+变量可以大大简化Makefile的编写复杂度，使用变量后的Makefile如下：
+
+```
+CC=gcc
+OBJS=main.o add.o sub.o
+CFLAGS=-D_DEBUG
+
+main:$(OBJS)
+	$(CC) $(CFLAGS) $^ -o $@
+
+main.o:main.c
+	$(CC) $(CFLAGS) -c $^ -o $@
+add.o:add.c
+	$(CC) $(CFLAGS) -c $^ -o $@
+sub.o:sub.c
+	$(CC) $(CFLAGS) -c $^ -o $@
+
+.PHONY:clean
+clean:
+	-rm main *.o
+```	
+
+其中CC、OBJS、CFLAGS都是自定义的Makefile变量，$^和$@是系统特殊的变量。
+
+- 上面的Makefile还是太复杂，可不可以再简单点，没问题：使用模式匹配。
+
+```
+CC=gcc
+OBJS=main.o add.o sub.o
+CFLAGS=-D_DEBUG
+
+main:$(OBJS)
+	$(CC) $(CFLAGS) $^ -o $@
+
+%.o:%.c
+	$(CC) $(CFLAGS) -c $^ -o $@
+
+.PHONY:clean
+clean:
+	-rm main *.o
+```
+
+上面的Makefile使用%用来匹配任何非空字符串。
+
+1. 模式规则“%.o:%.c”，它表示的含义是：所有的.o文件依赖于对应的.c文件。
+2. 	模式规则%.o:debug.h，表示所有的.o文件都依赖于头文件“debug.h”
+
+在编写大型程序时，常常工程中的.c都有与之对应的.h文件，以上两种用法在Makfile很常用。
+
+除了模式匹配，Makefile中还可以使用通配符：*。
+如上面的伪目标中就使用*.o就代表所有后缀为.o的文件。
+
+- 好吧，加足马力，再简单点：使用Makefile的自动推导规则。请注意，这可以简化一些Makefile，但如果你不注意，就可能出错，因此不推荐使用。
+
+```
+CC=gcc
+OBJS=main.o add.o sub.o
+CFLAGS=-D_DEBUG
+
+main:$(OBJS)
+	$(CC) $^ -o $@
+
+main.o:
+add.o:add.h
+sub.o:sub.h
+
+.PHONY:clean
+clean:
+	-rm main *.o
+```
+
+有木有，在生成main.o add.o sub.o目标时连命令都省去了，Makefile能自动推导使用gcc命令编译，还知道要加-D_DEBUG选项，这么神奇？这都要归功于CC和CFLAGS变量，你换成别的变量名试试，看看还行不。所以说：Makefile的自动推导规则最好慎用，除非你能确保正确。
+
+下面是将模式匹配和自动推导规则结合到一起的Makefile文件。
+
+```
+CC=gcc
+OBJS=main.o add.o sub.o
+CFLAGS=-D_DEBUG
+
+main:$(OBJS)
+	$(CC) $^ -o $@
+
+%.o:add.h sub.h
+
+.PHONY:clean
+clean:
+	-rm main *.o
+```
+
+知足常乐，不雅太贪了，能简化到这样就OK了。
+
+- Makefile中注释使用#，在命令前加上@能取消回显
+
+- 多目录的Makefile
+
+1. include可包含其它目录的Makefile文件
+2. export可导出当前Makefile中的变量共其它Makefile使用
+3. VPATH变量可以指定依赖文件的搜索目录，多个目录间使用:隔开，如
+
+```
+VPATH = src:../headers   # 搜索路径默认包括当前路径
+```
+	
+4. 关键字vpath可以指定在某目录下选择性搜索某模式匹配的依赖文件，如
+
+```
+vpath %.h ../headers     # 搜索路径默认包括当前路径
+```
+
+上面提到的4点内容将在之后的Makefile实例中看到。
+
+- 知道一些简单的Makefile内嵌函数
+
+关于Makefile内嵌函数及更多内容请参考文献[5].
+
+### Makefile工程模板实例
+
+本小节将给出两个通用的工程Makefile实例，可作为模板直接应用到自己的工程中，这些实例都来源于网络，原作者保留版权。
+
+阅读Makefile也是一种享受，就像喝着牛奶读着小说，热情洋溢的Hacker们，研究去吧！
+
+- 第一个模板：将该模板添加到工程所在目录，指定相关的变量即可使用（作者还附有参考哈）
+
+```
+#############################################################
+# Generic Makefile for C/C++ Program
+#
+# License: GPL (General Public License)
+# Author:  whyglinux <whyglinux AT gmail DOT com>
+# Date:    2006/03/04 (version 0.1)
+#          2007/03/24 (version 0.2)
+#          2007/04/09 (version 0.3)
+#          2007/06/26 (version 0.4)
+#          2008/04/05 (version 0.5)
+#
+# Description:
+# ------------
+# This is an easily customizable makefile template. The purpose is to
+# provide an instant building environment for C/C++ programs.
+#
+# It searches all the C/C++ source files in the specified directories,
+# makes dependencies, compiles and links to form an executable.
+#
+# Besides its default ability to build C/C++ programs which use only
+# standard C/C++ libraries, you can customize the Makefile to build
+# those using other libraries. Once done, without any changes you can
+# then build programs using the same or less libraries, even if source
+# files are renamed, added or removed. Therefore, it is particularly
+# convenient to use it to build codes for experimental or study use.
+#
+# GNU make is expected to use the Makefile. Other versions of makes
+# may or may not work.
+#
+# Usage:
+# ------
+# 1. Copy the Makefile to your program directory.
+# 2. Customize in the "Customizable Section" only if necessary:
+#    * to use non-standard C/C++ libraries, set pre-processor or compiler
+#      options to <MY_CFLAGS> and linker ones to <MY_LIBS>
+#      (See Makefile.gtk+-2.0 for an example)
+#    * to search sources in more directories, set to <SRCDIRS>
+#    * to specify your favorite program name, set to <PROGRAM>
+# 3. Type make to start building your program.
+#
+# Make Target:
+# ------------
+# The Makefile provides the following targets to make:
+#   $ make           compile and link
+#   $ make NODEP=yes compile and link without generating dependencies
+#   $ make objs      compile only (no linking)
+#   $ make tags      create tags for Emacs editor
+#   $ make ctags     create ctags for VI editor
+#   $ make clean     clean objects and the executable file
+#   $ make distclean clean objects, the executable and dependencies
+#   $ make help      get the usage of the makefile
+#
+#===========================================================================
+
+## Customizable Section: adapt those variables to suit your program.
+##==========================================================================
+
+# The pre-processor and compiler options.
+MY_CFLAGS =
+
+# The linker options.
+MY_LIBS   =
+
+# The pre-processor options used by the cpp (man cpp for more).
+CPPFLAGS  = -Wall
+
+# The options used in linking as well as in any direct use of ld.
+LDFLAGS   =
+
+# The directories in which source files reside.
+# If not specified, only the current directory will be serached.
+SRCDIRS   =
+
+# The executable file name.
+# If not specified, current directory name or `a.out' will be used.
+PROGRAM   =
+
+## Implicit Section: change the following only when necessary.
+##==========================================================================
+
+# The source file types (headers excluded).
+# .c indicates C source files, and others C++ ones.
+SRCEXTS = .c .C .cc .cpp .CPP .c++ .cxx .cp
+
+# The header file types.
+HDREXTS = .h .H .hh .hpp .HPP .h++ .hxx .hp
+
+# The pre-processor and compiler options.
+# Users can override those variables from the command line.
+CFLAGS  = -g -D_DEBUG -O2
+CXXFLAGS= -g -O2
+
+# The C program compiler.
+CC     = gcc
+
+# The C++ program compiler.
+CXX    = g++
+
+# Un-comment the following line to compile C programs as C++ ones.
+#CC     = $(CXX)
+
+# The command used to delete file.
+RM     = rm -f
+
+CTAGS  = ctags
+CTAGSFLAGS = --c++-kinds=+p --fields=+iaS --extra=+q -R
+
+## Stable Section: usually no need to be changed. But you can add more.
+##==========================================================================
+SHELL   = /bin/sh
+EMPTY   =
+SPACE   = $(EMPTY) $(EMPTY)
+ifeq ($(PROGRAM),)
+  CUR_PATH_NAMES = $(subst /,$(SPACE),$(subst $(SPACE),_,$(CURDIR)))
+  PROGRAM = $(word $(words $(CUR_PATH_NAMES)),$(CUR_PATH_NAMES))
+  ifeq ($(PROGRAM),)
+    PROGRAM = a.out
+  endif
+endif
+ifeq ($(SRCDIRS),)
+  SRCDIRS = .
+endif
+SOURCES = $(foreach d,$(SRCDIRS),$(wildcard $(addprefix $(d)/*,$(SRCEXTS))))
+HEADERS = $(foreach d,$(SRCDIRS),$(wildcard $(addprefix $(d)/*,$(HDREXTS))))
+SRC_CXX = $(filter-out %.c,$(SOURCES))
+OBJS    = $(addsuffix .o, $(basename $(SOURCES)))
+DEPS    = $(OBJS:.o=.d)
+
+## Define some useful variables.
+DEP_OPT = $(shell if `$(CC) --version | grep "GCC" >/dev/null`; then \
+                  echo "-MM -MP"; else echo "-M"; fi )
+DEPEND      = $(CC)  $(DEP_OPT)  $(MY_CFLAGS) $(CFLAGS) $(CPPFLAGS)
+DEPEND.d    = $(subst -g ,,$(DEPEND))
+COMPILE.c   = $(CC)  $(MY_CFLAGS) $(CFLAGS)   $(CPPFLAGS) -c
+COMPILE.cxx = $(CXX) $(MY_CFLAGS) $(CXXFLAGS) $(CPPFLAGS) -c
+LINK.c      = $(CC)  $(MY_CFLAGS) $(CFLAGS)   $(CPPFLAGS) $(LDFLAGS)
+LINK.cxx    = $(CXX) $(MY_CFLAGS) $(CXXFLAGS) $(CPPFLAGS) $(LDFLAGS)
+
+.PHONY: all objs tags ctags clean distclean help show
+
+# Delete the default suffixes
+.SUFFIXES:
+
+all: $(PROGRAM)
+
+# Rules for creating dependency files (.d).
+#------------------------------------------
+
+%.d:%.c
+	@echo -n $(dir $<) > $@
+	@$(DEPEND.d) $< >> $@
+
+%.d:%.C
+	@echo -n $(dir $<) > $@
+	@$(DEPEND.d) $< >> $@
+
+%.d:%.cc
+	@echo -n $(dir $<) > $@
+	@$(DEPEND.d) $< >> $@
+
+%.d:%.cpp
+	@echo -n $(dir $<) > $@
+	@$(DEPEND.d) $< >> $@
+
+%.d:%.CPP
+	@echo -n $(dir $<) > $@
+	@$(DEPEND.d) $< >> $@
+
+%.d:%.c++
+	@echo -n $(dir $<) > $@
+	@$(DEPEND.d) $< >> $@
+
+%.d:%.cp
+	@echo -n $(dir $<) > $@
+	@$(DEPEND.d) $< >> $@
+
+%.d:%.cxx
+	@echo -n $(dir $<) > $@
+	@$(DEPEND.d) $< >> $@
+
+# Rules for generating object files (.o).
+#----------------------------------------
+objs:$(OBJS)
+
+%.o:%.c
+	$(COMPILE.c) $< -o $@
+
+%.o:%.C
+	$(COMPILE.cxx) $< -o $@
+
+%.o:%.cc
+	$(COMPILE.cxx) $< -o $@
+
+%.o:%.cpp
+	$(COMPILE.cxx) $< -o $@
+
+%.o:%.CPP
+	$(COMPILE.cxx) $< -o $@
+
+%.o:%.c++
+	$(COMPILE.cxx) $< -o $@
+
+%.o:%.cp
+	$(COMPILE.cxx) $< -o $@
+
+%.o:%.cxx
+	$(COMPILE.cxx) $< -o $@
+
+# Rules for generating the tags.
+#-------------------------------------
+ctags: $(HEADERS) $(SOURCES)
+	$(CTAGS) $(CTAGSFLAGS) $(HEADERS) $(SOURCES)
+
+# Rules for generating the executable.
+#-------------------------------------
+$(PROGRAM):$(OBJS)
+ifeq ($(SRC_CXX),)              # C program
+	$(LINK.c)   $(OBJS) $(MY_LIBS) -o $@
+	@echo Type ./$@ to execute the program.
+else                            # C++ program
+	$(LINK.cxx) $(OBJS) $(MY_LIBS) -o $@
+	@echo Type ./$@ to execute the program.
+endif
+
+ifndef NODEP
+ifneq ($(DEPS),)
+  sinclude $(DEPS)
+endif
+endif
+
+clean:
+	$(RM) $(OBJS) $(PROGRAM) $(PROGRAM).exe
+
+distclean: clean
+	$(RM) $(DEPS) TAGS
+
+# Show help.
+help:
+	@echo 'Generic Makefile for C/C++ Programs (gcmakefile) version 0.5'
+	@echo 'Copyright (C) 2007, 2008 whyglinux <whyglinux@hotmail.com>'
+	@echo
+	@echo 'Usage: make [TARGET]'
+	@echo 'TARGETS:'
+	@echo '  all       (=make) compile and link.'
+	@echo '  NODEP=yes make without generating dependencies.'
+	@echo '  objs      compile only (no linking).'
+	@echo '  tags      create tags for Emacs editor.'
+	@echo '  ctags     create ctags for VI editor.'
+	@echo '  clean     clean objects and the executable file.'
+	@echo '  distclean clean objects, the executable and dependencies.'
+	@echo '  show      show variables (for debug use only).'
+	@echo '  help      print this message.'
+	@echo
+	@echo 'Report bugs to <whyglinux AT gmail DOT com>.'
+
+# Show variables (for debug use only.)
+show:
+	@echo 'PROGRAM     :' $(PROGRAM)
+	@echo 'SRCDIRS     :' $(SRCDIRS)
+	@echo 'HEADERS     :' $(HEADERS)
+	@echo 'SOURCES     :' $(SOURCES)
+	@echo 'SRC_CXX     :' $(SRC_CXX)
+	@echo 'OBJS        :' $(OBJS)
+	@echo 'DEPS        :' $(DEPS)
+	@echo 'DEPEND      :' $(DEPEND)
+	@echo 'COMPILE.c   :' $(COMPILE.c)
+	@echo 'COMPILE.cxx :' $(COMPILE.cxx)
+	@echo 'link.c      :' $(LINK.c)
+	@echo 'link.cxx    :' $(LINK.cxx)
+
+## End of the Makefile ##  Suggestions are welcome  ## All rights reserved ##
+##############################################################
+```
+
+我是从这里找到第一个模板的：[http://www.iteye.com/topic/774919]。使用本文的的Example2测试。
+
+- 第二个模板：适用于中大型工程，使用多个Makefile，通过include方式调用
+
+工程文件的组织方式为：
+
+![][Makefile-Template2]
+
+该部分内容来自于CSDN的一篇博文：项目实用makefile（[http://blog.csdn.net/zhouyulu/article/details/8449263]）。
+
+你可参考该博文，或下载源码研究下，很有帮助。
+
+作者使用文件名为make.global的Makefile进行全局编译的一些规则设定，内容如下：
+
+```
+# compile macro
+CC		= g++
+CFLAGS	= -O2 -Wall
+LDFLAGS	= -lm 
+INCLUDES= -I/usr/local/include
+
+# recursive make
+.PHONY: subdirs ${SUBDIRS} cleansubdirs
+subdirs: ${SUBDIRS}
+${SUBDIRS}:
+	${MAKE} -C $@ all
+
+# recursive make clean
+cleansubdirs:
+	@for dir in ${SUBDIRS}; do \
+		${MAKE} -C $$dir clean; \
+	done
+
+# dependence
+%.o: %.cpp
+	${CC} ${CFLAGS} ${INCLUDES} -c $< -o $@
+%.o: %.cc
+	${CC} ${CFLAGS} ${INCLUDES} -c $< -o $@	
+```
+
+项目根节点的Makefile使用export和include命令将上面的make.global中的变量信息导出，具体如下：
+
+```
+# target, subdir, objects in current dir
+TARGET	= test
+SUBDIRS	= src
+OBJECTS	= 
+
+all:subdirs ${OBJECTS}
+	${CC} -o ${TARGET} $$(find ./${SUBDIRS} -name '*.o') ${LDFLAGS} ${INCLUDES}
+
+clean:cleansubdirs
+	rm -f ${TARGET} ${OBJECTS}
+
+# path of "make global scripts"
+# NOTE, use absolute path. export once, use in all subdirs
+export PROJECTPATH=${PWD}
+export MAKEINCLUDE=${PROJECTPATH}/makeconfig/make.global
+
+# include "make global scripts"
+include ${MAKEINCLUDE}
+```
+
+其它目录下的Makefile比较具有一致性，如src目录下Makefile：
+
+```
+# subdir and objects in current dir
+SUBDIRS	= module-a module-b
+OBJECTS	= main.o
+
+all:subdirs ${OBJECTS}
+
+clean:cleansubdirs
+	rm -f ${OBJECTS}
+	
+include ${MAKEINCLUDE}
+```
+叶子节点的目录下，如：
+
+src/module-a
+```
+# subdir and objects in current dir
+SUBDIRS	= 
+OBJECTS	= test.o
+
+all:subdirs ${OBJECTS}
+
+clean:cleansubdirs
+	rm -f ${OBJECTS}
+	
+include ${MAKEINCLUDE}
+```
+
+src/module-b
+```
+# subdir and objects in current dir
+SUBDIRS	= 
+OBJECTS	= test.o
+
+all:subdirs ${OBJECTS}
+
+clean:cleansubdirs
+	rm -f ${OBJECTS}
+	
+include ${MAKEINCLUDE}
+```
+
+因此，只要在项目根目录使用一个make命令就能自动递归的调用其它目录下的Makefile对整个工程进行编译，尤其适合多人合作的项目中。
+
+我把作者的这部分代码放在了Example3实例中。
 
 
 # 5 参考资源
@@ -485,11 +1061,8 @@ gdb是一个调试工具，与gcc一样，gdb可调试包括C、C++、Java、Fortran、汇编等多种语言
 2. GNU 'make' manual @ http://www.gnu.org/software/make/manual/make.html.
 3. GCC and Make http://www3.ntu.edu.sg/home/ehchua/programming/cpp/gcc_make.html
 4. Robert Mecklenburg, "Managing Projects with GNU Make", 3rd Edition, 2004.
-
-
-
-
-
+5. GNU make中文手册. 翻译整理：徐海兵, 2004-09-11 
+6. 本文的代码实例： [CODES]
 
 
 
@@ -503,6 +1076,9 @@ gdb是一个调试工具，与gcc一样，gdb可调试包括C、C++、Java、Fortran、汇编等多种语言
 
 [gdb]:http://www.gnu.org/software/gdb/gdb.html
 [Peter's gdb]:http://www.dirac.org/linux/gdb/
+[http://www.iteye.com/topic/774919]: http://www.iteye.com/topic/774919
+[http://blog.csdn.net/zhouyulu/article/details/8449263]: http://blog.csdn.net/zhouyulu/article/details/8449263
+
 
 [gcc-v]:../images/实例学习gcc+gdb+make/gcc-v.png
 [gcc-process]:../images/实例学习gcc+gdb+make/GCC_CompilationProcess.png
@@ -511,3 +1087,6 @@ gdb是一个调试工具，与gcc一样，gdb可调试包括C、C++、Java、Fortran、汇编等多种语言
 [share-lib]:../images/实例学习gcc+gdb+make/share-lib.png
 [size-static]:../images/实例学习gcc+gdb+make/size-static.png
 [size-share]:../images/实例学习gcc+gdb+make/size-share.png
+[Makefile-Template2]:../images/实例学习gcc+gdb+make/Makefile-Template2.png
+
+[CODES]:../codes/实例学习gcc+gdb+make
