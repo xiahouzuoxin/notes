@@ -1,0 +1,39 @@
+; Code Composer Project File, Version 2.0 (do not modify or remove this line)
+
+[Project Settings]
+ProjectDir="E:\DSP\FD6713\burn_flash\burn_flash\"
+ProjectType=Executable
+CPUFamily=TMS320C67XX
+Tool="Compiler"
+Tool="CustomBuilder"
+Tool="DspBiosBuilder"
+Tool="Linker"
+Config="Debug"
+Config="Release"
+
+[Source Files]
+Source="BSP.c"
+Source="csl6713.lib"
+Source="FLASH.c"
+Source="main.c"
+Source="vecs.asm"
+Source="DSP6713.cmd"
+
+["Compiler" Settings: "Debug"]
+Options=-g -pdsw225 -fr"$(Proj_dir)\Debug" -d"_DEBUG" -d"CHIP_6713" -mv6700
+
+["Compiler" Settings: "Release"]
+Options=-pdsw225 -o3 -fr"$(Proj_dir)\Release" -mv6700
+
+["Linker" Settings: "Debug"]
+Options=-c -m".\Debug\burn_flash.map" -o".\Debug\burn_flash.out" -w -x
+
+["Linker" Settings: "Release"]
+Options=-c -m".\Release\burn_flash.map" -o".\Release\burn_flash.out" -w -x
+
+["DSP6713.cmd" Settings: "Debug"]
+LinkOrder=1
+
+["DSP6713.cmd" Settings: "Release"]
+LinkOrder=1
+

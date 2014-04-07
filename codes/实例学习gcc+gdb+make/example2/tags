@@ -1,0 +1,13 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+_ADD_H	./add.h	11;"	d
+_SUB_H	./sub.h	11;"	d
+add	./add.c	/^int add(int a, int b)$/;"	f	signature:(int a, int b)
+add	./add.h	/^extern int add(int a, int b);$/;"	p	signature:(int a, int b)
+main	./main.c	/^int main(void)$/;"	f	signature:(void)
+sub	./sub.c	/^int sub(int a, int b)$/;"	f	signature:(int a, int b)
+sub	./sub.h	/^extern int sub(int a, int b);$/;"	p	signature:(int a, int b)

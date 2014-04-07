@@ -1,0 +1,472 @@
+******************************************************************************
+          TMS320C6x COFF Linker PC v6.0.8                      
+******************************************************************************
+>> Linked Sun Mar 30 21:12:23 2014
+
+OUTPUT FILE NAME:   <./Debug/burn_flash.out>
+ENTRY POINT SYMBOL: "_c_int00"  address: 0000b2e0
+
+
+MEMORY CONFIGURATION
+
+         name            origin    length      used     unused   attr    fill
+----------------------  --------  ---------  --------  --------  ----  --------
+  BOOT_RAM              00000000   00000400  00000000  00000400  RWIX
+  IRAM                  00000400   00040000  0000b21e  00034de2  RWIX
+
+
+SECTION ALLOCATION MAP
+
+ output                                  attributes/
+section   page    origin      length       input sections
+--------  ----  ----------  ----------   ----------------
+.boot_load 
+*          0    00000000    00000000     UNINITIALIZED
+
+.data      0    00000000    00000000     UNINITIALIZED
+
+.const     0    00000400    00001d1a     
+                  00000400    00001bde     main.obj (.const)
+                  00001fde    00000002     rts6700.lib : fputs.obj (.const)
+                  00001fe0    00000101                 : ctype.obj (.const)
+                  000020e1    00000003     --HOLE-- [fill = 0]
+                  000020e4    00000013     FLASH.obj (.const)
+                  000020f7    00000023     rts6700.lib : _printfi.obj (.const)
+
+.sysmem    0    00002120    00000200     UNINITIALIZED
+                  00002120    00000008     rts6700.lib : memory.obj (.sysmem)
+
+.switch    0    00002320    00000010     
+                  00002320    00000010     rts6700.lib : frcdivd.obj (.switch)
+
+.bss       0    00002330    00000008     UNINITIALIZED
+                  00002330    00000008     FLASH.obj (.bss)
+
+.vectors   0    00002400    00000200     
+                  00002400    00000200     vecs.obj (.vectors)
+
+.far       0    00002600    00000520     UNINITIALIZED
+                  00002600    00000194     rts6700.lib : defs.obj (.far)
+                  00002794    000000f4     csl6713.lib : csl_irq.obj (.far)
+                  00002888    000000d0     rts6700.lib : trgdrv.obj (.far)
+                  00002958    000000cc                 : lowlev.obj (.far)
+                  00002a24    0000008c                 : exit.obj (.far)
+                  00002ab0    00000028     csl6713.lib : csl.obj (.far)
+                  00002ad8    00000024                 : csl_timer.obj (.far)
+                  00002afc    00000010                 : csl_pll.obj (.far)
+                  00002b0c    00000008     rts6700.lib : memory.obj (.far)
+                  00002b14    00000008                 : _lock.obj (.far)
+                  00002b1c    00000004                 : fopen.obj (.far)
+
+.cinit     0    00002b20    0000034c     
+                  00002b20    0000012c     csl6713.lib : csl_irq.obj (.cinit)
+                  00002c4c    00000004     --HOLE-- [fill = 0]
+                  00002c50    0000005c     rts6700.lib : defs.obj (.cinit)
+                  00002cac    00000004     --HOLE-- [fill = 0]
+                  00002cb0    0000005c                 : lowlev.obj (.cinit)
+                  00002d0c    00000004     --HOLE-- [fill = 0]
+                  00002d10    0000004c     csl6713.lib : csl_timer.obj (.cinit)
+                  00002d5c    00000004     --HOLE-- [fill = 0]
+                  00002d60    0000003c                 : csl.obj (.cinit)
+                  00002d9c    00000004     --HOLE-- [fill = 0]
+                  00002da0    0000002c     rts6700.lib : memory.obj (.cinit)
+                  00002dcc    00000004     --HOLE-- [fill = 0]
+                  00002dd0    0000002c                 : exit.obj (.cinit)
+                  00002dfc    00000004     --HOLE-- [fill = 0]
+                  00002e00    0000001c                 : _lock.obj (.cinit)
+                  00002e1c    00000004     --HOLE-- [fill = 0]
+                  00002e20    0000001c     FLASH.obj (.cinit)
+                  00002e3c    00000004     --HOLE-- [fill = 0]
+                  00002e40    00000018     csl6713.lib : csl_pll.obj (.cinit)
+                  00002e58    0000000c     rts6700.lib : fopen.obj (.cinit)
+                  00002e64    00000008     --HOLE-- [fill = 0]
+
+.stack     0    00002e70    00000300     UNINITIALIZED
+                  00002e70    00000008     rts6700.lib : boot.obj (.stack)
+
+.cio       0    00003170    00000120     UNINITIALIZED
+                  00003170    00000120     rts6700.lib : trgmsg.obj (.cio)
+
+.text      0    000032a0    00008460     
+                  000032a0    00000540     FLASH.obj (.text)
+                  000037e0    00000520     rts6700.lib : _printfi.obj (.text:__setfield)
+                  00003d00    00000480                 : _printfi.obj (.text:__getarg_diouxp)
+                  00004180    00000460                 : _printfi.obj (.text:__printfi)
+                  000045e0    00000400                 : _printfi.obj (.text:__fcpy)
+                  000049e0    000003e0                 : _printfi.obj (.text:_ecvt)
+                  00004dc0    000003e0                 : _printfi.obj (.text:_fcvt)
+                  000051a0    000003a0                 : fputs.obj (.text:_fputs)
+                  00005540    000003a0                 : memory.obj (.text:_free)
+                  000058e0    00000380                 : _printfi.obj (.text:__pproc_fwp)
+                  00005c60    00000340                 : _printfi.obj (.text:__pconv_e)
+                  00005fa0    00000320     BSP.obj (.text)
+                  000062c0    00000320     rts6700.lib : imath64.obj (.text:__divull)
+                  000065e0    00000320                 : frcdivd.obj (.text:__frcdivd)
+                  00006900    000002e0                 : _printfi.obj (.text:__pproc_diouxp)
+                  00006be0    000002e0                 : _printfi.obj (.text:__pproc_str)
+                  00006ec0    00000280                 : divd.obj (.text:__divd)
+                  00007140    00000240                 : imath40.obj (.text:__divul)
+                  00007380    00000240                 : memcpy62.obj (.text:_memcpy)
+                  000075c0    00000220                 : trgdrv.obj (.text:_HOSTrename)
+                  000077e0    00000220                 : _printfi.obj (.text:__mcpy)
+                  00007a00    00000220                 : setvbuf.obj (.text:_setvbuf)
+                  00007c20    00000200                 : _printfi.obj (.text:__pconv_g)
+                  00007e20    00000200                 : memory.obj (.text:_malloc)
+                  00008020    000001c0     csl6713.lib : csl.obj (.text:__CSL_init)
+                  000081e0    000001c0     rts6700.lib : _printfi.obj (.text:__ltostr)
+                  000083a0    000001a0                 : lowlev.obj (.text:_getdevice)
+                  00008540    00000180                 : fputc.obj (.text:_fputc)
+                  000086c0    00000160     csl6713.lib : csl_timer.obj (.text:_TIMER_open)
+                  00008820    00000160     rts6700.lib : _printfi.obj (.text:__pproc_fflags)
+                  00008980    00000160                 : fclose.obj (.text:_fclose)
+                  00008ae0    00000140                 : trgdrv.obj (.text:_HOSTopen)
+                  00008c20    00000140                 : atoi.obj (.text:_atoi)
+                  00008d60    00000140                 : exit.obj (.text:_exit)
+                  00008ea0    00000140                 : ltoa.obj (.text:_ltoa)
+                  00008fe0    00000140                 : memset.obj (.text:_memset)
+                  00009120    00000120                 : trgdrv.obj (.text:_HOSTlseek)
+                  00009240    00000120                 : trgdrv.obj (.text:_HOSTread)
+                  00009360    00000120                 : trgdrv.obj (.text:_HOSTwrite)
+                  00009480    00000120     csl6713.lib : csl_timer.obj (.text:_TIMER_reset)
+                  000095a0    00000120     rts6700.lib : autoinit.obj (.text:__auto_init)
+                  000096c0    00000120                 : fopen.obj (.text:__cleanup)
+                  000097e0    00000120                 : _printfi.obj (.text:__div)
+                  00009900    00000120                 : imath40.obj (.text:__divli)
+                  00009a20    00000120                 : _io_perm.obj (.text:__wrt_ok)
+                  00009b40    00000120                 : lowlev.obj (.text:_close)
+                  00009c60    00000120                 : fseek.obj (.text:_fseek)
+                  00009d80    00000120                 : lowlev.obj (.text:_lseek)
+                  00009ea0    00000120     csl6713.lib : csl_irq.obj (.text:_mux2Tables)
+                  00009fc0    00000120     rts6700.lib : lowlev.obj (.text:_write)
+                  0000a0e0    00000100     main.obj (.text)
+                  0000a1e0    00000100     rts6700.lib : trgdrv.obj (.text:_HOSTunlink)
+                  0000a2e0    00000100                 : _printfi.obj (.text:__ecpy)
+                  0000a3e0    00000100                 : _printfi.obj (.text:__pconv_f)
+                  0000a4e0    00000100                 : _printfi.obj (.text:__pproc_fge)
+                  0000a5e0    000000e0                 : trgdrv.obj (.text:_HOSTclose)
+                  0000a6c0    000000e0                 : memory.obj (.text:_minsert)
+                  0000a7a0    000000c0                 : divu.obj (.text:__divu)
+                  0000a860    000000c0                 : fflush.obj (.text:__doflush)
+                  0000a920    000000c0                 : fixdli.obj (.text:__fixdli)
+                  0000a9e0    000000c0                 : lowlev.obj (.text:_finddevice)
+                  0000aaa0    000000c0     csl6713.lib : csl_irq.obj (.text:_getMux)
+                  0000ab60    000000c0     rts6700.lib : memory.obj (.text:_mremove)
+                  0000ac20    000000c0                 : trgmsg.obj (.text:_readmsg)
+                  0000ace0    000000c0                 : trgmsg.obj (.text:_writemsg)
+                  0000ada0    000000a0                 : fltlid.obj (.text:__fltlid)
+                  0000ae40    000000a0                 : mpyll.obj (.text:__mpyll)
+                  0000aee0    000000a0                 : imath40.obj (.text:__remli)
+                  0000af80    000000a0                 : remu.obj (.text:__remu)
+                  0000b020    000000a0                 : printf.obj (.text:_printf)
+                  0000b0c0    000000a0                 : lowlev.obj (.text:_unlink)
+                  0000b160    00000080     csl6713.lib : csl_irq.obj (.text:__IRQ_init)
+                  0000b1e0    00000080     rts6700.lib : llshift.obj (.text:__llshl)
+                  0000b260    00000080                 : llshift.obj (.text:__llshru)
+                  0000b2e0    00000080                 : boot.obj (.text:_c_int00)
+                  0000b360    00000080                 : memccpy.obj (.text:_memccpy)
+                  0000b3e0    00000060                 : imath64.obj (.text:__subcull)
+                  0000b440    00000040     csl6713.lib : csl_pll.obj (.text:_PLL_bypass)
+                  0000b480    00000040                 : csl_pll.obj (.text:_PLL_deassert)
+                  0000b4c0    00000040                 : csl_pll.obj (.text:_PLL_enable)
+                  0000b500    00000040                 : csl_pll.obj (.text:_PLL_reset)
+                  0000b540    00000040     rts6700.lib : args_main.obj (.text:__args_main)
+                  0000b580    00000020     vecs.obj (.text)
+                  0000b5a0    00000020     csl6713.lib : csl_irq.obj (.text)
+                  0000b5c0    00000020                 : csl.obj (.text:_CSL6713_LIB_)
+                  0000b5e0    00000020                 : csl_irq.obj (.text:_IRQ_globalEnable)
+                  0000b600    00000020                 : csl_irq.obj (.text:_IRQ_nmiEnable)
+                  0000b620    00000020                 : csl_irq.obj (.text:_IRQ_setVecs)
+                  0000b640    00000020     rts6700.lib : negll.obj (.text:__negll)
+                  0000b660    00000020                 : _lock.obj (.text:__nop)
+                  0000b680    00000020                 : printf.obj (.text:__outc)
+                  0000b6a0    00000020                 : printf.obj (.text:__outs)
+                  0000b6c0    00000020                 : exit.obj (.text:_abort)
+                  0000b6e0    00000020                 : remove.obj (.text:_remove)
+
+
+GLOBAL SYMBOLS: SORTED ALPHABETICALLY BY Name 
+
+address    name
+--------   ----
+00002330   $bss
+00002330   .bss
+00000000   .data
+000032a0   .text
+0000b6c0   C$$EXIT
+0000ad8c   C$$IO$$
+000060bc   _BSP_init
+0000b5c0   _CSL6713_LIB_
+00002334   _FLASH_2AAA
+00002330   _FLASH_5555
+000032a0   _Flash_Erase
+00003724   _Flash_Readm
+00003700   _Flash_Reads
+0000361c   _Flash_Writem
+00003530   _Flash_Writes
+0000a5e0   _HOSTclose
+00009120   _HOSTlseek
+00008ae0   _HOSTopen
+00009240   _HOSTread
+000075c0   _HOSTrename
+0000a1e0   _HOSTunlink
+00009360   _HOSTwrite
+0000b5e0   _IRQ_globalEnable
+0000b600   _IRQ_nmiEnable
+0000b620   _IRQ_setVecs
+00006040   _InitEmif
+0000b440   _PLL_bypass
+0000b480   _PLL_deassert
+0000b4c0   _PLL_enable
+0000b500   _PLL_reset
+000086c0   _TIMER_open
+00009480   _TIMER_reset
+00003170   __CIOBUF_
+00008020   __CSL_init
+00002880   __IRQ_dispatchTable
+000027bc   __IRQ_eventTable
+0000b5a0   __IRQ_hookFetchPacket
+0000b160   __IRQ_init
+00002840   __IRQ_intTable
+00002afc   __PLL_divAddr
+00000300   __STACK_SIZE
+00000200   __SYSMEM_SIZE
+00002ad8   __TIMER_deviceTable
+00002af8   __TIMER_hBios
+00002af0   __TIMER_hDev0
+00002af4   __TIMER_hDev1
+ffffffff   ___binit__
+00002330   ___bss__
+ffffffff   ___c_args__
+00002b20   ___cinit__
+00000000   ___data__
+00000000   ___edata__
+00002338   ___end__
+0000b700   ___etext__
+ffffffff   ___pinit__
+000032a0   ___text__
+0000b540   __args_main
+000095a0   __auto_init
+000096c0   __cleanup
+00002aa8   __cleanup_ptr
+00001fe0   __ctypes_
+00006ec0   __divd
+00009900   __divli
+0000a7a0   __divu
+00007140   __divul
+000062c0   __divull
+0000a860   __doflush
+00002aac   __dtors_ptr
+0000a920   __fixdli
+0000ada0   __fltlid
+000065e0   __frcdivd
+00002790   __ft_end
+00002600   __ftable
+0000b1e0   __llshl
+0000b260   __llshru
+00002b14   __lock
+0000ae40   __mpyll
+0000b640   __negll
+0000b660   __nop
+00004180   __printfi
+0000aee0   __remli
+0000af80   __remu
+00002e70   __stack
+0000b3e0   __subcull
+00002120   __sys_memory
+000026f0   __tmpnams
+00002b18   __unlock
+00009a20   __wrt_ok
+0000b6c0   _abort
+00008c20   _atoi
+00000400   _boot
+0000b2e0   _c_int00
+00009b40   _close
+00008d60   _exit
+00008980   _fclose
+00008540   _fputc
+000051a0   _fputs
+00005540   _free
+00009c60   _fseek
+00009d80   _lseek
+00008ea0   _ltoa
+0000a0e0   _main
+00007e20   _malloc
+0000b360   _memccpy
+00007380   _memcpy
+00008fe0   _memset
+0000b020   _printf
+00008540   _putc
+0000ac20   _readmsg
+0000b6e0   _remove
+00007a00   _setvbuf
+00000800   _text
+0000b0c0   _unlink
+00002420   _vector1
+00002540   _vector10
+00002560   _vector11
+00002580   _vector12
+000025a0   _vector13
+000025c0   _vector14
+000025e0   _vector15
+00002440   _vector2
+00002460   _vector3
+00002480   _vector4
+000024a0   _vector5
+000024c0   _vector6
+000024e0   _vector7
+00002500   _vector8
+00002520   _vector9
+00002400   _vectors
+00009fc0   _write
+0000ace0   _writemsg
+ffffffff   binit
+00002b20   cinit
+00000000   edata
+00002338   end
+0000b700   etext
+ffffffff   pinit
+
+
+GLOBAL SYMBOLS: SORTED BY Symbol Address 
+
+address    name
+--------   ----
+00000000   .data
+00000000   ___data__
+00000000   ___edata__
+00000000   edata
+00000200   __SYSMEM_SIZE
+00000300   __STACK_SIZE
+00000400   _boot
+00000800   _text
+00001fe0   __ctypes_
+00002120   __sys_memory
+00002330   $bss
+00002330   .bss
+00002330   _FLASH_5555
+00002330   ___bss__
+00002334   _FLASH_2AAA
+00002338   ___end__
+00002338   end
+00002400   _vectors
+00002420   _vector1
+00002440   _vector2
+00002460   _vector3
+00002480   _vector4
+000024a0   _vector5
+000024c0   _vector6
+000024e0   _vector7
+00002500   _vector8
+00002520   _vector9
+00002540   _vector10
+00002560   _vector11
+00002580   _vector12
+000025a0   _vector13
+000025c0   _vector14
+000025e0   _vector15
+00002600   __ftable
+000026f0   __tmpnams
+00002790   __ft_end
+000027bc   __IRQ_eventTable
+00002840   __IRQ_intTable
+00002880   __IRQ_dispatchTable
+00002aa8   __cleanup_ptr
+00002aac   __dtors_ptr
+00002ad8   __TIMER_deviceTable
+00002af0   __TIMER_hDev0
+00002af4   __TIMER_hDev1
+00002af8   __TIMER_hBios
+00002afc   __PLL_divAddr
+00002b14   __lock
+00002b18   __unlock
+00002b20   ___cinit__
+00002b20   cinit
+00002e70   __stack
+00003170   __CIOBUF_
+000032a0   .text
+000032a0   _Flash_Erase
+000032a0   ___text__
+00003530   _Flash_Writes
+0000361c   _Flash_Writem
+00003700   _Flash_Reads
+00003724   _Flash_Readm
+00004180   __printfi
+000051a0   _fputs
+00005540   _free
+00006040   _InitEmif
+000060bc   _BSP_init
+000062c0   __divull
+000065e0   __frcdivd
+00006ec0   __divd
+00007140   __divul
+00007380   _memcpy
+000075c0   _HOSTrename
+00007a00   _setvbuf
+00007e20   _malloc
+00008020   __CSL_init
+00008540   _fputc
+00008540   _putc
+000086c0   _TIMER_open
+00008980   _fclose
+00008ae0   _HOSTopen
+00008c20   _atoi
+00008d60   _exit
+00008ea0   _ltoa
+00008fe0   _memset
+00009120   _HOSTlseek
+00009240   _HOSTread
+00009360   _HOSTwrite
+00009480   _TIMER_reset
+000095a0   __auto_init
+000096c0   __cleanup
+00009900   __divli
+00009a20   __wrt_ok
+00009b40   _close
+00009c60   _fseek
+00009d80   _lseek
+00009fc0   _write
+0000a0e0   _main
+0000a1e0   _HOSTunlink
+0000a5e0   _HOSTclose
+0000a7a0   __divu
+0000a860   __doflush
+0000a920   __fixdli
+0000ac20   _readmsg
+0000ace0   _writemsg
+0000ad8c   C$$IO$$
+0000ada0   __fltlid
+0000ae40   __mpyll
+0000aee0   __remli
+0000af80   __remu
+0000b020   _printf
+0000b0c0   _unlink
+0000b160   __IRQ_init
+0000b1e0   __llshl
+0000b260   __llshru
+0000b2e0   _c_int00
+0000b360   _memccpy
+0000b3e0   __subcull
+0000b440   _PLL_bypass
+0000b480   _PLL_deassert
+0000b4c0   _PLL_enable
+0000b500   _PLL_reset
+0000b540   __args_main
+0000b5a0   __IRQ_hookFetchPacket
+0000b5c0   _CSL6713_LIB_
+0000b5e0   _IRQ_globalEnable
+0000b600   _IRQ_nmiEnable
+0000b620   _IRQ_setVecs
+0000b640   __negll
+0000b660   __nop
+0000b6c0   C$$EXIT
+0000b6c0   _abort
+0000b6e0   _remove
+0000b700   ___etext__
+0000b700   etext
+ffffffff   ___binit__
+ffffffff   ___c_args__
+ffffffff   ___pinit__
+ffffffff   binit
+ffffffff   pinit
+
+[137 symbols]
