@@ -65,7 +65,6 @@ output neg_edge;
 output both_edge;
 
 reg [1:0]sig_fifo;
-reg sig_r0, sig_r1;  // ×´Ì¬¼Ä´æÆ÷
 always @ (posedge clk or negedge rst_n)
 	if (!rst_n) begin 
 		sig_fifo <= 2'b0;
