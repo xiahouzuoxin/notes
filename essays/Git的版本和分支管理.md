@@ -9,7 +9,7 @@
 
 [3] http://blog.csdn.net/xiahouzuoxin/article/details/18076043
 
-## 分支管理
+## 本地的分支管理
 
 创建分支，你可以使用
 
