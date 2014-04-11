@@ -16,11 +16,11 @@
 
 ## ARM
 
-## 蒸笼棋局——数学之美
+## 数学物理之美
 
 - [数学牛人matrix67](http://www.matrix67.com/blog/)
 
-## 琅嬛玉洞——巧夺天工
+## 工具及程序设计
 
 - [实例学习gcc+gdb+make](./实例学习gcc+gdb+make.md)
 - [Git的版本和分支管理](./Git的版本和分支管理.md)
