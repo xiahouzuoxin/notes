@@ -630,8 +630,208 @@ main()
 - 后注：烧写Flash要注意以上的任何一个细节，某个细节出错都可能造成烧写不成功！在应用程序中切忌对Flash进行擦写操作，莫要覆盖了原保存了烧写程序的Flash区域。
 
 
+## 5 烧写过程中的中断向量表
 
-## 5 参考
+就前面的烧写方法中，请思考一个问题，程序是从何时何处跳转到main函数执行的？
+
+如果不烧写Flash，我们都应该知道是在vecs.asm中
+
+```
+********************************************************************************
+*           Copyright (C) 2003 Texas Instruments Incorporated.
+*                           All Rights Reserved
+*------------------------------------------------------------------------------
+* FILENAME...... vecs.asm
+* DATE CREATED.. 12/06/2000
+* LAST MODIFIED. 03/05/2003
+********************************************************************************
+
+*------------------------------------------------------------------------------
+* Global symbols defined here and exported out of this file
+*------------------------------------------------------------------------------
+   .global _vectors
+   .global _c_int00
+   .global _vector1
+   .global _vector2
+   .global _vector3
+   .global _vector4	
+   .global _vector5 
+   .global _vector6
+   .global _vector7
+   .global _vector8
+   .global _vector9	  
+   .global _vector10 
+   .global _vector11   
+   .global _vector12  
+   .global _vector13
+   .global _vector14   
+   .global _vector15   
+
+*------------------------------------------------------------------------------
+* Global symbols referenced in this file but defined somewhere else. 
+* Remember that your interrupt service routines need to be referenced here.
+*------------------------------------------------------------------------------
+   .ref _c_int00
+
+*------------------------------------------------------------------------------
+* This is a macro that instantiates one entry in the interrupt service table.
+*------------------------------------------------------------------------------
+VEC_ENTRY .macro addr
+    STW   B0,*--B15
+    MVKL  addr,B0
+    MVKH  addr,B0
+    B     B0
+    LDW   *B15++,B0
+    NOP   2
+    NOP   
+    NOP   
+   .endm
+
+
+*------------------------------------------------------------------------------
+* This is a dummy interrupt service routine used to initialize the IST.
+*------------------------------------------------------------------------------
+_vec_dummy:
+  B    B3
+  NOP  5
+
+*------------------------------------------------------------------------------
+* This is the actual interrupt service table (IST). It is properly aligned and
+* is located in the subsection .text:vecs. This means if you don't explicitly
+* specify this section in your linker command file, it will default and link
+* into the .text section. Remember to set the ISTP register to point to this
+* table.
+*------------------------------------------------------------------------------
+ ;.sect ".text:vecs"
+ .sect ".vectors"	;
+ .align 1024
+
+_vectors:
+_vector0:   VEC_ENTRY _c_int00    ;RESET
+_vector1:   VEC_ENTRY _vec_dummy  ;NMI
+_vector2:   VEC_ENTRY _vec_dummy  ;RSVD
+_vector3:   VEC_ENTRY _vec_dummy
+_vector4:   VEC_ENTRY _vec_dummy
+_vector5:   VEC_ENTRY _vec_dummy
+_vector6:   VEC_ENTRY _vec_dummy
+_vector7:   VEC_ENTRY _vec_dummy
+_vector8:   VEC_ENTRY _vec_dummy    
+_vector9:   VEC_ENTRY _vec_dummy
+_vector10:  VEC_ENTRY _vec_dummy
+_vector11:  VEC_ENTRY _vec_dummy
+_vector12:  VEC_ENTRY _vec_dummy
+_vector13:  VEC_ENTRY _vec_dummy
+_vector14:  VEC_ENTRY _vec_dummy
+_vector15:  VEC_ENTRY _vec_dummy
+
+*------------------------------------------------------------------------------
+
+
+********************************************************************************
+* End of vecs.asm
+********************************************************************************
+```
+_vector为中断向量表的首地址标识符，系统复位后默认转入执行复位向量（复位向量始终保存在RAM的0地址处，这也就是为什么之前提到系统硬件复位后从0地址开始执行）。
+
+不烧写Flash，只要在cmd文件中将.vectors段设定在0地址处，然后调用c_int00，跳转到main函数执行。
+
+使用上面的方法烧写Flash，则是在copy table完成之后调用c_int00。两者跳转到main函数的机理是一样的。
+
+但是在烧写Flash的时候，要注意的一个问题就是：中断向量表存放在哪里？
+
+前面烧写Flash的时候，其实有一点没有提到：当系统调用（比如定时器中断），如何才能找到（定时器）中断向量的入口函数？
+
+因此，前面烧写Flash的方法在不做修改的情况下是无法执行中断服务程序的。
+
+修改方法有2，且听一一分解。
+
+#### 方法一
+
+在进入main函数之后，重定位中断向量表的位置（关于向量表的重定位参考[DSP TMS320C6000基础学习（7）—— Bootloader与VectorTable]）
+
+中断向量表的重定位必须在使用中断之前。
+
+```
+extern far void vectors();   /* 声明vectors，因为_vectors定义在汇编文件vecs.asm中 */
+
+IRQ_setVecs(vectors);   /* 重定位中断向量表 */       
+```
+
+### 方法二
+
+修改汇编文件和cmd文件。基本思路是：把中断向量表保存在0地址处，在向量表之后存储二级Bootloader，通过复位中断跳转到二级Bootloader。
+
+- 先修改cmd文件
+
+```
+-c
+-x
+-l rts6700.lib
+-heap  100h
+-stack 200h
+MEMORY
+{
+    BOOT_RAM   : o=00000000h,l=00000400h
+    IRAM       : o=00000400h,l=00040000h
+	FLASH_BOOT : o=90000000h,l=00000400h
+	FLASH_REST : o=90000400h,l=000FFB00h
+}
+SECTIONS
+{
+      .vectors  :> BOOT_RAM    /* 修改在这里，vectors段定义在vecs.asm中，中断向量表放在RAM 0地址处 */
+      .boot_load:> BOOT_RAM
+
+	  /* Initialized User code section */
+	  .text     :> IRAM
+	  .cinit    :> IRAM
+
+      .vectors  :> IRAM
+      .bss		:> IRAM
+      .far    	:> IRAM
+      .stack  	:> IRAM
+      .const    :> IRAM
+      .switch   :> IRAM
+      .sysmem   :> IRAM
+      .cio      :> IRAM   
+}
+```
+
+- 修改vecs.asm（只给出了修改部分）
+
+```
+...
+
+   .ref _c_int00
+   .ref _boot   ; 修改在这里，_boot段为二次引导程序入口，定义在boot_c671x.s62中
+
+...
+
+ .sect ".vectors"	;
+ .align 1024
+
+_vectors:
+_vector0:   VEC_ENTRY _boot       ;RESET   修改在这里(将_c_init改成了_boot)，复位后跳转到_boot执行二次引导程序
+_vector1:   VEC_ENTRY _vec_dummy  ;NMI
+_vector2:   VEC_ENTRY _vec_dummy  ;RSVD
+_vector3:   VEC_ENTRY _vec_dummy
+_vector4:   VEC_ENTRY _vec_dummy
+_vector5:   VEC_ENTRY _vec_dummy
+_vector6:   VEC_ENTRY _vec_dummy
+_vector7:   VEC_ENTRY _vec_dummy
+_vector8:   VEC_ENTRY _vec_dummy    
+_vector9:   VEC_ENTRY _vec_dummy
+_vector10:  VEC_ENTRY _vec_dummy
+_vector11:  VEC_ENTRY _vec_dummy
+_vector12:  VEC_ENTRY _vec_dummy
+_vector13:  VEC_ENTRY _vec_dummy
+_vector14:  VEC_ENTRY _vec_dummy
+_vector15:  VEC_ENTRY _vec_dummy
+```
+
+两种方法都做过测试，都是可行的！
+
+
+## 6 参考
 
 [1] Creating a Second-Level Bootloader for FLASH Bootloading on TMS320C6000 Platform With Code Composer Studio
 
