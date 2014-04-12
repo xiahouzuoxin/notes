@@ -8,6 +8,7 @@
 - [在DSP671x上使用Timer统计信号处理算法的时间消耗](./在DSP671x上使用Timer统计信号处理算法的时间消耗.md)
 - [TMS320C6713烧写Flash的通用方法](./TMS320C6713烧写Flash的通用方法.md)
 - [DSP连接不上CCS3.3的问题讨论](./DSP连接不上CCS3.3的问题讨论.md)
+- [烧写Flash后的DSP程序运行不正常的情况分析](./烧写Flash后的DSP程序运行不正常的情况分析.md)
 
 ## FPGA
 
