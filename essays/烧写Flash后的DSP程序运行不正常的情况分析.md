@@ -19,6 +19,45 @@
 
 中断向量表包含了所有中断的入口，在烧写Flash的时候，有两种方式可以保证中断能正常工作。具体可参见[TMS320C6713烧写Flash的通用方法]的第5小节。
 
+## 请检查cmd链接文件
+
+也不知道什么原因，我曾经在DSP的内部RAM中使用#pragma分配一个3x1024x8字节的区域，在烧写到Flash后运行会死机，
+
+
+```c
+#pragma DATA_SECTION(g_ad_fifo, "FIFO")
+#pragma DATA_ALIGN(g_ad_ping, 128);
+fifo_t g_ad_fifo;   // fifo_t为一个8字节的结构体
+```
+
+对应的cmd文件为，
+
+```
+MEMORY
+{
+    BOOT_RAM: o=00000000h,l=00000400h   
+	IRAM    : o=00000400h,l=0003FC00h
+	...
+}
+
+SECTIONS
+{    
+	.vecs     :> BOOT_RAM
+	.boot_load:> BOOT_RAM
+
+	...
+	
+	FIFO        > IRAM
+}
+```
+
+把#pragma去掉后就好了，
+
+```c
+fifo_t g_ad_fifo;   // fifo_t为结构体类型
+```
+
+
 
 ## 请检查程序中隐蔽的内存错误
 
