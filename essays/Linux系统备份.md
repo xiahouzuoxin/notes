@@ -1,4 +1,5 @@
-
+[<font size=4>←返回主目录<font>](./README.md)
+</br></br></br>
 
 Linux相对于Windows有一个最大的好处就是：Linux安装程序的过程只有复制文件的过程，没有写注册表的过程，因此，Linux系统重装之后只要将之前系统的程序文件备份好，重新放到新系统下即可使用。
 
@@ -57,7 +58,7 @@ su root
 tar -zxpPvf local.tar.gz
 tar -zxpPvf opt.tar.gz 
 tar -zxpPvf etc.tar.gz
-tar -zcpPvf monkeyzx.tar.gz
+tar -zxpPvf monkeyzx.tar.gz
 ```
 
 ## 5. vim配置
@@ -69,11 +70,11 @@ https://github.com/xiahouzuoxin/vim_config
 
 ## tar命令的解释
 
->> -z gzip压缩
+>> -z gzip压缩格式
 
->> -x gzip解压
+>> -x tar解包
 
->> -c 创建文件
+>> -c tar打包，创建文件
 
 >> -p 保留文件权限属性（小写字符）
 
