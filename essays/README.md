@@ -1,6 +1,6 @@
 # Contents
 
-## Embedded Systems
+## Embedded System
 
 - DSP 	
 	- [数字信号处理中各种频率关系](./数字信号处理中各种频率关系.md)
@@ -29,23 +29,26 @@
 	- [FPGA与DSP通信中的EMIF速率问题](./FPGA与DSP通信中的EMIF速率问题.md)
 
 
-## Math & Models
+## Math & Model
 
 - [数学牛人matrix67](http://www.matrix67.com/blog/)
 - [数理统计知识整理——回归分析与方差分析](./数理统计知识整理——回归分析与方差分析.md)
 
-## Algorithm
+## Generial Algorithm
 
 - [整数转字符串的一种快速实现](./整数转字符串的一种快速实现.md)
 
 
-## Language Skills & Tools
+## Language Skill & Tool
 
 - [实例学习gcc+gdb+make](./实例学习gcc+gdb+make.md)
 - [Git的版本和分支管理](./Git的版本和分支管理.md)
 - [Git使用补遗](./Git使用补遗.md)
 - [Matlab的多线程工具Timer](./Matlab的多线程工具Timer.md)
 - [Linux系统备份](./Linux系统备份.md)
+- [增大虚拟机CentOS控制台大小](./增大虚拟机CentOS控制台大小.md)
+- [设置CentOS启动默认进入控制台而不是图形界面](./设置CentOS启动默认进入控制台而不是图形界面.md)
+- [CentOS在Win7下的硬盘安装](./CentOS在Win7下的硬盘安装.md)
 
 
 ## Reading
