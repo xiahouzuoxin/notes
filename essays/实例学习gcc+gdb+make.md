@@ -469,12 +469,136 @@ gcc提供几个默认的环境变量：
 
 
 # 3 GDB的使用
+
 gdb是一个调试工具，与gcc一样，gdb可调试包括C、C++、Java、Fortran、汇编等多种语言。gdb的原始开发者是Richard M.Stallman也是开源运动中的一位领袖级级人物。
 
 ### 内存布局及栈结构
-如果你还在用Visual C++
+
+如果你还不知道malloc分配变量与局部变量的区别的话，那你还不够格称为程序员。因为程序中的定义或任何的内存分配都直接和可执行文件在用户进程虚存空间的布局映射有关，
+
+![][mem-layout]
+
+如上图所示，包括：
+
+- 内核虚拟空间（高地址）：用户进程是无法访问到的
+- 用户栈：局部变量存储的地方，该部分需要用户手动初始化
+- 运行时共享库空间：C库函数一般都会映射到这里
+- 用户堆：malloc分配的空间
+- 初始化读写数据区：该部分系统会在编译时初始化，包括全局变量、static声明变量等
+- 只读代码段：存放程序代码的地址，程序运行时都要将程序可执行代码装载到内存后才能运行
 
 
+### gdb调试C程序
+给定一段程序main.c：
+
+```
+#include <stdio.h>
+int add(int a, int b)
+{
+    int c = a + b;
+    return c;
+}
+
+int main(void)
+{
+    int i = 0;
+    int j = 3;
+    int k = add(i,j);
+    printf("i=%d, j=%d, k=%d\n", i,j,k);
+    return 0;
+}
+```
+
+使用gcc编译及gdb调试程序的方法如下：
+
+```
+Administrator@DADI-20131210YK /cygdrive/e/MyDesigner/Projects/notes/codes/实例学习gcc+gdb+make/gdb
+$ gcc -g main.c -o main          ### 注：编译时使用-g选项才能生成符号表用于gdb调试
+
+Administrator@DADI-20131210YK /cygdrive/e/MyDesigner/Projects/notes/codes/实例学习gcc+gdb+make/gdb
+$ gdb main
+GNU gdb (GDB) 7.3.50.20110821-cvs (cygwin-special)
+Copyright (C) 2011 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.  Type "show copying"
+and "show warranty" for details.
+This GDB was configured as "i686-cygwin".
+For bug reporting instructions, please see:
+<http://www.gnu.org/software/gdb/bugs/>...
+Reading symbols from /cygdrive/e/MyDesigner/Projects/notes/codes/实例学习gcc+gdb+make/gdb/main...don
+e.
+(gdb) l main                     ### 注：list查看程序，l [函数名/行数]
+16
+17          return c;
+18      }
+19
+20      int main(void)
+21      {
+22          int i = 0;
+23          int j = 3;
+24
+25          int k = add(i,j);
+(gdb)                            ### 注：Enter按键接上面继续查看程序
+26
+27          printf("i=%d, j=%d, k=%d\n", i,j,k);
+28
+29          return 0;
+30      }
+31
+(gdb) b 23                       ### 注：在23行添加断点
+Breakpoint 1 at 0x4010d5: file main.c, line 23.
+(gdb) b add                      ### 注：在add函数入口添加断点
+Breakpoint 2 at 0x401096: file main.c, line 15.
+(gdb) b 29                       ### 注：在29行添加断点
+Breakpoint 3 at 0x401112: file main.c, line 29.
+(gdb) info break                 ### 注：查看已添加的断点信息
+Num     Type           Disp Enb Address    What
+1       breakpoint     keep y   0x004010d5 in main at main.c:23
+2       breakpoint     keep y   0x00401096 in add at main.c:15
+3       breakpoint     keep y   0x00401112 in main at main.c:29
+(gdb) r                          ### 注：运行程序
+Starting program: /cygdrive/e/MyDesigner/Projects/notes/codes/实例学习gcc+gdb+make/gdb/main
+[New Thread 2492.0x36c]
+[New Thread 2492.0x1140]
+
+Breakpoint 1, main () at main.c:23
+23          int j = 3;
+(gdb) p i                        ### 注：print打印变量i的值
+$1 = 0
+(gdb) n                          ### 注：next下一步（把函数当一条语句直接跳过）
+25          int k = add(i,j);
+(gdb) s                          ### 注：step下一步（会执行到函数内部）
+
+Breakpoint 2, add (a=0, b=3) at main.c:15
+15          int c = a + b;
+(gdb) c                          ### 注：continue从运行到的当前位置继续往下执行，直到遇到下一个断点
+Continuing.
+i=0, j=3, k=3
+
+Breakpoint 3, main () at main.c:29
+29          return 0;
+(gdb) finish                     ### 注：直接执行到当前函数的结尾处，对main函数不起作用
+"finish" not meaningful in the outermost frame.
+(gdb) c                          ### 注：continue继续执行
+Continuing.
+[Inferior 1 (process 2492) exited normally]
+(gdb) q                          ### 注：程序执行结束，quit退出gdb
+
+Administrator@DADI-20131210YK /cygdrive/e/MyDesigner/Projects/notes/codes/实例学习gcc+gdb+make/gdb
+$
+```
+
+好了，就这么简单，只要会了以上几个命令，你就可以开开心心的使用gdb了。
+
+gdb还有很多高级的内容，本文目标为入门，更多内请不吝你的手指依次敲击：
+
+```
+>> gdb
+>> help  
+```
+
+参见参考文献[6]，这是gdb的一份官方手册。
 
 
 # 4 使用Makefile构建工程
@@ -1062,7 +1186,8 @@ include ${MAKEINCLUDE}
 3. GCC and Make http://www3.ntu.edu.sg/home/ehchua/programming/cpp/gcc_make.html
 4. Robert Mecklenburg, "Managing Projects with GNU Make", 3rd Edition, 2004.
 5. GNU make中文手册. 翻译整理：徐海兵, 2004-09-11 
-6. 本文的代码实例： [CODES]
+6. The gnu Source-Level Debugger for gdb (GDB). https://sourceware.org/gdb/download/onlinedocs/gdb/index.html. 
+7. 本文的代码实例： [CODES]
 
 
 
@@ -1079,7 +1204,6 @@ include ${MAKEINCLUDE}
 [http://www.iteye.com/topic/774919]: http://www.iteye.com/topic/774919
 [http://blog.csdn.net/zhouyulu/article/details/8449263]: http://blog.csdn.net/zhouyulu/article/details/8449263
 
-
 [gcc-v]:../images/实例学习gcc+gdb+make/gcc-v.png
 [gcc-process]:../images/实例学习gcc+gdb+make/GCC_CompilationProcess.png
 [prog-2]:../images/实例学习gcc+gdb+make/prog-2.png
@@ -1088,5 +1212,9 @@ include ${MAKEINCLUDE}
 [size-static]:../images/实例学习gcc+gdb+make/size-static.png
 [size-share]:../images/实例学习gcc+gdb+make/size-share.png
 [Makefile-Template2]:../images/实例学习gcc+gdb+make/Makefile-Template2.png
+
+
+[mem-layout]:../images/实例学习gcc+gdb+make/mem_layout.png
+
 
 [CODES]:../codes/实例学习gcc+gdb+make

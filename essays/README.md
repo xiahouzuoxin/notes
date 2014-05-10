@@ -1,6 +1,6 @@
-# Contents
+# 目录
 
-## Embedded System
+## 嵌入式系统
 
 - DSP 	
 	- [数字信号处理中各种频率关系](./数字信号处理中各种频率关系.md)
@@ -19,43 +19,66 @@
 - ARM
 
 
-- Hardware	
+- 硬件设计
 	- [高频总线上的串阻问题](./高频总线上的串阻问题.md)
 	- [设计DSP与FPGA数据采集硬件系统时遇到的一些问题整理](./设计DSP与FPGA数据采集硬件系统时遇到的一些问题整理.md)
 
-- OS
+- Linux 
 
-- Others
+- uCOS ii
+
+- 综合
 	- [FPGA与DSP通信中的EMIF速率问题](./FPGA与DSP通信中的EMIF速率问题.md)
 
 
-## Math & Model
+## 图像处理与机器学习
+
+
+## 数学与算法
 
 - [数学牛人matrix67](http://www.matrix67.com/blog/)
 - [数理统计知识整理——回归分析与方差分析](./数理统计知识整理——回归分析与方差分析.md)
-
-## Generial Algorithm
-
 - [整数转字符串的一种快速实现](./整数转字符串的一种快速实现.md)
 
 
-## Language Skill & Tool
+## 计算机基础
 
-- [实例学习gcc+gdb+make](./实例学习gcc+gdb+make.md)
-- [Git的版本和分支管理](./Git的版本和分支管理.md)
-- [Git使用补遗](./Git使用补遗.md)
-- [Matlab的多线程工具Timer](./Matlab的多线程工具Timer.md)
-- [Linux系统备份](./Linux系统备份.md)
-- [增大虚拟机CentOS控制台大小](./增大虚拟机CentOS控制台大小.md)
-- [设置CentOS启动默认进入控制台而不是图形界面](./设置CentOS启动默认进入控制台而不是图形界面.md)
-- [CentOS在Win7下的硬盘安装](./CentOS在Win7下的硬盘安装.md)
+- C/C++
 
+	- [实例学习gcc+gdb+make](./实例学习gcc+gdb+make.md)
 
-## Reading
+- Matlab 
 
-- [秋意](./秋意.md)
+	- [Matlab的多线程工具Timer](./Matlab的多线程工具Timer.md)
 
-## Contact Me
+- Linux 
+
+	- [Linux系统备份](./Linux系统备份.md)
+	- [增大虚拟机CentOS控制台大小](./增大虚拟机CentOS控制台大小.md)
+	- [设置CentOS启动默认进入控制台而不是图形界面](./设置CentOS启动默认进入控制台而不是图形界面.md)
+	- [CentOS在Win7下的硬盘安装](./CentOS在Win7下的硬盘安装.md)
+
+- Git
+
+	- [Git的版本和分支管理](./Git的版本和分支管理.md)
+	- [Git使用补遗](./Git使用补遗.md)
+
+- 综合
+
+## 阅读
+
+- 读书
+
+	- [关于阅读的名言](./关于阅读的名言.md)
+	- [读塞缪尔《失实》](./读塞缪尔《失实》.md)
+
+- 读论文
+
+- 写作
+
+	- [秋意](./秋意.md)
+
+##关于我
 
 北京科技大学<br>
 University of Science and Tecnology(USTB)

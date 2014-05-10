@@ -38,7 +38,7 @@
 
 CC=gcc
 OBJS=main.o add.o sub.o
-CFLAGS=-D_DEBUG
+CFLAGS=-D_DEBUG -g
 
 main:$(OBJS)
 	$(CC) $^ -o $@
