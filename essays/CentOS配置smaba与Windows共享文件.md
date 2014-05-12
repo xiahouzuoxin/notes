@@ -101,7 +101,7 @@ samba-winbind-clients-3.6.9-168.el6_5.x86_64
 	public = no                         # 目录不公开
 	writeable = yes                     # 可写
 	browseable = yes                    # 可读
-	valid users = smb                   # 访问用户
+	valid users = smb                   # 访问用户，上面新建的，也可以使用原来已有的
 	```
 
 ## 启动samba 
@@ -153,8 +153,6 @@ eth0      Link encap:Ethernet  HWaddr 00:0C:29:FD:DC:43
 
 > 若无法从Windows中往共享目录中拷贝文件，可能由于共享目录对smb用户的写权限不足，Linux中使用chmod 777 -R dir可改变dir目录权限。
 
-
-smbstatus
 [smbstatus]:../images/CentOS配置smaba与Windows共享文件/smbstatus.png
 [smb]:../images/CentOS配置smaba与Windows共享文件/smb.png
 
