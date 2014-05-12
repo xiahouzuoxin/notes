@@ -57,6 +57,8 @@
 	- [增大虚拟机CentOS控制台大小](./增大虚拟机CentOS控制台大小.md)
 	- [设置CentOS启动默认进入控制台而不是图形界面](./设置CentOS启动默认进入控制台而不是图形界面.md)
 	- [CentOS在Win7下的硬盘安装](./CentOS在Win7下的硬盘安装.md)
+	- [CentOS更新yum源的方法](./CentOS更新yum源的方法.md)
+	- [CentOS配置smaba与Windows共享文件](./CentOS配置smaba与Windows共享文件.md)
 
 - Git
 
