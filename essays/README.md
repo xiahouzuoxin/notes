@@ -31,7 +31,9 @@
 	- [FPGA与DSP通信中的EMIF速率问题](./FPGA与DSP通信中的EMIF速率问题.md)
 
 
-## 图像处理与机器学习
+## 图像/音频处理
+
+- [CentOS上编译安装OpenCV-2.3.1与ffmpeg-2.1.2](CentOS上编译安装OpenCV-2.3.1与ffmpeg-2.1.2.md)
 
 
 ## 数学与算法
@@ -84,7 +86,7 @@
 ##关于我
 
 北京科技大学<br>
-University of Science and Tecnology(USTB)
+University of Science and Tecnology Beijing (USTB)
 
 Email: [xiahouzuoxin@163.com](xiahouzuoxin@163.com)
 

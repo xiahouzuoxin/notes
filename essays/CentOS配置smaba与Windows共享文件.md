@@ -7,48 +7,6 @@ LinuxÓëLinux¼äÍ¨¹ıÊ²Ã´¹²ÏíÎÄ¼şÄØ¡ª¡ªNFS£¬WindowsÓëWindowsÖ®¼äÄØ¡ª¡ª¹²ÏíÎÄ¼ş¹¦ÄÜ¾
 
 Õâ¾ÍÊÇ±¾¶ÎÒª½²µÄ¶«¶«¡ª¡ªsamba¡£
 
-
-## ÈÃsmabaÍ¨¹ı·À»ğÇ½
-
-Ê¹ÓÃsambaĞèÒª´©¹ı·À»ğÇ½£¬Òò´ËÅäÖÃ/etc/sysconfig/iptablesÎÄ¼ş£¬Ìí¼Ó
-
-```
--A INPUT -m state --state NEW -m tcp -p tcp --dport 139 -j ACCEPT
--A INPUT -m state --state NEW -m tcp -p tcp --dport 445 -j ACCEPT
--A INPUT -m state --state NEW -m udp -p udp --dport 137 -j ACCEPT
--A INPUT -m state --state NEW -m udp -p udp --dport 138 -j ACCEPT
-```
-
-ÔÊĞí139 445 137 138¼¸¸ö¶Ë¿ÚÍ¨¹ı¡£ÅäÖÃÍêºóÖØÆô·À»ğÇ½£¬
-
-```
-# /etc/rc.d/init.d/iptables restart
-```
-
-»¹ÓĞÒ»ÖÖÍ¨¹ı·À»ğÇ½µÄ·½·¨¡ª¡ªË÷ĞÔ£¬°Ñ·À»ğÇ½¹ØÁË£¬
-
-```
-# service iptables stop
-```
-
-## ¹Ø±ÕSELINUX
-
-```
-# vim /etc/selinux/config
-```
-
-ÅäÖÃ
-
-```
-SELINUX=permissive
-```
-
-´ËÊ±ĞèÒªÖØÆôÏÂÏµÍ³£¬
-
-```
-# reboot
-```
-
 ## ¼ì²éÊÇ·ñ°²×°samba
 
 ```
@@ -83,6 +41,14 @@ samba-winbind-clients-3.6.9-168.el6_5.x86_64
 	# chkconfig nmb on
 	```
 
+	Ò²¿ÉÒÔÊ¹ÓÃsetupÃüÁî¿ÉÍ¨¹ı½çÃæÅäÖÃ¿ª»úÆô¶¯·şÎñ,
+
+	```
+	# setup
+	```
+
+	![setup][]
+
 2.	ĞÂ½¨smbÓÃ»§ÓÃÓÚ·ÃÎÊLinux¹²ÏíÎÄ¼ş
 
 	```
@@ -90,19 +56,74 @@ samba-winbind-clients-3.6.9-168.el6_5.x86_64
 	# smbpasswd -a smb  # ĞŞ¸ÄÃÜÂë
 	```
 
-	´ËÊ±/homeÄ¿Â¼»áÔö¼ÓÒ»¸ösmbµÄÓÃ»§¡£¸ÃLinuxÓÃ»§Ä¿Â¼½«¿ÉÖ±½Ó¹²Ïíµ½WindowsÏÂ¡£ÈôÒª¹²ÏíÆäËüÎÄ¼ş£¬°´²½Öè3ÅäÖÃÎÄ¼ş¡£
+	´ËÊ±/homeÄ¿Â¼»áÔö¼ÓÒ»¸ösmbµÄÓÃ»§¡£¸ÃLinuxÓÃ»§Ä¿Â¼½«¿ÉÖ±½Ó¹²Ïíµ½WindowsÏÂ¡£ÈôÒª¹²ÏíÆäËüÎÄ¼ş£¬°´²½Öè3ÅäÖÃÎÄ¼ş¡£Èç¹û²»ÓÃÁË£¬É¾³ısmbÓÃ»§Ò²ÊÇ¿ÉÒÔµÄ£¬
+
+	```
+	# smbpasswd -x smb  # É¾³ısmbÓÃ»§
+	```
 
 3.	sambaÅäÖÃÎÄ¼ş¡£
 
 	```
-	[public]
-	comment = Public Directories
-	path = /home/xiahouzuoxin/Public    # ¹²ÏíµÄLinuxÄ¿Â¼
+	[tmp]
+	comment = Tmp Directories
+	path = /tmp                         # ¹²ÏíµÄLinuxÄ¿Â¼
 	public = no                         # Ä¿Â¼²»¹«¿ª
 	writeable = yes                     # ¿ÉĞ´
 	browseable = yes                    # ¿É¶Á
 	valid users = smb                   # ·ÃÎÊÓÃ»§£¬ÉÏÃæĞÂ½¨µÄ£¬Ò²¿ÉÒÔÊ¹ÓÃÔ­À´ÒÑÓĞµÄ
 	```
+
+## ÈÃsmabaÍ¨¹ı·À»ğÇ½
+
+Ê¹ÓÃsambaĞèÒª´©¹ı·À»ğÇ½£¬Òò´Ë¸ù¾İ²»Í¬Çé¿ö£¬ÕâÀïÌá¹©3ÖÖ·½·¨£º
+	
+- ·½·¨1
+
+	```
+	# system-config-firewall
+	```
+
+	![smb-firewall][]
+
+- ·½·¨2
+
+	ÅäÖÃ/etc/sysconfig/iptablesÎÄ¼ş£¬Ìí¼Ó
+
+	```
+	-A INPUT -m state --state NEW -m tcp -p tcp --dport 139 -j ACCEPT
+	-A INPUT -m state --state NEW -m tcp -p tcp --dport 445 -j ACCEPT
+	-A INPUT -m state --state NEW -m udp -p udp --dport 137 -j ACCEPT
+	-A INPUT -m state --state NEW -m udp -p udp --dport 138 -j ACCEPT
+	```
+
+	ÔÊĞí139 445 137 138¼¸¸ö¶Ë¿ÚÍ¨¹ı¡£ÅäÖÃÍêºóÖØÆô·À»ğÇ½£¬
+
+	```
+	# /etc/rc.d/init.d/iptables restart
+	```
+
+- ·½·¨3
+
+	Ë÷ĞÔ£¬°Ñ·À»ğÇ½¹ØÁË£¬
+
+	```
+	# service iptables stop    # ÔİÊ±¹Ø±Õ
+	# chkconfig iptables off  # ÓÀ¾Ã¹Ø±Õ
+	```
+
+## ¹Ø±ÕSELINUX
+
+```
+# vim /etc/selinux/config
+SELINUX=permissive
+```
+
+´ËÊ±ĞèÒªÖØÆôÏÂÏµÍ³£¬
+
+```
+# reboot
+```
 
 ## Æô¶¯samba 
 
@@ -151,8 +172,15 @@ eth0      Link encap:Ethernet  HWaddr 00:0C:29:FD:DC:43
 
 > ÎÄ¼ş·ÃÎÊÈ¨ÏŞ£º
 
-> ÈôÎŞ·¨´ÓWindowsÖĞÍù¹²ÏíÄ¿Â¼ÖĞ¿½±´ÎÄ¼ş£¬¿ÉÄÜÓÉÓÚ¹²ÏíÄ¿Â¼¶ÔsmbÓÃ»§µÄĞ´È¨ÏŞ²»×ã£¬LinuxÖĞÊ¹ÓÃchmod 777 -R dir¿É¸Ä±ädirÄ¿Â¼È¨ÏŞ¡£
+> ÈôÎŞ·¨´ÓWindowsÖĞÍù¹²ÏíÄ¿Â¼ÖĞ¿½±´ÎÄ¼ş£¬¿ÉÄÜÓÉÓÚ¹²ÏíÄ¿Â¼¶ÔsmbÓÃ»§µÄĞ´È¨ÏŞ²»×ã£¬LinuxÖĞÊ¹ÓÃchmod 777 -R dir¿É¸Ä±ädirÄ¿Â¼È¨ÏŞ¡£ÓÉÓÚÈ¨ÏŞÔ­Òò£¬±¾ÎÄÖĞÊ¹ÓÃ/tmpÄ¿Â¼¹²Ïí£¬ÒòÎª/tmpÄ¿Â¼¶ÔËùÓĞÓÃ»§µÄÈ¨ÏŞ±È½Ï¿ª·Å¡£
+
+
+## ²Î¿¼
+
+1. http://www.livingelsewhere.net/tag/unix-linux-samba-ftp-smb-cifs/
+2. http://www.tangrucheng.com/centos6-5-setup-configure-samba.html
 
 [smbstatus]:../images/CentOSÅäÖÃsmabaÓëWindows¹²ÏíÎÄ¼ş/smbstatus.png
 [smb]:../images/CentOSÅäÖÃsmabaÓëWindows¹²ÏíÎÄ¼ş/smb.png
-
+[smb-firewall]:../images/CentOSÅäÖÃsmabaÓëWindows¹²ÏíÎÄ¼ş/smb-firewall.png
+[setup]:../images/CentOSÅäÖÃsmabaÓëWindows¹²ÏíÎÄ¼ş/setup.png
