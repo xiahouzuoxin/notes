@@ -1,4 +1,4 @@
-[<font size=4>←返回主目录<font>](./README.md)
+[<font size=4>←返回主目录<font>](../README.md)
 </br></br></br>
 
 硬件系统的构建如下图：

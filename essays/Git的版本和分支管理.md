@@ -1,4 +1,4 @@
-[<font size=4>←返回主目录<font>](./README.md)
+[<font size=4>←返回主目录<font>](../README.md)
 </br></br></br>
 
 由于已经对git使用比较熟悉了，此篇关于git分支和版本的的管理将不会详细记录每一个细节。如果你还不熟悉git，请先参看：

@@ -1,30 +1,95 @@
-## Markdownæ˜¯ä»€ä¹ˆ
-Markdownæ˜¯ä¸€ç§ç½‘ç»œä¹¦å†™è¯­è¨€ï¼Œå…¶ç›®æ ‡æ˜¯å®ç°æ˜“è¯»æ˜“å†™ï¼Œä¸”å…¼å®¹HTMLè¯­è¨€ã€‚
-Markdownçš„æµè¡Œå¾—ç›Šäº[Github](www.github.com)å’Œ[Stackoverflow](www.stackoverflow.com)ï¼ŒStackoverflowçš„ä»£ç å—ä»¥åŠGithubä¸Šçš„README.mdæ–‡ä»¶æ ¼å¼éƒ½æ˜¯é€šè¿‡Markdownè¡¨ç°çš„ã€‚
-ä»è¿™é‡Œæ‚¨å¯ä»¥å¾ˆç›´è§‚çš„çœ‹åˆ°Markdownçš„æ•ˆæœ:[https://github.com/adam-p/markdown-here](https://github.com/adam-p/markdown-here)ã€‚
+# Ä¿Â¼
 
-## Markdownä¸è‡ªç”±ä¹¦ç±
-ä½¿ç”¨Markdownå¯ä»¥ä¹¦å†™è‡ªç”±ä¹¦ç±ï¼Œå…³äºæ­¤ï¼Œæ‚¨å¯ä»¥å‚çœ‹æ–‡ç« ç”¨Markdownæ¥å†™è‡ªç”±ä¹¦ç±-å¼€æºæŠ€æœ¯çš„æ–¹æ¡ˆï¼Œå¼€æºä¹¦å’Œå¼€æºæŠ€æœ¯-Markdownç¯‡ä¸€æ–‡ä¹Ÿä»‹ç»äº†ä¸€äº›Markdownä¸å¼€æºä¹¦å’Œå¼€æºæŠ€æœ¯ä¹‹é—´çš„æ¸Šæºã€‚
+## Ç¶ÈëÊ½ÏµÍ³
 
-å·²ç»æœ‰ä¸€äº›å¼€æºä¹¦ç±ä½¿ç”¨Markdownä¹¦å†™äº†ï¼ŒäºšåµŒæ•™è‚²çš„å¼€æºä¹¦ç±æºç å¼€æ”¾å­¦ARMã€è’‹é‘«è€å¸ˆçš„GotGithubä¸€ä¹¦ï¼Œè¿™äº›å¼€æºä¹¦ç±éƒ½ç»™å­¦ä¹ è€…æä¾›å¾ˆå¤§å¸®åŠ©ã€‚Markdownä¹¦å†™å·²ç»æ˜¯ä¸€ç§å¼€æºç²¾ç¥ä½“ç°ã€‚å¥½äº†ï¼Œæ—¢ç„¶Markdownä¸è‡ªç”±ä¹¦å†™è¿™ä¹ˆé»˜å¥‘ï¼Œæˆ‘ä»¬æ€ä¹ˆç”¨Markdownæ¥å†™è‡ªå·±çš„README.mdï¼Œè‡ªå·±çš„åšå®¢ç”šè‡³è‡ªå·±çš„å¼€æºä¹¦ç±å‘¢ï¼Ÿ
+- DSP 	
+	- [Êı×ÖĞÅºÅ´¦ÀíÖĞ¸÷ÖÖÆµÂÊ¹ØÏµ](essays/Êı×ÖĞÅºÅ´¦ÀíÖĞ¸÷ÖÖÆµÂÊ¹ØÏµ.md)
+	- [ÂË²¨Æ÷Éè¼ÆÖ¸±ê](essays/ÂË²¨Æ÷Éè¼ÆÖ¸±ê.md)
+	- [Ä£ÄâĞÅºÅ²ÉÑùÓëAD×ª»»](essays/Ä£ÄâĞÅºÅ²ÉÑùÓëAD×ª»».md)
+	- [ÔÚDSP671xÉÏÊ¹ÓÃTimerÍ³¼ÆĞÅºÅ´¦ÀíËã·¨µÄÊ±¼äÏûºÄ](essays/ÔÚDSP671xÉÏÊ¹ÓÃTimerÍ³¼ÆĞÅºÅ´¦ÀíËã·¨µÄÊ±¼äÏûºÄ.md)
+	- [TMS320C6713ÉÕĞ´FlashµÄÍ¨ÓÃ·½·¨](essays/TMS320C6713ÉÕĞ´FlashµÄÍ¨ÓÃ·½·¨.md)
+	- [DSPÁ¬½Ó²»ÉÏCCS3.3µÄÎÊÌâÌÖÂÛ](essays/DSPÁ¬½Ó²»ÉÏCCS3.3µÄÎÊÌâÌÖÂÛ.md)
+	- [ÉÕĞ´FlashºóµÄDSP³ÌĞòÔËĞĞ²»Õı³£µÄÇé¿ö·ÖÎö](essays/ÉÕĞ´FlashºóµÄDSP³ÌĞòÔËĞĞ²»Õı³£µÄÇé¿ö·ÖÎö.md)
+	- [µ¼³öCCS3.3Êı¾İ¼°Ê¹ÓÃmatlab´¦ÀíµÄ·½·¨](essays/µ¼³öCCS3.3Êı¾İ¼°Ê¹ÓÃmatlab´¦ÀíµÄ·½·¨.md)
 
-è¿™é‡Œæœ‰ä¸€ä»½Markdownçš„è¯­æ³•ï¼Œ[http://wowubuntu.com/markdown/](http://wowubuntu.com/markdown/)ï¼Œä»https://gitcafe.com/riku/Markdown-Syntax-CN/blob/master/syntax.md
-çœ‹å¯èƒ½æ›´ç›´è§‚ã€‚Markdownè¯­æ³•æ˜¯å¦‚æ­¤ç®€å•ï¼Œä»¥è‡³äºè¿˜ä¸åˆ°1000è¡Œå°±æè¿°å®Œäº†ã€‚åˆå­¦è€…æ‚¨å¯ä»¥å‚è€ƒ[çŒ®ç»™å†™ä½œè€…çš„Markdownæ–°æ‰‹æŒ‡å—](http://jianshu.io/p/q81RER)ã€‚Githubçš„Markdownè¯­æ³•å¤§éƒ¨åˆ†éƒ½ä¸ä¼ ç»ŸMarkdownè¯­æ³•ä¸€æ ·ï¼Œè¿™æ‚¨å¯ä»¥çœ‹çœ‹[markdown-basics](https://help.github.com/articles/markdown-basics)ï¼Œä½†ä¹Ÿæœ‰äº›æ‰©å±•ï¼Œæ‰©å±•å†…å®¹åœ¨æ–‡æ¡£[GitHub Flavored Markdown](https://help.github.com/articles/github-flavored-markdown)ä¸­ã€‚
+- FPGA
+	- [FPGAµÄ¸´Î»](essays/FPGAµÄ¸´Î».md)
+	- [FPGAµÄ±ßÑØ¼ì²â](essays/FPGAµÄ±ßÑØ¼ì²â.md)
 
-## ä½¿ç”¨Markdown
-åœ¨ä½¿ç”¨Markdownè¿‡ç¨‹ä¸­ï¼Œæ‚¨ä¹Ÿè®¸è¿˜éœ€è¦ä¸€ä¸ªæ—¶æ—¶æ˜¾ç¤ºMarkdownæ–‡æ¡£é¢„è§ˆçš„å·¥å…·ï¼Œè¿™æ–¹é¢çš„å·¥å…·æœ‰å¾ˆå¤šï¼Œè¿™é‡Œæ¨èå‡ ä¸ªåœ¨çº¿çš„Markdownæ–‡æ¡£ç¼–è¾‘å™¨ï¼š
-
-1. Dillinger:[http://dillinger.io/](http://dillinger.io/)
-2. StackEdit:[https://stackedit.io/](https://stackedit.io/)
-3. å°è±¡ç¬”è®°:[http://maxiang.info/](http://maxiang.info/)
-
-â€œ[å…è´¹Markdownå†™ä½œå·¥å…·ç®€è¯„](http://jianshu.io/p/pgN9Rb)â€ä¸€æ–‡æä¾›äº†æœ‰å…³äºMarkdownæ–‡æ¡£ç¼–è¾‘å™¨çš„æ›´å¤šä¿¡æ¯ã€‚
-
-è°·æ­Œæµè§ˆå™¨è²Œä¼¼ä¹Ÿæœ‰Markdownçš„é¢„è§ˆæ’ä»¶[markdown-preview](https://github.com/volca/markdown-preview)ï¼Œè¿™æ ·æ‚¨å°±å¯ä»¥ç”¨è®°äº‹æœ¬ç¼–è¾‘ï¼Œç”¨æµè§ˆå™¨é¢„è§ˆäº†ã€‚å°è±¡ç¬”è®°ä¹Ÿæœ‰Chromeçš„æ‰©å±•ï¼Œå¯åœ¨å•†åº—æœç´ â€œé©¬å…‹é£è±¡â€ã€‚
-
-æˆ‘ä»¬è¯´Markdownæ˜¯ä¸ºäº†ä¹¦å†™è‡ªç”±ç”µå­ä¹¦ï¼Œé‚£ä¹ˆMarkdownå¦‚ä½•ç”Ÿæˆpdfæˆ–htmlæ ¼å¼çš„æ–‡æ¡£å‘¢ï¼Ÿæˆ‘ä»¬å¯ä»¥å€ŸåŠ©Markdownæ–‡æ¡£ç¼–è¾‘å™¨çš„åŠŸèƒ½ï¼ŒStackEditå°±èƒ½èƒœä»»ï¼Œä½¿ç”¨StackEditå·¦ä¸Šè§’çš„èœå•ï¼Œsave as..å°±å¯ä»¥åšåˆ°ï¼Œä½†ä¼¼ä¹å¯¹ä¸­æ–‡çš„æ”¯æŒä¸æ˜¯å¾ˆå¥½ã€‚æˆ‘ä»¬è¿˜å¯ä½¿ç”¨VIMæ’ä»¶å°†Markdownè½¬æ¢ä¸ºhtmlæ ¼å¼ã€‚
-
-è¿˜æœ‰ä¸€æ¬¾é›†ç¼–è¾‘ä¸Markdowné¢„è§ˆäºä¸€èº«çš„ä¸é”™å·¥å…·[Everedit](http://www.everedit.net/)ï¼Œå›½äº§çš„å“¦..
+- ARM
 
 
+- Ó²¼şÉè¼Æ
+	- [¸ßÆµ×ÜÏßÉÏµÄ´®×èÎÊÌâ](essays/¸ßÆµ×ÜÏßÉÏµÄ´®×èÎÊÌâ.md)
+	- [Éè¼ÆDSPÓëFPGAÊı¾İ²É¼¯Ó²¼şÏµÍ³Ê±Óöµ½µÄÒ»Ğ©ÎÊÌâÕûÀí](essays/Éè¼ÆDSPÓëFPGAÊı¾İ²É¼¯Ó²¼şÏµÍ³Ê±Óöµ½µÄÒ»Ğ©ÎÊÌâÕûÀí.md)
+	- [µÍ¹¦ºÄÄ£Ê½ÏÂï®µç³ØÊ¹ÓÃÊ±³¤µÄ¹ÀËã](essays/µÍ¹¦ºÄÄ£Ê½ÏÂï®µç³ØÊ¹ÓÃÊ±³¤µÄ¹ÀËã.md)
 
+- Linux 
+
+- uCOS ii
+
+- ×ÛºÏ
+	- [FPGAÓëDSPÍ¨ĞÅÖĞµÄEMIFËÙÂÊÎÊÌâ](essays/FPGAÓëDSPÍ¨ĞÅÖĞµÄEMIFËÙÂÊÎÊÌâ.md)
+
+
+## Í¼Ïñ/ÒôÆµ´¦Àí
+
+- [CentOSÉÏ±àÒë°²×°OpenCV-2.3.1Óëffmpeg-2.1.2](essays/CentOSÉÏ±àÒë°²×°OpenCV-2.3.1Óëffmpeg-2.1.2.md)
+
+
+## ÊıÑ§ÓëËã·¨
+
+- [ÊıÑ§Å£ÈËmatrix67](http://www.matrix67.com/blog/)
+- [ÊıÀíÍ³¼ÆÖªÊ¶ÕûÀí¡ª¡ª»Ø¹é·ÖÎöÓë·½²î·ÖÎö](essays/ÊıÀíÍ³¼ÆÖªÊ¶ÕûÀí¡ª¡ª»Ø¹é·ÖÎöÓë·½²î·ÖÎö.md)
+- [ÕûÊı×ª×Ö·û´®µÄÒ»ÖÖ¿ìËÙÊµÏÖ](essays/ÕûÊı×ª×Ö·û´®µÄÒ»ÖÖ¿ìËÙÊµÏÖ.md)
+
+
+## ¼ÆËã»ú»ù´¡
+
+- C/C++
+
+	- [ÊµÀıÑ§Ï°gcc+gdb+make](essays/ÊµÀıÑ§Ï°gcc+gdb+make.md)
+
+- Matlab 
+
+	- [MatlabµÄ¶àÏß³Ì¹¤¾ßTimer](essays/MatlabµÄ¶àÏß³Ì¹¤¾ßTimer.md)
+
+- Linux 
+
+	- [LinuxÏµÍ³±¸·İ](essays/LinuxÏµÍ³±¸·İ.md)
+	- [Ôö´óĞéÄâ»úCentOS¿ØÖÆÌ¨´óĞ¡](essays/Ôö´óĞéÄâ»úCentOS¿ØÖÆÌ¨´óĞ¡.md)
+	- [ÉèÖÃCentOSÆô¶¯Ä¬ÈÏ½øÈë¿ØÖÆÌ¨¶ø²»ÊÇÍ¼ĞÎ½çÃæ](essays/ÉèÖÃCentOSÆô¶¯Ä¬ÈÏ½øÈë¿ØÖÆÌ¨¶ø²»ÊÇÍ¼ĞÎ½çÃæ.md)
+	- [CentOSÔÚWin7ÏÂµÄÓ²ÅÌ°²×°](essays/CentOSÔÚWin7ÏÂµÄÓ²ÅÌ°²×°.md)
+	- [CentOS¸üĞÂyumÔ´µÄ·½·¨](essays/CentOS¸üĞÂyumÔ´µÄ·½·¨.md)
+	- [CentOSÅäÖÃsmabaÓëWindows¹²ÏíÎÄ¼ş](essays/CentOSÅäÖÃsmabaÓëWindows¹²ÏíÎÄ¼ş.md)
+
+- Git
+
+	- [GitµÄ°æ±¾ºÍ·ÖÖ§¹ÜÀí](essays/GitµÄ°æ±¾ºÍ·ÖÖ§¹ÜÀí.md)
+	- [GitÊ¹ÓÃ²¹ÒÅ](essays/GitÊ¹ÓÃ²¹ÒÅ.md)
+
+- ×ÛºÏ
+
+## ÔÄ¶Á
+
+- ¶ÁÊé
+
+	- [¹ØÓÚÔÄ¶ÁµÄÃûÑÔ](essays/¹ØÓÚÔÄ¶ÁµÄÃûÑÔ.md)
+	- [¶ÁÈûçÑ¶û¡¶Ê§Êµ¡·](essays/¶ÁÈûçÑ¶û¡¶Ê§Êµ¡·.md)
+	- [½ğÓ¹ÎäÏÀĞ¡ËµÖ®ÎÒµÄ¼û½â](essays/½ğÓ¹ÎäÏÀĞ¡ËµÖ®ÎÒµÄ¼û½â.md)
+
+- ¶ÁÂÛÎÄ
+
+- Ğ´×÷
+
+	- [Ê¹ÓÃMarkdownÊéĞ´](essays/Ê¹ÓÃMarkdownÊéĞ´.md)
+	- [ÇïÒâ](essays/ÇïÒâ.md)
+
+##¹ØÓÚÎÒ
+
+±±¾©¿Æ¼¼´óÑ§<br>
+University of Science and Tecnology Beijing (USTB)
+
+Email: [xiahouzuoxin@163.com](xiahouzuoxin@163.com)
+
+Created in 2014.03.

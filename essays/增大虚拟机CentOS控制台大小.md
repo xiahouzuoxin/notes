@@ -1,4 +1,4 @@
-[<font size=4>←返回主目录<font>](./README.md)
+[<font size=4>←返回主目录<font>](../README.md)
 </br></br></br>
 
 在虚拟机上装了个CentOS，可是控制台分辨率太小了，如果想放大控制台分辨率，则修改文件/boot/grub/grub.conf的kernel项。

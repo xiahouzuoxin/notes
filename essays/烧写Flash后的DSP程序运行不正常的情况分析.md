@@ -1,4 +1,4 @@
-[<font size=4>←返回主目录<font>](./README.md)
+[<font size=4>←返回主目录<font>](../README.md)
 </br></br></br>
 
 这段时间一直在调试DSP6713的Flash烧写，现在对Flash的烧写也算心中了如。

@@ -1,4 +1,4 @@
-[<font size=4>←返回主目录<font>](./README.md)
+[<font size=4>←返回主目录<font>](../README.md)
 </br></br></br>
 
 操作环境：CentOS 6.5 64bit 宽带外网
