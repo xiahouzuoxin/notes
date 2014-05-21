@@ -34,7 +34,8 @@
 
 ## 图像/音频处理
 
-- [CentOS上编译安装OpenCV-2.3.1与ffmpeg-2.1.2](essays/CentOS上编译安装OpenCV-2.3.1与ffmpeg-2.1.2.md)
+- OpenCV
+	- [CentOS上编译安装OpenCV-2.3.1与ffmpeg-2.1.2](essays/CentOS上编译安装OpenCV-2.3.1与ffmpeg-2.1.2.md)
 
 
 ## 数学与算法
@@ -53,6 +54,7 @@
 - Matlab 
 
 	- [Matlab的多线程工具Timer](essays/Matlab的多线程工具Timer.md)
+	- [Matlab中的笛卡尔坐标及极坐标](./Matlab中的笛卡尔坐标及极坐标.md)
 
 - Linux 
 
@@ -86,7 +88,7 @@
 	- [Markdown中插入数学公式的方法](essays/Markdown中插入数学公式的方法.md)
 	- [秋意](essays/秋意.md)
 
-##关于我
+# 关于我
 
 北京科技大学<br>
 University of Science and Tecnology Beijing (USTB)
