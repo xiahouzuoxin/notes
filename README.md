@@ -70,7 +70,7 @@
 
 - 综合
 
-## 阅读
+## 阅读与写作
 
 - 读书
 
@@ -83,6 +83,7 @@
 - 写作
 
 	- [使用Markdown书写](essays/使用Markdown书写.md)
+	- [Markdown中插入数学公式的方法](essays/Markdown中插入数学公式的方法.md)
 	- [秋意](essays/秋意.md)
 
 ##关于我
