@@ -15,6 +15,7 @@
 - FPGA
 	- [FPGA的复位](essays/FPGA的复位.md)
 	- [FPGA的边沿检测](essays/FPGA的边沿检测.md)
+	- [使用Tcl脚本分配FPGA管脚](essays/使用Tcl脚本分配FPGA管脚.md)
 
 - ARM
 
@@ -23,6 +24,7 @@
 	- [高频总线上的串阻问题](essays/高频总线上的串阻问题.md)
 	- [设计DSP与FPGA数据采集硬件系统时遇到的一些问题整理](essays/设计DSP与FPGA数据采集硬件系统时遇到的一些问题整理.md)
 	- [低功耗模式下锂电池使用时长的估算](essays/低功耗模式下锂电池使用时长的估算.md)
+	- [EP2C8F256的官方原理图库存在问题](essays/EP2C8F256的官方原理图库存在问题.md)
 
 - Linux 
 
@@ -32,13 +34,22 @@
 	- [FPGA与DSP通信中的EMIF速率问题](essays/FPGA与DSP通信中的EMIF速率问题.md)
 
 
-## 图像/音频处理
+## 图像 音频 机器学习
 
 - OpenCV
 	- [CentOS上编译安装OpenCV-2.3.1与ffmpeg-2.1.2](essays/CentOS上编译安装OpenCV-2.3.1与ffmpeg-2.1.2.md)
 
+- 网络资源
 
-## 数学与算法
+	- [bfcat计算机视觉](http://www.bfcat.com/)
+	- [cvchina增强视觉](http://www.cvchina.info/)
+	- [周志华主页](http://cs.nju.edu.cn/zhouzh/)
+	- [CV Online](http://homepages.inf.ed.ac.uk/rbf/CVonline/)
+	- [Berkeley Computer Vision Group](http://www.eecs.berkeley.edu/Research/Projects/CS/vision/)
+	- [免费图像数据库](essays/免费图像数据库.md)
+
+
+## 数学 算法
 
 - [数学牛人matrix67](http://www.matrix67.com/blog/)
 - [数理统计知识整理——回归分析与方差分析](essays/数理统计知识整理——回归分析与方差分析.md)
@@ -50,11 +61,12 @@
 - C/C++
 
 	- [实例学习gcc+gdb+make](essays/实例学习gcc+gdb+make.md)
+	- [数组的指针特性](essays/数组的指针特性.md)
 
 - Matlab 
 
 	- [Matlab的多线程工具Timer](essays/Matlab的多线程工具Timer.md)
-	- [Matlab中的笛卡尔坐标及极坐标](./Matlab中的笛卡尔坐标及极坐标.md)
+	- [Matlab中的笛卡尔坐标及极坐标](essays/Matlab中的笛卡尔坐标及极坐标.md)
 
 - Linux 
 
@@ -72,7 +84,7 @@
 
 - 综合
 
-## 阅读与写作
+## 阅读 写作
 
 - 读书
 
@@ -81,6 +93,8 @@
 	- [金庸武侠小说之我的见解](essays/金庸武侠小说之我的见解.md)
 
 - 读论文
+
+	- [中国计算机学会推荐国际学术会议和期刊目录](http://www.ccf.org.cn/sites/ccf/paiming.jsp)
 
 - 写作
 
