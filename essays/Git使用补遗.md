@@ -54,5 +54,27 @@ git stash drop [stash]
 git stash clear
 ```
 
+## 比较修改
+
+`git diff`查看更改但未使用git add暂存的内容与git add的暂存区内容的差异。
+
+`git diff --cached`查看git add暂存区的内容与上次提交HEAD之间的差异。
+
+`git diff`与`git diff --cached`和在一起就包含了所有未提交的更改。当然，这也可以直接通过`git diff HEAD`一条命令直接查看工作区更改与上次提交的差异。
+
+`git diff dev..master` 比较dev分支与master分支最新提交的diff。
+
+`git diff dev...master` 比较dev分支与master分支自从分开开发以来master分支的所有改变。
+
+`git diff sha1 sha2` 比较两次不同提交sha1和sha2之间的差别。
+
+如果只是要比较某个文件而不是所有的变化，则在响应的命令后添加文件名即可，如`git diff README.md`。
+
+
+
+
+
+
+
 
 

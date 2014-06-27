@@ -16,6 +16,7 @@
 	- [FPGA的复位](essays/FPGA的复位.md)
 	- [FPGA的边沿检测](essays/FPGA的边沿检测.md)
 	- [使用Tcl脚本分配FPGA管脚](essays/使用Tcl脚本分配FPGA管脚.md)
+	- [Quartus_ii中使用Testbench仿真的方法](essays/Quartus_ii中使用Testbench仿真的方法.md)
 
 - ARM
 
@@ -25,6 +26,7 @@
 	- [设计DSP与FPGA数据采集硬件系统时遇到的一些问题整理](essays/设计DSP与FPGA数据采集硬件系统时遇到的一些问题整理.md)
 	- [低功耗模式下锂电池使用时长的估算](essays/低功耗模式下锂电池使用时长的估算.md)
 	- [EP2C8F256的官方原理图库存在问题](essays/EP2C8F256的官方原理图库存在问题.md)
+	- [PCB设计参考资料](essays/PCB设计参考资料.md)
 
 - Linux 
 
