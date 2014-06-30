@@ -3,6 +3,7 @@
 ## 嵌入式系统
 
 - DSP 	
+
 	- [数字信号处理中各种频率关系](essays/数字信号处理中各种频率关系.md)
 	- [滤波器设计指标](essays/滤波器设计指标.md)
 	- [模拟信号采样与AD转换](essays/模拟信号采样与AD转换.md)
@@ -13,6 +14,7 @@
 	- [导出CCS3.3数据及使用matlab处理的方法](essays/导出CCS3.3数据及使用matlab处理的方法.md)
 
 - FPGA
+
 	- [FPGA的复位](essays/FPGA的复位.md)
 	- [FPGA的边沿检测](essays/FPGA的边沿检测.md)
 	- [使用Tcl脚本分配FPGA管脚](essays/使用Tcl脚本分配FPGA管脚.md)
@@ -22,23 +24,21 @@
 
 
 - 硬件设计
+
 	- [高频总线上的串阻问题](essays/高频总线上的串阻问题.md)
+	- [FPGA与DSP通信中的EMIF速率问题](essays/FPGA与DSP通信中的EMIF速率问题.md)
 	- [设计DSP与FPGA数据采集硬件系统时遇到的一些问题整理](essays/设计DSP与FPGA数据采集硬件系统时遇到的一些问题整理.md)
 	- [低功耗模式下锂电池使用时长的估算](essays/低功耗模式下锂电池使用时长的估算.md)
+	- [AlteraFPGA功耗估计工具](essays/AlteraFPGA功耗估计工具.md)
 	- [EP2C8F256的官方原理图库存在问题](essays/EP2C8F256的官方原理图库存在问题.md)
 	- [PCB设计参考资料](essays/PCB设计参考资料.md)
-
-- Linux 
-
-- uCOS ii
-
-- 综合
-	- [FPGA与DSP通信中的EMIF速率问题](essays/FPGA与DSP通信中的EMIF速率问题.md)
+	
 
 
 ## 图像 音频 机器学习
 
 - OpenCV
+
 	- [CentOS上编译安装OpenCV-2.3.1与ffmpeg-2.1.2](essays/CentOS上编译安装OpenCV-2.3.1与ffmpeg-2.1.2.md)
 
 - 网络资源
@@ -78,6 +78,7 @@
 	- [CentOS在Win7下的硬盘安装](essays/CentOS在Win7下的硬盘安装.md)
 	- [CentOS更新yum源的方法](essays/CentOS更新yum源的方法.md)
 	- [CentOS配置smaba与Windows共享文件](essays/CentOS配置smaba与Windows共享文件.md)
+	- [CentOS安装中文字体](essays/CentOS安装中文字体.md)
 
 - Git
 
@@ -100,9 +101,11 @@
 
 - 写作
 
+	- [秋意](essays/秋意.md)
 	- [使用Markdown书写](essays/使用Markdown书写.md)
 	- [Markdown中插入数学公式的方法](essays/Markdown中插入数学公式的方法.md)
-	- [秋意](essays/秋意.md)
+	- [Latex入门](essays/Latex入门.md)
+	
 
 # 关于我
 
