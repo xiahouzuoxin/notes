@@ -136,6 +136,13 @@ Latex就想一门编程语言，写完后需要编译，编译上述文档的命令为：`xelatex hello.tex`
 
 
 
+## 参考文献
+
+1.	[一份不太简短的LATEX2ε介绍中文版](http://hhtao.weebly.com/uploads/3/3/7/2/3372398/lshort-zh-cn.pdf). 版本 4.20，二○○七年九月.
+2.	[The Not So Short Introduction to LATEX 2ε](http://mirror.neu.edu.cn/CTAN/info/lshort/english/lshort.pdf). Version 5.03, April 25, 2014.
+3.	LaTeX新人教程——30分钟从完全陌生到基本入门.
+
+
 [hello]:../images/Latex入门/hello.png
 [zhfontcfg]:../images/Latex入门/zhfontcfg.png
 

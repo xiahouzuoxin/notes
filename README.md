@@ -19,6 +19,7 @@
 	- [FPGA的边沿检测](essays/FPGA的边沿检测.md)
 	- [使用Tcl脚本分配FPGA管脚](essays/使用Tcl脚本分配FPGA管脚.md)
 	- [Quartus_ii中使用Testbench仿真的方法](essays/Quartus_ii中使用Testbench仿真的方法.md)
+	- [CycloneII系列FPGA结构](essays/CycloneII系列FPGA结构.md)
 
 - ARM
 
@@ -32,6 +33,7 @@
 	- [AlteraFPGA功耗估计工具](essays/AlteraFPGA功耗估计工具.md)
 	- [EP2C8F256的官方原理图库存在问题](essays/EP2C8F256的官方原理图库存在问题.md)
 	- [PCB设计参考资料](essays/PCB设计参考资料.md)
+	- [三极管的电平转换及驱动电路分析](essays/三极管的电平转换及驱动电路分析.md)
 	
 
 
@@ -56,6 +58,8 @@
 - [数学牛人matrix67](http://www.matrix67.com/blog/)
 - [数理统计知识整理——回归分析与方差分析](essays/数理统计知识整理——回归分析与方差分析.md)
 - [整数转字符串的一种快速实现](essays/整数转字符串的一种快速实现.md)
+- [转载@韩昊：傅里叶分析之掐死教程（完整版）](http://zhuanlan.zhihu.com/wille/19763358)
+- 转载@StackExchange：常见算法在实际项目中的应用 [英文版 ](http://cstheory.stackexchange.com/questions/19759/core-algorithms-deployed/19773#19773)[中文版](http://blog.jobbole.com/52669/)
 
 
 ## 计算机基础
