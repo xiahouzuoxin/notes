@@ -12,6 +12,7 @@
 	- [DSP连接不上CCS3.3的问题讨论](essays/DSP连接不上CCS3.3的问题讨论.md)
 	- [烧写Flash后的DSP程序运行不正常的情况分析](essays/烧写Flash后的DSP程序运行不正常的情况分析.md)
 	- [导出CCS3.3数据及使用matlab处理的方法](essays/导出CCS3.3数据及使用matlab处理的方法.md)
+	- [功率谱的一点理解](essays/功率谱的一点理解.md)
 
 - FPGA
 
@@ -60,6 +61,7 @@
 - [整数转字符串的一种快速实现](essays/整数转字符串的一种快速实现.md)
 - [转载@韩昊：傅里叶分析之掐死教程（完整版）](http://zhuanlan.zhihu.com/wille/19763358)
 - 转载@StackExchange：常见算法在实际项目中的应用 [英文版 ](http://cstheory.stackexchange.com/questions/19759/core-algorithms-deployed/19773#19773)[中文版](http://blog.jobbole.com/52669/)
+- [矩阵特征值分解与奇异值分解含义解析及应用](essays/矩阵特征值分解与奇异值分解含义解析及应用.md)
 
 
 ## 计算机基础
