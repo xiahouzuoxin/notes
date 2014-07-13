@@ -13,6 +13,7 @@
 	- [烧写Flash后的DSP程序运行不正常的情况分析](essays/烧写Flash后的DSP程序运行不正常的情况分析.md)
 	- [导出CCS3.3数据及使用matlab处理的方法](essays/导出CCS3.3数据及使用matlab处理的方法.md)
 	- [功率谱的一点理解](essays/功率谱的一点理解.md)
+	- [TI-DSP数学库之c67xmathlib的使用](essays/TI-DSP数学库之c67xmathlib的使用.md)
 
 - FPGA
 
@@ -85,6 +86,7 @@
 	- [CentOS更新yum源的方法](essays/CentOS更新yum源的方法.md)
 	- [CentOS配置smaba与Windows共享文件](essays/CentOS配置smaba与Windows共享文件.md)
 	- [CentOS安装中文字体](essays/CentOS安装中文字体.md)
+	- [Shell命令小技巧](essays/Shell命令小技巧.md)
 
 - Git
 
