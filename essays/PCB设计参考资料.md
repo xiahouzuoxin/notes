@@ -95,7 +95,17 @@
 	
 	这样做能放置信号像上面的右图一样交叉。当然，上面的方法不是定则，我总是说，凡事随需而变（这个只能自己领悟），只不过在很多情况下按这种方式设计很管用罢了。
 
-11. 无私奉献，自己学习使用Cadence绘制PCB板整理出来的62页的基础教程（[下载链接]），重在设计流程，页页皆心血，绝对实用，绝对够分量，一张目录截图如下：
+11.	电源地回路的设计：
+
+	![PowerGround01]
+
+	上图的电源地回路面积大，容易受电磁干扰
+	
+	![PowerGround02]	
+
+	上图通过改进——电源与地线靠近走线，减小了回路面积，降低了电磁干扰（679/12.8，约54倍）。因此，电源与地尽量应该靠近走线！而信号线之间则应该尽量避免并行走线，降低信号之间的互感效应。
+
+12. 无私奉献，自己学习使用Cadence绘制PCB板整理出来的62页的基础教程（[下载链接]），重在设计流程，页页皆心血，绝对实用，绝对够分量，一张目录截图如下：
 
 	![Contents]
 
@@ -109,4 +119,6 @@
 [mirror]:../images/PCB设计参考资料/mirror.png
 [Contents]:../images/PCB设计参考资料/Contents.png
 [ModuleLines]:../images/PCB设计参考资料/ModuleLines.png
+[PowerGround01]:../images/PCB设计参考资料/PowerGround01.png
+[PowerGround02]:../images/PCB设计参考资料/PowerGround02.png
 [下载链接]:../enclosure/PCB设计参考资料/Allegro绘制PCB流程及规范.pdf

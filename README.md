@@ -14,6 +14,7 @@
 	- [导出CCS3.3数据及使用matlab处理的方法](essays/导出CCS3.3数据及使用matlab处理的方法.md)
 	- [功率谱的一点理解](essays/功率谱的一点理解.md)
 	- [TI-DSP数学库之c67xmathlib的使用](essays/TI-DSP数学库之c67xmathlib的使用.md)
+	- [DSP/BIOS使用入门](essays/DSP-BIOS使用入门.md)
 
 - FPGA
 
@@ -65,12 +66,13 @@
 - [矩阵特征值分解与奇异值分解含义解析及应用](essays/矩阵特征值分解与奇异值分解含义解析及应用.md)
 
 
-## 计算机基础
+## 计算机
 
 - C/C++
 
 	- [实例学习gcc+gdb+make](essays/实例学习gcc+gdb+make.md)
 	- [数组的指针特性](essays/数组的指针特性.md)
+	- [位运算的绝妙用法](essays/位运算的绝妙用法.md)
 
 - Matlab 
 
@@ -86,14 +88,16 @@
 	- [CentOS更新yum源的方法](essays/CentOS更新yum源的方法.md)
 	- [CentOS配置smaba与Windows共享文件](essays/CentOS配置smaba与Windows共享文件.md)
 	- [CentOS安装中文字体](essays/CentOS安装中文字体.md)
-	- [Shell命令小技巧](essays/Shell命令小技巧.md)
+	- [Shell及VIM命令小技巧](essays/Shell及VIM命令小技巧.md)
 
 - Git
 
 	- [Git的版本和分支管理](essays/Git的版本和分支管理.md)
 	- [Git使用补遗](essays/Git使用补遗.md)
 
-- 综合
+- 上位机
+
+	- [LabVIEW上位机与串口通信](../LabVIEW上位机与串口通信.md)
 
 ## 阅读 写作
 
