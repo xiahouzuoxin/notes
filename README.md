@@ -97,7 +97,7 @@
 
 - 上位机
 
-	- [LabVIEW上位机与串口通信](../LabVIEW上位机与串口通信.md)
+	- [LabVIEW上位机与串口通信](essays/LabVIEW上位机与串口通信.md)
 
 ## 阅读 写作
 
