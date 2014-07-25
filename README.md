@@ -15,7 +15,7 @@
 	- [功率谱的一点理解](essays/功率谱的一点理解.md)
 	- [TI-DSP数学库之c67xmathlib的使用](essays/TI-DSP数学库之c67xmathlib的使用.md)
 	- [DSP/BIOS使用入门](essays/DSP-BIOS使用入门.md)
-	- [DSP-BIOS使用之初窥门径——滴答时钟及烧写Flash](essays/DSP-BIOS使用之初窥门径——滴答时钟及烧写Flash.md)
+	- [DSP/BIOS使用之初窥门径——滴答时钟及烧写Flash](essays/DSP-BIOS使用之初窥门径——滴答时钟及烧写Flash.md)
 
 - FPGA
 
