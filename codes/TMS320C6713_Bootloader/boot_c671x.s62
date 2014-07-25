@@ -1,0 +1,178 @@
+;A;
+;  ======== boot_c671x.s62 ========
+;
+            .title  "Flash bootup utility"
+
+; global EMIF symbols defined for the c671x family
+            .include        boot_c671x.h62
+
+; Address of the generated boot-table
+user_size      .equ  0x0002271c
+user_ld_start  .equ  0x90000400
+user_rn_start  .equ  0x00000400
+
+            .sect ".boot_load"
+            .global _boot
+
+			.ref _c_int00
+            
+_boot:      
+;************************************************************************
+;* DEBUG LOOP -  COMMENT OUT B FOR NORMAL OPERATION
+;************************************************************************
+
+            zero B1
+_myloop:  ; [!B1] B _myloop  
+            nop  5
+_myloopend: nop
+
+;************************************************************************
+;* CONFIGURE EMIF
+;************************************************************************
+
+        ;****************************************************************
+        ; *EMIF_GCTL = EMIF_GCTL_V;
+        ;****************************************************************
+
+            mvkl  EMIF_GCTL,A4    
+      ||    mvkl  EMIF_GCTL_V,B4
+
+            mvkh  EMIF_GCTL,A4
+      ||    mvkh  EMIF_GCTL_V,B4
+
+            stw   B4,*A4
+
+        ;****************************************************************
+        ; *EMIF_CE0 = EMIF_CE0_V
+        ;****************************************************************
+
+            mvkl  EMIF_CE0,A4       
+      ||    mvkl  EMIF_CE0_V,B4     
+
+            mvkh  EMIF_CE0,A4
+      ||    mvkh  EMIF_CE0_V,B4
+
+            stw   B4,*A4
+
+        ;****************************************************************
+        ; *EMIF_CE1 = EMIF_CE1_V (setup for 8-bit async)
+        ;****************************************************************
+
+            mvkl  EMIF_CE1,A4       
+      ||    mvkl  EMIF_CE1_V,B4
+
+            mvkh  EMIF_CE1,A4
+      ||    mvkh  EMIF_CE1_V,B4
+
+            stw   B4,*A4
+        
+        ;****************************************************************
+        ; *EMIF_CE2 = EMIF_CE2_V (setup for 32-bit async)
+        ;****************************************************************
+
+            mvkl  EMIF_CE2,A4       
+      ||    mvkl  EMIF_CE2_V,B4
+
+            mvkh  EMIF_CE2,A4
+      ||    mvkh  EMIF_CE2_V,B4
+
+            stw   B4,*A4
+
+        ;****************************************************************
+        ; *EMIF_CE3 = EMIF_CE3_V (setup for 32-bit async)
+        ;****************************************************************
+
+      ||    mvkl  EMIF_CE3,A4    
+      ||    mvkl  EMIF_CE3_V,B4     ;
+
+            mvkh  EMIF_CE3,A4
+      ||    mvkh  EMIF_CE3_V,B4
+
+            stw   B4,*A4
+
+        ;****************************************************************
+        ; *EMIF_SDRAMCTL = EMIF_SDRAMCTL_V
+        ;****************************************************************
+      ||    mvkl  EMIF_SDRAMCTL,A4      
+      ||    mvkl  EMIF_SDRAMCTL_V,B4    ;
+
+            mvkh  EMIF_SDRAMCTL,A4
+      ||    mvkh  EMIF_SDRAMCTL_V,B4
+
+            stw   B4,*A4
+
+        ;****************************************************************
+        ; *EMIF_SDRAMTIM = EMIF_SDRAMTIM_V
+        ;****************************************************************
+      ||    mvkl  EMIF_SDRAMTIM,A4      
+      ||    mvkl  EMIF_SDRAMTIM_V,B4    ;
+
+            mvkh  EMIF_SDRAMTIM,A4
+      ||    mvkh  EMIF_SDRAMTIM_V,B4
+
+            stw   B4,*A4
+
+        ;****************************************************************
+        ; *EMIF_SDRAMEXT = EMIF_SDRAMEXT_V
+        ;****************************************************************
+      ||    mvkl  EMIF_SDRAMEXT,A4      
+      ||    mvkl  EMIF_SDRAMEXT_V,B4    ;
+
+            mvkh  EMIF_SDRAMEXT,A4
+      ||    mvkh  EMIF_SDRAMEXT_V,B4
+
+            stw   B4,*A4
+
+;****************************************************************************
+; copy sections
+;****************************************************************************
+        mvkl  copyTable, a3 ; load table pointer
+        mvkh  copyTable, a3
+
+        ; ldw   *a3++, b1     ; Load entry point
+
+copy_section_top:
+        ldw   *a3++, b0     ; byte count 
+		ldw   *a3++, b4     ; load flash start (load) address
+        ldw   *a3++, a4     ; ram start address
+        nop   2
+
+ [!b0]  b copy_done         ; have we copied all sections?
+        nop   5
+
+copy_loop:
+        ldb   *b4++,b5      ; fetch from flash
+        sub   b0,1,b0       ; decrement counter
+ [ b0]  b     copy_loop     ; setup branch if not done
+ [!b0]  b     copy_section_top
+        zero  a1
+ [!b0]  and   3,a3,a1
+        stb   b5,*a4++      ; store to ram
+ [!b0]  and   -4,a3,a5
+ [a1]   and   4, a5,a3
+
+;****************************************************************************
+; jump to entry point
+;****************************************************************************
+copy_done:
+        mvkl .S2 _c_int00,b0
+		mvkh .S2 _c_int00,b0
+        b    .S2 b0
+        nop   5
+
+copyTable: 
+	
+			; count
+			; flash start (load) address 
+			; ram start (run) address
+	 
+    		;; .text
+    		.word user_size
+    		.word user_ld_start
+    		.word user_rn_start    
+		      		
+    		;; end of table
+    		.word 0
+    		.word 0
+    		.word 0
+   

@@ -1,0 +1,30 @@
+;
+;  ======== c6713_emif.s62 ========
+;
+            .title  "Flash bootup utility"
+
+; global EMIF symbols defined for the c671x family
+            .include        boot_c671x.h62
+
+;EMIF Register Addresses for c671x family  
+EMIF_GCTL       .equ  0x01800000  ;EMIF global control
+EMIF_CE1        .equ  0x01800004  ;address of EMIF CE1 control reg.
+EMIF_CE0        .equ  0x01800008  ;EMIF CE0control
+EMIF_CE2        .equ  0x01800010  ;EMIF CE2control
+EMIF_CE3        .equ  0x01800014  ;EMIF CE3control
+EMIF_SDRAMCTL   .equ  0x01800018  ;EMIF SDRAM control
+EMIF_SDRAMTIM   .equ  0x0180001c  ;EMIF SDRAM timer
+EMIF_SDRAMEXT   .equ  0x01800020  ;EMIF SDRAM extension
+
+; EMIF Register Values specifically for 6713 DSK
+EMIF_GCTL_V     .equ  0x00000078  ;
+EMIF_CE0_V      .equ  0xffffff23  ;EMIF CE0 SDRAM
+EMIF_CE1_V      .equ  0xffffff13  ;EMIF CE1 Flash 8-bit
+EMIF_CE2_V      .equ  0xffffbf93 ;EMIF CE2 Daughtercard 32-bit async
+EMIF_CE3_V      .equ  0xffffff13  ;EMIF CE3 Daughtercard 32-bit async
+EMIF_SDRAMCTL_V .equ  0x53115000  ;EMIF SDRAM control
+EMIF_SDRAMTIM_V .equ  0x00000578  ;SDRAM timing (refresh)
+EMIF_SDRAMEXT_V .equ  0x000a8529  ;SDRAM extended control
+
+
+

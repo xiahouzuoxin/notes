@@ -1,0 +1,29 @@
+;
+;  ======== boot_c671x.h62 ========
+;
+
+	.if ($isdefed("BOOT_C671X_") = 0)  ; prevent multiple includes of this file
+BOOT_C671X_	.set	1
+
+; EMIF Register Addresses for c671x family         
+        .global EMIF_GCTL         ;EMIF global control
+        .global EMIF_CE1          ;address of EMIF CE1 control reg.
+        .global EMIF_CE0          ;EMIF CE0control
+        .global EMIF_CE2          ;EMIF CE2control
+        .global EMIF_CE3          ;EMIF CE3control
+        .global EMIF_SDRAMCTL     ;EMIF SDRAM control
+        .global EMIF_SDRAMTIM     ;EMIF SDRAM timer
+        .global EMIF_SDRAMEXT     ;EMIF SDRAM extension
+
+; EMIF Register Values for c671x family
+        .global EMIF_GCTL_V       ;
+        .global EMIF_CE0_V        ;EMIF CE0 SDRAM
+        .global EMIF_CE1_V        ;EMIF CE1 Flash 8-bit
+        .global EMIF_CE2_V        ;EMIF CE2 Daughtercard 32-bit async
+        .global EMIF_CE3_V        ;EMIF CE3 Daughtercard 32-bit async
+        .global EMIF_SDRAMCTL_V   ;EMIF SDRAM control
+        .global EMIF_SDRAMTIM_V   ;SDRAM timing (refresh)
+        .global EMIF_SDRAMEXT_V   ;SDRAM extended control
+
+	.endif		; if BOOT_C671X_ is not defined
+
