@@ -79,6 +79,7 @@
 
 	- [Matlab的多线程工具Timer](essays/Matlab的多线程工具Timer.md)
 	- [Matlab中的笛卡尔坐标及极坐标](essays/Matlab中的笛卡尔坐标及极坐标.md)
+	- [matlab与C联合编程](essays/matlab与C联合编程.md)
 
 - Linux 
 
@@ -107,6 +108,7 @@
 	- [关于阅读的名言](essays/关于阅读的名言.md)
 	- [读塞缪尔《失实》](essays/读塞缪尔《失实》.md)
 	- [金庸武侠小说之我的见解](essays/金庸武侠小说之我的见解.md)
+	- [一首诗熟记三十六计](essays/一首诗熟记三十六计.md)
 
 - 读论文
 
