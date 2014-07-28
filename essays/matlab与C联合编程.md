@@ -3,8 +3,80 @@
 
 
 ## 在MATLAB中配置C语言编译器
-mex –setup       ; 将入口函数为mexFunction的C/C++文件编译成mex(DLL)文件
-mbuild -setup    ; 将入口函数为main的C/C++文件生成可以独立运行的C应用程序
+
+在这之前必须安装好编译器，可以是VC完整版，绿色版貌似不行啊，
+
+1\.	`mex –setup`设置编译器选项，将入口函数为mexFunction的C/C++文件编译成mex(DLL)文件
+
+```	
+>> mex -setup
+Please choose your compiler for building external interface (MEX) files: 
+ 
+Would you like mex to locate installed compilers [y]/n? y
+ 
+Select a compiler: 
+[1] Microsoft Visual C++ 2008 SP1 in D:\Program Files\VS2008 
+ 
+[0] None 
+ 
+Compiler: 1
+ 
+Please verify your choices: 
+ 
+Compiler: Microsoft Visual C++ 2008 SP1  
+Location: D:\Program Files\VS2008 
+ 
+Are these correct [y]/n? y
+ 
+*************************************************************************** 
+  Warning: MEX-files generated using Microsoft Visual C++ 2008 require 
+           that Microsoft Visual Studio 2008 run-time libraries be  
+           available on the computer they are run on. 
+           If you plan to redistribute your MEX-files to other MATLAB 
+           users, be sure that they have the run-time libraries. 
+*************************************************************************** 
+ 
+Trying to update options file: C:\Users\Administrator\AppData\Roaming\MathWorks\MATLAB\R2010b\mexopts.bat 
+From template:              D:\PROGRA~1\MATLAB\R2010b\bin\win64\mexopts\msvc90opts.bat 
+ 
+Done . . . 
+```
+
+2\. `mbuild -setup`设置编译器选项，将入口函数为main的C/C++文件生成可以独立运行的C应用程序
+
+```
+>> mbuild -setup
+Please choose your compiler for building standalone MATLAB applications: 
+ 
+Would you like mbuild to locate installed compilers [y]/n? y
+ 
+Select a compiler: 
+[1] Microsoft Visual C++ 2008 SP1 in D:\Program Files\VS2008 
+ 
+[0] None 
+ 
+Compiler: 1
+ 
+Please verify your choices: 
+ 
+Compiler: Microsoft Visual C++ 2008 SP1  
+Location: D:\Program Files\VS2008 
+ 
+Are these correct [y]/n? y
+ 
+**************************************************************************** 
+  Warning: Applications/components generated using Microsoft Visual Studio   
+           2008 require that the Microsoft Visual Studio 2008 run-time       
+           libraries be available on the computer used for deployment.       
+           To redistribute your applications/components, be sure that the    
+           deployment machine has these run-time libraries.                  
+**************************************************************************** 
+ 
+Trying to update options file: C:\Users\Administrator\AppData\Roaming\MathWorks\MATLAB\R2010b\compopts.bat 
+From template:              D:\PROGRA~1\MATLAB\R2010b\bin\win64\mbuildopts\msvc90compp.bat 
+ 
+Done . . . 
+```
 
 ## MATLAB调用C程序测试
 
