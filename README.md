@@ -46,6 +46,13 @@
 - OpenCV
 
 	- [CentOS上编译安装OpenCV-2.3.1与ffmpeg-2.1.2](essays/CentOS上编译安装OpenCV-2.3.1与ffmpeg-2.1.2.md)
+	- [OpenCV基础篇之读取显示图片](essays/OpenCV基础篇之读取显示图片.md)
+	- [OpenCV基础篇之使用CMake管理工程](essays/OpenCV基础篇之使用CMake管理工程.md)
+	- [OpenCV基础篇之Mat数据结构](essays/OpenCV基础篇之Mat数据结构.md)
+	- [OpenCV基础篇之像素访问](essays/OpenCV基础篇之像素访问.md)
+	- [OpenCV基础篇之图片叠加](essays/OpenCV基础篇之图片叠加.md)
+	- [OpenCV基础篇之像素操作对比度调节](essays/OpenCV基础篇之像素操作对比度调节.md)
+	- [OpenCV基础篇之绘图及RNG随机数对象](essays/OpenCV基础篇之绘图及RNG随机数对象.md)
 
 - 网络资源
 
