@@ -52,6 +52,7 @@
 	- [OpenCV基础篇之像素访问](essays/OpenCV基础篇之像素访问.md)
 	- [OpenCV基础篇之图片叠加](essays/OpenCV基础篇之图片叠加.md)
 	- [OpenCV基础篇之像素操作对比度调节](essays/OpenCV基础篇之像素操作对比度调节.md)
+	- [OpenCV基础篇之查找表](essays/OpenCV基础篇之查找表.md)
 	- [OpenCV基础篇之绘图及RNG随机数对象](essays/OpenCV基础篇之绘图及RNG随机数对象.md)
 
 - 网络资源
@@ -72,6 +73,7 @@
 - [转载@韩昊：傅里叶分析之掐死教程（完整版）](http://zhuanlan.zhihu.com/wille/19763358)
 - 转载@StackExchange：常见算法在实际项目中的应用 [英文版 ](http://cstheory.stackexchange.com/questions/19759/core-algorithms-deployed/19773#19773)[中文版](http://blog.jobbole.com/52669/)
 - [矩阵特征值分解与奇异值分解含义解析及应用](essays/矩阵特征值分解与奇异值分解含义解析及应用.md)
+- [循环的角度求均值](essays/循环的角度求均值.md)
 
 
 ## 计算机
