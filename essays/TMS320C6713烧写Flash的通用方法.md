@@ -831,7 +831,98 @@ _vector15:  VEC_ENTRY _vec_dummy
 两种方法都做过测试，都是可行的！
 
 
-## 6 参考
+## 6 进阶——单一工程的自烧写
+
+虽然上述方法在之前用起来一直很好，但烧写步骤多少还是有些麻烦，上述的步骤大概是：
+
+1.	修改user_size，编译装载要烧写的工程
+2.	从内存中导出要烧写的内容
+3.	编译装载Flash烧写工程，使用该工程将2中导出的内容烧写到Flash
+
+里面最麻烦的是，每次都要从内存中先导出烧写内容，转化为.h头文件再烧写，导出过程还不能有半点失误。这无疑是一件很麻烦的是，本来如果DSP板上有个拨码开关控制的话，就可以轻松完成自烧写了（在烧写的时候拨到一边，烧写完后拨到另一边运行）。
+
+但是，现在没有，人是喜欢偷懒的，于是我又在user_size上下了点功夫——何不用user_size作判别量，如果Flash中的user_size与现在挂着仿真器的运行着的程序的user_size不一致，就进行烧写不就可以吗？于是我的main函数就变成了下面那样：
+
+```c
+int main(void) {
+
+	/* Init BSP, include CSL_init() */
+	BSP_Init();
+
+	// Flash_Erase(0x90000000,0x10);
+	// Check size of text and burn Flash
+	#define USER_SIZE (0x23d68)
+	if (USER_SIZE !=  *(uint32_t *)(0x9000030C)) {
+	    /* Erase flash memory. */
+	    Flash_Erase(0x90000000,0x10);
+		printf("\nErase Flash ok.");
+		
+	    /* Write flash memory. */
+		Flash_Writem(0x90000000, (uint16_t *)(0x0), 0x400>>1);   
+	    printf("\nWrite .boot ok.");
+
+	   	Flash_Writem(0x90000400, (uint16_t *)(0x400), USER_SIZE>>1);
+	    printf("\nWrite .text ok.");
+
+		printf("\nBurn to flash ok.");
+
+		LED_Control(SIG_LED_ON);
+		Delay_ticks(3000, NULL);
+		LED_Control(SIG_LED_OFF);
+
+	    return 0;
+	}
+
+	// below is user code
+
+	while(1) {
+		
+	}
+	
+}
+```
+
+里面一定注意几个关键的量：
+
+1.	代码中的0x23d68是我的user_size大小，这个时候，每当要烧写的时候，user_size不仅要在boot_c671x.s62文件中修改，main函数中的USER_SIZE宏定义也要修改
+
+2.	请注意下面代码中的0x9000030C
+
+	```c
+	if (0x23d68 !=  *(uint32_t *)(0x9000030C))
+	```
+
+	0x9000030C表示的是在现在的Flash中，user_size存放的地址。这个地址可以通过下面的方法确定：配置好的启动文件后将工程通过仿真器下载到DSP上，从boot_c671x.s62代码中
+
+	```
+	_copyTable: 
+		
+				; count
+				; flash start (load) address 
+				; ram start (run) address
+		 
+	    		;; .text
+	    		.word user_size
+	    		.word user_ld_start
+	    		.word user_rn_start    
+			      		
+	    		;; end of table
+	    		.word 0
+	    		.word 0
+	    		.word 0
+	```
+
+	可以看到，我的user_size是存放在_copyTable位置（请注意，1~5小节为之前的版本，因为没有考虑和C语言交互，所以汇编中只使用copyTable，这里考虑到和C交互，将汇编中copyTable都加前下划线改成了_copyTable，不过不改也没关系，因为最后还是发现没用上）。在Memory窗口中搜索copyTable，
+
+	![copyTable]
+
+	因为挂上仿真器后的copyTable=0x0000030C是指内存中的copyTable，对应烧写到Flash中的copyTable就是0x90000000+0x0000030C=0x9000030C，这就是上面if条件语句中看到的值了。
+
+	if里面就是Flash烧写的代码，和之前使用Flash工程烧写几乎一致，只不过烧写的起始地址和长度要改变改变而已，所谓学而不思则罔，留给读者慢慢体会吧。
+
+这样，每次修改user_size和USER_SIZE后，挂着仿真器运行程序，此时Flash中的user_size还是上一次的，因此执行if条件中的烧写代码。烧写完成后，重新上电，因为Flash中的user_size在刚才使用仿真器烧写时已经更新，所以if条件中的烧写代码不执行，直接跳过if执行用户程序，这就为什么DSP能在单一工程中自烧写！
+
+## 7 参考
 
 [1] Creating a Second-Level Bootloader for FLASH Bootloading on TMS320C6000 Platform With Code Composer Studio
 
@@ -853,3 +944,4 @@ _vector15:  VEC_ENTRY _vec_dummy
 [Burn]:../images/TMS320C6713烧写Flash的通用方法/Burn.png
 [burnflash]:../codes/TMS320C6713烧写Flash的通用方法/burn_flash
 [test2]:../images/TMS320C6713烧写Flash的通用方法/test2.png
+[copyTable]:../images/TMS320C6713烧写Flash的通用方法/copyTable.png

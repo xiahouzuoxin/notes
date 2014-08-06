@@ -38,6 +38,7 @@
 	- [EP2C8F256的官方原理图库存在问题](essays/EP2C8F256的官方原理图库存在问题.md)
 	- [PCB设计参考资料](essays/PCB设计参考资料.md)
 	- [三极管的电平转换及驱动电路分析](essays/三极管的电平转换及驱动电路分析.md)
+	- [DCDC纹波小实验](essays/DCDC纹波小实验.md)
 	
 
 
@@ -112,24 +113,22 @@
 
 ## 阅读 写作
 
-- 读书
+- 读书写作
 
 	- [关于阅读的名言](essays/关于阅读的名言.md)
 	- [读塞缪尔《失实》](essays/读塞缪尔《失实》.md)
 	- [金庸武侠小说之我的见解](essays/金庸武侠小说之我的见解.md)
 	- [一首诗熟记三十六计](essays/一首诗熟记三十六计.md)
 	- [此心安处是吾乡——苏轼《定风波》](essays/此心安处是吾乡——苏轼《定风波》.md)
-
-- 读论文
-
-	- [中国计算机学会推荐国际学术会议和期刊目录](http://www.ccf.org.cn/sites/ccf/paiming.jsp)
-
-- 写作
-
 	- [秋意](essays/秋意.md)
 	- [使用Markdown书写](essays/使用Markdown书写.md)
 	- [Markdown中插入数学公式的方法](essays/Markdown中插入数学公式的方法.md)
 	- [Latex入门](essays/Latex入门.md)
+	-[拾掇起来的年华](拾掇起来的年华.md)
+
+- 读论文
+
+	- [中国计算机学会推荐国际学术会议和期刊目录](http://www.ccf.org.cn/sites/ccf/paiming.jsp)
 	
 
 # 关于我
