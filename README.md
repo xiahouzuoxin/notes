@@ -1,6 +1,6 @@
-# 目录
+# 第一篇 分类目录
 
-## 嵌入式系统
+## 1 嵌入式
 
 - DSP 	
 
@@ -39,10 +39,11 @@
 	- [PCB设计参考资料](essays/PCB设计参考资料.md)
 	- [三极管的电平转换及驱动电路分析](essays/三极管的电平转换及驱动电路分析.md)
 	- [DCDC纹波小实验](essays/DCDC纹波小实验.md)
+	- [运放参数解释及常用运放选型](essays/运放参数解释及常用运放选型.md)
 	
 
 
-## 图像 音频 机器学习
+## 2 图像 音频 机器学习
 
 - OpenCV
 
@@ -66,7 +67,7 @@
 	- [免费图像数据库](essays/免费图像数据库.md)
 
 
-## 数学 算法
+## 3 数学 算法
 
 - [数学牛人matrix67](http://www.matrix67.com/blog/)
 - [数理统计知识整理——回归分析与方差分析](essays/数理统计知识整理——回归分析与方差分析.md)
@@ -77,7 +78,7 @@
 - [循环的角度求均值](essays/循环的角度求均值.md)
 
 
-## 计算机
+## 4 计算机
 
 - C/C++
 
@@ -111,7 +112,7 @@
 
 	- [LabVIEW上位机与串口通信](essays/LabVIEW上位机与串口通信.md)
 
-## 阅读 写作
+## 5 阅读 写作 其它
 
 - 读书写作
 
@@ -124,18 +125,51 @@
 	- [使用Markdown书写](essays/使用Markdown书写.md)
 	- [Markdown中插入数学公式的方法](essays/Markdown中插入数学公式的方法.md)
 	- [Latex入门](essays/Latex入门.md)
-	-[拾掇起来的年华](拾掇起来的年华.md)
+	- [拾掇起来的年华](essays/拾掇起来的年华.md)
+	- [声波能从空气中穿透墙体传播吗](essays/声波能从空气中穿透墙体传播吗.md)
 
 - 读论文
 
 	- [中国计算机学会推荐国际学术会议和期刊目录](http://www.ccf.org.cn/sites/ccf/paiming.jsp)
 	
 
-# 关于我
+# 第二篇 说明
 
-北京科技大学<br>
-University of Science and Tecnology Beijing (USTB)
+本工程中，未特殊说明的笔记全部原创，一字一字从键盘上敲出来的，转载请注明出处：<https://github.com/xiahouzuoxin>，谢谢！
 
-Email: [xiahouzuoxin@163.com](xiahouzuoxin@163.com)
+笔记完全使用Markdown书写，并首先发布在[Github](https://github.com/xiahouzuoxin)，Github支持Markdown格式的预览，你可以直接在Github上无障碍的阅览。关于如何使用Markdown书写，可以参见我的笔记“[使用Markdown书写](essays/使用Markdown书写.md)”。
 
+如果Download这些笔记到本地，则可以使用Google浏览器+Markdown Preview Plus插件的方式进行本地浏览，若要正常浏览文档中的公式，则必需确保网络连接正常，因为公式都使用到<http://www.forkosh.com/mathtextutorial.html>的Latex解析器。
+
+工程中文件目录的安排如下：
+
+	README.md  本文档
+
+	essays/    所有笔记的Markdown文本格式
+
+	codes/     存放可供下载的代码
+
+	images/    存放文档中的所有图片
+
+	enclosure/ 存放可供下载的附件（pdf等）
+
+
+
+# 第三篇 关于我
+
+1. 学历
+
+	- 2009级本科：北京科技大学，电子信息工程专业
+	- 2013级硕士：北京科技大学，计算机技术专业（保送）
+
+2. 座右铭
+
+	- 千淘万漉虽辛苦，吹尽狂沙始到金。    ——（唐）刘禹锡
+
+3. 联系邮箱（欢迎学习交流）
+
+	- <xiahouzuoxin@163.com>
+	- <g20138503@xs.ustb.edu.cn>
+
+-------------------------------------------
 Created in 2014.03.
