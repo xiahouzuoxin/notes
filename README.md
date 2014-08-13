@@ -40,6 +40,7 @@
 	- [三极管的电平转换及驱动电路分析](essays/三极管的电平转换及驱动电路分析.md)
 	- [DCDC纹波小实验](essays/DCDC纹波小实验.md)
 	- [运放参数解释及常用运放选型](essays/运放参数解释及常用运放选型.md)
+	- [使用Pspice进行电路仿真](essays/使用Pspice进行电路仿真.md)
 	
 
 
@@ -59,12 +60,7 @@
 
 - 网络资源
 
-	- [bfcat计算机视觉](http://www.bfcat.com/)
-	- [cvchina增强视觉](http://www.cvchina.info/)
-	- [周志华主页](http://cs.nju.edu.cn/zhouzh/)
-	- [CV Online](http://homepages.inf.ed.ac.uk/rbf/CVonline/)
-	- [Berkeley Computer Vision Group](http://www.eecs.berkeley.edu/Research/Projects/CS/vision/)
-	- [免费图像数据库](essays/免费图像数据库.md)
+	- [图像牛人链接及数据库资源](essays/图像牛人链接及数据库资源.md)
 
 
 ## 3 数学 算法
