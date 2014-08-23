@@ -27,6 +27,8 @@
 
 - ARM
 
+	- [基于SPI的双MCU通信](essays/基于SPI的双MCU通信.md)
+
 
 - 硬件设计
 
@@ -72,6 +74,7 @@
 - 转载@StackExchange：常见算法在实际项目中的应用 [英文版 ](http://cstheory.stackexchange.com/questions/19759/core-algorithms-deployed/19773#19773)[中文版](http://blog.jobbole.com/52669/)
 - [矩阵特征值分解与奇异值分解含义解析及应用](essays/矩阵特征值分解与奇异值分解含义解析及应用.md)
 - [循环的角度求均值](essays/循环的角度求均值.md)
+- [位反转算法](essays/位反转算法.md)
 
 
 ## 4 计算机

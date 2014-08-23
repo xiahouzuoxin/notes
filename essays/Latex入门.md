@@ -127,6 +127,19 @@ Latex就想一门编程语言，写完后需要编译，编译上述文档的命令为：`xelatex hello.tex`
 
 到这里，貌似我们已经能够使用Latex开始书写了！
 
+注意：要使用xelatex编译的文件格式必须是UTF-8，VIM中使用命令`：set filetype=utf-8`即可，Windows下使用CTex则另存为选择UTF-8格式。当然，Windows下使用中文字体有更方便的方法：
+
+```
+\usepackage{xeCJK}
+\usepackage{fontspec}
+\setCJKmainfont{SimSun}
+\setCJKmonofont{SimSun}
+\setmainfont{Times New Roman}
+```
+
+其中的\\setCJKmainfont{SimSun}就是用于设置宋体为中文主字体。而且上面的配置在中英混合的文章中好看。
+
+
 
 ## Latex语法
 
