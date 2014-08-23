@@ -1,0 +1,63 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"><link rel="stylesheet" id="theme" href="chrome-extension://febilkbfcbhebfnokafefeacimjdckgl/theme/Github.css"></head><body><p><a href="../README.md"><font size="4">←返回主目录<font></font></font></a><font size="4"><font>
+<br><br><br></font></font></p><font size="4"><font>
+<p>以前我曾一度傻乎乎的使用</p>
+<pre><code class="language-Verilog nginx"><span class="title">always</span> @ (posedge signal)</code></pre>
+<p>这样的代码去检测signal的上升沿，闹出了很多问题。</p>
+<p>当受实验室的一同学指教后，再也不会傻乎乎的这样干了。当然，你看完下文也不会这样干了。</p>
+<p>检测上升沿的原理：使用高频的时钟对信号进行采样，因此要实现上升沿检测，时钟频率至少要在信号最高频率的2倍以上，否则就可能出现漏检测。具体请参见下面代码。</p>
+<pre><code class="language-Verilog ruby"><span class="class"><span class="keyword">module</span> <span class="title">edge_check</span>(<span class="title">clk</span>, <span class="title">rst_n</span>, <span class="title">signal</span>, <span class="title">pos_edge</span>, <span class="title">neg_edge</span>, <span class="title">both_edge</span>);</span>
+
+input clk;
+input rst_n;
+input signal;
+output pos_edge;
+output neg_edge;
+output both_edge;
+
+
+reg sig_r<span class="number">0</span>, sig_r1;  <span class="regexp">//</span> 状态寄存器
+always @ (posedge clk <span class="keyword">or</span> negedge rst_n)
+    <span class="keyword">if</span> (!rst_n) <span class="keyword">begin</span> 
+        sig_r<span class="number">0</span> &lt;= <span class="number">1</span><span class="string">'b0;
+        sig_r1 &lt;= 1'</span>b<span class="number">0</span>;
+    <span class="keyword">end</span> <span class="keyword">else</span> <span class="keyword">begin</span> 
+        sig_r<span class="number">0</span> &lt;= signal;
+        sig_r1 &lt;= sig_r<span class="number">0</span>;
+    <span class="keyword">end</span> 
+
+assign pos_edge = (~sig_r1) &amp; (sig_r<span class="number">0</span>);
+assign neg_edge = sig_r1 &amp; (~sig_r<span class="number">0</span>);    
+assign both_edge = sig_r1 ^ sig_r<span class="number">0</span>;  <span class="regexp">//</span> 双边沿检测，或pos_edge|neg_edge
+
+endmodule</code></pre>
+<p>使用Quartus II综合布线之后的RTL视图如下：</p>
+<p><img src="../images/FPGA的边沿检测/check_regs.png" alt="check_regs"></p>
+<p>从RTL视图中可以看出，电路是通过一个异步复位的D触发器实现的。</p>
+<p>ModelSim的仿真视图如下，从中可看出已检测出上升和下降沿，但存在一个延时，这是因为使用了时钟同步的检测。</p>
+<p><img src="../images/FPGA的边沿检测/modelsim1.png" alt="modelsim1"></p>
+<p>或者上面的Verilog代码还可以换一种写法，效率上差不了太多；</p>
+<pre><code class="language-Verilog nginx"><span class="title">module</span> edge_check(clk, rst_n, signal, pos_edge, neg_edge, both_edge);
+
+<span class="title">input</span> clk;
+<span class="title">input</span> rst_n;
+<span class="title">input</span> signal;
+<span class="title">output</span> pos_edge;
+<span class="title">output</span> neg_edge;
+<span class="title">output</span> both_edge;
+
+<span class="title">reg</span> [<span class="number">1</span>:<span class="number">0</span>]sig_fifo;
+<span class="title">always</span> @ (posedge clk or negedge rst_n)
+    if (!rst_n) begin 
+        sig_fifo &lt;= <span class="number">2</span><span class="string">'b0;
+    end else begin 
+        sig_fifo &lt;= {sig_fifo[0], signal};
+    end 
+
+assign pos_edge = (sig_fifo == 2'</span>b01);
+<span class="title">assign</span> neg_edge = (sig_fifo == <span class="number">2</span><span class="string">'b10);    
+assign both_edge = sig_fifo[0] ^ sig_fifo[1];  // 双边沿检测，或pos_edge|neg_edge
+
+endmodule</span></code></pre>
+<p>生成的RTL视图为</p>
+<p><img src="../images/FPGA的边沿检测/check_fifo.png" alt="check_fifo"></p>
+</font></font></body></html>

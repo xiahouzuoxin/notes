@@ -1,0 +1,92 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"><link rel="stylesheet" id="theme" href="chrome-extension://febilkbfcbhebfnokafefeacimjdckgl/theme/Github.css"></head><body><p><a href="../README.md"><font size="4">←返回主目录<font></font></font></a><font size="4"><font>
+<br><br><br></font></font></p><font size="4"><font>
+<p>已测试环境：</p>
+<ol>
+<li>CentOS 6.3 32bit</li>
+<li>CentOS 6.5 64bit</li>
+</ol>
+<p>曾经在CentOS 6.3 32bit安装过OpenCV，参见<a href="http://blog.csdn.net/xiahouzuoxin/article/details/9831263">CentOS 6.3中安装OpenCV2.3.1</a>，如今换了64bit系统，大刀阔斧，重新来一遍。</p>
+<h2>检查并安装相关程序，确保gtk安装成功，否则无法显示图片</h2>
+<pre><code class="nginx"><span class="title">yum</span> install gcc-c++              <span class="comment"># g++编译</span>
+yum install gtk-devel            <span class="comment"># 反正是gtk神马的，不一定就是gtk-devel，可以使用*gtk-devel*匹配</span>
+yum install gimp-devel
+yum install gimp-devel-tools
+yum install gimp-help-browser
+yum install zlib-devel
+yum install libtiff-devel        <span class="comment"># tiff格式图片支持</span>
+yum install libjpeg-devel        <span class="comment"># jpeg图片支持</span>
+yum install libpng-devel         <span class="comment"># png图片支持</span>
+yum install gstreamer-devel      <span class="comment"># 处理MP3、Ogg、MPEG1、MPEG2、AVI等格式的多媒体数据</span>
+yum install libavc1394-devel     <span class="comment"># 1394音频接口的控制命令集</span>
+yum install libraw1394-devel
+yum install libdc1394-devel
+yum install jasper-devel
+yum install jasper-utils
+yum install cmake                <span class="comment"># 方便编译构建OpenCV的工具</span>
+yum install swig
+yum install python               <span class="comment"># python环境支持</span>
+yum install libtool
+yum install nasm                 <span class="comment"># 汇编工具</span></code></pre>
+<h2>安装ffmpeg2.1.2</h2>
+<p>ffmpeg没有现成的用于CentOS的rpm包，因此需要使用源码编译安装，</p>
+<pre><code class="sql">./configure <span class="comment">--enable-shared –disable-yasm</span>
+make
+make install</code></pre>
+<p>此时，ffmpeg默认安装到/usr/local下面.</p>
+<h2>安装OpenCV-2.3.1</h2>
+<ol>
+<li><p>使用vi打开CMakeLists.txt文件，找到下面一行后将其注释(#)</p>
+<pre><code class="ruby">set_property( <span class="constant">CACHE</span> <span class="constant">CMAKE_BUILD_TYPE</span> <span class="constant">PROPERTY</span> <span class="constant">STRINGS</span><span class="variable">${</span><span class="constant">CMAKE_CONFIGURATION_TYPES</span>} )
+<span class="comment"># set_property( CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS${CMAKE_CONFIGURATION_TYPES} )</span></code></pre>
+</li>
+<li><p>使用vi打开CMakeLists.txt文件，搜索关键字ffmpeg，找到对应位置，</p>
+<pre><code class="ruby"><span class="keyword">if</span>(<span class="constant">EXISTS</span> /usr/<span class="keyword">include</span>/ffmpeg/libavformat/avformat.hOR <span class="constant">HAVE_FFMPEG_SWSCALE</span>)</code></pre>
+<p>确认上面的目录是/usr/include，如果在安装ffmpeg时，修改了路径，则作相应的修改，现在我们可以不动。</p>
+</li>
+<li><p>到opencv源代码主目录写下，依次执行</p>
+<pre><code class="nginx"><span class="title">mkdir</span> release
+cd release
+cmake ../
+make
+make install</code></pre>
+<p>等待安装结束，默认安装到位置/usr/local/。</p>
+</li>
+</ol>
+<h2>测试</h2>
+<pre><code class="cpp"><span class="preprocessor">#include &lt;cv.h&gt;</span>
+<span class="preprocessor">#include &lt;highgui.h&gt;</span>
+
+<span class="keyword">using</span> <span class="keyword">namespace</span> cv;
+<span class="keyword">int</span> main( <span class="keyword">int</span> argc, <span class="keyword">char</span>** argv )
+{
+  Mat image;
+  image = imread(argv[<span class="number">1</span>], <span class="number">1</span> );
+
+  <span class="keyword">if</span>( argc != <span class="number">2</span> ||!image.data )
+    {
+      printf(<span class="string">"No image data \n"</span> );
+      <span class="keyword">return</span> -<span class="number">1</span>;
+    }
+  namedWindow(<span class="string">"Display Image"</span>, CV_WINDOW_AUTOSIZE );
+  imshow(<span class="string">"Display Image"</span>, image );
+  waitKey(<span class="number">0</span>);
+
+  <span class="keyword">return</span> <span class="number">0</span>;
+}</code></pre>
+<p>编写Makefile，</p>
+<pre><code class="ruby"><span class="constant">SRC</span>=<span class="constant">DisplayImage</span>.cpp
+<span class="constant">LIB</span>=-<span class="constant">L</span>/usr/local/lib/
+<span class="constant">INC</span>=-<span class="constant">I</span>/usr/local/<span class="keyword">include</span>/opencv/
+<span class="constant">Test</span><span class="symbol">:</span><span class="variable">$(</span><span class="constant">SRC</span>)
+   g++ -o <span class="constant">Test</span> <span class="variable">$(</span><span class="constant">LIB</span>)<span class="variable">$(</span><span class="constant">INC</span>) -lopencv_core -lopencv_highgui -lopencv_ml <span class="variable">$^</span></code></pre>
+<p>执行make，没有错误。继续运行，./Test {ImagePathName}，出现“不能链接到动态库”的错误，大致如下：</p>
+<pre><code class="delphi">error <span class="keyword">while</span> loading shared libraries: libopencv_core.so.<span class="number">2.3</span>: cannot open shared <span class="keyword">object</span> <span class="keyword">file</span>: No such <span class="keyword">file</span> <span class="keyword">or</span> directory</code></pre>
+<p>解决办法：</p>
+<pre><code class="nginx"><span class="title">cd</span> /etc/ld.so.conf.d/   <span class="comment"># 该文件夹下存放了各种动态链接库的路径信息</span>
+vim usr-lib.conf</code></pre>
+<p>添加如下信息（opencv的lib所在路径）</p>
+<pre><code class="undefined">/usr/local/lib</code></pre>
+<p>保存文件后执行ldconfig命令即可。</p>
+<p>重新运行，没问题，收工。</p>
+<p><img src="../images/CentOS上编译安装OpenCV-2.3.1与ffmpeg-2.1.2/result.png" alt="result"></p>
+</font></font></body></html>

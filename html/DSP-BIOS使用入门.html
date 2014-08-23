@@ -1,0 +1,239 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"><link rel="stylesheet" id="theme" href="chrome-extension://febilkbfcbhebfnokafefeacimjdckgl/theme/Github.css"></head><body><p><a href="../README.md"><font size="4">←返回主目录<font></font></font></a><font size="4"><font>
+<br><br><br></font></font></p><font size="4"><font>
+<h2>从环境说到搭建第一个工程</h2>
+<p>请注意，此文默认读者已经对DSP及CCS V3.3环境有一定的了解了，知道cmd文件的配置，知道新建工程，编译并连接仿真器下载！如果你对这些还都不熟悉，请先熟悉这些！当然，最好要有操作系统的基本概念——任务、调度、中断！</p>
+<ol>
+<li><p>第一个问题：DSP/BIOS（好吧，我们一般这样写）是什么？</p>
+<p>是TI公司专门为DSP开发的嵌入式实时操作系统，既然是TI公司为自己的DSP开发的——官方的，当然性能是杠杠的了（当然，我还在入门，这点也是道听途说，没有实际体会）。既然说到实时操作系统，那还有哪些嵌入式实时操作系统呢？Linux是吗——不是，VxWorks——是，哦，还有一个小的开源系统——uCOS II也是。</p>
+</li>
+<li><p>问题二：要使用DSP/BIOS，需要安装什么环境呢？</p>
+<p>本文为CCS v3.3，默认就安装上DSP/BIOS，版本为V5.31.2（可以通过<code>Help-&gt;About...</code>菜单查看版本）。当然，如果需要其它版本（可以同时安装多个版本），可以到TI官网下载，链接：</p>
+<p><a href="http://software-dl.ti.com/dsps/dsps_public_sw/sdo_sb/targetcontent/bios/dspbios/README.md">http://software-dl.ti.com/dsps/dsps_public_sw/sdo_sb/targetcontent/bios/dspbios/README.md</a></p>
+<p>请注意：DSP处理器型号、CCS版本、DSP/BIOS版本之间存在兼容性，请注意选择！</p>
+<p>下载后安装到CCS所在目录，通过<code>Help-&gt;About...</code>中的Manager选择使用的BIOS版本！</p>
+<p><img src="../images/DSP-BIOS使用入门/1.png" alt="1"></p>
+<p>本文使用的是CCS V3.3默认的DSP/BIOS版本，即V5.31.2。无特殊说明，本文的例子运行在TI的CCS 3.3软件仿真模式下，仿真环境配置如下（使用C6713处理器仿真）：</p>
+<p><img src="../images/DSP-BIOS使用入门/2.png" alt="2"></p>
+</li>
+<li><p>问题三：如何建立第一个BIOS工程？</p>
+<p>先建立一个普通工程，<code>Project-&gt;New...</code>，如下：</p>
+<p><img src="../images/DSP-BIOS使用入门/3.png" alt="3"></p>
+<p><code>File-&gt;New-&gt;DSP/BIOS Configuration...</code>新建DSP/BIOS配置文件，</p>
+<p><img src="../images/DSP-BIOS使用入门/4.png" alt="4">
+<img src="../images/DSP-BIOS使用入门/5.png" alt="5"></p>
+<p>保存一下，配置文件的后缀为*.tcf.</p>
+<p>将<strong>配置文件和由配置文件自动生成的cmd文件</strong>添加到工程，</p>
+<p><img src="../images/DSP-BIOS使用入门/6.png" alt="6"></p>
+<p>新建一个main.c文件，<strong>把main.c添加到工程</strong>（总是忘记这个然后还到处找问题），写个最简单的代码吧，</p>
+<pre><code class="nginx"><span class="title">int</span> main(void)
+{
+  <span class="title">return</span> <span class="number">0</span>;
+}</code></pre>
+<p>编译一下工程，此时出现错误提示：</p>
+<pre><code class="sql">js: "./bios_first.tcf", line 11: Heaps are enabled, but the segment for DSP/BIOS Objects (MEM.BIOSOBJSEG) is not <span class="operator"><span class="keyword">set</span> correctly. Please <span class="keyword">create</span> a heap <span class="keyword">in</span> one <span class="keyword">of</span> your data segments <span class="keyword">and</span> <span class="keyword">set</span> MEM.BIOSOBJSEG <span class="keyword">to</span> it.</span></code></pre>
+<p>没关系，在下一小节将看到怎么去掉该错误！</p>
+</li>
+</ol>
+<h2>DSP/BIOS的配置方法</h2>
+<ol>
+<li><p>系统配置</p>
+<p><img src="../images/DSP-BIOS使用入门/7.png" alt="7"></p>
+<p>在Global Setting上右键属性，设置DSP目标板时钟，CLKOUT时钟以及大小端模式。</p>
+<p>关于Call User Init Function选项，默认是打开的，如果连接有实体目标板，则最好在此处设置用户初始化PLL及EMIF等的代码的函数（有关PLL初始化话的代码参考其它C6713的工程）。否则软件仿真模式下，则去掉该选项能在运行时避免不少错误。</p>
+<p>接下来配置SDRAM及堆大小，</p>
+<p><img src="../images/DSP-BIOS使用入门/8.png" alt="8">
+<img src="../images/DSP-BIOS使用入门/9.png" alt="9"></p>
+<p>现在可以重新编译一下工程了，恭喜恭喜，编译成功！之前提示的堆错误就在这里解决的！</p>
+<p>现在，就需要根据需求对SDRAM的存储空间进行划分（就是以前没使用操作系统时要写cmd文件一样，这里的划分将自动生成或修改cmd文件）。使用DSP/BIOS很方便，在MEM上右键<code>Insert MEM</code>就可插入分区了！这部分功能对应到cmd上就是类似于cmd中MEMORY的功能，</p>
+<pre><code class="css"><span class="tag">MEMORY</span>
+<span class="rules">{
+  <span class="rule"><span class="attribute">BOOT_RAM</span>:<span class="value"> o=<span class="number">00000000</span>h,l=<span class="number">00000400</span>h   
+  IRAM    : o=<span class="number">00000400</span>h,l=<span class="number">0003</span>FC00h
+
+  <span class="comment">/* CE2: SDRM 256Mbit */</span>
+  SDRAM:    o = <span class="number">80000000</span>h,l=<span class="number">01000000</span>h  <span class="comment">/* 128Mbit */</span>
+  GB_MEM: o = <span class="number">81000000</span>h,l=<span class="number">01000000</span>h  <span class="comment">/* 128Mbit */</span> 
+
+  <span class="comment">/* Flash */</span>
+  FLASH_BOOT : o=<span class="number">90000000</span>h,l=<span class="number">00000400</span>h
+  FLASH_REST : o=<span class="number">90000400</span>h,l=<span class="number">000</span>FFB00h 
+}</span></span></span></code></pre>
+</li>
+<li><p>LOG的配置</p>
+<p>LOG功能说白了就是用来实现printf的，STS用来捕获任意对象的计数值。</p>
+<p>在LOG上右键<code>Insert LOG</code>，插入一个trace的打印对象，</p>
+<p><img src="../images/DSP-BIOS使用入门/10.png" alt="10"></p>
+<p>在main.c中编写如下代码，</p>
+<pre><code class="cpp"><span class="preprocessor">#include "bios_firstcfg.h" // DSP/BIOS自动生成，可以在工程下找到，包含了对trace的声明以及相关头文件的包含</span>
+
+<span class="keyword">int</span> main(<span class="keyword">void</span>)
+{
+  LOG_enable(&amp;trace);
+  LOG_printf(&amp;trace, <span class="string">"Hello DSP/BIOS %d."</span>, <span class="number">0</span>); 
+
+  <span class="keyword">return</span> <span class="number">0</span>;
+}</code></pre>
+<p>编译通过后装载程序，打开菜单<code>DSP/BIOS-&gt;Message Log</code>，运行程序效果如图，</p>
+<p><img src="../images/DSP-BIOS使用入门/11.png" alt="11"></p>
+<p>注意，上面的程序中是通过LOG_printf函数而非printf打印消息的，其它的有关LOG的函数还有，</p>
+<pre><code class="delphi">LOG_disable. Disable the system log.
+LOG_enable. Enable the system log.
+LOG_error. Write a user error event <span class="keyword">to</span> the system log.
+LOG_event. Append unformatted message <span class="keyword">to</span> message log.
+LOG_event5. Append <span class="number">5</span>-argument unformatted message <span class="keyword">to</span> log.
+LOG_message. Write a user message event <span class="keyword">to</span> the system log.
+LOG_printf. Append formatted message <span class="keyword">to</span> message log.
+LOG_printf4. Append <span class="number">4</span>-argument formatted message <span class="keyword">to</span> log.
+LOG_reset. Reset the system log.</code></pre>
+<p>好了，这是我们学习DSP/BIOS遇到的第1个模块（Module）——LOG模块。</p>
+<p>其实DSP/BIOS中还有很多模块，参考TI文档《SPRU430S：TMS320C6000 DSP/BIOS 5.x Application Programming Interface (API) Reference Guide》</p>
+<p><img src="../images/DSP-BIOS使用入门/12.png" alt="12"></p>
+</li>
+<li><p>任务模块的配置</p>
+<p>操作系统最基本的就是任务，我们先来看看任务！新建两个任务，右键属性设置任务函数名，如图，</p>
+<p><img src="../images/DSP-BIOS使用入门/13.png" alt="13"></p>
+<p>对TSK_task1做相同的配置，请注意，其中的Task function要在C函数前加下划线！</p>
+<p>在main函数中添加两个任务的代码，</p>
+<pre><code class="cpp"><span class="keyword">void</span> func_task0(<span class="keyword">void</span>)  <span class="comment">// 对应刚才的_func_task0</span>
+{
+  <span class="keyword">static</span> Uint16 TSK0 = <span class="number">0</span>;
+
+  <span class="keyword">while</span> (<span class="number">1</span>) {   <span class="comment">// 任务一般都有死循环，只执行一次的任务意义不大</span>
+      LOG_printf(&amp;trace, <span class="string">"TSK0=%u"</span>, TSK0++);
+      TSK_yield();
+  }        
+}
+
+<span class="keyword">void</span> func_task1(<span class="keyword">void</span>)  <span class="comment">// 对应刚才的_func_task1</span>
+{
+  <span class="keyword">static</span> Uint16 TSK1 = <span class="number">0</span>;
+
+  <span class="keyword">while</span> (<span class="number">1</span>) {
+      LOG_printf(&amp;trace, <span class="string">"TSK1=%u"</span>, TSK1++);
+      TSK_yield();
+  }        
+}</code></pre>
+<p>重新编译装载，运行后在Message Log窗口下看到的效果如下：</p>
+<p><img src="../images/DSP-BIOS使用入门/14.png" alt="14"></p>
+<p>操作系统的任务都是死循环的结构，要实现任务调度必须要让每个任务有空闲的时间，不妨把上面代码中的TSK_yield()注释掉，重新编译装载运行，此时程序会一直在func_task0中执行。</p>
+<p>TSK_yield在这里的作用就是如果有相同优先级的任务，则调度到同优先级的其它任务执行！</p>
+<p>TSK模块的属性有很多，除了设置函数名外，还可以设置优先级、输入参数等！调度函数也有很多，另一个常用的是使用睡眠调度函数——TSK_sleep，其使用如下：</p>
+<pre><code class="javascript"><span class="keyword">void</span> func_task(<span class="keyword">void</span>)
+{
+  <span class="keyword">while</span>(<span class="number">1</span>) {
+      <span class="comment">// 处理代码</span>
+
+      TSK_sleep(<span class="number">100</span>);  <span class="comment">// 100表示系统时钟计数</span>
+  }
+}</code></pre>
+</li>
+<li><p>软中断SWI模块的配置</p>
+<p>中断具有比任何任务都高的优先级，而其中硬件中断（HWI）又比软件中断（SWI）优先级更高。</p>
+<p><img src="../images/DSP-BIOS使用入门/15.png" alt="15"></p>
+<p>软中断邮箱不是信号中的消息邮箱，但机制类似，上面的值为软中断邮箱的复位值！</p>
+<p>一旦软中断邮箱的值达到0时，触发软件中断，触发后一次执行完成（除非被硬件中断打断），执行完后软中断邮箱恢复到复位值！由于是一次执行完成，因此与任务不同，软中断中绝不会有死循环（否则就一直执行软中断，任务就别执行了）！</p>
+<p>接下来完成软中断函数中的内容：task1每执行2次，触发一次软中断，软中断计数值+1。</p>
+<pre><code class="cpp"><span class="keyword">void</span> func_task1(<span class="keyword">void</span>)  <span class="comment">// 对应刚才的_func_task1</span>
+{
+  <span class="keyword">static</span> Uint16 TSK1 = <span class="number">0</span>;
+
+  <span class="keyword">while</span> (<span class="number">1</span>) {
+      LOG_printf(&amp;trace, <span class="string">"TSK1=%u"</span>, TSK1++);
+      SWI_dec(&amp;ADC_swi);  <span class="comment">// 软中断邮箱计数值递减</span>
+      TSK_yield();
+  }        
+}
+
+<span class="keyword">void</span> swi_adc(<span class="keyword">void</span>)
+{
+  <span class="keyword">static</span> Uint16 adc_cnt = <span class="number">0</span>;
+
+  LOG_printf(&amp;trace, <span class="string">"SWI_ADC=%u"</span>, adc_cnt++);
+
+  <span class="comment">// 一次执行完后，邮箱值恢复为初始值2</span>
+}</code></pre>
+<p><img src="../images/DSP-BIOS使用入门/16.png" alt="16"></p>
+<p>SWI_dec()函数用于修改软中断邮箱的计数值，其它对软中断邮箱操作的函数还包括：</p>
+<pre><code class="javascript"><span class="keyword">void</span> SWI_or(swi, mask);  <span class="comment">// 邮箱值与mask进行或操作，当值为0时触发软中断</span>
+SWI_Handle swi; <span class="comment">/* SWI object handle*/</span>
+Uns mask; <span class="comment">/* value to be ORed */</span>
+
+<span class="keyword">void</span> SWI_andn(swi, mask);  <span class="comment">// 邮箱值与mask进行与非操作，当值为0时触发软中断</span>
+SWI_Handle swi; <span class="comment">/* SWI object handle*/</span>
+Uns mask <span class="comment">/* inverse value to be ANDed */</span>
+
+<span class="keyword">void</span> SWI_inc(swi);  <span class="comment">// Increment SWI’s mailbox value and post the SWI</span>
+SWI_Handle swi; <span class="comment">/* SWI object handle*/</span>
+
+<span class="keyword">void</span> SWI_dec(swi);  <span class="comment">// Decrement SWI’s mailbox value and post if mailbox becomes 0</span>
+SWI_Handle swi; <span class="comment">/* SWI object handle*/</span></code></pre>
+<p>6000系列的DSP软中断邮箱为32位，2000系列为16位。下面是从刘鑫茂的DSP/BIOS讲座PPT中截取的软中断邮箱函数的对比图及操作时邮箱值的变化过程图：</p>
+<p><img src="../images/DSP-BIOS使用入门/17.png" alt="17">
+<img src="../images/DSP-BIOS使用入门/18.png" alt="18"></p>
+</li>
+<li><p>信号量SEM模块的配置</p>
+<p>信号量分互斥信号量和计数信号量，互斥信号量只有两种状态：可用于不可用，计数信号量通过设置一个计数值，如果计数值大于0，则任务请求该信号量时不被阻塞。</p>
+<p><img src="../images/DSP-BIOS使用入门/19.png" alt="19"></p>
+<p>编写程序：现在是任务执行2次进一次软中断，这里将信号量初始值设为1，task0中使用SEM_pend等待信号量，task0执行1次就进入等待状态，再过一次，进入软中断，软中断中使用SEM_post发布信号量，信号量值增1，task0收到信号量后从等待状态返回，继续执行！</p>
+<p><img src="../images/DSP-BIOS使用入门/20.png" alt="20"></p>
+<pre><code class="ruby">status = <span class="constant">SEM_pend</span>(sem, timeout);
+<span class="constant">SEM_Handle</span> sem; <span class="regexp">/* semaphore object handle */</span>
+<span class="constant">Uns</span> timeout; <span class="regexp">/* return after this many system clock ticks */</span>
+
+返回值：<span class="constant">Bool</span> status; <span class="regexp">/* TRUE if successful, FALSE if timeout */</span></code></pre>
+<p>如果timeout=0表示不等待继续执行，SYS_FOREVER表示一直等待直到信号量的值大于0。SEM_post()函数相对简单，不赘述。</p>
+</li>
+<li><p>输入输出——实时数据交换模块配置</p>
+<p>不知注意到没有，软件仿真模式下，使用Load装载程序时总会弹出如下的警告框，</p>
+<p><img src="../images/DSP-BIOS使用入门/22.png" alt="22"></p>
+<p>这就是RTDX模块没有配置的问题，在输入输出的RTDX模块上右键属性，配置如下，</p>
+<p><img src="../images/DSP-BIOS使用入门/23.png" alt="23"></p>
+<p>配置好后，重新编译，Load时就不会再弹出那警告框了！</p>
+</li>
+</ol>
+<p>总结一下：其实，就让上文看到的一样，DSP/BIOS的模块还有很多，上面只是挑了几个比较常用的说了说，就光信号同步那一大块就还有消息邮箱、消息队列等，所谓举一反三，这些模块的功能及函数定义，或者想了解更多关于DSP/BIOS知识，都可以从下面的手册上找到：</p>
+<ol>
+<li>SPRU430S: TMS320C6000 DSP/BIOS 5.x Application Programming Interface (API) Reference Guide</li>
+<li>SPRU423F: TMS320 DSP BIOS User Guide</li>
+<li>SPRU616A: DSP-BIOS Driver Developer's Guide</li>
+</ol>
+<p>除此之外，要想灵活的使用DSP/BIOS，毕竟它是一个操作系统，熟悉操作系统的基本概念很重要，如果学习或使用过uCOS ii或Linux这些去学习DSP/BIOS就小菜一碟了！</p>
+<h2>DSP/BIOS工程的启动顺序</h2>
+<ol>
+<li><p>初始化DSP：DSP/BIOS程序从C/C++环境入口c_int00开始运行。对于C6000平台，在c_int00开始处，系统栈指针（B15）和全局页指针（B14）被分别设置在堆栈断的末尾和.bss断的开始。控制寄存器AMR、IER、CSR等被初始化；</p>
+</li>
+<li><p>初始化.bss段：当堆栈被设置完成后，初始化任务被调用，利用.cinit的记录对.bss断的变量进行初始化；</p>
+</li>
+<li><p>调用BIOS_init初始化用到的各个模块：BIOS_init调用MOD_init对配置用到的各个模块进行初始化，包括HWI_init、HST_init、IDL_init等；</p>
+</li>
+<li><p>处理.pinit表：.pinit表包含一些指向初始化函数的指针，对C++程序，全局对象类的创建也在此时完成；</p>
+</li>
+<li><p>调用用户程序的main函数：用户main函数可以是C/C++函数或者汇编语言函数，对于汇编函数，使用_main的函数名。由于此时的硬件、软件中断还没有被使能，所以在用户主函数的初始化中需要注意，可以使能单独的中断屏蔽位，但是不能调用类似HWI_enable的接口来使能全局中断；</p>
+</li>
+<li><p>调用BIOS_start启动DSP/BIOS：BIOS_start在用户main函数退出后被调用，它负责使能使用的各个模块并调用MOD_startup启动每个模块。包括CLK_startup、PIP_startup、SWI_startup、HWI_startup等。当TSK管理模块在配置中被使用时，TSK_startup被执行，并且BIOS_start将不会结束返回；</p>
+</li>
+<li><p>执行idle循环：有两种方式进入idle循环。当TSK管理模块使能时，任务调度器运行的TSK_idle任务调用IDL_loop在其它任务空闲时进入idle循环；当TSK模块未被使用时，BIOS_start调用将返回，并执行IDL_loop进入永久的idle循环，此时硬件和软件中断可以抢占idle循环得到执行。由于idle循环中管理和主机的通信，因此主机和目标机之间的数据交互可以进行了</p>
+</li>
+</ol>
+<p>从上述的启动过程我们可以分析一下为什么在操作系统中main函数不需要使用while(1)死循环：因为在DSP/BIOS中，main函数只是被操作系统调用用来进行初始化的，执行完main函数后才能启动操作系统。这也给了我一个启示——如果我想在一个工程中既可以使用操作系统，又可以在某些情况下简单的禁用操作系统，只需定义一个宏开关main函数中while(1)循环就可以了！</p>
+<h2>DSP/BIOS在DSP项目中的地位</h2>
+<p>下图是TI公司倡导的DSP软件架构，</p>
+<p><img src="../images/DSP-BIOS使用入门/21.png" alt="21"></p>
+<p>由图可知，</p>
+<ol>
+<li><p>由CSL负责DSP芯片级外设的驱动，这部分是软件开发人员最底层的代码，DSP/BIOS负责底层的调度，方便应用层的管理，还有Driver模块，我认为是其它的非DSP芯片级的驱动，如USB/PCI等外设接口</p>
+</li>
+<li><p>中间层主要是算法相关的东西，TI提供了一个DSP算法的标准，只要按该标准编写的算法能很容易的实现不同DSP之间的移植</p>
+</li>
+<li><p>再上层就是应用程序了</p>
+</li>
+</ol>
+<p>这就是TI的DSP高端大气上档次的三层软件架构！</p>
+<h2>参考资料</h2>
+<ol>
+<li>SPRU430S: TMS320C6000 DSP/BIOS 5.x Application Programming Interface (API) Reference Guide</li>
+<li>SPRU423F: TMS320 DSP BIOS User Guide</li>
+<li>SPRU616A: DSP-BIOS Driver Developer's Guide</li>
+<li>刘鑫茂：DSP/BIOS讲座</li>
+</ol>
+</font></font></body></html>

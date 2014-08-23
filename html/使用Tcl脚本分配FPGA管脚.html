@@ -1,0 +1,20 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"><link rel="stylesheet" id="theme" href="chrome-extension://febilkbfcbhebfnokafefeacimjdckgl/theme/Github.css"></head><body><p><a href="../README.md"><font size="4">←返回主目录<font></font></font></a><font size="4"><font>
+<br><br><br></font></font></p><font size="4"><font>
+<h2>自动生成Tcl文件</h2>
+<pre><code class="nginx"><span class="title">Project</span> -&gt; Generate Tcl File for Project...</code></pre>
+<p>弹出如下对话框，设置脚本路径。</p>
+<p><img src="../images/使用Tcl脚本分配FPGA管脚/Create-Tcl.png" alt=""></p>
+<h2>编辑引脚</h2>
+<p>使用<code>set_location_assignment</code>分配管脚如下：</p>
+<p><img src="../images/使用Tcl脚本分配FPGA管脚/Tcl.png" alt=""></p>
+<p>第一次配制时，没有<code>set_location_assignment</code>语句，自已在<code>set_global_assignment</code>语句下一行添加即可。</p>
+<h2>执行Tcl脚本</h2>
+<pre><code class="nginx"><span class="title">Tools</span> -&gt; Tcl Scripts...</code></pre>
+<p><img src="../images/使用Tcl脚本分配FPGA管脚/Tcl-Run.jpg" alt=""></p>
+<p>选中刚新建的Tcl文件，点击Run运行即可！</p>
+<h2>答疑解惑</h2>
+<p>1. 为什么Tcl中没有为每个引脚分配输入输出属性，也能保证引脚属性正确？</p>
+<p>因为引脚输入输出属性都已经在Verilog语言的module中或原理图中设置了，如下图，</p>
+<p><img src="../images/使用Tcl脚本分配FPGA管脚/Pin2.png" alt="Pin2">
+<img src="../images/使用Tcl脚本分配FPGA管脚/Pin1.png" alt="Pin1"></p>
+</font></font></body></html>

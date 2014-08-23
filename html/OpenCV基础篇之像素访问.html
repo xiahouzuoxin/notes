@@ -1,0 +1,104 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"><link rel="stylesheet" id="theme" href="chrome-extension://febilkbfcbhebfnokafefeacimjdckgl/theme/Github.css"></head><body><p><a href="../README.md"><font size="4">←返回主目录<font></font></font></a><font size="4"><font>
+<br><br><br></font></font></p><font size="4"><font>
+<h2>程序及分析</h2>
+<pre><code class="language-c cpp"><span class="comment">/*
+ * FileName : get_pixels.cpp
+ * Author   : xiahouzuoxin @163.com
+ * Version  : v1.0
+ * Date     : Sun 01 Jun 2014 06:40:54 PM CST
+ * Brief    : 
+ * 
+ * Copyright (C) MICL,USTB
+ */</span>
+<span class="preprocessor">#include &lt;cv.h&gt;</span>
+<span class="preprocessor">#include &lt;highgui.h&gt;</span>
+
+<span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;
+<span class="keyword">using</span> <span class="keyword">namespace</span> cv;
+
+<span class="keyword">int</span> main(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])
+{
+    <span class="keyword">if</span> (argc &lt; <span class="number">2</span>) {
+        <span class="built_in">cout</span> &lt;&lt; <span class="string">"Usage: ./get_pixels [imag name]"</span> &lt;&lt; endl;
+        <span class="keyword">return</span> -<span class="number">1</span>;
+    }
+
+    Mat img;
+
+    img = imread(argv[<span class="number">1</span>], <span class="number">1</span>);
+
+
+    <span class="comment">/*
+     * Reverse pixels
+     */</span>
+    Mat out1 = img.clone();  <span class="comment">// change dst will not affect img</span>
+
+    <span class="keyword">long</span> n_rows = out1.rows;
+    <span class="keyword">long</span> n_cols = out1.cols * out1.channels();
+
+    <span class="comment">/*
+     * Row pointer
+     */</span>
+    uchar *p;
+    <span class="keyword">for</span> (<span class="keyword">long</span> i=<span class="number">0</span>; i&lt;n_rows; i++) {
+        p = out1.ptr&lt;uchar&gt;(i);
+        <span class="keyword">for</span> (<span class="keyword">long</span> j=<span class="number">0</span>; j&lt;n_cols; j++) {
+            p[j] = <span class="number">255</span> - p[j];
+        }
+    }
+
+    <span class="comment">/*
+     * Element pointer
+     */</span>
+    Mat out2;
+    out2.create(img.size(), img.type());  <span class="comment">// reserve size and type but alloc new space</span>
+
+    n_rows = out2.rows;
+    n_cols = out2.cols * out2.channels();
+
+    p = out2.data;
+    <span class="keyword">double</span> c = <span class="number">0.5</span>;
+    <span class="keyword">double</span> b = <span class="number">30</span>;
+    <span class="keyword">for</span> (<span class="keyword">long</span> i=<span class="number">0</span>; i&lt;n_rows*n_cols; i++) {
+       *(p+i) = (uchar)(<span class="number">255</span> * <span class="number">0.5</span> * ((<span class="keyword">double</span>)(img.data[i]) / <span class="number">255</span>) + b);
+    }
+
+    <span class="comment">/*
+     * Display
+     */</span>
+    namedWindow(<span class="string">"src_image"</span>, CV_WINDOW_NORMAL);
+    imshow(<span class="string">"src_image"</span>, img);
+    namedWindow(<span class="string">"reverse_image"</span>, CV_WINDOW_NORMAL);
+    imshow(<span class="string">"reverse_image"</span>, out1);
+    namedWindow(<span class="string">"mici_image"</span>, CV_WINDOW_NORMAL);
+    imshow(<span class="string">"mici_image"</span>, out2);
+
+    waitKey(<span class="number">0</span>);
+
+    <span class="keyword">return</span> <span class="number">0</span>;
+}</code></pre>
+<ol>
+<li><p>基于元素指针的像素访问：根据Mat的数据结构，按理我们可以通过Mat.data访问像素数据的指针，再根据指针访问到像素数据，这是最直接的方法，一般图片数据在内存中都是连续存储（一般应该使用is_continues()进行判断，注意上面程序中没有，因为大部分情况是连续存储的，所以没有考虑），这种访问像素方式的一般格式是：</p>
+<pre><code class="cpp">uchar *p;  <span class="comment">// 定义一个像素索引指针</span>
+p = image.data;  <span class="comment">// image为Mat对象，将对象的数据指针赋值给p</span>
+<span class="keyword">for</span> (<span class="keyword">long</span> i=<span class="number">0</span>; i &lt; image.rows*image.cols*image.channels(); i++) {
+  *p++ = ..;  <span class="comment">// 通过索引指针操作数据</span>
+}</code></pre>
+<p>上面程序通过元素指针的方法给出了一个幂次变换的例子：</p>
+<pre><code class="cpp">*(p+i) = (uchar)(<span class="number">255</span> * <span class="number">0.5</span> * ((<span class="keyword">double</span>)(img.data[i]) / <span class="number">255</span>) + b);</code></pre>
+<p>幂次变换是一种很好用的图像增强的方法，我的Github上还有一个Matlab写的用幂次变换处理外出爬山风景照片的例子（<a href="https://github.com/xiahouzuoxin/zx_photo）">https://github.com/xiahouzuoxin/zx_photo）</a></p>
+</li>
+<li><p>基于行指针的访问：OpenCV中定义了一个ptr方法，是一个模板：</p>
+<pre><code class="xml">// returns pointer to the matrix element
+// idx – rows,you should use @isContinues() before decided it
+template<span class="tag">&lt;<span class="title">int</span> <span class="attribute">n</span>&gt;</span> uchar* ptr(const Vec<span class="tag">&lt;<span class="title">int,</span> <span class="attribute">n</span>&gt;</span>&amp; idx);</code></pre>
+<p>通过ptr<uchar>(i)直接获得Mat对象的第i行的指针，跟二维数组的行指针有些类似，继而可以通过ptr<uchar>(i)[j]得到第i行第j列的像素值。</uchar></uchar></p>
+<p>上面程序给出了使用行指针进行图像反转的例子。</p>
+</li>
+<li><p>请注意一下其它的函数：img.clone()之前已经讲过——除了拷贝Mat数据结构的头和数据指针，连数据也一块拷贝，并将数据指针指向新拷贝的数据。</p>
+</li>
+</ol>
+<h2>效果</h2>
+<p><img src="../images/OpenCV基础篇之像素访问/result.png" alt="result"></p>
+<p>左边是元素图片，中间是经过图片反转之后的图片，右边是使用幂次变换增强后的图片。</p>
+</font></font></body></html>

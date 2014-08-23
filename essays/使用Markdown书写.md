@@ -1,34 +1,34 @@
-[<font size=4>â†è¿”å›ä¸»ç›®å½•<font>](../README.md)
+[<font size=4>¡û·µ»ØÖ÷Ä¿Â¼<font>](../README.md)
 </br></br></br>
 
 
-## Markdownæ˜¯ä»€ä¹ˆ
-Markdownæ˜¯ä¸€ç§ç½‘ç»œä¹¦å†™è¯­è¨€ï¼Œå…¶ç›®æ ‡æ˜¯å®ç°æ˜“è¯»æ˜“å†™ï¼Œä¸”å…¼å®¹HTMLè¯­è¨€ã€‚
-Markdownçš„æµè¡Œå¾—ç›Šäº[Github](www.github.com)å’Œ[Stackoverflow](www.stackoverflow.com)ï¼ŒStackoverflowçš„ä»£ç å—ä»¥åŠGithubä¸Šçš„README.mdæ–‡ä»¶æ ¼å¼éƒ½æ˜¯é€šè¿‡Markdownè¡¨ç°çš„ã€‚
-ä»è¿™é‡Œæ‚¨å¯ä»¥å¾ˆç›´è§‚çš„çœ‹åˆ°Markdownçš„æ•ˆæœ:[https://github.com/adam-p/markdown-here](https://github.com/adam-p/markdown-here)ã€‚
+## MarkdownÊÇÊ²Ã´
+MarkdownÊÇÒ»ÖÖÍøÂçÊéĞ´ÓïÑÔ£¬ÆäÄ¿±êÊÇÊµÏÖÒ×¶ÁÒ×Ğ´£¬ÇÒ¼æÈİHTMLÓïÑÔ¡£
+MarkdownµÄÁ÷ĞĞµÃÒæÓÚ[Github](www.github.com)ºÍ[Stackoverflow](www.stackoverflow.com)£¬StackoverflowµÄ´úÂë¿éÒÔ¼°GithubÉÏµÄREADME.mdÎÄ¼ş¸ñÊ½¶¼ÊÇÍ¨¹ıMarkdown±íÏÖµÄ¡£
+´ÓÕâÀïÄú¿ÉÒÔºÜÖ±¹ÛµÄ¿´µ½MarkdownµÄĞ§¹û:[https://github.com/adam-p/markdown-here](https://github.com/adam-p/markdown-here)¡£
 
-## Markdownä¸è‡ªç”±ä¹¦ç±
-ä½¿ç”¨Markdownå¯ä»¥ä¹¦å†™è‡ªç”±ä¹¦ç±ï¼Œå…³äºæ­¤ï¼Œæ‚¨å¯ä»¥å‚çœ‹æ–‡ç« ç”¨Markdownæ¥å†™è‡ªç”±ä¹¦ç±-å¼€æºæŠ€æœ¯çš„æ–¹æ¡ˆï¼Œå¼€æºä¹¦å’Œå¼€æºæŠ€æœ¯-Markdownç¯‡ä¸€æ–‡ä¹Ÿä»‹ç»äº†ä¸€äº›Markdownä¸å¼€æºä¹¦å’Œå¼€æºæŠ€æœ¯ä¹‹é—´çš„æ¸Šæºã€‚
+## MarkdownÓë×ÔÓÉÊé¼®
+Ê¹ÓÃMarkdown¿ÉÒÔÊéĞ´×ÔÓÉÊé¼®£¬¹ØÓÚ´Ë£¬Äú¿ÉÒÔ²Î¿´ÎÄÕÂÓÃMarkdownÀ´Ğ´×ÔÓÉÊé¼®-¿ªÔ´¼¼ÊõµÄ·½°¸£¬¿ªÔ´ÊéºÍ¿ªÔ´¼¼Êõ-MarkdownÆªÒ»ÎÄÒ²½éÉÜÁËÒ»Ğ©MarkdownÓë¿ªÔ´ÊéºÍ¿ªÔ´¼¼ÊõÖ®¼äµÄÔ¨Ô´¡£
 
-å·²ç»æœ‰ä¸€äº›å¼€æºä¹¦ç±ä½¿ç”¨Markdownä¹¦å†™äº†ï¼ŒäºšåµŒæ•™è‚²çš„å¼€æºä¹¦ç±æºç å¼€æ”¾å­¦ARMã€è’‹é‘«è€å¸ˆçš„GotGithubä¸€ä¹¦ï¼Œè¿™äº›å¼€æºä¹¦ç±éƒ½ç»™å­¦ä¹ è€…æä¾›å¾ˆå¤§å¸®åŠ©ã€‚Markdownä¹¦å†™å·²ç»æ˜¯ä¸€ç§å¼€æºç²¾ç¥ä½“ç°ã€‚å¥½äº†ï¼Œæ—¢ç„¶Markdownä¸è‡ªç”±ä¹¦å†™è¿™ä¹ˆé»˜å¥‘ï¼Œæˆ‘ä»¬æ€ä¹ˆç”¨Markdownæ¥å†™è‡ªå·±çš„README.mdï¼Œè‡ªå·±çš„åšå®¢ç”šè‡³è‡ªå·±çš„å¼€æºä¹¦ç±å‘¢ï¼Ÿ
+ÒÑ¾­ÓĞÒ»Ğ©¿ªÔ´Êé¼®Ê¹ÓÃMarkdownÊéĞ´ÁË£¬ÑÇÇ¶½ÌÓıµÄ¿ªÔ´Êé¼®Ô´Âë¿ª·ÅÑ§ARM¡¢½¯öÎÀÏÊ¦µÄGotGithubÒ»Êé£¬ÕâĞ©¿ªÔ´Êé¼®¶¼¸øÑ§Ï°ÕßÌá¹©ºÜ´ó°ïÖú¡£MarkdownÊéĞ´ÒÑ¾­ÊÇÒ»ÖÖ¿ªÔ´¾«ÉñÌåÏÖ¡£ºÃÁË£¬¼ÈÈ»MarkdownÓë×ÔÓÉÊéĞ´ÕâÃ´Ä¬Æõ£¬ÎÒÃÇÔõÃ´ÓÃMarkdownÀ´Ğ´×Ô¼ºµÄREADME.md£¬×Ô¼ºµÄ²©¿ÍÉõÖÁ×Ô¼ºµÄ¿ªÔ´Êé¼®ÄØ£¿
 
-è¿™é‡Œæœ‰ä¸€ä»½Markdownçš„è¯­æ³•ï¼Œ[http://wowubuntu.com/markdown/](http://wowubuntu.com/markdown/)ï¼Œä»https://gitcafe.com/riku/Markdown-Syntax-CN/blob/master/syntax.md
-çœ‹å¯èƒ½æ›´ç›´è§‚ã€‚Markdownè¯­æ³•æ˜¯å¦‚æ­¤ç®€å•ï¼Œä»¥è‡³äºè¿˜ä¸åˆ°1000è¡Œå°±æè¿°å®Œäº†ã€‚åˆå­¦è€…æ‚¨å¯ä»¥å‚è€ƒ[çŒ®ç»™å†™ä½œè€…çš„Markdownæ–°æ‰‹æŒ‡å—](http://jianshu.io/p/q81RER)ã€‚Githubçš„Markdownè¯­æ³•å¤§éƒ¨åˆ†éƒ½ä¸ä¼ ç»ŸMarkdownè¯­æ³•ä¸€æ ·ï¼Œè¿™æ‚¨å¯ä»¥çœ‹çœ‹[markdown-basics](https://help.github.com/articles/markdown-basics)ï¼Œä½†ä¹Ÿæœ‰äº›æ‰©å±•ï¼Œæ‰©å±•å†…å®¹åœ¨æ–‡æ¡£[GitHub Flavored Markdown](https://help.github.com/articles/github-flavored-markdown)ä¸­ã€‚
+ÕâÀïÓĞÒ»·İMarkdownµÄÓï·¨£¬[http://wowubuntu.com/markdown/](http://wowubuntu.com/markdown/)£¬´Óhttps://gitcafe.com/riku/Markdown-Syntax-CN/blob/master/syntax.md
+¿´¿ÉÄÜ¸üÖ±¹Û¡£MarkdownÓï·¨ÊÇÈç´Ë¼òµ¥£¬ÒÔÖÁÓÚ»¹²»µ½1000ĞĞ¾ÍÃèÊöÍêÁË¡£³õÑ§ÕßÄú¿ÉÒÔ²Î¿¼[Ï×¸øĞ´×÷ÕßµÄMarkdownĞÂÊÖÖ¸ÄÏ](http://jianshu.io/p/q81RER)¡£GithubµÄMarkdownÓï·¨´ó²¿·Ö¶¼Óë´«Í³MarkdownÓï·¨Ò»Ñù£¬ÕâÄú¿ÉÒÔ¿´¿´[markdown-basics](https://help.github.com/articles/markdown-basics)£¬µ«Ò²ÓĞĞ©À©Õ¹£¬À©Õ¹ÄÚÈİÔÚÎÄµµ[GitHub Flavored Markdown](https://help.github.com/articles/github-flavored-markdown)ÖĞ¡£
 
-## ä½¿ç”¨Markdown
-åœ¨ä½¿ç”¨Markdownè¿‡ç¨‹ä¸­ï¼Œæ‚¨ä¹Ÿè®¸è¿˜éœ€è¦ä¸€ä¸ªæ—¶æ—¶æ˜¾ç¤ºMarkdownæ–‡æ¡£é¢„è§ˆçš„å·¥å…·ï¼Œè¿™æ–¹é¢çš„å·¥å…·æœ‰å¾ˆå¤šï¼Œè¿™é‡Œæ¨èå‡ ä¸ªåœ¨çº¿çš„Markdownæ–‡æ¡£ç¼–è¾‘å™¨ï¼š
+## Ê¹ÓÃMarkdown
+ÔÚÊ¹ÓÃMarkdown¹ı³ÌÖĞ£¬ÄúÒ²Ğí»¹ĞèÒªÒ»¸öÊ±Ê±ÏÔÊ¾MarkdownÎÄµµÔ¤ÀÀµÄ¹¤¾ß£¬Õâ·½ÃæµÄ¹¤¾ßÓĞºÜ¶à£¬ÕâÀïÍÆ¼ö¼¸¸öÔÚÏßµÄMarkdownÎÄµµ±à¼­Æ÷£º
 
 1. Dillinger:[http://dillinger.io/](http://dillinger.io/)
 2. StackEdit:[https://stackedit.io/](https://stackedit.io/)
-3. å°è±¡ç¬”è®°:[http://maxiang.info/](http://maxiang.info/)
+3. Ó¡Ïó±Ê¼Ç:[http://maxiang.info/](http://maxiang.info/)
 
-â€œ[å…è´¹Markdownå†™ä½œå·¥å…·ç®€è¯„](http://jianshu.io/p/pgN9Rb)â€ä¸€æ–‡æä¾›äº†æœ‰å…³äºMarkdownæ–‡æ¡£ç¼–è¾‘å™¨çš„æ›´å¤šä¿¡æ¯ã€‚
+¡°[Ãâ·ÑMarkdownĞ´×÷¹¤¾ß¼òÆÀ](http://jianshu.io/p/pgN9Rb)¡±Ò»ÎÄÌá¹©ÁËÓĞ¹ØÓÚMarkdownÎÄµµ±à¼­Æ÷µÄ¸ü¶àĞÅÏ¢¡£
 
-è°·æ­Œæµè§ˆå™¨è²Œä¼¼ä¹Ÿæœ‰Markdownçš„é¢„è§ˆæ’ä»¶[markdown-preview](https://github.com/volca/markdown-preview)ï¼Œè¿™æ ·æ‚¨å°±å¯ä»¥ç”¨è®°äº‹æœ¬ç¼–è¾‘ï¼Œç”¨æµè§ˆå™¨é¢„è§ˆäº†ã€‚å°è±¡ç¬”è®°ä¹Ÿæœ‰Chromeçš„æ‰©å±•ï¼Œå¯åœ¨å•†åº—æœç´ â€œé©¬å…‹é£è±¡â€ã€‚
+¹È¸èä¯ÀÀÆ÷Ã²ËÆÒ²ÓĞMarkdownµÄÔ¤ÀÀ²å¼ş[markdown-preview](https://github.com/volca/markdown-preview)£¬ÕâÑùÄú¾Í¿ÉÒÔÓÃ¼ÇÊÂ±¾±à¼­£¬ÓÃä¯ÀÀÆ÷Ô¤ÀÀÁË¡£Ó¡Ïó±Ê¼ÇÒ²ÓĞChromeµÄÀ©Õ¹£¬¿ÉÔÚÉÌµêËÑËØ¡°Âí¿Ë·ÉÏó¡±¡£
 
-æˆ‘ä»¬è¯´Markdownæ˜¯ä¸ºäº†ä¹¦å†™è‡ªç”±ç”µå­ä¹¦ï¼Œé‚£ä¹ˆMarkdownå¦‚ä½•ç”Ÿæˆpdfæˆ–htmlæ ¼å¼çš„æ–‡æ¡£å‘¢ï¼Ÿæˆ‘ä»¬å¯ä»¥å€ŸåŠ©Markdownæ–‡æ¡£ç¼–è¾‘å™¨çš„åŠŸèƒ½ï¼ŒStackEditå°±èƒ½èƒœä»»ï¼Œä½¿ç”¨StackEditå·¦ä¸Šè§’çš„èœå•ï¼Œsave as..å°±å¯ä»¥åšåˆ°ï¼Œä½†ä¼¼ä¹å¯¹ä¸­æ–‡çš„æ”¯æŒä¸æ˜¯å¾ˆå¥½ã€‚æˆ‘ä»¬è¿˜å¯ä½¿ç”¨VIMæ’ä»¶å°†Markdownè½¬æ¢ä¸ºhtmlæ ¼å¼ã€‚
+ÎÒÃÇËµMarkdownÊÇÎªÁËÊéĞ´×ÔÓÉµç×ÓÊé£¬ÄÇÃ´MarkdownÈçºÎÉú³Épdf»òhtml¸ñÊ½µÄÎÄµµÄØ£¿ÎÒÃÇ¿ÉÒÔ½èÖúMarkdownÎÄµµ±à¼­Æ÷µÄ¹¦ÄÜ£¬StackEdit¾ÍÄÜÊ¤ÈÎ£¬Ê¹ÓÃStackEdit×óÉÏ½ÇµÄ²Ëµ¥£¬save as..¾Í¿ÉÒÔ×öµ½£¬µ«ËÆºõ¶ÔÖĞÎÄµÄÖ§³Ö²»ÊÇºÜºÃ¡£ÎÒÃÇ»¹¿ÉÊ¹ÓÃVIM²å¼ş½«Markdown×ª»»Îªhtml¸ñÊ½¡£
 
-è¿˜æœ‰ä¸€æ¬¾é›†ç¼–è¾‘ä¸Markdowné¢„è§ˆäºä¸€èº«çš„ä¸é”™å·¥å…·[Everedit](http://www.everedit.net/)ï¼Œå›½äº§çš„å“¦..
+»¹ÓĞÒ»¿î¼¯±à¼­ÓëMarkdownÔ¤ÀÀÓÚÒ»ÉíµÄ²»´í¹¤¾ß[Everedit](http://www.everedit.net/)£¬¹ú²úµÄÅ¶..
 
 
 

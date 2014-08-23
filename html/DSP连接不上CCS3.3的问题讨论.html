@@ -1,0 +1,42 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"><link rel="stylesheet" id="theme" href="chrome-extension://febilkbfcbhebfnokafefeacimjdckgl/theme/Github.css"></head><body><p><a href="../README.md"><font size="4">←返回主目录<font></font></font></a><font size="4"><font>
+<br><br><br></font></font></p><font size="4"><font>
+<h2>环境</h2>
+<ul>
+<li>操作系统：Win7, 64bit</li>
+<li>IDE：CCS V3.3</li>
+<li>仿真器：SEED XDS510PLUS</li>
+<li>DSP型号：TMS320C6713GDP(DSP6713)</li>
+</ul>
+<h2>检查步骤</h2>
+<ol>
+<li><p>试着按下复位按键后再点击Connect连接</p>
+</li>
+<li><p>请检查电源供电是否正常（核心电压是否为1.2V，IO口电压是否稳定为3.3V）</p>
+<p>使用示波器AC测试检查供电的纹波，TMS320C6713数据手册的99页有纹波的范围要求</p>
+<p><img src="../images/DSP连接不上CCS3.3的问题讨论/wenbo.png" alt=""></p>
+</li>
+<li><p>如果是用电池供电，检查电池电压，电池电压过低会造成连接失败，推荐使用电压监控芯片TPS3823-33</p>
+</li>
+<li><p>检查上电复位是否正常（上电时有复位脉冲，上电后复位引脚为高电平），DSP6713的复位引脚有上拉电阻</p>
+</li>
+<li><p>检查时钟输出是否正常，包括晶振输出和ECLKOUT（TMS320C6713中默认=晶振时钟/2），如果ECLKOUT管脚输出不正常，则说明芯片坏了</p>
+</li>
+<li><p>CCS3.3工程中载入的GEL文件是否正确（如“存储器的初始化”）</p>
+</li>
+<li><p>请确保仿真器是好的（换块好的DSP板试试），不过一般不会倒霉到是这种问题吧（一个仿真器好贵呢）</p>
+</li>
+<li><p>检查JTAG接口的EMU0与EMU1是否有上拉电阻，NC管脚应该保持悬空</p>
+<p><img src="../images/DSP连接不上CCS3.3的问题讨论/JTAG.png" alt="JTAG"></p>
+</li>
+<li><p>检查PLL滤波管脚是否正确，滤波器是否焊接好</p>
+<p><img src="../images/DSP连接不上CCS3.3的问题讨论/PLL.png" alt="PLL"></p>
+<p>我就有一次EXCCET103的GND脚没焊好，怎么都连不上</p>
+</li>
+<li><p>芯片相关的配置（数据手册上说明的特殊引脚）是否使用上拉/下拉电阻进行配置？TMS320C6713要进行如下的配置</p>
+<p><img src="../images/DSP连接不上CCS3.3的问题讨论/Config.png" alt="Config"></p>
+<p>另外，保留管脚RSV1~7的配置是否正确也请参考Datasheet</p>
+</li>
+<li><p>实在没有办法，发现上面的检查都是正确的，恭喜你中奖了——赶紧换芯片吧……    </p>
+</li>
+</ol>
+</font></font></body></html>

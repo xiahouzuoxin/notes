@@ -1,3 +1,6 @@
+
+本目录默认为[Markdown目录索引](README.md)，本地浏览或Markdown索引发现某些公式不能正常显示时，请使用[html目录索引](index.md)。
+
 # 第一篇 分类目录
 
 ## 1 嵌入式
@@ -142,7 +145,11 @@
 
 工程中文件目录的安排如下：
 
-	README.md  本文档
+	README.md  Markdown文件索引目录
+
+	index.md   html文件索引目录
+
+	html/      所有笔记的html文本格式
 
 	essays/    所有笔记的Markdown文本格式
 

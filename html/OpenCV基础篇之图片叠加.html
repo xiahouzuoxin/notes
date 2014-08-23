@@ -1,0 +1,69 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"><link rel="stylesheet" id="theme" href="chrome-extension://febilkbfcbhebfnokafefeacimjdckgl/theme/Github.css"></head><body><p><a href="../README.md"><font size="4">←返回主目录<font></font></font></a><font size="4"><font>
+<br><br><br></font></font></p><font size="4"><font>
+<h2>程序及分析</h2>
+<pre><code class="language-c cpp"><span class="comment">/*
+ * FileName : blend.cpp
+ * Author   : xiahouzuoxin @163.com
+ * Version  : v1.0
+ * Date     : Mon 28 Jul 2014 08:47:59 PM CST
+ * Brief    : 
+ * 
+ * Copyright (C) MICL,USTB
+ */</span>
+<span class="preprocessor">#include &lt;cv.h&gt;</span>
+<span class="preprocessor">#include &lt;highgui.h&gt;</span>
+<span class="preprocessor">#include &lt;stdio.h&gt;</span>
+
+<span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;
+<span class="keyword">using</span> <span class="keyword">namespace</span> cv;
+
+<span class="keyword">int</span> main(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])
+{
+    <span class="keyword">double</span> alpha = <span class="number">0.5</span>;
+    <span class="keyword">double</span> beta;
+    <span class="keyword">double</span> input;
+
+    Mat src1, src2, dst;
+
+    <span class="comment">// User input alpha</span>
+    <span class="built_in">cout</span>&lt;&lt;<span class="string">"Simple Linear Blender"</span> &lt;&lt; endl;
+    <span class="built_in">cout</span>&lt;&lt;<span class="string">"---------------------"</span> &lt;&lt; endl;
+    <span class="built_in">cout</span>&lt;&lt;<span class="string">"Enter alpha [0-1]: "</span>;
+    <span class="built_in">cin</span>&gt;&gt;input;
+
+    <span class="keyword">if</span> (alpha &gt;=<span class="number">0</span> &amp;&amp; alpha &lt;=<span class="number">1</span>) {
+        alpha = input;
+    }
+
+    <span class="comment">// Read images</span>
+    src1 = imread(<span class="string">"../test_imgs/KeNan.jpg"</span>);
+    src2 = imread(<span class="string">"../test_imgs/Background.jpg"</span>);
+
+    <span class="keyword">if</span> (!src1.data) {
+        <span class="built_in">cout</span>&lt;&lt;<span class="string">"Error loading src1\n"</span>&lt;&lt;endl;
+        <span class="keyword">return</span> -<span class="number">1</span>;
+    }
+    <span class="keyword">if</span> (!src2.data) {
+        <span class="built_in">cout</span>&lt;&lt;<span class="string">"Error loading src2\n"</span>&lt;&lt;endl;
+        <span class="keyword">return</span> -<span class="number">1</span>;
+    }
+
+    <span class="comment">// Create WIndows</span>
+    namedWindow(<span class="string">"Linear Blend"</span>, <span class="number">1</span>);
+
+    beta = (<span class="number">1.0</span> - alpha);
+    addWeighted(src1, alpha, src2, beta, <span class="number">0.0</span>, dst);
+
+    imshow(<span class="string">"Linear Blend"</span>, dst);
+    waitKey(<span class="number">0</span>);
+
+    <span class="keyword">return</span> <span class="number">0</span>;
+}</code></pre>
+<p>这里的图像叠加指线性叠加，设图像A的像素为fA(x)，图像B的像素为fB(x)，叠加系数为α，则线性叠加操作为：</p>
+<p><img src="http://www.forkosh.com/mathtex.cgi? \Large g(x)=\alpha f_A(x)+(1-\alpha)f_B(x)"></p>
+<p>α为0-1之间的值，从上面也可以看出，叠加必需保证两幅输入图像的尺寸大小相同。程序中的</p>
+<pre><code class="undefined">addWeighted(src1, alpha, src2, beta, 0.0, dst);</code></pre>
+<p>完成叠加操作。</p>
+<h2>效果</h2>
+<p><img src="../images/OpenCV基础篇之图片叠加/result.png" alt="result"></p>
+</font></font></body></html>

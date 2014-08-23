@@ -1,0 +1,99 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"><link rel="stylesheet" id="theme" href="chrome-extension://febilkbfcbhebfnokafefeacimjdckgl/theme/Github.css"></head><body><p><a href="../README.md"><font size="4">←返回主目录<font></font></font></a><font size="4"><font>
+<br><br><br></font></font></p><font size="4"><font>
+<p>操作环境：CentOS 6.5 64bit</p>
+<p>Linux与Linux间通过什么共享文件呢——NFS，Windows与Windows之间呢——共享文件功能就OK了，那Windows与Linux之间呢？</p>
+<p>这就是本段要讲的东东——samba。</p>
+<h2>检查是否安装samba</h2>
+<pre><code class="ruby"><span class="comment"># rmp -qa|grep samba</span></code></pre>
+<p>若安装了，则会显示如下，</p>
+<pre><code class="undefined">samba4-libs-4.0.0-58.el6.rc4.x86_64
+samba-common-3.6.9-168.el6_5.x86_64
+samba-winbind-3.6.9-168.el6_5.x86_64
+samba-client-3.6.9-168.el6_5.x86_64
+samba-3.6.9-168.el6_5.x86_64
+samba-winbind-clients-3.6.9-168.el6_5.x86_64</code></pre>
+<p>否则，使用</p>
+<pre><code class="ruby"><span class="comment"># yum install smaba</span></code></pre>
+<p>安装samba.</p>
+<h2>配置samba</h2>
+<ol>
+<li><p>设置开机启动</p>
+<pre><code class="ruby"><span class="comment"># chkconfig smb on</span>
+<span class="comment"># chkconfig nmb on</span></code></pre>
+<p>也可以使用setup命令可通过界面配置开机启动服务,</p>
+<pre><code class="ruby"><span class="comment"># setup</span></code></pre>
+<p><img src="../images/CentOS配置smaba与Windows共享文件/setup.png" alt="setup"></p>
+</li>
+<li><p>新建smb用户用于访问Linux共享文件</p>
+<pre><code class="ruby"><span class="comment"># useradd smb       # 新建用户</span>
+<span class="comment"># smbpasswd -a smb  # 修改密码</span></code></pre>
+<p>此时/home目录会增加一个smb的用户。该Linux用户目录将可直接共享到Windows下。若要共享其它文件，按步骤3配置文件。如果不用了，删除smb用户也是可以的，</p>
+<pre><code class="ruby"><span class="comment"># smbpasswd -x smb  # 删除smb用户</span></code></pre>
+</li>
+<li><p>samba配置文件。</p>
+<pre><code class="cpp">[tmp]
+comment = Tmp Directories
+path = /tmp                         <span class="preprocessor"># 共享的Linux目录</span>
+<span class="keyword">public</span> = no                         <span class="preprocessor"># 目录不公开</span>
+writeable = yes                     <span class="preprocessor"># 可写</span>
+browseable = yes                    <span class="preprocessor"># 可读</span>
+valid users = smb                   <span class="preprocessor"># 访问用户，上面新建的，也可以使用原来已有的</span></code></pre>
+</li>
+</ol>
+<h2>让smaba通过防火墙</h2>
+<p>使用samba需要穿过防火墙，因此根据不同情况，这里提供3种方法：</p>
+<ul>
+<li><p>方法1</p>
+<pre><code class="ruby">  <span class="comment"># system-config-firewall</span></code></pre>
+<p>  <img src="../images/CentOS配置smaba与Windows共享文件/smb-firewall.png" alt="smb-firewall"></p>
+</li>
+<li><p>方法2</p>
+<p>  配置/etc/sysconfig/iptables文件，添加</p>
+<pre><code class="sql">  -A INPUT -m state <span class="comment">--state NEW -m tcp -p tcp --dport 139 -j ACCEPT</span>
+  -A INPUT -m state <span class="comment">--state NEW -m tcp -p tcp --dport 445 -j ACCEPT</span>
+  -A INPUT -m state <span class="comment">--state NEW -m udp -p udp --dport 137 -j ACCEPT</span>
+  -A INPUT -m state <span class="comment">--state NEW -m udp -p udp --dport 138 -j ACCEPT</span></code></pre>
+<p>  允许139 445 137 138几个端口通过。配置完后重启防火墙，</p>
+<pre><code class="sql">  # /etc/rc.d/init.d/iptables re<span class="operator"><span class="keyword">start</span></span></code></pre>
+</li>
+<li><p>方法3</p>
+<p>  索性，把防火墙关了，</p>
+<pre><code class="ruby">  <span class="comment"># service iptables stop    # 暂时关闭</span>
+  <span class="comment"># chkconfig iptables off  # 永久关闭</span></code></pre>
+</li>
+</ul>
+<h2>关闭SELINUX</h2>
+<pre><code class="ruby"><span class="comment"># vim /etc/selinux/config</span>
+<span class="constant">SELINUX</span>=permissive</code></pre>
+<p>此时需要重启下系统，</p>
+<pre><code class="ruby"><span class="comment"># reboot</span></code></pre>
+<h2>启动samba</h2>
+<pre><code class="ruby"><span class="comment"># service samba start   # 启动</span>
+<span class="comment"># service samba restart # 重启</span></code></pre>
+<p>可以通过</p>
+<pre><code class="ruby"><span class="comment"># service samba status</span></code></pre>
+<p>查看samba启动状态。</p>
+<h2>Windows访问</h2>
+<p>先查看Linux虚拟机网络ip地址，</p>
+<pre><code class="nginx"><span class="comment"># ifconifg</span>
+<span class="title">eth0</span>      Link encap:Ethernet  HWaddr <span class="number">00</span>:0C:<span class="number">29</span>:FD:DC:<span class="number">43</span>  
+          inet addr:<span class="number">192.168.56.58</span>  Bcast:<span class="number">192.168.56.255</span>  Mask:<span class="number">255.255.255.0</span>
+          inet6 addr: fe80::20c:29ff:fefd:dc43/<span class="number">64</span> Scope:Link</code></pre>
+<p>在Windows下使用Win+R开启运行窗口，输入</p>
+<pre><code class="undefined">\\192.168.56.58</code></pre>
+<p>即可访问Linux共享的目录。</p>
+<p><img src="../images/CentOS配置smaba与Windows共享文件/smb.png" alt="smb"></p>
+<p>此时使用</p>
+<pre><code class="ruby"><span class="comment"># smbstatus</span></code></pre>
+<p>查看连接状态。</p>
+<p><img src="../images/CentOS配置smaba与Windows共享文件/smbstatus.png" alt="smbstatus"></p>
+<blockquote>
+<p>文件访问权限：</p>
+<p>若无法从Windows中往共享目录中拷贝文件，可能由于共享目录对smb用户的写权限不足，Linux中使用chmod 777 -R dir可改变dir目录权限。由于权限原因，本文中使用/tmp目录共享，因为/tmp目录对所有用户的权限比较开放。</p>
+</blockquote>
+<h2>参考</h2>
+<ol>
+<li><a href="http://www.livingelsewhere.net/tag/unix-linux-samba-ftp-smb-cifs/">http://www.livingelsewhere.net/tag/unix-linux-samba-ftp-smb-cifs/</a></li>
+<li><a href="http://www.tangrucheng.com/centos6-5-setup-configure-samba.html">http://www.tangrucheng.com/centos6-5-setup-configure-samba.html</a></li>
+</ol>
+</font></font></body></html>

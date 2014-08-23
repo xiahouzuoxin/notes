@@ -1,0 +1,122 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"><link rel="stylesheet" id="theme" href="chrome-extension://febilkbfcbhebfnokafefeacimjdckgl/theme/Github.css"></head><body><p><a href="../README.md"><font size="4">←返回主目录<font></font></font></a><font size="4"><font>
+<br><br><br></font></font></p><font size="4"><font>
+<p>实现下面转换最快的算法是什么：</p>
+<pre><code class="undefined">0010 0000 =&gt; 0000 0100</code></pre>
+<p>位反转算法在FFT算法中的倒位序实现是必需的。因此很有用，本文翻译自<a href="http://stackoverflow.com/questions/746171/best-algorithm-for-bit-reversal-from-msb-lsb-to-lsb-msb-in-c">http://stackoverflow.com/questions/746171/best-algorithm-for-bit-reversal-from-msb-lsb-to-lsb-msb-in-c</a>，自己做了些简单的修改。</p>
+<p>下面不特殊说明默认的反转数据都是是32位int类型。当然，虽然也可以扩展到64bit，但大多数DSP处理器还是32bit的。</p>
+<h2>1 魔数（低内存）</h2>
+<pre><code class="language-c javascript">unsigned int
+reverse(register unsigned int x)
+{
+    x = (((x &amp; <span class="number">0xaaaaaaaa</span>) &gt;&gt; <span class="number">1</span>) | ((x &amp; <span class="number">0x55555555</span>) &lt;<span class="xml"><span class="tag">&lt; <span class="attribute">1</span>));
+    <span class="attribute">x</span> = (((<span class="attribute">x</span> &amp; <span class="attribute">0xcccccccc</span>) &gt;</span>&gt; 2) | ((x &amp; 0x33333333) <span class="tag">&lt;<span class="title">&lt;</span> <span class="attribute">2</span>));
+    <span class="attribute">x</span> = (((<span class="attribute">x</span> &amp; <span class="attribute">0xf0f0f0f0</span>) &gt;</span>&gt; 4) | ((x &amp; 0x0f0f0f0f) <span class="tag">&lt;<span class="title">&lt;</span> <span class="attribute">4</span>));
+    <span class="attribute">x</span> = (((<span class="attribute">x</span> &amp; <span class="attribute">0xff00ff00</span>) &gt;</span>&gt; 8) | ((x &amp; 0x00ff00ff) <span class="tag">&lt;<span class="title">&lt;</span> <span class="attribute">8</span>));
+    <span class="attribute">return</span>((<span class="attribute">x</span> &gt;</span>&gt; 16) | (x <span class="tag">&lt;<span class="title">&lt;</span> <span class="attribute">16</span>));
+
+}</span></span></code></pre>
+<h2>2 查找表（最快）</h2>
+<pre><code class="language-c cpp"><span class="keyword">static</span> <span class="keyword">const</span> <span class="keyword">unsigned</span> <span class="keyword">char</span> BitReverseTable256[] = 
+{
+  <span class="number">0x00</span>, <span class="number">0x80</span>, <span class="number">0x40</span>, <span class="number">0xC0</span>, <span class="number">0x20</span>, <span class="number">0xA0</span>, <span class="number">0x60</span>, <span class="number">0xE0</span>, <span class="number">0x10</span>, <span class="number">0x90</span>, <span class="number">0x50</span>, <span class="number">0xD0</span>, <span class="number">0x30</span>, <span class="number">0xB0</span>, <span class="number">0x70</span>, <span class="number">0xF0</span>, 
+  <span class="number">0x08</span>, <span class="number">0x88</span>, <span class="number">0x48</span>, <span class="number">0xC8</span>, <span class="number">0x28</span>, <span class="number">0xA8</span>, <span class="number">0x68</span>, <span class="number">0xE8</span>, <span class="number">0x18</span>, <span class="number">0x98</span>, <span class="number">0x58</span>, <span class="number">0xD8</span>, <span class="number">0x38</span>, <span class="number">0xB8</span>, <span class="number">0x78</span>, <span class="number">0xF8</span>, 
+  <span class="number">0x04</span>, <span class="number">0x84</span>, <span class="number">0x44</span>, <span class="number">0xC4</span>, <span class="number">0x24</span>, <span class="number">0xA4</span>, <span class="number">0x64</span>, <span class="number">0xE4</span>, <span class="number">0x14</span>, <span class="number">0x94</span>, <span class="number">0x54</span>, <span class="number">0xD4</span>, <span class="number">0x34</span>, <span class="number">0xB4</span>, <span class="number">0x74</span>, <span class="number">0xF4</span>, 
+  <span class="number">0x0C</span>, <span class="number">0x8C</span>, <span class="number">0x4C</span>, <span class="number">0xCC</span>, <span class="number">0x2C</span>, <span class="number">0xAC</span>, <span class="number">0x6C</span>, <span class="number">0xEC</span>, <span class="number">0x1C</span>, <span class="number">0x9C</span>, <span class="number">0x5C</span>, <span class="number">0xDC</span>, <span class="number">0x3C</span>, <span class="number">0xBC</span>, <span class="number">0x7C</span>, <span class="number">0xFC</span>, 
+  <span class="number">0x02</span>, <span class="number">0x82</span>, <span class="number">0x42</span>, <span class="number">0xC2</span>, <span class="number">0x22</span>, <span class="number">0xA2</span>, <span class="number">0x62</span>, <span class="number">0xE2</span>, <span class="number">0x12</span>, <span class="number">0x92</span>, <span class="number">0x52</span>, <span class="number">0xD2</span>, <span class="number">0x32</span>, <span class="number">0xB2</span>, <span class="number">0x72</span>, <span class="number">0xF2</span>, 
+  <span class="number">0x0A</span>, <span class="number">0x8A</span>, <span class="number">0x4A</span>, <span class="number">0xCA</span>, <span class="number">0x2A</span>, <span class="number">0xAA</span>, <span class="number">0x6A</span>, <span class="number">0xEA</span>, <span class="number">0x1A</span>, <span class="number">0x9A</span>, <span class="number">0x5A</span>, <span class="number">0xDA</span>, <span class="number">0x3A</span>, <span class="number">0xBA</span>, <span class="number">0x7A</span>, <span class="number">0xFA</span>,
+  <span class="number">0x06</span>, <span class="number">0x86</span>, <span class="number">0x46</span>, <span class="number">0xC6</span>, <span class="number">0x26</span>, <span class="number">0xA6</span>, <span class="number">0x66</span>, <span class="number">0xE6</span>, <span class="number">0x16</span>, <span class="number">0x96</span>, <span class="number">0x56</span>, <span class="number">0xD6</span>, <span class="number">0x36</span>, <span class="number">0xB6</span>, <span class="number">0x76</span>, <span class="number">0xF6</span>, 
+  <span class="number">0x0E</span>, <span class="number">0x8E</span>, <span class="number">0x4E</span>, <span class="number">0xCE</span>, <span class="number">0x2E</span>, <span class="number">0xAE</span>, <span class="number">0x6E</span>, <span class="number">0xEE</span>, <span class="number">0x1E</span>, <span class="number">0x9E</span>, <span class="number">0x5E</span>, <span class="number">0xDE</span>, <span class="number">0x3E</span>, <span class="number">0xBE</span>, <span class="number">0x7E</span>, <span class="number">0xFE</span>,
+  <span class="number">0x01</span>, <span class="number">0x81</span>, <span class="number">0x41</span>, <span class="number">0xC1</span>, <span class="number">0x21</span>, <span class="number">0xA1</span>, <span class="number">0x61</span>, <span class="number">0xE1</span>, <span class="number">0x11</span>, <span class="number">0x91</span>, <span class="number">0x51</span>, <span class="number">0xD1</span>, <span class="number">0x31</span>, <span class="number">0xB1</span>, <span class="number">0x71</span>, <span class="number">0xF1</span>,
+  <span class="number">0x09</span>, <span class="number">0x89</span>, <span class="number">0x49</span>, <span class="number">0xC9</span>, <span class="number">0x29</span>, <span class="number">0xA9</span>, <span class="number">0x69</span>, <span class="number">0xE9</span>, <span class="number">0x19</span>, <span class="number">0x99</span>, <span class="number">0x59</span>, <span class="number">0xD9</span>, <span class="number">0x39</span>, <span class="number">0xB9</span>, <span class="number">0x79</span>, <span class="number">0xF9</span>, 
+  <span class="number">0x05</span>, <span class="number">0x85</span>, <span class="number">0x45</span>, <span class="number">0xC5</span>, <span class="number">0x25</span>, <span class="number">0xA5</span>, <span class="number">0x65</span>, <span class="number">0xE5</span>, <span class="number">0x15</span>, <span class="number">0x95</span>, <span class="number">0x55</span>, <span class="number">0xD5</span>, <span class="number">0x35</span>, <span class="number">0xB5</span>, <span class="number">0x75</span>, <span class="number">0xF5</span>,
+  <span class="number">0x0D</span>, <span class="number">0x8D</span>, <span class="number">0x4D</span>, <span class="number">0xCD</span>, <span class="number">0x2D</span>, <span class="number">0xAD</span>, <span class="number">0x6D</span>, <span class="number">0xED</span>, <span class="number">0x1D</span>, <span class="number">0x9D</span>, <span class="number">0x5D</span>, <span class="number">0xDD</span>, <span class="number">0x3D</span>, <span class="number">0xBD</span>, <span class="number">0x7D</span>, <span class="number">0xFD</span>,
+  <span class="number">0x03</span>, <span class="number">0x83</span>, <span class="number">0x43</span>, <span class="number">0xC3</span>, <span class="number">0x23</span>, <span class="number">0xA3</span>, <span class="number">0x63</span>, <span class="number">0xE3</span>, <span class="number">0x13</span>, <span class="number">0x93</span>, <span class="number">0x53</span>, <span class="number">0xD3</span>, <span class="number">0x33</span>, <span class="number">0xB3</span>, <span class="number">0x73</span>, <span class="number">0xF3</span>, 
+  <span class="number">0x0B</span>, <span class="number">0x8B</span>, <span class="number">0x4B</span>, <span class="number">0xCB</span>, <span class="number">0x2B</span>, <span class="number">0xAB</span>, <span class="number">0x6B</span>, <span class="number">0xEB</span>, <span class="number">0x1B</span>, <span class="number">0x9B</span>, <span class="number">0x5B</span>, <span class="number">0xDB</span>, <span class="number">0x3B</span>, <span class="number">0xBB</span>, <span class="number">0x7B</span>, <span class="number">0xFB</span>,
+  <span class="number">0x07</span>, <span class="number">0x87</span>, <span class="number">0x47</span>, <span class="number">0xC7</span>, <span class="number">0x27</span>, <span class="number">0xA7</span>, <span class="number">0x67</span>, <span class="number">0xE7</span>, <span class="number">0x17</span>, <span class="number">0x97</span>, <span class="number">0x57</span>, <span class="number">0xD7</span>, <span class="number">0x37</span>, <span class="number">0xB7</span>, <span class="number">0x77</span>, <span class="number">0xF7</span>, 
+  <span class="number">0x0F</span>, <span class="number">0x8F</span>, <span class="number">0x4F</span>, <span class="number">0xCF</span>, <span class="number">0x2F</span>, <span class="number">0xAF</span>, <span class="number">0x6F</span>, <span class="number">0xEF</span>, <span class="number">0x1F</span>, <span class="number">0x9F</span>, <span class="number">0x5F</span>, <span class="number">0xDF</span>, <span class="number">0x3F</span>, <span class="number">0xBF</span>, <span class="number">0x7F</span>, <span class="number">0xFF</span>
+};
+
+<span class="keyword">unsigned</span> <span class="keyword">int</span> v; <span class="comment">// reverse 32-bit value, 8 bits at time</span>
+<span class="keyword">unsigned</span> <span class="keyword">int</span> c; <span class="comment">// c will get v reversed</span>
+
+<span class="comment">// Option 1:</span>
+c = (BitReverseTable256[v &amp; <span class="number">0xff</span>] &lt;&lt; <span class="number">24</span>) | 
+    (BitReverseTable256[(v &gt;&gt; <span class="number">8</span>) &amp; <span class="number">0xff</span>] &lt;&lt; <span class="number">16</span>) | 
+    (BitReverseTable256[(v &gt;&gt; <span class="number">16</span>) &amp; <span class="number">0xff</span>] &lt;&lt; <span class="number">8</span>) |
+    (BitReverseTable256[(v &gt;&gt; <span class="number">24</span>) &amp; <span class="number">0xff</span>]);
+
+<span class="comment">// Option 2:</span>
+<span class="keyword">unsigned</span> <span class="keyword">char</span> * p = (<span class="keyword">unsigned</span> <span class="keyword">char</span> *) &amp;v;
+<span class="keyword">unsigned</span> <span class="keyword">char</span> * q = (<span class="keyword">unsigned</span> <span class="keyword">char</span> *) &amp;c;
+q[<span class="number">3</span>] = BitReverseTable256[p[<span class="number">0</span>]]; 
+q[<span class="number">2</span>] = BitReverseTable256[p[<span class="number">1</span>]]; 
+q[<span class="number">1</span>] = BitReverseTable256[p[<span class="number">2</span>]]; 
+q[<span class="number">0</span>] = BitReverseTable256[p[<span class="number">3</span>]];</code></pre>
+<h2>3 其它方案</h2>
+<h3>简单</h3>
+<pre><code class="language-c cpp"><span class="keyword">unsigned</span> <span class="keyword">int</span> v;     <span class="comment">// input bits to be reversed</span>
+<span class="keyword">unsigned</span> <span class="keyword">int</span> r = v; <span class="comment">// r will be reversed bits of v; first get LSB of v</span>
+<span class="keyword">int</span> s = <span class="keyword">sizeof</span>(v) * CHAR_BIT - <span class="number">1</span>; <span class="comment">// extra shift needed at end</span>
+
+<span class="keyword">for</span> (v &gt;&gt;= <span class="number">1</span>; v; v &gt;&gt;= <span class="number">1</span>)
+{   
+  r &lt;&lt;= <span class="number">1</span>;
+  r |= v &amp; <span class="number">1</span>;
+  s--;
+}
+r &lt;&lt;= s; <span class="comment">// shift when v's highest bits are zero</span></code></pre>
+<h3>快一些 (32-bit processor)</h3>
+<pre><code class="language-c nginx"><span class="title">unsigned</span> char b = x;
+<span class="title">b</span> = ((b * 0x0802LU &amp; 0x22110LU) | (b * 0x8020LU &amp; 0x88440LU)) * 0x10101LU &gt;&gt; <span class="number">16</span>;</code></pre>
+<h3>快一些 (64-bit processor)</h3>
+<pre><code class="language-c cpp"><span class="keyword">unsigned</span> <span class="keyword">char</span> b; <span class="comment">// reverse this (8-bit) byte</span>
+b = (b * <span class="number">0x0202020202</span>ULL &amp; <span class="number">0x010884422010</span>ULL) % <span class="number">1023</span>;</code></pre>
+<p>上面仅是对8bit的位反转，如果想用于32bit，则只要将32bit拆成4字节，然后每字节单独反转，最后将4字节反转后组合。</p>
+<pre><code class="language-c nginx"><span class="title">unsigned</span> int toReverse;
+<span class="title">unsigned</span> int reversed;
+<span class="title">unsigned</span> char inByte0 = (toReverse &amp; 0xFF);
+<span class="title">unsigned</span> char inByte1 = (toReverse &amp; 0xFF00) &gt;&gt; <span class="number">8</span>;
+<span class="title">unsigned</span> char inByte2 = (toReverse &amp; 0xFF0000) &gt;&gt; <span class="number">16</span>;
+<span class="title">unsigned</span> char inByte3 = (toReverse &amp; 0xFF000000) &gt;&gt; <span class="number">24</span>;
+<span class="title">reversed</span> = (reverseBits(inByte0) &lt;&lt; <span class="number">24</span>) | (reverseBits(inByte1) &lt;&lt; <span class="number">16</span>) | (reverseBits(inByte2) &lt;&lt; <span class="number">8</span>) | (reverseBits(inByte3);</code></pre>
+<h3>递归版本</h3>
+<pre><code class="language-c javascript">int reverse_bits_recursive(unsigned int num, unsigned int numBits)
+{
+    unsigned int reversedNum;;
+    unsigned int mask = <span class="number">0</span>;
+
+    mask = (<span class="number">0x1</span> &lt;<span class="xml"><span class="tag">&lt; (<span class="attribute">numBits</span>/<span class="attribute">2</span>)) <span class="attribute">-</span> <span class="attribute">1</span>;
+
+    <span class="attribute">if</span> (<span class="attribute">numBits</span> =<span class="value">=</span> <span class="attribute">1</span>) <span class="attribute">return</span> <span class="attribute">num</span>;
+    <span class="attribute">reversedNum</span> = <span class="attribute">reverse_bits_recursive</span>(<span class="attribute">num</span> &gt;</span>&gt; numBits/2, numBits/2) |
+                   reverse_bits_recursive((num &amp; mask), numBits/2) <span class="tag">&lt;<span class="title">&lt;</span> <span class="attribute">numBits</span>/<span class="attribute">2</span>;
+    <span class="attribute">return</span> <span class="attribute">reversedNum</span>;
+}
+
+<span class="attribute">int</span> <span class="attribute">main</span>()
+{
+    <span class="attribute">unsigned</span> <span class="attribute">int</span> <span class="attribute">reversedNum</span>;
+    <span class="attribute">unsigned</span> <span class="attribute">int</span> <span class="attribute">num</span>;
+
+    <span class="attribute">num</span> = <span class="attribute">0x55</span>;
+    <span class="attribute">reversedNum</span> = <span class="attribute">reverse_bits_recursive</span>(<span class="attribute">num</span>, <span class="attribute">8</span>);
+    <span class="attribute">printf</span> ("<span class="attribute">Bit</span> <span class="attribute">Reversal</span> <span class="attribute">Input</span> = <span class="attribute">0x</span>%<span class="attribute">x</span> <span class="attribute">Output</span> = <span class="attribute">0x</span>%<span class="attribute">x</span>\<span class="attribute">n</span>", <span class="attribute">num</span>, <span class="attribute">reversedNum</span>);
+
+    <span class="attribute">num</span> = <span class="attribute">0xabcd</span>;
+    <span class="attribute">reversedNum</span> = <span class="attribute">reverse_bits_recursive</span>(<span class="attribute">num</span>, <span class="attribute">16</span>);
+    <span class="attribute">printf</span> ("<span class="attribute">Bit</span> <span class="attribute">Reversal</span> <span class="attribute">Input</span> = <span class="attribute">0x</span>%<span class="attribute">x</span> <span class="attribute">Output</span> = <span class="attribute">0x</span>%<span class="attribute">x</span>\<span class="attribute">n</span>", <span class="attribute">num</span>, <span class="attribute">reversedNum</span>);
+
+    <span class="attribute">num</span> = <span class="attribute">0x123456</span>;
+    <span class="attribute">reversedNum</span> = <span class="attribute">reverse_bits_recursive</span>(<span class="attribute">num</span>, <span class="attribute">24</span>);
+    <span class="attribute">printf</span> ("<span class="attribute">Bit</span> <span class="attribute">Reversal</span> <span class="attribute">Input</span> = <span class="attribute">0x</span>%<span class="attribute">x</span> <span class="attribute">Output</span> = <span class="attribute">0x</span>%<span class="attribute">x</span>\<span class="attribute">n</span>", <span class="attribute">num</span>, <span class="attribute">reversedNum</span>);
+
+    <span class="attribute">num</span> = <span class="attribute">0x11223344</span>;
+    <span class="attribute">reversedNum</span> = <span class="attribute">reverse_bits_recursive</span>(<span class="attribute">num</span>,<span class="attribute">32</span>);
+    <span class="attribute">printf</span> ("<span class="attribute">Bit</span> <span class="attribute">Reversal</span> <span class="attribute">Input</span> = <span class="attribute">0x</span>%<span class="attribute">x</span> <span class="attribute">Output</span> = <span class="attribute">0x</span>%<span class="attribute">x</span>\<span class="attribute">n</span>", <span class="attribute">num</span>, <span class="attribute">reversedNum</span>);
+}</span></span></code></pre>
+<p>上面的输出结果是：</p>
+<pre><code class="nginx"><span class="title">Bit</span> Reversal Input = 0x55 Output = 0xaa
+Bit Reversal Input = 0xabcd Output = 0xb3d5
+Bit Reversal Input = 0x123456 Output = 0x651690
+Bit Reversal Input = 0x11223344 Output = 0x22cc4488</code></pre>
+</font></font></body></html>

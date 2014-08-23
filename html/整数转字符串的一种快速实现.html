@@ -1,0 +1,122 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"><link rel="stylesheet" id="theme" href="chrome-extension://febilkbfcbhebfnokafefeacimjdckgl/theme/Github.css"></head><body><p><a href="../README.md"><font size="4">←返回主目录<font></font></font></a><font size="4"><font>
+<br><br><br></font></font></p><font size="4"><font>
+<h3>基本思路</h3>
+<ul>
+<li>若输入为正整数，则直接按10求模，取出十进制中的每个bit，存储到字符串中即可</li>
+<li>若输入为负整数，则先转化为正整数，按正整数方法处理，输出时字符串的存储起始地址存储'-'符号即可</li>
+</ul>
+<p>因此，负整数的存储将比正整数的存储所需字符串空间的长度要多1个字节。</p>
+<p>如果只是上面那么简单，本文就真是画蛇添足。基于此，本文在写程序时考虑到2个问题：</p>
+<ol>
+<li>除10运算的机器运算复杂度高</li>
+<li>模10运算也不是高效的机器运算</li>
+</ol>
+<p>大家肯定在很多文章中见过使用位运算求除2^k和mod(2^k)的方法，但这些方法在除10和mod(10)这根本行不通。</p>
+<p>比如计算 x = 100 / 8，只要求x = 100 &gt;&gt; 3即可，可要求x = 100 / 3，或除以5/7之类的数就无能为力了。</p>
+<p>本文参考<a href="http://www.hackersdelight.org/">Hacker's Delight</a> By Henry S. Warren，使用所谓的“魔数”计算，让你领略所谓的“奇技淫巧”。</p>
+<h3>详细的程序</h3>
+<pre><code class="language-c xml">/*
+ * FileName : format2str.c
+ * Author   : xiahouzuoxin @163.com
+ * Version  : v1.0
+ * Date     : 2014/4/8 11:08:40
+ * Brief    : 
+ * 
+ * Copyright (C) MICL,USTB
+ */
+#include "format2str.h" 
+
+/*
+ * @brief   
+ *   == Use Example
+ *   str = (char *)malloc(k*sizeof(char));
+ *   if (str) {
+ *      int32_to_str(x, str, n);  // n <span class="tag">&lt;<span class="title">=</span> <span class="attribute">k</span>
+ *   }
+ *   =<span class="value">=</span> <span class="attribute">Be</span> <span class="attribute">careful</span> <span class="attribute">of</span> <span class="attribute">choose</span> <span class="attribute">the</span> <span class="attribute">input</span> <span class="attribute">n</span>
+ * @<span class="attribute">inputs</span>  
+ *   <span class="attribute">x</span> <span class="attribute">-</span> <span class="attribute">Interger</span> <span class="attribute">numbers</span>
+ *   <span class="attribute">n</span> <span class="attribute">-</span> 
+ *      <span class="attribute">x</span>&gt;</span>0, n &gt;= bit of x in decimal format + 1
+ *      x<span class="tag">&lt;<span class="title">0,</span> <span class="attribute">n</span> &gt;</span>= bit of x in decimal format + 2
+ * @outputs 
+ *   str - Converted string
+ * @retval  
+ *   If success return 0, else others.
+ */
+int32_t int32_to_str(int32_t x, char *str, uint32_t n)
+{
+    uint32_t remain = 0;
+    uint32_t div_x  = 0;
+    uint32_t le_zero= 0;
+
+    if (x<span class="tag">&lt;<span class="title">0)</span> {
+        <span class="attribute">x</span> = <span class="attribute">-x</span>;
+        <span class="attribute">le_zero</span> = <span class="attribute">1</span>;
+    }
+
+    <span class="attribute">str</span>[<span class="attribute">--n</span>] = '\<span class="attribute">0</span>';
+    <span class="attribute">while</span> ((<span class="attribute">x</span> &gt;</span> 0) &amp;&amp; (n&gt;0)) {
+        div_x  = DIV10(x);
+        remain = x - ((div_x<span class="tag">&lt;<span class="title">&lt;3)+(div_x&lt;&lt;1));</span>  // <span class="attribute">x</span> <span class="attribute">-</span> <span class="attribute">div_x</span> * <span class="attribute">10</span>
+        <span class="attribute">x</span>      = <span class="attribute">div_x</span>;
+
+        <span class="attribute">str</span>[<span class="attribute">--n</span>] = <span class="attribute">remain</span> + '<span class="attribute">0</span>';
+    }
+    <span class="attribute">while</span> (<span class="attribute">n</span> &gt;</span> 1) {
+        str[--n] = '0';
+    } 
+    if (le_zero &gt; 0) {
+        str[--n] = '-';
+    } else {
+        str[--n] = '0';
+    }
+
+    return (n);
+}</code></pre>
+<pre><code class="language-c python">/*
+ * FileName : format2str.h
+ * Author   : xiahouzuoxin <span class="decorator">@163.com</span>
+ * Version  : v1<span class="number">.0</span>
+ * Date     : <span class="number">2014</span>/<span class="number">4</span>/<span class="number">9</span> <span class="number">10</span>:<span class="number">15</span>:<span class="number">09</span>
+ * Brief    : 
+ * 
+ * Copyright (C) MICL,USTB
+ */
+<span class="comment">#ifndef _FORMAT2STR_H</span>
+<span class="comment">#define _FORMAT2STR_H</span>
+
+<span class="comment">#ifdef __cplusplus</span>
+extern <span class="string">"C"</span> {
+<span class="comment">#endif</span>
+
+
+<span class="comment">#include &lt;stdint.h&gt;</span>
+
+/* 
+ * Magic Number <span class="number">0x66666667</span> 
+ * Refrence to &lt;&lt;Hacke<span class="string">r's Delight&gt;&gt; By Henry S. Warren
+ */
+#define DIV5(x)        (((int64_t)x*0x66666667L) &gt;&gt; 33)
+#define DIV10(x)       (((int64_t)x*0x66666667L) &gt;&gt; 34)
+
+extern int32_t int32_to_str(int32_t x, char *str, uint32_t n);
+
+#ifdef __cplusplus
+}
+#endif
+#endif</span></code></pre>
+<p>除3的魔数是0x55555556，除7的魔数是0x92492493，除5的魔数是0x66666667，程序中就使用到除5的魔数用于/10的运算。</p>
+<p>因此，求mod(x,10)可以通过x-DIV10(x)*10计算得到。</p>
+<p>这里又有个技巧，</p>
+<pre><code class="javascript">x*<span class="number">10</span> = x*(<span class="number">8</span>+<span class="number">2</span>) = x*<span class="number">8</span> + x*<span class="number">2</span> = x&lt;<span class="xml"><span class="tag">&lt;<span class="title">3</span> + <span class="attribute">x</span>&lt;&lt;<span class="attribute">1</span></span></span></code></pre>
+<p>关于int32_t int32_to_str(int32_t x, char *str, uint32_t n)函数调用的提示：</p>
+<ol>
+<li>n不能大于str分配空间的最大长度k</li>
+<li>若x为正数：则n至少取x十进制格式的bit数+1（+1用于存储字符串结尾字符'\0'）</li>
+<li>若x为正数：则n至少取x十进制格式的bit数+2（+2用于存储'\0'和负数的符号字符'-'）</li>
+</ol>
+<h3>源代码</h3>
+<p><a href="../codes/整数转字符串的一种快速实现">format2str</a></p>
+<p>可能还会有其它的更新，如float转字符串等的实现（float可以通过先乘以一个系数化为整数后再转字符串）。</p>
+</font></font></body></html>

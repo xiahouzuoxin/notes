@@ -1,0 +1,28 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"><link rel="stylesheet" id="theme" href="chrome-extension://febilkbfcbhebfnokafefeacimjdckgl/theme/Github.css"></head><body><p><a href="../README.md"><font size="4">←返回主目录<font></font></font></a><font size="4"><font>
+<br><br><br></font></font></p><font size="4"><font>
+<h2>代码实例</h2>
+<pre><code class="language-C sql">
+hTimer = TIMER_open(TIMER_DEVANY,0); <span class="comment">/* open a timer */</span>
+
+<span class="comment">/* Configure the timer. 1 count corresponds to 4 CPU cycles in C67 */</span>
+<span class="comment">/* control period initial value */</span>
+TIMER_configArgs(hTimer, 0x000002C0, 0xFFFFFFFF, 0x00000000);
+
+<span class="comment">/* Compute the overhead of calling the timer. */</span>
+<span class="operator"><span class="keyword">start</span> = TIMER_getCount(hTimer);</span> <span class="comment">/* to remove L1P miss overhead */</span>
+<span class="operator"><span class="keyword">start</span> = TIMER_getCount(hTimer);</span> <span class="comment">/* get count */</span>
+stop = TIMER_getCount(hTimer); <span class="comment">/* get count */</span>
+
+overhead = stop - <span class="operator"><span class="keyword">start</span>;</span>
+<span class="operator"><span class="keyword">start</span> = TIMER_getCount(hTimer);</span> <span class="comment">/* get count */</span>
+
+<span class="comment">/* Call a function here. */</span>
+
+<span class="comment">/* get count */</span>
+diff = (TIMER_getCount(hTimer) – <span class="operator"><span class="keyword">start</span>) ? overhead;</span> 
+TIMER_close(hTimer);
+printf(”%d cycles \n”, diff*4);</code></pre>
+<p>注意，C6713上定时器的一个计数值对应4个时钟周期。</p>
+<p>overhead表示Timer本身配置过程的时钟消耗，所以有diff计算，</p>
+<pre><code class="language-c sql">diff = (TIMER_getCount(hTimer) – <span class="operator"><span class="keyword">start</span>) ? overhead;</span> <span class="comment">/* get count */</span></code></pre>
+</font></font></body></html>

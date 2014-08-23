@@ -1,0 +1,19 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"><link rel="stylesheet" id="theme" href="chrome-extension://febilkbfcbhebfnokafefeacimjdckgl/theme/Github.css"></head><body><p><a href="../README.md"><font size="4">←返回主目录<font></font></font></a><font size="4"><font>
+<br><br><br></font></font></p><font size="4"><font>
+<h2>求最值</h2>
+<p>使用?:比较两数的大小常用如下方法：</p>
+<pre><code class="ruby"><span class="comment">#ifndef MIN</span>
+<span class="comment">#define MIN(a,b)  ((a) &gt; (b) ? (b) : (a))</span>
+<span class="comment">#endif</span>
+
+<span class="comment">#ifndef MAX</span>
+<span class="comment">#define MAX(a,b)  ((a) &lt; (b) ? (b) : (a))</span>
+<span class="comment">#endif</span></code></pre>
+<p>如今在OpenCV的core/../types_c.h中发现了如下的不使用跳转就能比较两数大小：</p>
+<pre><code class="css"><span class="comment">/* min &amp; max without jumps */</span>
+<span class="id">#define</span>  <span class="tag">CV_IMIN</span>(<span class="tag">a</span>, <span class="tag">b</span>)  ((<span class="tag">a</span>) ^ (((<span class="tag">a</span>)^(<span class="tag">b</span>)) &amp; (((<span class="tag">a</span>) &lt; (<span class="tag">b</span>)) - 1)))
+
+<span class="id">#define</span>  <span class="tag">CV_IMAX</span>(<span class="tag">a</span>, <span class="tag">b</span>)  ((<span class="tag">a</span>) ^ (((<span class="tag">a</span>)^(<span class="tag">b</span>)) &amp; (((<span class="tag">a</span>) &gt; (<span class="tag">b</span>)) - 1)))</code></pre>
+<h2>求绝对值</h2>
+<pre><code class="xml">#define  CV_IABS(a)     (((a) ^ ((a) <span class="tag">&lt; <span class="attribute">0</span> ? <span class="attribute">-1</span> <span class="attribute">:</span> <span class="attribute">0</span>)) <span class="attribute">-</span> ((<span class="attribute">a</span>) &lt; <span class="attribute">0</span> ? <span class="attribute">-1</span> <span class="attribute">:</span> <span class="attribute">0</span>))</span></code></pre>
+</font></font></body></html>

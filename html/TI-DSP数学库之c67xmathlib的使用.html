@@ -1,0 +1,41 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"><link rel="stylesheet" id="theme" href="chrome-extension://febilkbfcbhebfnokafefeacimjdckgl/theme/Github.css"></head><body><p><a href="../README.md"><font size="4">←返回主目录<font></font></font></a><font size="4"><font>
+<br><br><br></font></font></p><font size="4"><font>
+<p>正如TI描述的：</p>
+<pre><code class="delphi">The C67x FastRTS <span class="keyword">library</span> is an optimized floating-point math <span class="function"><span class="keyword">function</span> <span class="title">library</span> <span class="title">for</span> <span class="title">C</span> <span class="title">programmers</span> <span class="title">using</span> <span class="title">TMS320C67x</span> <span class="title">devices</span></span></code></pre>
+<p>上面说的C67x FastRTS library就是本文使用的c67xmathlib，在dsp中使用C标准的math.h总感觉是一种资源浪费（没测试过，只是感觉，若有测试过的希望一起交流）。而在工程中难免要用到一些数学函数，如log2在FFT算法中就很好用，sin/cos函数在解三角形的算法中不可避免，当时为提高速度，一般使用查表的方式。然而，查表的弊端就是——太耗存储空间了，而且精度有限，某些情况下不得已还在查表法基础上进行插值计算。C67x FastRTS library恰好提供了一些优化的数学函数支持，推荐使用！</p>
+<h2>去官网下载</h2>
+<p><a href="http://www.ti.com.cn/tool/cn/mathlib">http://www.ti.com.cn/tool/cn/mathlib</a></p>
+<p>下载完是个可执行程序，估计就是一个大包，因为安装完后就是一些.c/h文件，其目录结构如下：</p>
+<pre><code class="delphi"> +--mathlib_v2.<span class="number">0.0</span>.<span class="number">1</span>
+     |
+     +--docs                <span class="keyword">Library</span> documentation
+     |
+     +--src                 Source code <span class="keyword">with</span> example projects
+     |   |
+     |   + dp              Example projects <span class="keyword">for</span> Double precision kernels
+     |   + sp              Example projects <span class="keyword">for</span> Single precision kernels
+     |
+     |--include            Header <span class="keyword">file</span> containing kernel <span class="keyword">interface</span>
+     |                         header files
+     |
+     |--lib                   Precompiled <span class="keyword">Library</span>  (COFF <span class="keyword">and</span> ELF)
+     |
+     |--build               Provided project <span class="keyword">to</span> rebuild <span class="keyword">library</span>
+     |
+     |--README.txt          Top-level README <span class="keyword">file</span>
+     |
+     |--Rules.make     Rules.make <span class="keyword">file</span> <span class="keyword">for</span> setting paths <span class="keyword">to</span> dependencies <span class="keyword">in</span> Linux
+     |
+     |--Top level make <span class="keyword">file</span></code></pre>
+<h2>使用</h2>
+<p>正统的是使用软件包的方法是：lib目录下的静态链接库加include目录下的.h头文件。然而，因为src目录下已经给了源代码，我宁愿将我需要用到的函数源码复制到工程中编译。</p>
+<p>比如：使用float类型的sin函数——拷贝./src/sp/sinsp/sinsp_c.c及./src/sp/sinsp/sinsp_c.h到工程中编译即可使用。</p>
+<p>每个函数模块都提供几个文件：</p>
+<ol>
+<li>基于C语言函数的实现（在*_c.c/h文件中）</li>
+<li>基于inline的实现（在*_i.h头文件中）</li>
+<li>基于向量/多个输入的实现（在*_v.c文件中）</li>
+<li>用于验证的main函数（*_d.c文件）</li>
+</ol>
+<p>另外值得注意的一点是，在使用前最好使用CCS的仿真器验证下函数的正确性！当然你足够相信TI的话就当我没说过这话。</p>
+</font></font></body></html>

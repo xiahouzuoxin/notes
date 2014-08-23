@@ -1,0 +1,58 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"><link rel="stylesheet" id="theme" href="chrome-extension://febilkbfcbhebfnokafefeacimjdckgl/theme/Github.css"></head><body><p><a href="../README.md"><font size="4">←返回主目录<font></font></font></a><font size="4"><font>
+<br><br><br></font></font></p><font size="4"><font>
+<p>下面的matlab程序分别使用周期图法、相关函数法以及AR谱方法计算信号的功率谱。</p>
+<pre><code class="delphi">% power spectrum estimated
+clear all;
+clc;
+close all;
+
+Fs=<span class="number">1000</span>;       % 采样频率
+nfft = <span class="number">1024</span>;   % fft计算点数
+
+%产生含有噪声的序列
+n=<span class="number">0</span>:<span class="number">1</span>/Fs:<span class="number">1</span>;
+xn=cos(<span class="number">2</span>*pi*<span class="number">100</span>*n)+<span class="number">3</span>*cos(<span class="number">2</span>*pi*<span class="number">200</span>*n)+(<span class="number">2</span>*randn(size(n)));
+subplot(<span class="number">2</span>,<span class="number">2</span>,<span class="number">1</span>);plot(xn);title(<span class="string">'加噪信号'</span>);grid <span class="keyword">on</span>
+
+% 周期图法
+window=boxcar(length(xn)); %矩形窗
+[psd1,f]=periodogram(xn,window,nfft,Fs); %直接法
+psd1 = psd1 / max(psd1);
+subplot(<span class="number">2</span>,<span class="number">2</span>,<span class="number">2</span>);plot(f,<span class="number">10</span>*log10(psd1+<span class="number">0.000001</span>));title(<span class="string">'周期图法'</span>);grid <span class="keyword">on</span>
+
+% 自相关法
+cxn=xcorr(xn,<span class="string">'unbiased'</span>); %计算序列的自相关函数
+CXk=fft(cxn,nfft);
+psd2=abs(CXk);
+<span class="keyword">index</span>=<span class="number">0</span>:round(nfft/<span class="number">2</span>-<span class="number">1</span>);
+k=<span class="keyword">index</span>*Fs/nfft;
+psd2 = psd2 / max(psd2);
+psd2=<span class="number">10</span>*log10(psd2(<span class="keyword">index</span>+<span class="number">1</span>)+<span class="number">0.000001</span>);
+subplot(<span class="number">2</span>,<span class="number">2</span>,<span class="number">3</span>);plot(k,psd2);title(<span class="string">'自相关法'</span>);grid <span class="keyword">on</span>
+
+% AR谱
+psd3 = pyulear(xn, Fs, nfft); 
+psd3=psd3/max(psd3);
+psd3 = psd3 / max(psd3);
+<span class="keyword">index</span>=<span class="number">0</span>:round(nfft/<span class="number">2</span>-<span class="number">1</span>);
+psd3=<span class="number">10</span>*log10(psd3(<span class="keyword">index</span>+<span class="number">1</span>)+<span class="number">0.000001</span>);
+subplot(<span class="number">2</span>,<span class="number">2</span>,<span class="number">4</span>);plot(k, psd3);title(<span class="string">'AR谱估计'</span>);grid <span class="keyword">on</span>;</code></pre>
+<p><img src="../images/功率谱的一点理解/psd.png" alt="psd"></p>
+<p>现在就此来说是关于功率谱的几点理解：</p>
+<ol>
+<li><p>功率谱的数据都是相对值，他无法给出信号的实际绝对幅值，一般只要看峰值之间的比值就行了，也可以对数据归一化</p>
+</li>
+<li><p>功率谱中的峰值代表的是信号中的周期成分，隐含的周期信号能量要比随机信号大（这个一般能理解的）。比如，上面xn是</p>
+<pre><code class="ini"><span class="setting">xn=<span class="value">cos(<span class="number">2</span>*pi*<span class="number">100</span>*n)+<span class="number">3</span>*cos(<span class="number">2</span>*pi*<span class="number">200</span>*n)+(<span class="number">2</span>*randn(size(n)));</span></span></code></pre>
+<p>其周期包括200Hz及100Hz，200Hz的幅值比100Hz大，再看功率谱图中，清晰的体现了信号中含有200Hz和100Hz的信号。</p>
+</li>
+<li><p>直接法又称周期图法，它是把随机序列x(n)的N个观测数据视为一能量有限的序列，直接计算x(n)的离散傅立叶变换，得X(k)，然后再取其幅值的平方，并除以N，作为序列x(n)真实功率谱的估计</p>
+</li>
+<li><p>间接法先由序列x(n)估计出自相关函数R(n)，然后对R(n)进行傅立叶变换，便得到x(n)的功率谱估计</p>
+</li>
+<li><p>直接采用平均周期图法求功率谱时，功率普形状呈锯齿形，谱峰点的准确位置不大好定。于是可以采用其他的方法对谱进行平滑操作，平滑化，仅仅是为了使图形光滑，并不会使得波的本质受到歪曲和畸变。反过来说，由于不纯的东西去掉了，本质的东西必然会更加显示出来！平滑化的程度可以根据所分析的信号，选择合理的窗函数和带宽！</p>
+</li>
+<li><p>平均周期图法和其他方法求出的结果，参数条件取得一样的话，可以得到完全相同的结果。</p>
+</li>
+</ol>
+</font></font></body></html>

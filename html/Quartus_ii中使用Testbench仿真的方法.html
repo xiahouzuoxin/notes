@@ -1,0 +1,23 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"><link rel="stylesheet" id="theme" href="chrome-extension://febilkbfcbhebfnokafefeacimjdckgl/theme/Github.css"></head><body><p><a href="../README.md"><font size="4">←返回主目录<font></font></font></a><font size="4"><font>
+<br><br><br></font></font></p><font size="4"><font>
+<h2>设置Modelsim路径</h2>
+<p>执行<code>Tools -&gt; Options -&gt; General -&gt; EDA Tool Options</code>，设置Modelsim路径如下：</p>
+<p><img src="../images/Quartus_ii中使用Testbench仿真的方法/ModelsimPath.jpg" alt="ModelsimPath"></p>
+<p>一般设置好一次以后就不用设置了。</p>
+<h2>编写Testbench</h2>
+<ol>
+<li><p>使用模板：</p>
+<p>执行<code>Processing -&gt; Start -&gt; Start Testbench Template Writer</code>生成Testbench模板文件，</p>
+<p>使用<code>File-&gt;Open</code>打开在工程simulation目录下的Testbench文件进行编辑</p>
+</li>
+<li><p>手动编写：</p>
+<p><code>File -&gt; New...</code>，选择Verilg HDL File，Testbench文件命名后缀最好使用*_tst.vt，在新建的文件中编写逻辑，如下例所示：</p>
+<p><img src="../images/Quartus_ii中使用Testbench仿真的方法/TestbenchEx.png" alt="TestbenchEx"></p>
+</li>
+</ol>
+<h2>仿真设置</h2>
+<p>执行<code>Assigments -&gt; Settings -&gt; EDA Tool Settings -&gt; Simulation</code>设置仿真参数</p>
+<p><img src="../images/Quartus_ii中使用Testbench仿真的方法/ModelsimArgs.png" alt="ModelsimArgs"></p>
+<p><img src="../images/Quartus_ii中使用Testbench仿真的方法/TestbenchSetting.png" alt="TestbenchSetting"></p>
+<p>一路OK，执行<code>Tools-&gt;Run Simulation Tools-&gt;RTL simulation</code>则弹出Modelsim的仿真界面，就可以进行仿真分析了。</p>
+</font></font></body></html>

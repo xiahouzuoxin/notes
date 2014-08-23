@@ -1,0 +1,56 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"><link rel="stylesheet" id="theme" href="chrome-extension://febilkbfcbhebfnokafefeacimjdckgl/theme/Github.css"></head><body><p><a href="../README.md"><font size="4">←返回主目录<font></font></font></a><font size="4"><font>
+<br><br><br></font></font></p><font size="4"><font>
+<h2>程序及分析</h2>
+<pre><code class="language-c cpp"><span class="comment">/*
+ * FileName : read.cpp
+ * Author   : xiahouzuoxin @163.com
+ * Version  : v1.0
+ * Date     : Tue 13 May 2014 07:34:25 PM CST
+ * Brief    : 
+ * 
+ * Copyright (C) MICL,USTB
+ */</span>
+<span class="preprocessor">#include &lt;cv.h&gt;</span>
+<span class="preprocessor">#include &lt;highgui.h&gt;</span>
+
+<span class="keyword">using</span> <span class="keyword">namespace</span> cv;
+<span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;
+
+<span class="keyword">int</span> main(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)
+{
+    Mat img;
+
+    img = imread(argv[<span class="number">1</span>], <span class="number">1</span>);
+
+    <span class="keyword">if</span> (argc != <span class="number">2</span> || !img.data) {
+        <span class="built_in">cout</span>&lt;&lt;<span class="string">"No image data.\n"</span>&lt;&lt;endl;
+        <span class="keyword">return</span> -<span class="number">1</span>;
+    }
+
+    namedWindow(<span class="string">"Display Image"</span>, CV_WINDOW_AUTOSIZE);
+    imshow(<span class="string">"Display Image"</span>, img);
+
+    waitKey(<span class="number">0</span>);
+
+    <span class="keyword">return</span> <span class="number">0</span>;
+}</code></pre>
+<ol>
+<li><p>这就是<a href="OpenCV基础篇之读取显示图片.md">OpenCV基础篇之读取显示图片</a>中使用的代码</p>
+</li>
+<li><p>如果没有安装CMake，则使用下面命令安装</p>
+<pre><code class="nginx"><span class="title">yum</span> install cmake</code></pre>
+</li>
+<li><p>CMake是一款工程管理软件，比Makefile平台迁移性更好，通过CMake能自动生成Makefile。用于本程序的CMake文件内容如下：</p>
+<pre><code class="ruby">project(read)
+find_package(<span class="constant">OpenCV</span> <span class="constant">REQUIRED</span>)
+add_executable(read read)
+target_link_libraries(read <span class="variable">${</span><span class="constant">OpenCV_LIBS</span>})</code></pre>
+<p>将上述内容保存到文件名为CMakeLists.txt（必须是这个文件名）的文件中，依次执行</p>
+<pre><code class="nginx"><span class="title">cmake</span> ./
+make</code></pre>
+<p>cmake命令直接生成Makefile，通过Makefile生成可执行文件（这也就是为什么cmake平台迁移性好，不同的平台能生成对应的Makefile，很容易迁移到Windows）。</p>
+</li>
+</ol>
+<h2>效果</h2>
+<p><img src="../images/OpenCV基础篇之使用CMake管理工程/result.png" alt="result"></p>
+</font></font></body></html>

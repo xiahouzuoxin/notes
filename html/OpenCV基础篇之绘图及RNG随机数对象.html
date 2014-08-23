@@ -1,0 +1,143 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"><link rel="stylesheet" id="theme" href="chrome-extension://febilkbfcbhebfnokafefeacimjdckgl/theme/Github.css"></head><body><p><a href="../README.md"><font size="4">←返回主目录<font></font></font></a><font size="4"><font>
+<br><br><br></font></font></p><font size="4"><font>
+<h2>程序及分析</h2>
+<pre><code class="language-c cpp"><span class="comment">/*
+ * FileName : random_gen.c
+ * Author   : xiahouzuoxin @163.com
+ * Version  : v1.0
+ * Date     : Tue 29 Jul 2014 08:31:41 PM CST
+ * Brief    : 
+ * 
+ * Copyright (C) MICL,USTB
+ */</span>
+<span class="preprocessor">#include &lt;cv.h&gt;</span>
+<span class="preprocessor">#include &lt;highgui.h&gt;</span>
+<span class="preprocessor">#include &lt;iostream&gt;</span>
+
+<span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;
+<span class="keyword">using</span> <span class="keyword">namespace</span> cv;
+
+
+<span class="keyword">const</span> <span class="keyword">char</span> wndname[] = <span class="string">"Drawing"</span>;
+<span class="keyword">const</span> <span class="keyword">int</span> RAND_N = <span class="number">100</span>;
+
+<span class="keyword">void</span> help(<span class="keyword">void</span>)
+{
+    <span class="built_in">cout</span>&lt;&lt;<span class="string">"Usage:./drawing"</span>&lt;&lt;endl;
+}
+
+<span class="keyword">static</span> Scalar random_color(RNG&amp; rng)
+{
+    <span class="keyword">int</span> icolor = (<span class="keyword">unsigned</span>)rng;
+
+    <span class="keyword">return</span> Scalar(icolor&amp;<span class="number">0xFF</span>, (icolor&gt;&gt;<span class="number">8</span>)&amp;<span class="number">0xFF</span>, (icolor&gt;&gt;<span class="number">16</span>)&amp;<span class="number">0xFF</span>);
+}
+
+<span class="keyword">int</span> main(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])
+{
+    <span class="keyword">int</span> line_type = CV_AA;
+    <span class="keyword">int</span> i = <span class="number">0</span>;
+    <span class="keyword">int</span> width = <span class="number">1000</span>;
+    <span class="keyword">int</span> height = <span class="number">700</span>;
+    <span class="keyword">int</span> x1 = -width/<span class="number">2</span>;
+    <span class="keyword">int</span> x2 = width*<span class="number">3</span>/<span class="number">2</span>;
+    <span class="keyword">int</span> y1 = -height/<span class="number">2</span>;
+    <span class="keyword">int</span> y2 = height*<span class="number">3</span>/<span class="number">2</span>;
+    <span class="keyword">const</span> <span class="keyword">int</span> DELAY = <span class="number">10</span>;
+
+    RNG rng(<span class="number">0xFFFFFFFF</span>);
+    Mat image = Mat::zeros(height, width, CV_8UC3);
+
+    imshow(wndname, image);
+    waitKey(DELAY);
+
+    <span class="keyword">for</span> (i=<span class="number">0</span>; i&lt;RAND_N; i++) {
+        Point pt1;
+        Point pt2;
+
+        pt1.x = rng.uniform(x1, x2);
+        pt1.y = rng.uniform(y1, y2);
+        pt2.x = rng.uniform(x1, x2);
+        pt2.y = rng.uniform(y1, y2);
+
+        line(image, pt1, pt2, random_color(rng), rng.uniform(<span class="number">1</span>,<span class="number">5</span>), line_type);
+    }
+    imshow(wndname, image);
+    waitKey(<span class="number">0</span>);
+
+    <span class="keyword">for</span> (i=<span class="number">0</span>; i&lt;RAND_N; i++) {
+    Point org;
+    org.x = rng.uniform(x1, x2);
+    org.y = rng.uniform(y1, y2);
+    putText(image, <span class="string">"OpenCV"</span>,org, rng.uniform(<span class="number">0</span>,<span class="number">8</span>),rng.uniform(<span class="number">0</span>,<span class="number">10</span>)*<span class="number">0.5</span>+<span class="number">0.1</span>, 
+            random_color(rng), rng.uniform(<span class="number">1</span>, <span class="number">10</span>), line_type);
+    }
+
+    imshow(wndname, image);
+    waitKey(<span class="number">0</span>);
+    <span class="keyword">return</span> <span class="number">0</span>;
+}</code></pre>
+<ol>
+<li><p>RNG是OpenCV中的随机数生成类，其定义在core.hpp中，</p>
+<pre><code class="cpp"><span class="keyword">class</span> CV_EXPORTS RNG
+{
+<span class="keyword">public</span>:
+  <span class="keyword">enum</span> { UNIFORM=<span class="number">0</span>, NORMAL=<span class="number">1</span> };
+
+  RNG();
+  RNG(uint64 _state);
+  <span class="comment">//! updates the state and returns the next 32-bit unsigned integer random number</span>
+  <span class="keyword">unsigned</span> next();
+
+  <span class="keyword">operator</span> uchar();
+  <span class="keyword">operator</span> schar();
+  <span class="keyword">operator</span> ushort();
+  <span class="keyword">operator</span> <span class="keyword">short</span>();
+  <span class="keyword">operator</span> <span class="keyword">unsigned</span>();
+  <span class="comment">//! returns a random integer sampled uniformly from [0, N).</span>
+  <span class="keyword">unsigned</span> <span class="keyword">operator</span>()(<span class="keyword">unsigned</span> N);
+  <span class="keyword">unsigned</span> <span class="keyword">operator</span> ()();
+  <span class="keyword">operator</span> <span class="keyword">int</span>();
+  <span class="keyword">operator</span> <span class="keyword">float</span>();
+  <span class="keyword">operator</span> <span class="keyword">double</span>();
+  <span class="comment">//! returns uniformly distributed integer random number from [a,b) range</span>
+  <span class="keyword">int</span> uniform(<span class="keyword">int</span> a, <span class="keyword">int</span> b);
+  <span class="comment">//! returns uniformly distributed floating-point random number from [a,b) range</span>
+  <span class="keyword">float</span> uniform(<span class="keyword">float</span> a, <span class="keyword">float</span> b);
+  <span class="comment">//! returns uniformly distributed double-precision floating-point random number from [a,b) range</span>
+  <span class="keyword">double</span> uniform(<span class="keyword">double</span> a, <span class="keyword">double</span> b);
+  <span class="keyword">void</span> fill( InputOutputArray mat, <span class="keyword">int</span> distType, InputArray a, InputArray b );
+  <span class="comment">//! returns Gaussian random variate with mean zero.</span>
+  <span class="keyword">double</span> gaussian(<span class="keyword">double</span> sigma);
+
+  uint64 state;
+};</code></pre>
+<p>提供了两种随机数——均匀分布（uniform)和高斯正态分布（gaussian）。本文使用的是随机分布，两个参数分布表示均匀分布的下限和上限。<code>RNG rng(0xFFFFFFFF);</code>中的0xFFFFFFFF表示初始的随机值。</p>
+</li>
+<li><p>Mat矩阵初始化：</p>
+<pre><code class="nginx"><span class="title">Mat</span> image = Mat::zeros(height, width, CV_8UC3);</code></pre>
+</li>
+<li><p>line用于绘制直线，也定义在core.hpp中，</p>
+<pre><code class="cpp"><span class="comment">//! draws the line segment (pt1, pt2) in the image</span>
+CV_EXPORTS_W <span class="keyword">void</span> line(Mat&amp; img, Point pt1, Point pt2, <span class="keyword">const</span> Scalar&amp;     color,<span class="keyword">int</span> thickness=<span class="number">1</span>, <span class="keyword">int</span> lineType=<span class="number">8</span>, <span class="keyword">int</span> shift=<span class="number">0</span>);</code></pre>
+<p>还有其它绘图函数circle、ellipse、rectangle等也也可以从core.hpp中找到原型，可用到时自行学习。</p>
+</li>
+<li><p>putText可以将文字添加到图片中，</p>
+<pre><code class="cpp"><span class="comment">//! renders text string in the image</span>
+CV_EXPORTS_W <span class="keyword">void</span> putText( Mat&amp; img, <span class="keyword">const</span> <span class="built_in">string</span>&amp; text, Point org,
+                       <span class="keyword">int</span> fontFace, <span class="keyword">double</span> fontScale, Scalar color,
+                       <span class="keyword">int</span> thickness=<span class="number">1</span>, <span class="keyword">int</span> linetype=<span class="number">8</span>,
+                       <span class="keyword">bool</span> bottomLeftOrigin=<span class="keyword">false</span> );</code></pre>
+<p>其第一个参数img就是要添加文字的图像，第二个参数就是要添加的文字（程序中是"OpenCV"）</p>
+</li>
+<li><p>关于颜色：颜色是用RGB三通道表示的，因此上面函数中颜色参数的类型都是Scalar类型。Scalar在OpenCV中类似于向量，但其长度最大为4通道，源程序中</p>
+<pre><code class="undefined">Scalar(icolor&amp;0xFF, (icolor&gt;&gt;8)&amp;0xFF, (icolor&gt;&gt;16)&amp;0xFF);</code></pre>
+<p>将随机数的值取出分别作为RGB三个通道的颜色值。</p>
+</li>
+</ol>
+<h2>效果</h2>
+<p><img src="../images/OpenCV基础篇之绘图及RNG随机数对象/result1.png" alt="result1"></p>
+<p>随机线条的效果</p>
+<p><img src="../images/OpenCV基础篇之绘图及RNG随机数对象/result2.png" alt="result2"></p>
+<p>添加“OpenCV”文字后效果</p>
+</font></font></body></html>

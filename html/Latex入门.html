@@ -1,0 +1,116 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"><link rel="stylesheet" id="theme" href="chrome-extension://febilkbfcbhebfnokafefeacimjdckgl/theme/Github.css"></head><body><p><a href="../README.md"><font size="4">←返回主目录<font></font></font></a><font size="4"><font>
+<br><br><br></font></font></p><font size="4"><font>
+<p>终于到了要写写论文的时候了，回想一年前本科毕业（大四）的时候——静心尽力做了一年的图像分割和识别，毕业的时候搜检一下那一年看过的论文，打印的纸质版摞一起居然有好几本书厚，而且还都是英文的。这一直令我感到自豪，这得非常感谢那个时候为我导航的刘老师，让我的大学在做了2年嵌入式后领略到另一番风味。如今又到准备论文的时候了，我这个爱折腾开源软件的拥趸，也打算好好用用Latex这个工具了。</p>
+<p>操作环境：CentOS 6.5 64bit</p>
+<h2>安装</h2>
+<p>先配置好CentOS的yum源，参考<a href="./CentOS更新yum源的方法.md">CentOS更新yum源的方法</a>，配置好后，执行</p>
+<pre><code class="nginx"><span class="title">yum</span> install texlive*</code></pre>
+<p>安装texlive相关的包及其依赖，等待下载安装完成，基本的Latex环境就配置好了。texlive默认安装到<code>/usr/share/texmf/</code>目录下.</p>
+<p>这个时候不妨使用来写一小段文字，文件命名为<code>Hello.tex</code></p>
+<pre><code class="sql">\documentclass{article}
+
+\author{xiahouzuoxin}
+\title{Signal Processing}
+
+\<span class="operator"><span class="keyword">begin</span>{document}
+    \maketitle
+    <span class="keyword">First</span> ducument I <span class="keyword">write</span> use Latex.  % coments
+\<span class="keyword">end</span>{document}</span></code></pre>
+<p>Latex就想一门编程语言，写完后需要编译，编译上述文档的命令为：<code>xelatex hello.tex</code>. 则输出文件中会有一个hello.pdf的文件，打开后效果：</p>
+<p><img src="../images/Latex入门/hello.png" alt="hello"></p>
+<h2>中文字体支持</h2>
+<p>使用xelatex命令编译不像之前的latex命令编译一样，自己生成字体，xelatex编译可以使用系统字体，简化了字体安装。因此首先要为系统安装中文字体，CentOS安装中文字体的方法参见<a href="./CentOS安装中文字体.md">CentOS安装中文字体</a>。</p>
+<p>我从Windows中拷贝安装了<code>黑体</code>、<code>宋体</code>、<code>华文中宋</code>、<code>华文楷体</code>、<code>幼圆</code>、<code>隶书</code>等中文字体。</p>
+<p>为方便安装的中文字体在Latex中的使用，不妨使用下面的中文字体宏包（这里的宏与C语言中的宏定义是类似的概念，Latex中宏包的文件后缀名为.sty）：</p>
+<pre><code class="ruby">% <span class="constant">Filename</span><span class="symbol">:</span> zhfontcfg.sty
+% xetex/xelatex 字体设定宏包
+
+\<span class="constant">ProvidesPackage</span>{zhfontcfg}
+\usepackage[cm-default]{fontspec} <span class="string">%[cm-default]</span>选项主要用来解决使用数学环境时数学符号不能正常显示的问题
+
+\usepackage{xunicode,xltxtra}
+\defaultfontfeatures{<span class="constant">Mapping</span>=tex-text} %如果没有它，会有一些 tex 特殊字符无法正常使用，比如连字符。
+
+% 中文断行
+\<span class="constant">XeTeXlinebreaklocale</span> <span class="string">"zh"</span>
+\<span class="constant">XeTeXlinebreakskip</span> = 0pt plus <span class="number">1</span>pt minus <span class="number">0</span>.<span class="number">1</span>pt
+
+%将系统字体名映射为逻辑字体名称，主要是为了维护的方便
+\newcommand\fontnamehei{<span class="constant">SimHei</span>}              % 黑体
+\newcommand\fontnamesong{<span class="constant">SimSun</span>}             % 宋体
+\newcommand\fontnamezhsong{<span class="constant">STZhongSong</span>}      % 华文中宋
+\newcommand\fontnamekai{<span class="constant">STKaiti</span>}             % 华文楷体
+\newcommand\fontnameyouyuan{<span class="constant">YouYuan</span>}         % 幼圆
+\newcommand\fontnameLi{<span class="constant">LiSu</span>}                 % 隶书
+\newcommand\fontnamemono{<span class="constant">DejaVu</span> <span class="constant">Sans</span> <span class="constant">Mono</span>}  
+\newcommand\fontnameroman{<span class="constant">Times</span> <span class="constant">New</span> <span class="constant">Roman</span>}
+
+<span class="string">%%设置常用中文字号，方便调用
+\newcommand{\erhao}{\fontsize{22pt}{\baselineskip}\selectfont}
+\newcommand{\xiaoerhao}{\fontsize{18pt}{\baselineskip}\selectfont}
+\newcommand{\sanhao}{\fontsize{16pt}{\baselineskip}\selectfont}
+\newcommand{\xiaosanhao}{\fontsize{15pt}{\baselineskip}\selectfont}
+\newcommand{\sihao}{\fontsize{14pt}{\baselineskip}\selectfont}
+\newcommand{\xiaosihao}{\fontsize{12pt}{\baselineskip}\selectfont}
+\newcommand{\wuhao}{\fontsize{10.5pt}{\baselineskip}\selectfont}
+\newcommand{\xiaowuhao}{\fontsize{9pt}{\baselineskip}\selectfont}
+\newcommand{\liuhao}{\fontsize{7.5pt}{\baselineskip}\selectfont}
+
+%</span>设置文档正文字体为宋体
+\setmainfont[<span class="constant">BoldFont</span>=\fontnamehei]{\fontnamesong}
+\setsansfont[<span class="constant">BoldFont</span>=\fontnamehei]{\fontnamekai}
+\setmonofont{\fontnamemono}
+
+%楷体
+\newfontinstance\<span class="constant">KAI</span> {\fontnamekai}
+\newcommand{\kai}[<span class="number">1</span>]{{\<span class="constant">KAI</span><span class="comment">#1}}</span>
+
+%黑体
+\newfontinstance\<span class="constant">HEI</span>{\fontnamehei}
+\newcommand{\hei}[<span class="number">1</span>]{{\<span class="constant">HEI</span><span class="comment">#1}}</span>
+
+%英文
+\newfontinstance\<span class="constant">ENF</span>{\fontnameroman}
+\newcommand{\en}[<span class="number">1</span>]{\,{\<span class="constant">ENF</span><span class="comment">#1}\,}</span></code></pre>
+<p>在.tex的Latex文件中使用usepackage{zhfontcfg}即可使用上面的宏包文件，下面是一个使用zhfontcfg宏包书写中英文混合的实例：</p>
+<pre><code class="sql">% FileName: main.tex
+
+\documentclass{article}
+
+\usepackage{zhfontcfg}
+\usepackage[colorlinks,linkcolor=black]{hyperref}
+
+\title{latex多字体简易示例}
+\author{夏侯佐鑫}
+
+\<span class="operator"><span class="keyword">begin</span>{document}
+\maketitle
+  \<span class="keyword">section</span>{楷体}
+  \kai{楷体}
+  \<span class="keyword">section</span>{黑体}
+  \hei{黑体}
+
+  我是北京科技大学的学生.    % 这里是默认的正文宋体
+
+  \<span class="keyword">section</span>{英文}
+  \en{English Times New Roman}
+\<span class="keyword">end</span>{document}</span></code></pre>
+<p>使用<code>xelatex main.tex</code>编译后的结果为：</p>
+<p><img src="../images/Latex入门/zhfontcfg.png" alt="zhfontcfg"></p>
+<p>到这里，貌似我们已经能够使用Latex开始书写了！</p>
+<p>注意：要使用xelatex编译的文件格式必须是UTF-8，VIM中使用命令<code>：set filetype=utf-8</code>即可，Windows下使用CTex则另存为选择UTF-8格式。当然，Windows下使用中文字体有更方便的方法：</p>
+<pre><code class="undefined">\usepackage{xeCJK}
+\usepackage{fontspec}
+\setCJKmainfont{SimSun}
+\setCJKmonofont{SimSun}
+\setmainfont{Times New Roman}</code></pre>
+<p>其中的\setCJKmainfont{SimSun}就是用于设置宋体为中文主字体。而且上面的配置在中英混合的文章中好看。</p>
+<h2>Latex语法</h2>
+<h2>Latex模板</h2>
+<h2>参考文献</h2>
+<ol>
+<li><a href="http://hhtao.weebly.com/uploads/3/3/7/2/3372398/lshort-zh-cn.pdf">一份不太简短的LATEX2ε介绍中文版</a>. 版本 4.20，二○○七年九月.</li>
+<li><a href="http://mirror.neu.edu.cn/CTAN/info/lshort/english/lshort.pdf">The Not So Short Introduction to LATEX 2ε</a>. Version 5.03, April 25, 2014.</li>
+<li>LaTeX新人教程——30分钟从完全陌生到基本入门.</li>
+</ol>
+</font></font></body></html>

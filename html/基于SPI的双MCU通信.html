@@ -1,0 +1,104 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"><link rel="stylesheet" id="theme" href="chrome-extension://febilkbfcbhebfnokafefeacimjdckgl/theme/Github.css"></head><body><p><a href="../README.md"><font size="4">←返回主目录<font></font></font></a><font size="4"><font>
+<br><br><br></font></font></p><font size="4"><font>
+<h2>设置通信帧格式</h2>
+<p>SPI通信的配置那只是基本的底层，要保证通信做得漂亮，设计通信的帧格式将大大降低错误概率。比如，因为我暂时最多传输一个字（16bit）的数据，设计如下7字节的帧格式：</p>
+<p><img src="../images/基于SPI的双MCU通信/Frame.jpg" alt="Frame"></p>
+<p>将帧格式对应到数据结构就是一个结构体：</p>
+<pre><code class="language-c cpp"><span class="keyword">struct</span> st_msg_user {
+    uint8_t header;
+    uint8_t type;
+    uint8_t low_byte;
+    uint8_t high_byte;
+    uint8_t rsvd0;
+    uint8_t rsvd1;
+    uint8_t checkout;   <span class="comment">// low_byte ^ high_byte </span>
+};</code></pre>
+<p>然后，所有对帧的操作都归结到对上面结构体的操作，如：</p>
+<pre><code class="cpp"><span class="keyword">extern</span> <span class="keyword">struct</span> st_msg_user assemble_frame(uint8_t type, uint16_t data);  <span class="comment">// 将数据组成一帧</span>
+<span class="keyword">extern</span> <span class="keyword">void</span> msg_printf(<span class="keyword">struct</span> st_msg_user *msg);                        <span class="comment">// 将帧发送出去</span>
+<span class="keyword">extern</span> uint16_t unpack_frame(<span class="keyword">struct</span> st_msg_user msg);                   <span class="comment">// 解出帧中的数据</span></code></pre>
+<h2>SPI主从机配置注意事项</h2>
+<p>首先考虑硬件上要注意的：</p>
+<ol>
+<li><p>必需设置1个MCU为主机，另1个为从机，两者接线是CLK、MISO、MOSI、SEL一一对应连接。注意是一一对接，也就是说主机MISO就接到从机的MISO、主机MOSI就接到从机的MOSI</p>
+</li>
+<li><p>除了要接SPI的4根线意外，还必须连接地线（共地），提供参考电势</p>
+</li>
+</ol>
+<p>软件配置上：</p>
+<ol>
+<li><p>CLK永远是由主机发出，因此必须使用全双工模式，在读数据的时候同时写一个数据提供总线时钟</p>
+</li>
+<li><p>时钟的空闲状态和时钟的采样沿的主从机配置要保持一致</p>
+</li>
+<li><p>我使用的是TMS320C6713与STM32进行SPI通信，DSP为主机，ARM为从机，则两端的配置如下：</p>
+<ul>
+<li>ARM端</li>
+</ul>
+<p><img src="../images/基于SPI的双MCU通信/ARM.jpg" alt="ARM"></p>
+<p>其中影响通信数据的段包括：Datasize；CPOL和CPHA分别表示时钟空闲状态和时钟采样边沿，主从机必须一致；FisrtBit也很重要，否则接收到的数据是倒转的，因为我的DSP是MSB格式，所以ARM端也设成MSB。</p>
+<ul>
+<li>DSP端</li>
+</ul>
+<p>DSP端使用McBSP模拟SPI主机功能，其寄存器配置如下：</p>
+<pre><code class="language-c javascript"><span class="comment">/*
+* Config SPI
+* devNum -- Choose from 0~1 for McBSP0/McBSP1
+*/</span>
+<span class="keyword">void</span> SPI_Config(MCBSP_Handle *hMcbsp_ch, int devNum)
+{
+  *hMcbsp_ch = MCBSP_open(devNum, MCBSP_OPEN_RESET);
+  MCBSP_reset(*hMcbsp_ch);
+
+  <span class="comment">/* Configure using structure @SPI_McbspConfig which defined above */</span>
+  SPI_McbspConfig.spcr = MCBSP_SPCR_DEFAULT 
+      | (<span class="number">0</span> &lt;<span class="xml"><span class="tag">&lt; <span class="attribute">_MCBSP_SPCR_DLB_SHIFT</span> )      // 回环测试
+      | (<span class="attribute">3</span> &lt;&lt; <span class="attribute">_MCBSP_SPCR_CLKSTP_SHIFT</span>);   // <span class="attribute">CLK_STP</span>=<span class="value">11</span>
+  <span class="attribute">SPI_McbspConfig.rcr</span>  = <span class="attribute">MCBSP_RCR_DEFAULT</span> // (<span class="attribute">1</span>)<span class="attribute">Single</span> <span class="attribute">phase</span> <span class="attribute">frame</span> (<span class="attribute">2</span>)<span class="attribute">Frame</span> <span class="attribute">len</span>=<span class="value">8bit</span> 
+      | (<span class="attribute">1</span> &lt;&lt; <span class="attribute">_MCBSP_RCR_RFIG_SHIFT</span>     )  // <span class="attribute">ignore</span> <span class="attribute">first</span> <span class="attribute">pulse</span> 
+      | (<span class="attribute">1</span> &lt;&lt; <span class="attribute">_MCBSP_RCR_RDATDLY_SHIFT</span>  ); // <span class="attribute">must</span> <span class="attribute">be</span> <span class="attribute">1</span> 
+  <span class="attribute">SPI_McbspConfig.xcr</span> = <span class="attribute">MCBSP_XCR_DEFAULT</span>  // (<span class="attribute">1</span>)<span class="attribute">Single</span> <span class="attribute">phase</span> <span class="attribute">frame</span> (<span class="attribute">2</span>)<span class="attribute">Frame</span> <span class="attribute">len</span>=<span class="value">8bit</span> 
+      | (<span class="attribute">1</span> &lt;&lt; <span class="attribute">_MCBSP_XCR_XFIG_SHIFT</span>     )  // <span class="attribute">ignore</span> <span class="attribute">first</span> <span class="attribute">pulse</span>
+      | (<span class="attribute">1</span> &lt;&lt; <span class="attribute">_MCBSP_XCR_XDATDLY_SHIFT</span>  ); // <span class="attribute">must</span> <span class="attribute">be</span> <span class="attribute">1</span>
+  <span class="attribute">SPI_McbspConfig.srgr</span> = <span class="attribute">MCBSP_SRGR_DEFAULT</span>
+      | (<span class="attribute">1</span> &lt;&lt; <span class="attribute">_MCBSP_SRGR_CLKSM_SHIFT</span>   )  // <span class="attribute">Sample-rate</span> <span class="attribute">generator</span> <span class="attribute">clock</span> &lt;<span class="attribute">-</span> <span class="attribute">CPU</span> <span class="attribute">clock</span>
+      &amp; (~(<span class="attribute">1</span> &lt;&lt; <span class="attribute">_MCBSP_SRGR_FSGM_SHIFT</span> )) // <span class="attribute">DXR-to-XSR</span> <span class="attribute">copy</span> <span class="attribute">will</span> <span class="attribute">generate</span> <span class="attribute">FSX</span>
+      | (<span class="attribute">MCBSP_SRGR_CLKGDV_OF</span>(<span class="attribute">24</span>)   &lt;&lt; <span class="attribute">_MCBSP_SRGR_CLKGDV_SHIFT</span>  ); // (<span class="attribute">CPU</span>/<span class="attribute">2</span>) / (<span class="attribute">24</span>+<span class="attribute">1</span>) = <span class="attribute">4MHz</span>
+  <span class="attribute">SPI_McbspConfig.mcr</span> = <span class="attribute">MCBSP_MCR_DEFAULT</span>; /* <span class="attribute">Using</span> <span class="attribute">default</span> <span class="attribute">value</span> <span class="attribute">of</span> <span class="attribute">MCR</span> <span class="attribute">register</span> */
+  <span class="attribute">SPI_McbspConfig.rcer</span> = <span class="attribute">MCBSP_RCER_DEFAULT</span>;
+  <span class="attribute">SPI_McbspConfig.xcer</span> = <span class="attribute">MCBSP_XCER_DEFAULT</span>;
+  <span class="attribute">SPI_McbspConfig.pcr</span> = <span class="attribute">MCBSP_PCR_DEFAULT</span>
+      | (<span class="attribute">1</span> &lt;&lt; <span class="attribute">_MCBSP_PCR_FSXM_SHIFT</span>     )  // <span class="attribute">FSXM</span> <span class="attribute">driverd</span> <span class="attribute">by</span> <span class="attribute">FSGM</span> <span class="attribute">bit</span> <span class="attribute">in</span> <span class="attribute">SRGR.</span>
+      | (<span class="attribute">1</span> &lt;&lt; <span class="attribute">_MCBSP_PCR_FSRM_SHIFT</span>     )  // <span class="attribute">Frame-synchronization</span> <span class="attribute">signal</span> <span class="attribute">is</span> <span class="attribute">generated</span> <span class="attribute">internally</span> <span class="attribute">by</span> <span class="attribute">the</span> <span class="attribute">sample-rate</span> <span class="attribute">generator</span> 
+      | (<span class="attribute">1</span> &lt;&lt; <span class="attribute">_MCBSP_PCR_CLKXM_SHIFT</span>    )  // <span class="attribute">Master</span>
+      | (<span class="attribute">1</span> &lt;&lt; <span class="attribute">_MCBSP_PCR_CLKRM_SHIFT</span>    )  // <span class="attribute">CLKR</span> <span class="attribute">is</span> <span class="attribute">output</span>, <span class="attribute">driverd</span> <span class="attribute">by</span> <span class="attribute">Sample-rate</span> <span class="attribute">generate</span>
+      | (<span class="attribute">1</span> &lt;&lt; <span class="attribute">_MCBSP_PCR_FSXP_SHIFT</span>     )  // <span class="attribute">SPI</span>/<span class="attribute">SS</span> <span class="attribute">is</span> <span class="attribute">low</span> <span class="attribute">active</span> 
+      &amp; (~(<span class="attribute">1</span> &lt;&lt; <span class="attribute">_MCBSP_PCR_CLKRP_SHIFT</span> ))  // <span class="attribute">receive</span> <span class="attribute">at</span> <span class="attribute">falling</span> <span class="attribute">edge</span>, <span class="attribute">CLKRP</span>=<span class="value">0</span>
+      &amp; (~(<span class="attribute">1</span> &lt;&lt; <span class="attribute">_MCBSP_PCR_CLKXP_SHIFT</span> )); // <span class="attribute">transmit</span> <span class="attribute">at</span> <span class="attribute">rising</span> <span class="attribute">edge</span>, <span class="attribute">CLKXP</span>=<span class="value">0</span>  
+
+  <span class="attribute">MCBSP_config</span>(*<span class="attribute">hMcbsp_ch</span>, &amp;<span class="attribute">SPI_McbspConfig</span>);     
+
+  <span class="attribute">SPI_Start</span>(<span class="attribute">g_hMcbsp0</span>);   
+}</span></span></code></pre>
+<p>主要配置好时钟频率，空闲状态、采样边沿，帧长。</p>
+</li>
+<li><p>另外，考虑到主从机间时钟采样可能存在的问题，在使用SPI发送帧的时候，最后帧的每个发送字节间存在短暂的时延，避免通信错误的发送，如下，我Delay了5us，</p>
+<pre><code class="language-c cpp"><span class="keyword">void</span> SPI_Write_Str(MCBSP_Handle hMcbsp_ch, <span class="keyword">const</span> <span class="keyword">char</span> *str, int32_t n)
+{
+  <span class="keyword">while</span> (n &gt; <span class="number">0</span>) {
+      <span class="keyword">while</span> (!MCBSP_xrdy(hMcbsp_ch));
+      MCBSP_write(hMcbsp_ch, (Uint32)(*str++));    
+      n--;
+      Delay_us(<span class="number">5</span>);
+  }
+}</code></pre>
+</li>
+</ol>
+<h2>逻辑分析仪采集SPI总线数据图</h2>
+<p>共1帧的数据：</p>
+<p><img src="../images/基于SPI的双MCU通信/img1.png" alt="img1"></p>
+<p>前4个字节：</p>
+<p><img src="../images/基于SPI的双MCU通信/img2.png" alt="img2"></p>
+<p>后3个字节：</p>
+<p><img src="../images/基于SPI的双MCU通信/img3.png" alt="img3"></p>
+</font></font></body></html>

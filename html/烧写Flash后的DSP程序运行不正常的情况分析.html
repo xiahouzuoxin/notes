@@ -1,0 +1,108 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"><link rel="stylesheet" id="theme" href="chrome-extension://febilkbfcbhebfnokafefeacimjdckgl/theme/Github.css"></head><body><p><a href="../README.md"><font size="4">←返回主目录<font></font></font></a><font size="4"><font>
+<br><br><br></font></font></p><font size="4"><font>
+<p>这段时间一直在调试DSP6713的Flash烧写，现在对Flash的烧写也算心中了如。</p>
+<p>那天，非常Happy的发现将闪烁LED烧写到Flash成功了，然后，就以为一切都OK了……</p>
+<p>那天，成功烧写了一个300KB以上的程序，又认为，这次应该OK了……</p>
+<p>那天，写了个Timer中断程序，烧写到Flash，却死机了……</p>
+<p>那天，在RAM上运行很流畅的一个算法（算法中调用了CCS的atan函数），在烧写到Flash后算法却死机了……</p>
+<p>那天，我开始思考：是什么情况导致RAM中跑得很Happy的程序烧写到Flash就运行得如此的不堪——众多的囧相。</p>
+<p>“且行且珍惜”，珍惜这些次发现Bug的机会，因此，我要总结：在RAM中能正常运行，而烧写到Flash后无法正常运行的一些情况讨论。</p>
+<h2>请检查中断向量表</h2>
+<p>中断向量表包含了所有中断的入口，在烧写Flash的时候，有两种方式可以保证中断能正常工作。具体可参见<a href="./TMS320C6713烧写Flash的通用方法.md">TMS320C6713烧写Flash的通用方法</a>的第5小节。</p>
+<h2>请检查cmd链接文件</h2>
+<p>也不知道什么原因，我曾经在DSP的内部RAM中使用#pragma分配一个3x1024x8字节的区域，在烧写到Flash后运行会死机，</p>
+<pre><code class="language-c ruby"><span class="comment">#pragma DATA_SECTION(g_ad_fifo, "FIFO")</span>
+<span class="comment">#pragma DATA_ALIGN(g_ad_ping, 128);</span>
+fifo_t g_ad_fifo;   <span class="regexp">//</span> fifo_t为一个<span class="number">8</span>字节的结构体</code></pre>
+<p>对应的cmd文件为，</p>
+<pre><code class="css"><span class="tag">MEMORY</span>
+<span class="rules">{
+    <span class="rule"><span class="attribute">BOOT_RAM</span>:<span class="value"> o=<span class="number">00000000</span>h,l=<span class="number">00000400</span>h   
+    IRAM    : o=<span class="number">00000400</span>h,l=<span class="number">0003</span>FC00h
+    ...
+}</span></span></span>
+
+<span class="tag">SECTIONS</span>
+<span class="rules">{    
+    <span class="rule"><span class="attribute">.vecs     </span>:<span class="value">&gt; BOOT_RAM
+    .boot_load:&gt; BOOT_RAM
+
+    ...
+
+    FIFO        &gt; IRAM
+}</span></span></span></code></pre>
+<p>把#pragma去掉后就好了，</p>
+<pre><code class="language-c ruby">fifo_t g_ad_fifo;   <span class="regexp">//</span> fifo_t为结构体类型</code></pre>
+<h2>请检查程序中隐蔽的内存错误</h2>
+<p>很多情况下，当出现数组越界时，在RAM中的程序都能正常运行，但在烧写Flash后运行就会出现死机或程序跑飞的现象。</p>
+<p>比如定义一个数组，</p>
+<pre><code class="nginx"><span class="title">int</span> x[<span class="number">5</span>];</code></pre>
+<p>你使用x[5]=10这样的语句在RAM程序中是某些时候能正确运行的，在PC上应该也可以。但将这种程序烧写到Flash之后运行，DSP果断和你说拜拜！</p>
+<p>因此，请谨慎地检查程序代码中的数组越界和指针操作。在DSP程序中，坚决不使用C库函数中的malloc函数。如果需要动态分配内存的操作，可以自己写一个，或使用uCOS II或DSP/BIOS等嵌入式操作系统。</p>
+<h2>请尽量避免使用math.h中的三角及log等函数</h2>
+<p>也不知道是什么原因，也可能是我对atan函数的使用方法不正确造成的吧。在我的一个最初的程序中，我是直接这样计算atan(x)的，</p>
+<pre><code class="cpp"><span class="keyword">float</span> x,y;
+...
+y = atan(x); <span class="comment">// x范围为[0, 1.7]</span></code></pre>
+<p>在RAM中以及在PC中都多次测试过没有任何问题。</p>
+<p>烧写Flash之后，也不是死机，但程序运行到atan这个函数的时候会卡上很长一段时间，再接着往下运行。</p>
+<p>难道是math.h中的atan运算效率太低？但为什么RAM中就能运行呢？这个还不清楚。</p>
+<p>于是想了个招，在要使用三角函数和log等函数的地方都使用查表法替代库函数，在精度要求高而存储空间又有限的场合，可使用查表+插值的方式。</p>
+<p>下面是改进方法计算atan，</p>
+<pre><code class="cpp"><span class="comment">/* table of determine ATAN(x) */</span>
+<span class="keyword">const</span> <span class="keyword">float</span> atan_tb[] = {  <span class="comment">// 精度(0.020)</span>
+<span class="number">0.00</span>, <span class="number">1.15</span>, <span class="number">2.29</span>, <span class="number">3.43</span>, <span class="number">4.57</span>, <span class="number">5.71</span> , <span class="number">6.84</span>, <span class="number">7.97</span>, <span class="number">9.09</span>, <span class="number">10.20</span>,
+<span class="number">11.31</span>, <span class="number">12.41</span>, <span class="number">13.50</span>, <span class="number">14.57</span>, <span class="number">15.64</span>, <span class="number">16.70</span> , <span class="number">17.74</span>, <span class="number">18.78</span>, <span class="number">19.80</span>, <span class="number">20.81</span>,
+<span class="number">21.80</span>, <span class="number">22.78</span>, <span class="number">23.75</span>, <span class="number">24.70</span>, <span class="number">25.64</span>, <span class="number">26.57</span> , <span class="number">27.47</span>, <span class="number">28.37</span>, <span class="number">29.25</span>, <span class="number">30.11</span>,
+<span class="number">30.96</span>, <span class="number">31.80</span>, <span class="number">32.62</span>, <span class="number">33.42</span>, <span class="number">34.22</span>, <span class="number">34.99</span> , <span class="number">35.75</span>, <span class="number">36.50</span>, <span class="number">37.23</span>, <span class="number">37.95</span>,
+<span class="number">38.66</span>, <span class="number">39.35</span>, <span class="number">40.03</span>, <span class="number">40.70</span>, <span class="number">41.35</span>, <span class="number">41.99</span> , <span class="number">42.61</span>, <span class="number">43.23</span>, <span class="number">43.83</span>, <span class="number">44.42</span>,
+<span class="number">45.00</span>, <span class="number">45.57</span>, <span class="number">46.12</span>, <span class="number">46.67</span>, <span class="number">47.20</span>, <span class="number">47.73</span> , <span class="number">48.24</span>, <span class="number">48.74</span>, <span class="number">49.24</span>, <span class="number">49.72</span>,
+<span class="number">50.19</span>, <span class="number">50.66</span>, <span class="number">51.12</span>, <span class="number">51.56</span>, <span class="number">52.00</span>, <span class="number">52.43</span> , <span class="number">52.85</span>, <span class="number">53.27</span>, <span class="number">53.67</span>, <span class="number">54.07</span>,
+<span class="number">54.46</span>, <span class="number">54.85</span>, <span class="number">55.22</span>, <span class="number">55.59</span>, <span class="number">55.95</span>, <span class="number">56.31</span> , <span class="number">56.66</span>, <span class="number">57.00</span>, <span class="number">57.34</span>, <span class="number">57.67</span>,
+<span class="number">57.99</span>, <span class="number">58.31</span>, <span class="number">58.63</span>, <span class="number">58.93</span>, <span class="number">59.24</span>, <span class="number">59.53</span> , <span class="number">59.83</span> 
+};
+
+y = atan_tb[((uint16_t)(x*<span class="number">100</span>)) &gt;&gt; <span class="number">1</span>];</code></pre>
+<p>建立atan的表可以借助Matlab。在需要插值的场合，比如，上面atan_tb的精度为0.02，而我们希望在少数的一些场合下使atan在0.01的精度，如果以0.01建表将会使表的数据存储量扩大1倍，这是我们可以在0.02精度表的基础上再使用插值的方式。</p>
+<p>比如，要计算atan(0.03)，我们可以从表中查到atan(0.02)和atan(0.04)，如果仅使用线性插值的话，则</p>
+<pre><code class="undefined">atan(0.03) = (atan(0.02) + atan(0.04)) / 2</code></pre>
+<h2>请检查程序的逻辑</h2>
+<p>曾傻傻的写过一个类似下面的程序，</p>
+<pre><code class="cpp">uint8_t dir;  <span class="comment">// 低3位进行了编码，下面的switch进行解码</span>
+
+<span class="keyword">int</span> dist_switch(<span class="keyword">int</span> a, <span class="keyword">int</span> b, <span class="keyword">int</span> c)
+{
+    <span class="keyword">int</span> max_dist;
+    <span class="keyword">int</span> min_dist;
+    <span class="keyword">int</span> result = <span class="number">0</span>;
+
+    <span class="keyword">switch</span> (dir) {
+    <span class="keyword">case</span> <span class="number">0x00</span>: <span class="keyword">break</span>;
+    <span class="keyword">case</span> <span class="number">0x01</span>: max=a;min=b;<span class="keyword">break</span>;
+    <span class="keyword">case</span> <span class="number">0x02</span>: max=a;min=c;<span class="keyword">break</span>;
+    <span class="keyword">case</span> <span class="number">0x03</span>: max=b;min=a;<span class="keyword">break</span>;
+    <span class="keyword">case</span> <span class="number">0x04</span>: max=b;min=c;<span class="keyword">break</span>;
+    <span class="keyword">case</span> <span class="number">0x05</span>: max=c;min=a;<span class="keyword">break</span>;
+    <span class="keyword">case</span> <span class="number">0x06</span>: max=c;min=b;<span class="keyword">break</span>;
+    <span class="keyword">case</span> <span class="number">0x07</span>: <span class="keyword">break</span>;
+    <span class="keyword">default</span>: <span class="keyword">break</span>;
+    }
+
+    result = max * <span class="number">100</span> / (min + max);
+
+    <span class="keyword">return</span> result;
+}</code></pre>
+<p>咋一看，没有语法问题，switch的break语句也加上了。</p>
+<p>问题出就出在：dir低三位进行了编码，最大编码个数应该是8。而因为实际中只用到6种情况，switch中对其它的两种编码都使用break，问题就出来了，如果我的dir=0x00会怎么样？switch语句当然没问题，问题在下一条语句：</p>
+<pre><code class="ini"><span class="setting">result = <span class="value">max * <span class="number">100</span> / (min + max);</span></span></code></pre>
+<p>dir=0x00没有对max和min进行任何的赋值，而且其它地方也没有。因此max和min作为局部变量将会是一个随机的值，这在RAM中是能够运行通过的，但烧写到Flash之后，这种局部变量的不确定性直接回导致Flash宕机。</p>
+<p>因此，对于switch以及if...else...的逻辑问题，不能只关注它们所在范围，请仔细检查其上下文。</p>
+<h2>请特别关照一下程序中的除法运算</h2>
+<p>x=a/b中若b可能为0，这样的程序烧写到Flash会直接导致DSP死机的。如果可以的话，尽量将除法运算转换为移位运算。</p>
+<p>比如，要计算y=x/0.02，一个号的转换方式就是：</p>
+<pre><code class="ini"><span class="setting">y=<span class="value">(uint32_t)(x*<span class="number">100</span>)/<span class="number">2</span>=((uint32_t)(x*<span class="number">100</span>) &gt;&gt; <span class="number">1</span>);</span></span></code></pre>
+<p>还可以更好一点，将*100也使用移位替代，</p>
+<pre><code class="javascript">uint32_t tmp_x = (uint32_t)x;
+y = ((tmp_x&lt;<span class="xml"><span class="tag">&lt;<span class="title">6)</span> + (<span class="attribute">tmp_x</span>&lt;&lt;<span class="attribute">5</span>) + (<span class="attribute">tmp_x</span>&lt;&lt;<span class="attribute">2</span>)) &gt;</span>&gt; 1;</span></code></pre>
+<p>这样你就再也看不到除法运算了。</p>
+</font></font></body></html>

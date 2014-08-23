@@ -1,0 +1,92 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"><link rel="stylesheet" id="theme" href="chrome-extension://febilkbfcbhebfnokafefeacimjdckgl/theme/Github.css"></head><body><p><a href="../README.md"><font size="4">←返回主目录<font></font></font></a><font size="4"><font>
+<br><br><br></font></font></p><font size="4"><font>
+<h2>经典滤波器与现代滤波器</h2>
+<p>经典滤波器就是我们熟知的FIR和IIR，<strong>经典滤波器要求对输入信号的频率范围已知</strong>，从功能上可划分为：</p>
+<ul>
+<li><p><strong>低通滤波器（LPF）</strong></p>
+<p>  <img src="../images/滤波器设计指标/LPFilter.gif" alt=""></p>
+</li>
+<li><p><strong>高通滤波器（HPF）</strong></p>
+<p>  <img src="../images/滤波器设计指标/HPFilter.gif" alt=""></p>
+</li>
+<li><p><strong>带通滤波器（BPF）</strong></p>
+<p>  <img src="../images/滤波器设计指标/BPFilter.gif" alt=""></p>
+</li>
+<li><p><strong>带阻滤波器（BSF）</strong></p>
+<p>  <img src="../images/滤波器设计指标/BandRejectFilter.gif" alt=""></p>
+</li>
+<li><p><strong>陷波滤波器（Notch Filter）</strong></p>
+<p>  <img src="../images/滤波器设计指标/NotchFilter.gif" alt=""></p>
+</li>
+</ul>
+<p>上面的图示是滤波器的增益曲线（Gain Curve）.</p>
+<p>现代滤波器适用于<strong>输入信号中含有混叠干扰频率</strong>，常见的包括：</p>
+<ul>
+<li>维纳滤波器</li>
+<li>卡尔曼滤波器</li>
+<li>自适应滤波器</li>
+<li>……</li>
+</ul>
+<p>对于现代滤波器，有时间要一个个进行研究。</p>
+<h2>数字滤波器的技术指标</h2>
+<p>滤波器的技术指标通常是以频率响应的幅值特性（或者说上面提到的增益曲线）来表征，IIR很难实现线性相位，因此一般不考虑相位特性，若要求相位特性，则可使用FIR设计。</p>
+<blockquote>
+<p>滤波器设计指标定义图</p>
+<p><img src="../images/滤波器设计指标/1.png" alt="滤波器设计指标"></p>
+</blockquote>
+<p>在以上的指标中，往往使用衰减指标，滤波器衰减是指信号经过滤波器后信号强度的减少,专指信号功率幅度损失,等于20*log(输出功率/输入功率，单位为分贝(dB).</p>
+<ul>
+<li><p><strong>通带衰减</strong> </p>
+<p>  <img src="../images/滤波器设计指标/2.gif" alt="Passband"></p>
+</li>
+</ul>
+<p>由图可知，<img src="../images/滤波器设计指标/4.gif" alt="">越小滤波器性能越好，即<img src="../images/滤波器设计指标/6.gif" alt="">越小越好。</p>
+<ul>
+<li><strong>阻带衰减</strong> </li>
+</ul>
+<blockquote>
+<p><img src="../images/滤波器设计指标/3.gif" alt="Stopband"></p>
+</blockquote>
+<p>由图可知，<img src="../images/滤波器设计指标/5.gif" alt="">越小滤波器性能越好，即<img src="../images/滤波器设计指标/7.gif" alt="">越大越好。</p>
+<p>若在<img src="../images/滤波器设计指标/8.gif" alt="">处幅值H=0.707时，<img src="../images/滤波器设计指标/6.gif" alt="">=3dB，则称<img src="../images/滤波器设计指标/8.gif" alt="">为<strong>3dB截止频率</strong>。我们常说的<strong>带宽</strong>就是指3dB点间的频率宽度。</p>
+<p>滤波器设计中的其它概念：</p>
+<ul>
+<li><strong>中心频率(Center Frequency)</strong></li>
+</ul>
+<p>滤波器中心频率是指一个滤波器高低3dB频率间的中心频率，该中心频率可以是高低3dB频率的几何平均数或算术平均数。 </p>
+<blockquote>
+<p>算术平均数</p>
+<p><img src="../images/滤波器设计指标/10.gif" alt=""></p>
+<p>几何平均数</p>
+<p><img src="../images/滤波器设计指标/11.gif" alt=""></p>
+</blockquote>
+<ul>
+<li><strong>品质因数(Qaulity Factor)</strong></li>
+</ul>
+<p>品质因数通常是用来衡量电感或电容品质的参数，等于相应的电抗与电阻之比。在带通滤波器中，负载Q(Loaded Q)等于该带通滤波器的中心频率 与3dB带宽之比。 </p>
+<blockquote>
+<p>滤波器衰减纹波示意图</p>
+<p><img src="../images/滤波器设计指标/FilterDefine.gif" alt=""></p>
+</blockquote>
+<ul>
+<li><strong>通带纹波(Passband Ripple)</strong></li>
+</ul>
+<p>滤波器通带纹波是指在通带内衰减的波浪状变化,见上述滤波器衰减纹波释义图。滤波器产生的原因之一是由于负债不匹配。</p>
+<ul>
+<li><strong>反射损耗(Return/Reflection Loss)</strong></li>
+</ul>
+<p>滤波器反射损耗是指滤波器由于所接负载不匹配，由滤波器输出端反射回输入端的能量。滤波器反射损耗可用驻波比(VSWR)来定义，单位为分贝。 理想情况下，滤波器所接负载匹配即驻波比(VSWR)等于1，此时反射损耗为负无穷大分贝。 </p>
+<blockquote>
+<p><img src="../images/滤波器设计指标/9.gif" alt=""></p>
+</blockquote>
+<p>反射损耗的概念在射频电子电路设计中非常常见。</p>
+<ul>
+<li><strong>相对衰减(Relative Attenuation)</strong></li>
+</ul>
+<p>滤波器相对衰减指的是相对于零分贝，滤波器所产生的最小衰减。见上述滤波器衰减纹波释义图。</p>
+<h2>滤波器的实现</h2>
+<p>滤波器的实现即可以通过软件，也可以通过硬件实现。RC电路就是一种最简单的无源滤波器，通过改变RC电路结构能实现从低通到高通的一系列滤波器，使用FPGA设计滤波器也是一种常见的选择。软件上，通过在DSP或ARM上使用C或汇编编程也可实现FIR或IIR等滤波器。</p>
+<h2>参考</h2>
+<p>[1] <a href="http://www.probenotes.com/Notes/Filter/FilterIndex.html">滤波器设计(Filter Design)</a></p>
+<p>[2] 北京科技大学大学数字信号处理课程课件</p>
+</font></font></body></html>

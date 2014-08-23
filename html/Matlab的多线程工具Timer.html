@@ -1,0 +1,112 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"><link rel="stylesheet" id="theme" href="chrome-extension://febilkbfcbhebfnokafefeacimjdckgl/theme/Github.css"></head><body><p><a href="../README.md"><font size="4">←返回主目录<font></font></font></a><font size="4"><font>
+<br><br><br></font></font></p><font size="4"><font>
+<p>作为一个从本科电子信息工程转入计算机研究生的同学，一直研究嵌入式、信号处理相关方向，一直被我奉为最经典的语言就是C和Matlab。</p>
+<p>有了它们，我几乎可以干任何我想干的事情。</p>
+<p>用多了Matlab做仿真，有时就会遇到：Matlab如何实现的定时器的功能的呢？比如：</p>
+<ol>
+<li>网络拓扑结构每隔10s更新一次</li>
+<li>让这个程序在5s后就结束吧</li>
+</ol>
+<p>在Matlab中提供了一个多线程的方法——Timer。</p>
+<p>每当使用一个新的Matlab函数，最好资料就是帮助文档：</p>
+<pre><code class="undefined">&gt;&gt; help timer 
+&gt;&gt; doc timer</code></pre>
+<p>使用Timer的步骤如下：</p>
+<h2>1 创建Timer对象</h2>
+<p>timer对象的创建直接通过timer函数完成的，</p>
+<pre><code class="ruby">iter     = <span class="number">400</span>; 
+interval = <span class="number">0</span>.<span class="number">5</span>;  % s
+t = timer(<span class="string">'TimerFcn'</span>, <span class="variable">@caputure</span>, ...  % 回调函数caputure，必选参数
+    <span class="string">'Period'</span>, interval, ...  % 每隔interval (s)调用一次caputure函数
+    <span class="string">'ExecutionMode'</span>, <span class="string">'fixedSpacing'</span>, ...
+    <span class="string">'TasksToExecute'</span>, iter); % 调用caputure次数设定为iter</code></pre>
+<p>Timer对象的格式为：</p>
+<pre><code class="sql">&gt;&gt; t
+
+   Timer Object: timer-1
+
+   Timer Settings
+      ExecutionMode: fixedSpacing
+             Period: 0.5
+           BusyMode: <span class="operator"><span class="keyword">drop</span>
+            Running: off
+
+   Callbacks
+           TimerFcn: @main/caputure
+           ErrorFcn: <span class="string">''</span>
+           StartFcn: <span class="string">''</span>
+            StopFcn: <span class="string">''</span></span></code></pre>
+<ul>
+<li><p>Timer Settings中比较重要的参数有：</p>
+<ul>
+<li><p>ExecutionMode   执行的模式</p>
+<p>就是确定TimerFcn执行周期计算的始末点</p>
+<p>'singleShot'    ：只能执行一次，故Period属性不起作用，其他模式都可以执行多次</p>
+<p>'fixedSpacing'  ：上一次TimerFcn执行完毕时刻到下一次TimerFcn被加入队列时刻之间的间隔</p>
+<p>'fixedDelay'    ：上一次开始执行到下一次被加入队列之间的间隔      </p>
+<p>'fixedRate'     ：前后两次被加入到执行语句队列时刻之间的间隔</p>
+</li>
+<li><p>Period  时间间隔(执行周期)</p>
+<p>也就是每个Period执行一次TimerFcn，执行周期到底指的是哪两个时刻之间的间隔由ExecutionMode决定</p>
+</li>
+<li><p>StartDelay   启动时延</p>
+<p>从启动Timer开始到第一次把TimerFcn的加入到Matlab的执行语句队列中去的时延, 默认值为0s           </p>
+</li>
+<li><p>TasksToExecute    执行次数</p>
+<p>TimerFcn被执行的次数，默认为1次，设置多次时需要设置执行周期Period</p>
+</li>
+</ul>
+</li>
+<li><p>Timer对象的另一部分是回调函数（Callbacks）</p>
+<ul>
+<li><p>TimerFcn    Timer函数</p>
+<p>是Timer对象的核心，Timer的多线就是通过执行这个TimerFcn来实现的，也是Timer对象的必选参数</p>
+</li>
+<li><p>ErrorFcn</p>
+</li>
+<li><p>StartFcn   启动Timer时调用的函数，可以用于初始化</p>
+</li>
+<li><p>StopFcn     停止Timer时调用的函数</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2>2 设定和读取Timer对象的参数</h2>
+<p>除了可以在创建Timer时设定相关参数外，还有其它的方法可以随时设置：</p>
+<ul>
+<li>使用set/get函数</li>
+</ul>
+<pre><code class="sql">%创建一个默认的Timer对象
+TaskTimer=timer
+<span class="operator"><span class="keyword">set</span>(TaskTimer,<span class="string">'Name'</span>,<span class="string">'Matlabsky'</span>,<span class="string">'TimerFcn'</span>,@caputure)
+<span class="keyword">get</span>(TaskTimer,<span class="string">'Name'</span>)
+<span class="string">`</span></span></code></pre>
+<ul>
+<li>直接操纵结构体</li>
+</ul>
+<pre><code class="ruby"><span class="constant">TaskTimer</span>=timer
+<span class="constant">TaskTimer</span>.<span class="constant">Name</span>=<span class="string">'Matlabsky'</span>
+<span class="constant">TaskTimer</span>.<span class="constant">TimerFcn</span>=<span class="variable">@caputure</span></code></pre>
+<h2>3 创建回调函数</h2>
+<p>回调函数的格式为：</p>
+<pre><code class="delphi"><span class="function"><span class="keyword">function</span> <span class="title">my_callback_fcn</span><span class="params">(obj,event,p1,p2)</span>
+% <span class="title">by</span> <span class="title">dynamic</span>
+% <span class="title">see</span> <span class="title">also</span> <span class="title">http</span>:</span><span class="comment">//www.matlabsky.com</span>
+% <span class="number">20092.15</span>
+%
+% ==== obj和event为必选输入参数
+%
+% <span class="number">1</span>. obj就是前面创建的Timer对象，它包含着Timer的所有参数
+%
+% <span class="number">2</span>. event是一个结构体，包含<span class="keyword">Type</span>和Data两个字段
+%    <span class="keyword">Type</span>保存的是当前的Timer对象执行的时间，比如StartFcn、StopFcn等
+%    Data是一个结构体，包含time一个字段，保存的是执行该事件的系统时间
+%
+%    所以event的使用是event.<span class="keyword">Type</span>获取Timer到底在执行哪个事件，event.Data.time获取执行该时间的系统时间
+%
+% ==== p1,p2...等是其它自定义的输入参数，根据需要在自己添加</code></pre>
+<h1>参考</h1>
+<ol>
+<li><a href="http://www.matlabsky.com/thread-646-1-1.html">http://www.matlabsky.com/thread-646-1-1.html</a></li>
+</ol>
+</font></font></body></html>
