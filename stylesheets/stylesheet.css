@@ -1,4 +1,4 @@
-body {
+﻿body {
   margin: 0;
   padding: 0;
   background: #151515 url("../images/bkg.png") 0 0;
@@ -58,8 +58,8 @@ header h1 {
 }
 
 header h1:before {
-  content: "./ ";
-  font-size: 24px;
+  content: "";
+  font-size: 30px;
 }
 
 header h2 {
