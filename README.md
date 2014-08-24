@@ -1,5 +1,5 @@
 ﻿
-本目录默认为[Markdown目录索引](README.md)，Markdown索引发现某些公式不能正常显示时，请下载本工程到本地，使用[html目录索引](index.md)浏览。
+本目录默认为[Markdown目录索引](README.md)，在[这里](README.html)使用[html目录索引](README.html)浏览。
 
 # 第一篇 分类目录
 
@@ -139,29 +139,37 @@
 
 本工程中，未特殊说明的笔记全部原创，一字一字从键盘上敲出来的，转载请注明出处：<https://github.com/xiahouzuoxin>，谢谢！
 
-笔记完全使用Markdown书写，并首先发布在[Github](https://github.com/xiahouzuoxin)，Github支持Markdown格式的预览，你可以直接在Github上无障碍的阅览。关于如何使用Markdown书写，可以参见我的笔记“[使用Markdown书写](essays/使用Markdown书写.md)”。
+## 浏览方式选择
 
-如果Download这些笔记到本地，则使用“使用Google浏览器+Markdown Preview Plus插件”的方式进行本地浏览：
+1.	[Github](https://github.com/xiahouzuoxin/notes)上的Markdown格式，但可能有些公式显示不正常
 
-1.	浏览Markdown格式笔记：，若要正常浏览文档中的公式，则必需确保网络连接正常，因为公式都使用到<http://www.forkosh.com/mathtextutorial.html>的Latex解析器。
+2.	[我的博客](http://xiahouzuoxin.github.io/notes/)，但在博客上浏览Markdown格式需要使用“Google浏览器+Markdown Preview Plus插件”，但我推荐这种方式——公式图片神马都无障碍显示。
 
-2.	直接浏览html格式笔记
+本笔记完全使用Markdown书写，并首先发布在[Github](https://github.com/xiahouzuoxin)，Github支持Markdown格式的预览，你可以直接在[Github](https://github.com/xiahouzuoxin/notes)上无障碍的阅览。我也为本工程使用Github的Pages功能设置了博客，你也可以到<http://xiahouzuoxin.github.io/notes/>浏览。
+
+如果Download这些笔记到本地，则使用“使用Google浏览器+Markdown Preview Plus插件”的方式进行本地浏览。
+
+关于如何使用Markdown书写，可以参见我的笔记“[使用Markdown书写](essays/使用Markdown书写.md)”。
+
+## 目录结构
 
 工程中文件目录的安排如下：
 
-	README.md  Markdown文件索引目录
+	README.md     Markdown文件索引目录
 
-	index.md   html文件索引目录
+	README.html   html文件索引目录
 
-	html/      所有笔记的html文本格式
+	html/         所有笔记的html文本格式
 
-	essays/    所有笔记的Markdown文本格式
+	essays/       所有笔记的Markdown文本格式
 
-	codes/     存放可供下载的代码
+	codes/        存放可供下载的代码
 
-	images/    存放文档中的所有图片
+	images/       存放文档中的所有图片
+ 
+	enclosure/    存放可供下载的附件（pdf等）
 
-	enclosure/ 存放可供下载的附件（pdf等）
+## 编辑器
 
 笔记书写使用的编辑器是everedit（一款小巧的国产编辑器），文档的默认编码格式设置如下图（`工具->设置->常规`，在`编辑`选项中）：
 
@@ -169,7 +177,7 @@
 
 本笔记中使用Chrome+Markdown Preview Plus插件将Markdwon转成html的方法：
 
-使用Chrome打开md文件，在工具栏中选择`Markdown Preview Plus`插件，`Export to html`，将转成的html存放到目录`html/`下。修改index.md索引文件。
+使用Chrome打开md文件，在工具栏中选择`Markdown Preview Plus`插件，`Export to html`，将转成的html存放到目录`html/`下。修改README.html索引文件。
 
 
 # 第三篇 关于我
