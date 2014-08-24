@@ -1,7 +1,7 @@
-[<font size=4>��������Ŀ¼<font>](../README.md)
+[<font size=4>←返回主目录<font>](../README.md)
 </br></br></br>
 
-## ���򼰷���
+## 程序及分析
 
 ```c
 /*
@@ -82,42 +82,42 @@ int main(int argc, char *argv[])
 }
 ```
 
-1.	����Ԫ��ָ������ط��ʣ�����Mat�����ݽṹ���������ǿ���ͨ��Mat.data�����������ݵ�ָ�룬�ٸ���ָ����ʵ��������ݣ�������ֱ�ӵķ�����һ��ͼƬ�������ڴ��ж��������洢��һ��Ӧ��ʹ��is_continues()�����жϣ�ע�����������û�У���Ϊ�󲿷�����������洢�ģ�����û�п��ǣ������ַ������ط�ʽ��һ���ʽ�ǣ�
+1.	基于元素指针的像素访问：根据Mat的数据结构，按理我们可以通过Mat.data访问像素数据的指针，再根据指针访问到像素数据，这是最直接的方法，一般图片数据在内存中都是连续存储（一般应该使用is_continues()进行判断，注意上面程序中没有，因为大部分情况是连续存储的，所以没有考虑），这种访问像素方式的一般格式是：
 
 	```
-	uchar *p;  // ����һ����������ָ��
-	p = image.data;  // imageΪMat���󣬽����������ָ�븳ֵ��p
+	uchar *p;  // 定义一个像素索引指针
+	p = image.data;  // image为Mat对象，将对象的数据指针赋值给p
 	for (long i=0; i < image.rows*image.cols*image.channels(); i++) {
-		*p++ = ..;  // ͨ������ָ���������
+		*p++ = ..;  // 通过索引指针操作数据
 	}
 	```
 
-	�������ͨ��Ԫ��ָ��ķ���������һ���ݴα任�����ӣ�
+	上面程序通过元素指针的方法给出了一个幂次变换的例子：
 
 	```
 	*(p+i) = (uchar)(255 * 0.5 * ((double)(img.data[i]) / 255) + b);
 	```
 
-	�ݴα任��һ�ֺܺ��õ�ͼ����ǿ�ķ������ҵ�Github�ϻ���һ��Matlabд�����ݴα任���������ɽ�羰��Ƭ�����ӣ�https://github.com/xiahouzuoxin/zx_photo��
+	幂次变换是一种很好用的图像增强的方法，我的Github上还有一个Matlab写的用幂次变换处理外出爬山风景照片的例子（https://github.com/xiahouzuoxin/zx_photo）
 
-2.	������ָ��ķ��ʣ�OpenCV�ж�����һ��ptr��������һ��ģ�壺
+2.	基于行指针的访问：OpenCV中定义了一个ptr方法，是一个模板：
 
 	```
 	// returns pointer to the matrix element
-	// idx �C rows,you should use @isContinues() before decided it
+	// idx – rows,you should use @isContinues() before decided it
 	template<int n> uchar* ptr(const Vec<int, n>& idx);
 	```
-	ͨ��ptr<uchar>(i)ֱ�ӻ��Mat����ĵ�i�е�ָ�룬����ά�������ָ����Щ���ƣ��̶�����ͨ��ptr<uchar>(i)[j]�õ���i�е�j�е�����ֵ��
+	通过ptr<uchar>(i)直接获得Mat对象的第i行的指针，跟二维数组的行指针有些类似，继而可以通过ptr<uchar>(i)[j]得到第i行第j列的像素值。
 
-	������������ʹ����ָ�����ͼ��ת�����ӡ�
+	上面程序给出了使用行指针进行图像反转的例子。
 
-3.	��ע��һ�������ĺ�����img.clone()֮ǰ�Ѿ������������˿���Mat���ݽṹ��ͷ������ָ�룬������Ҳһ�鿽������������ָ��ָ���¿��������ݡ�
+3.	请注意一下其它的函数：img.clone()之前已经讲过——除了拷贝Mat数据结构的头和数据指针，连数据也一块拷贝，并将数据指针指向新拷贝的数据。
 
 
-## Ч��
+## 效果
 
 ![result]
 
-�����Ԫ��ͼƬ���м��Ǿ���ͼƬ��ת֮���ͼƬ���ұ���ʹ���ݴα任��ǿ���ͼƬ��
+左边是元素图片，中间是经过图片反转之后的图片，右边是使用幂次变换增强后的图片。
 
-[result]:../images/OpenCV����ƪ֮���ط���/result.png
+[result]:../images/OpenCV基础篇之像素访问/result.png

@@ -1,19 +1,19 @@
-[<font size=4>¡û·µ»ØÖ÷Ä¿Â¼<font>](../README.md)
+[<font size=4>â†è¿”å›ä¸»ç›®å½•<font>](../README.md)
 </br></br></br>
 
-²Ù×÷»·¾³£ºCentOS 6.5 64bit
+æ“ä½œç¯å¢ƒï¼šCentOS 6.5 64bit
 
-LinuxÓëLinux¼äÍ¨¹ıÊ²Ã´¹²ÏíÎÄ¼şÄØ¡ª¡ªNFS£¬WindowsÓëWindowsÖ®¼äÄØ¡ª¡ª¹²ÏíÎÄ¼ş¹¦ÄÜ¾ÍOKÁË£¬ÄÇWindowsÓëLinuxÖ®¼äÄØ£¿
+Linuxä¸Linuxé—´é€šè¿‡ä»€ä¹ˆå…±äº«æ–‡ä»¶å‘¢â€”â€”NFSï¼ŒWindowsä¸Windowsä¹‹é—´å‘¢â€”â€”å…±äº«æ–‡ä»¶åŠŸèƒ½å°±OKäº†ï¼Œé‚£Windowsä¸Linuxä¹‹é—´å‘¢ï¼Ÿ
 
-Õâ¾ÍÊÇ±¾¶ÎÒª½²µÄ¶«¶«¡ª¡ªsamba¡£
+è¿™å°±æ˜¯æœ¬æ®µè¦è®²çš„ä¸œä¸œâ€”â€”sambaã€‚
 
-## ¼ì²éÊÇ·ñ°²×°samba
+## æ£€æŸ¥æ˜¯å¦å®‰è£…samba
 
 ```
 # rmp -qa|grep samba
 ```
 
-Èô°²×°ÁË£¬Ôò»áÏÔÊ¾ÈçÏÂ£¬
+è‹¥å®‰è£…äº†ï¼Œåˆ™ä¼šæ˜¾ç¤ºå¦‚ä¸‹ï¼Œ
 
 ```
 samba4-libs-4.0.0-58.el6.rc4.x86_64
@@ -24,24 +24,24 @@ samba-3.6.9-168.el6_5.x86_64
 samba-winbind-clients-3.6.9-168.el6_5.x86_64
 ```
 
-·ñÔò£¬Ê¹ÓÃ
+å¦åˆ™ï¼Œä½¿ç”¨
 
 ```
 # yum install smaba
 ```
 
-°²×°samba.
+å®‰è£…samba.
 
-## ÅäÖÃsamba 
+## é…ç½®samba 
 
-1.	ÉèÖÃ¿ª»úÆô¶¯
+1.	è®¾ç½®å¼€æœºå¯åŠ¨
 
 	```
 	# chkconfig smb on
 	# chkconfig nmb on
 	```
 
-	Ò²¿ÉÒÔÊ¹ÓÃsetupÃüÁî¿ÉÍ¨¹ı½çÃæÅäÖÃ¿ª»úÆô¶¯·şÎñ,
+	ä¹Ÿå¯ä»¥ä½¿ç”¨setupå‘½ä»¤å¯é€šè¿‡ç•Œé¢é…ç½®å¼€æœºå¯åŠ¨æœåŠ¡,
 
 	```
 	# setup
@@ -49,36 +49,36 @@ samba-winbind-clients-3.6.9-168.el6_5.x86_64
 
 	![setup][]
 
-2.	ĞÂ½¨smbÓÃ»§ÓÃÓÚ·ÃÎÊLinux¹²ÏíÎÄ¼ş
+2.	æ–°å»ºsmbç”¨æˆ·ç”¨äºè®¿é—®Linuxå…±äº«æ–‡ä»¶
 
 	```
-	# useradd smb       # ĞÂ½¨ÓÃ»§
-	# smbpasswd -a smb  # ĞŞ¸ÄÃÜÂë
+	# useradd smb       # æ–°å»ºç”¨æˆ·
+	# smbpasswd -a smb  # ä¿®æ”¹å¯†ç 
 	```
 
-	´ËÊ±/homeÄ¿Â¼»áÔö¼ÓÒ»¸ösmbµÄÓÃ»§¡£¸ÃLinuxÓÃ»§Ä¿Â¼½«¿ÉÖ±½Ó¹²Ïíµ½WindowsÏÂ¡£ÈôÒª¹²ÏíÆäËüÎÄ¼ş£¬°´²½Öè3ÅäÖÃÎÄ¼ş¡£Èç¹û²»ÓÃÁË£¬É¾³ısmbÓÃ»§Ò²ÊÇ¿ÉÒÔµÄ£¬
+	æ­¤æ—¶/homeç›®å½•ä¼šå¢åŠ ä¸€ä¸ªsmbçš„ç”¨æˆ·ã€‚è¯¥Linuxç”¨æˆ·ç›®å½•å°†å¯ç›´æ¥å…±äº«åˆ°Windowsä¸‹ã€‚è‹¥è¦å…±äº«å…¶å®ƒæ–‡ä»¶ï¼ŒæŒ‰æ­¥éª¤3é…ç½®æ–‡ä»¶ã€‚å¦‚æœä¸ç”¨äº†ï¼Œåˆ é™¤smbç”¨æˆ·ä¹Ÿæ˜¯å¯ä»¥çš„ï¼Œ
 
 	```
-	# smbpasswd -x smb  # É¾³ısmbÓÃ»§
+	# smbpasswd -x smb  # åˆ é™¤smbç”¨æˆ·
 	```
 
-3.	sambaÅäÖÃÎÄ¼ş¡£
+3.	sambaé…ç½®æ–‡ä»¶ã€‚
 
 	```
 	[tmp]
 	comment = Tmp Directories
-	path = /tmp                         # ¹²ÏíµÄLinuxÄ¿Â¼
-	public = no                         # Ä¿Â¼²»¹«¿ª
-	writeable = yes                     # ¿ÉĞ´
-	browseable = yes                    # ¿É¶Á
-	valid users = smb                   # ·ÃÎÊÓÃ»§£¬ÉÏÃæĞÂ½¨µÄ£¬Ò²¿ÉÒÔÊ¹ÓÃÔ­À´ÒÑÓĞµÄ
+	path = /tmp                         # å…±äº«çš„Linuxç›®å½•
+	public = no                         # ç›®å½•ä¸å…¬å¼€
+	writeable = yes                     # å¯å†™
+	browseable = yes                    # å¯è¯»
+	valid users = smb                   # è®¿é—®ç”¨æˆ·ï¼Œä¸Šé¢æ–°å»ºçš„ï¼Œä¹Ÿå¯ä»¥ä½¿ç”¨åŸæ¥å·²æœ‰çš„
 	```
 
-## ÈÃsmabaÍ¨¹ı·À»ğÇ½
+## è®©smabaé€šè¿‡é˜²ç«å¢™
 
-Ê¹ÓÃsambaĞèÒª´©¹ı·À»ğÇ½£¬Òò´Ë¸ù¾İ²»Í¬Çé¿ö£¬ÕâÀïÌá¹©3ÖÖ·½·¨£º
+ä½¿ç”¨sambaéœ€è¦ç©¿è¿‡é˜²ç«å¢™ï¼Œå› æ­¤æ ¹æ®ä¸åŒæƒ…å†µï¼Œè¿™é‡Œæä¾›3ç§æ–¹æ³•ï¼š
 	
-- ·½·¨1
+- æ–¹æ³•1
 
 	```
 	# system-config-firewall
@@ -86,9 +86,9 @@ samba-winbind-clients-3.6.9-168.el6_5.x86_64
 
 	![smb-firewall][]
 
-- ·½·¨2
+- æ–¹æ³•2
 
-	ÅäÖÃ/etc/sysconfig/iptablesÎÄ¼ş£¬Ìí¼Ó
+	é…ç½®/etc/sysconfig/iptablesæ–‡ä»¶ï¼Œæ·»åŠ 
 
 	```
 	-A INPUT -m state --state NEW -m tcp -p tcp --dport 139 -j ACCEPT
@@ -97,52 +97,52 @@ samba-winbind-clients-3.6.9-168.el6_5.x86_64
 	-A INPUT -m state --state NEW -m udp -p udp --dport 138 -j ACCEPT
 	```
 
-	ÔÊĞí139 445 137 138¼¸¸ö¶Ë¿ÚÍ¨¹ı¡£ÅäÖÃÍêºóÖØÆô·À»ğÇ½£¬
+	å…è®¸139 445 137 138å‡ ä¸ªç«¯å£é€šè¿‡ã€‚é…ç½®å®Œåé‡å¯é˜²ç«å¢™ï¼Œ
 
 	```
 	# /etc/rc.d/init.d/iptables restart
 	```
 
-- ·½·¨3
+- æ–¹æ³•3
 
-	Ë÷ĞÔ£¬°Ñ·À»ğÇ½¹ØÁË£¬
+	ç´¢æ€§ï¼ŒæŠŠé˜²ç«å¢™å…³äº†ï¼Œ
 
 	```
-	# service iptables stop    # ÔİÊ±¹Ø±Õ
-	# chkconfig iptables off  # ÓÀ¾Ã¹Ø±Õ
+	# service iptables stop    # æš‚æ—¶å…³é—­
+	# chkconfig iptables off  # æ°¸ä¹…å…³é—­
 	```
 
-## ¹Ø±ÕSELINUX
+## å…³é—­SELINUX
 
 ```
 # vim /etc/selinux/config
 SELINUX=permissive
 ```
 
-´ËÊ±ĞèÒªÖØÆôÏÂÏµÍ³£¬
+æ­¤æ—¶éœ€è¦é‡å¯ä¸‹ç³»ç»Ÿï¼Œ
 
 ```
 # reboot
 ```
 
-## Æô¶¯samba 
+## å¯åŠ¨samba 
 
 ```
-# service samba start   # Æô¶¯
-# service samba restart # ÖØÆô
+# service samba start   # å¯åŠ¨
+# service samba restart # é‡å¯
 ```
 
-¿ÉÒÔÍ¨¹ı
+å¯ä»¥é€šè¿‡
 
 ```
 # service samba status
 ```
 
-²é¿´sambaÆô¶¯×´Ì¬¡£
+æŸ¥çœ‹sambaå¯åŠ¨çŠ¶æ€ã€‚
 
-## Windows·ÃÎÊ
+## Windowsè®¿é—®
 
-ÏÈ²é¿´LinuxĞéÄâ»úÍøÂçipµØÖ·£¬
+å…ˆæŸ¥çœ‹Linuxè™šæ‹Ÿæœºç½‘ç»œipåœ°å€ï¼Œ
 
 ```
 # ifconifg
@@ -151,36 +151,36 @@ eth0      Link encap:Ethernet  HWaddr 00:0C:29:FD:DC:43
           inet6 addr: fe80::20c:29ff:fefd:dc43/64 Scope:Link
 ```
 
-ÔÚWindowsÏÂÊ¹ÓÃWin+R¿ªÆôÔËĞĞ´°¿Ú£¬ÊäÈë
+åœ¨Windowsä¸‹ä½¿ç”¨Win+Rå¼€å¯è¿è¡Œçª—å£ï¼Œè¾“å…¥
 
 ```
 \\192.168.56.58
 ```
 
-¼´¿É·ÃÎÊLinux¹²ÏíµÄÄ¿Â¼¡£
+å³å¯è®¿é—®Linuxå…±äº«çš„ç›®å½•ã€‚
 
 ![smb][]
 
-´ËÊ±Ê¹ÓÃ
+æ­¤æ—¶ä½¿ç”¨
 
 ```
 # smbstatus
 ```
-²é¿´Á¬½Ó×´Ì¬¡£
+æŸ¥çœ‹è¿æ¥çŠ¶æ€ã€‚
 
 ![smbstatus][]
 
-> ÎÄ¼ş·ÃÎÊÈ¨ÏŞ£º
+> æ–‡ä»¶è®¿é—®æƒé™ï¼š
 
-> ÈôÎŞ·¨´ÓWindowsÖĞÍù¹²ÏíÄ¿Â¼ÖĞ¿½±´ÎÄ¼ş£¬¿ÉÄÜÓÉÓÚ¹²ÏíÄ¿Â¼¶ÔsmbÓÃ»§µÄĞ´È¨ÏŞ²»×ã£¬LinuxÖĞÊ¹ÓÃchmod 777 -R dir¿É¸Ä±ädirÄ¿Â¼È¨ÏŞ¡£ÓÉÓÚÈ¨ÏŞÔ­Òò£¬±¾ÎÄÖĞÊ¹ÓÃ/tmpÄ¿Â¼¹²Ïí£¬ÒòÎª/tmpÄ¿Â¼¶ÔËùÓĞÓÃ»§µÄÈ¨ÏŞ±È½Ï¿ª·Å¡£
+> è‹¥æ— æ³•ä»Windowsä¸­å¾€å…±äº«ç›®å½•ä¸­æ‹·è´æ–‡ä»¶ï¼Œå¯èƒ½ç”±äºå…±äº«ç›®å½•å¯¹smbç”¨æˆ·çš„å†™æƒé™ä¸è¶³ï¼ŒLinuxä¸­ä½¿ç”¨chmod 777 -R dirå¯æ”¹å˜dirç›®å½•æƒé™ã€‚ç”±äºæƒé™åŸå› ï¼Œæœ¬æ–‡ä¸­ä½¿ç”¨/tmpç›®å½•å…±äº«ï¼Œå› ä¸º/tmpç›®å½•å¯¹æ‰€æœ‰ç”¨æˆ·çš„æƒé™æ¯”è¾ƒå¼€æ”¾ã€‚
 
 
-## ²Î¿¼
+## å‚è€ƒ
 
 1. http://www.livingelsewhere.net/tag/unix-linux-samba-ftp-smb-cifs/
 2. http://www.tangrucheng.com/centos6-5-setup-configure-samba.html
 
-[smbstatus]:../images/CentOSÅäÖÃsmabaÓëWindows¹²ÏíÎÄ¼ş/smbstatus.png
-[smb]:../images/CentOSÅäÖÃsmabaÓëWindows¹²ÏíÎÄ¼ş/smb.png
-[smb-firewall]:../images/CentOSÅäÖÃsmabaÓëWindows¹²ÏíÎÄ¼ş/smb-firewall.png
-[setup]:../images/CentOSÅäÖÃsmabaÓëWindows¹²ÏíÎÄ¼ş/setup.png
+[smbstatus]:../images/CentOSé…ç½®smabaä¸Windowså…±äº«æ–‡ä»¶/smbstatus.png
+[smb]:../images/CentOSé…ç½®smabaä¸Windowså…±äº«æ–‡ä»¶/smb.png
+[smb-firewall]:../images/CentOSé…ç½®smabaä¸Windowså…±äº«æ–‡ä»¶/smb-firewall.png
+[setup]:../images/CentOSé…ç½®smabaä¸Windowså…±äº«æ–‡ä»¶/setup.png

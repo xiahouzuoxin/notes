@@ -1,21 +1,21 @@
-[<font size=4>¡û·µ»ØÖ÷Ä¿Â¼<font>](../README.md)
+[<font size=4>â†è¿”å›ä¸»ç›®å½•<font>](../README.md)
 </br></br></br>
 
-ÖÕÓÚµ½ÁËÒªĞ´Ğ´ÂÛÎÄµÄÊ±ºòÁË£¬»ØÏëÒ»ÄêÇ°±¾¿Æ±ÏÒµ£¨´óËÄ£©µÄÊ±ºò¡ª¡ª¾²ĞÄ¾¡Á¦×öÁËÒ»ÄêµÄÍ¼Ïñ·Ö¸îºÍÊ¶±ğ£¬±ÏÒµµÄÊ±ºòËÑ¼ìÒ»ÏÂÄÇÒ»Äê¿´¹ıµÄÂÛÎÄ£¬´òÓ¡µÄÖ½ÖÊ°æŞûÒ»Æğ¾ÓÈ»ÓĞºÃ¼¸±¾Êéºñ£¬¶øÇÒ»¹¶¼ÊÇÓ¢ÎÄµÄ¡£ÕâÒ»Ö±ÁîÎÒ¸Ğµ½×ÔºÀ£¬ÕâµÃ·Ç³£¸ĞĞ»ÄÇ¸öÊ±ºòÎªÎÒµ¼º½µÄÁõÀÏÊ¦£¬ÈÃÎÒµÄ´óÑ§ÔÚ×öÁË2ÄêÇ¶ÈëÊ½ºóÁìÂÔµ½ÁíÒ»·¬·çÎ¶¡£Èç½ñÓÖµ½×¼±¸ÂÛÎÄµÄÊ±ºòÁË£¬ÎÒÕâ¸ö°®ÕÛÌÚ¿ªÔ´Èí¼şµÄÓµõ»£¬Ò²´òËãºÃºÃÓÃÓÃLatexÕâ¸ö¹¤¾ßÁË¡£
+ç»ˆäºåˆ°äº†è¦å†™å†™è®ºæ–‡çš„æ—¶å€™äº†ï¼Œå›æƒ³ä¸€å¹´å‰æœ¬ç§‘æ¯•ä¸šï¼ˆå¤§å››ï¼‰çš„æ—¶å€™â€”â€”é™å¿ƒå°½åŠ›åšäº†ä¸€å¹´çš„å›¾åƒåˆ†å‰²å’Œè¯†åˆ«ï¼Œæ¯•ä¸šçš„æ—¶å€™æœæ£€ä¸€ä¸‹é‚£ä¸€å¹´çœ‹è¿‡çš„è®ºæ–‡ï¼Œæ‰“å°çš„çº¸è´¨ç‰ˆæ‘ä¸€èµ·å±…ç„¶æœ‰å¥½å‡ æœ¬ä¹¦åšï¼Œè€Œä¸”è¿˜éƒ½æ˜¯è‹±æ–‡çš„ã€‚è¿™ä¸€ç›´ä»¤æˆ‘æ„Ÿåˆ°è‡ªè±ªï¼Œè¿™å¾—éå¸¸æ„Ÿè°¢é‚£ä¸ªæ—¶å€™ä¸ºæˆ‘å¯¼èˆªçš„åˆ˜è€å¸ˆï¼Œè®©æˆ‘çš„å¤§å­¦åœ¨åšäº†2å¹´åµŒå…¥å¼åé¢†ç•¥åˆ°å¦ä¸€ç•ªé£å‘³ã€‚å¦‚ä»Šåˆåˆ°å‡†å¤‡è®ºæ–‡çš„æ—¶å€™äº†ï¼Œæˆ‘è¿™ä¸ªçˆ±æŠ˜è…¾å¼€æºè½¯ä»¶çš„æ‹¥è¶¸ï¼Œä¹Ÿæ‰“ç®—å¥½å¥½ç”¨ç”¨Latexè¿™ä¸ªå·¥å…·äº†ã€‚
 
-²Ù×÷»·¾³£ºCentOS 6.5 64bit
+æ“ä½œç¯å¢ƒï¼šCentOS 6.5 64bit
 
-## °²×°
+## å®‰è£…
 
-ÏÈÅäÖÃºÃCentOSµÄyumÔ´£¬²Î¿¼[CentOS¸üĞÂyumÔ´µÄ·½·¨](./CentOS¸üĞÂyumÔ´µÄ·½·¨.md)£¬ÅäÖÃºÃºó£¬Ö´ĞĞ
+å…ˆé…ç½®å¥½CentOSçš„yumæºï¼Œå‚è€ƒ[CentOSæ›´æ–°yumæºçš„æ–¹æ³•](./CentOSæ›´æ–°yumæºçš„æ–¹æ³•.md)ï¼Œé…ç½®å¥½åï¼Œæ‰§è¡Œ
 
 ```
 yum install texlive*
 ```
 
-°²×°texliveÏà¹ØµÄ°ü¼°ÆäÒÀÀµ£¬µÈ´ıÏÂÔØ°²×°Íê³É£¬»ù±¾µÄLatex»·¾³¾ÍÅäÖÃºÃÁË¡£texliveÄ¬ÈÏ°²×°µ½`/usr/share/texmf/`Ä¿Â¼ÏÂ.
+å®‰è£…texliveç›¸å…³çš„åŒ…åŠå…¶ä¾èµ–ï¼Œç­‰å¾…ä¸‹è½½å®‰è£…å®Œæˆï¼ŒåŸºæœ¬çš„Latexç¯å¢ƒå°±é…ç½®å¥½äº†ã€‚texliveé»˜è®¤å®‰è£…åˆ°`/usr/share/texmf/`ç›®å½•ä¸‹.
 
-Õâ¸öÊ±ºò²»·ÁÊ¹ÓÃÀ´Ğ´Ò»Ğ¡¶ÎÎÄ×Ö£¬ÎÄ¼şÃüÃûÎª`Hello.tex`
+è¿™ä¸ªæ—¶å€™ä¸å¦¨ä½¿ç”¨æ¥å†™ä¸€å°æ®µæ–‡å­—ï¼Œæ–‡ä»¶å‘½åä¸º`Hello.tex`
 
 ```
 \documentclass{article}
@@ -29,43 +29,43 @@ yum install texlive*
 \end{document}
 ```
 
-Latex¾ÍÏëÒ»ÃÅ±à³ÌÓïÑÔ£¬Ğ´ÍêºóĞèÒª±àÒë£¬±àÒëÉÏÊöÎÄµµµÄÃüÁîÎª£º`xelatex hello.tex`. ÔòÊä³öÎÄ¼şÖĞ»áÓĞÒ»¸öhello.pdfµÄÎÄ¼ş£¬´ò¿ªºóĞ§¹û£º
+Latexå°±æƒ³ä¸€é—¨ç¼–ç¨‹è¯­è¨€ï¼Œå†™å®Œåéœ€è¦ç¼–è¯‘ï¼Œç¼–è¯‘ä¸Šè¿°æ–‡æ¡£çš„å‘½ä»¤ä¸ºï¼š`xelatex hello.tex`. åˆ™è¾“å‡ºæ–‡ä»¶ä¸­ä¼šæœ‰ä¸€ä¸ªhello.pdfçš„æ–‡ä»¶ï¼Œæ‰“å¼€åæ•ˆæœï¼š
 
 ![hello]
 
-## ÖĞÎÄ×ÖÌåÖ§³Ö
+## ä¸­æ–‡å­—ä½“æ”¯æŒ
 
-Ê¹ÓÃxelatexÃüÁî±àÒë²»ÏñÖ®Ç°µÄlatexÃüÁî±àÒëÒ»Ñù£¬×Ô¼ºÉú³É×ÖÌå£¬xelatex±àÒë¿ÉÒÔÊ¹ÓÃÏµÍ³×ÖÌå£¬¼ò»¯ÁË×ÖÌå°²×°¡£Òò´ËÊ×ÏÈÒªÎªÏµÍ³°²×°ÖĞÎÄ×ÖÌå£¬CentOS°²×°ÖĞÎÄ×ÖÌåµÄ·½·¨²Î¼û[CentOS°²×°ÖĞÎÄ×ÖÌå](./CentOS°²×°ÖĞÎÄ×ÖÌå.md)¡£
+ä½¿ç”¨xelatexå‘½ä»¤ç¼–è¯‘ä¸åƒä¹‹å‰çš„latexå‘½ä»¤ç¼–è¯‘ä¸€æ ·ï¼Œè‡ªå·±ç”Ÿæˆå­—ä½“ï¼Œxelatexç¼–è¯‘å¯ä»¥ä½¿ç”¨ç³»ç»Ÿå­—ä½“ï¼Œç®€åŒ–äº†å­—ä½“å®‰è£…ã€‚å› æ­¤é¦–å…ˆè¦ä¸ºç³»ç»Ÿå®‰è£…ä¸­æ–‡å­—ä½“ï¼ŒCentOSå®‰è£…ä¸­æ–‡å­—ä½“çš„æ–¹æ³•å‚è§[CentOSå®‰è£…ä¸­æ–‡å­—ä½“](./CentOSå®‰è£…ä¸­æ–‡å­—ä½“.md)ã€‚
 
-ÎÒ´ÓWindowsÖĞ¿½±´°²×°ÁË`ºÚÌå`¡¢`ËÎÌå`¡¢`»ªÎÄÖĞËÎ`¡¢`»ªÎÄ¿¬Ìå`¡¢`Ó×Ô²`¡¢`Á¥Êé`µÈÖĞÎÄ×ÖÌå¡£
+æˆ‘ä»Windowsä¸­æ‹·è´å®‰è£…äº†`é»‘ä½“`ã€`å®‹ä½“`ã€`åæ–‡ä¸­å®‹`ã€`åæ–‡æ¥·ä½“`ã€`å¹¼åœ†`ã€`éš¶ä¹¦`ç­‰ä¸­æ–‡å­—ä½“ã€‚
 
-Îª·½±ã°²×°µÄÖĞÎÄ×ÖÌåÔÚLatexÖĞµÄÊ¹ÓÃ£¬²»·ÁÊ¹ÓÃÏÂÃæµÄÖĞÎÄ×ÖÌåºê°ü£¨ÕâÀïµÄºêÓëCÓïÑÔÖĞµÄºê¶¨ÒåÊÇÀàËÆµÄ¸ÅÄî£¬LatexÖĞºê°üµÄÎÄ¼şºó×ºÃûÎª.sty£©£º
+ä¸ºæ–¹ä¾¿å®‰è£…çš„ä¸­æ–‡å­—ä½“åœ¨Latexä¸­çš„ä½¿ç”¨ï¼Œä¸å¦¨ä½¿ç”¨ä¸‹é¢çš„ä¸­æ–‡å­—ä½“å®åŒ…ï¼ˆè¿™é‡Œçš„å®ä¸Cè¯­è¨€ä¸­çš„å®å®šä¹‰æ˜¯ç±»ä¼¼çš„æ¦‚å¿µï¼ŒLatexä¸­å®åŒ…çš„æ–‡ä»¶åç¼€åä¸º.styï¼‰ï¼š
 
 ```
 % Filename: zhfontcfg.sty
-% xetex/xelatex ×ÖÌåÉè¶¨ºê°ü
+% xetex/xelatex å­—ä½“è®¾å®šå®åŒ…
 
 \ProvidesPackage{zhfontcfg}
-\usepackage[cm-default]{fontspec} %[cm-default]Ñ¡ÏîÖ÷ÒªÓÃÀ´½â¾öÊ¹ÓÃÊıÑ§»·¾³Ê±ÊıÑ§·ûºÅ²»ÄÜÕı³£ÏÔÊ¾µÄÎÊÌâ
+\usepackage[cm-default]{fontspec} %[cm-default]é€‰é¡¹ä¸»è¦ç”¨æ¥è§£å†³ä½¿ç”¨æ•°å­¦ç¯å¢ƒæ—¶æ•°å­¦ç¬¦å·ä¸èƒ½æ­£å¸¸æ˜¾ç¤ºçš„é—®é¢˜
 
 \usepackage{xunicode,xltxtra}
-\defaultfontfeatures{Mapping=tex-text} %Èç¹ûÃ»ÓĞËü£¬»áÓĞÒ»Ğ© tex ÌØÊâ×Ö·ûÎŞ·¨Õı³£Ê¹ÓÃ£¬±ÈÈçÁ¬×Ö·û¡£
+\defaultfontfeatures{Mapping=tex-text} %å¦‚æœæ²¡æœ‰å®ƒï¼Œä¼šæœ‰ä¸€äº› tex ç‰¹æ®Šå­—ç¬¦æ— æ³•æ­£å¸¸ä½¿ç”¨ï¼Œæ¯”å¦‚è¿å­—ç¬¦ã€‚
 
-% ÖĞÎÄ¶ÏĞĞ
+% ä¸­æ–‡æ–­è¡Œ
 \XeTeXlinebreaklocale "zh"
 \XeTeXlinebreakskip = 0pt plus 1pt minus 0.1pt
 
-%½«ÏµÍ³×ÖÌåÃûÓ³ÉäÎªÂß¼­×ÖÌåÃû³Æ£¬Ö÷ÒªÊÇÎªÁËÎ¬»¤µÄ·½±ã
-\newcommand\fontnamehei{SimHei}              % ºÚÌå
-\newcommand\fontnamesong{SimSun}             % ËÎÌå
-\newcommand\fontnamezhsong{STZhongSong}      % »ªÎÄÖĞËÎ
-\newcommand\fontnamekai{STKaiti}             % »ªÎÄ¿¬Ìå
-\newcommand\fontnameyouyuan{YouYuan}         % Ó×Ô²
-\newcommand\fontnameLi{LiSu}                 % Á¥Êé
+%å°†ç³»ç»Ÿå­—ä½“åæ˜ å°„ä¸ºé€»è¾‘å­—ä½“åç§°ï¼Œä¸»è¦æ˜¯ä¸ºäº†ç»´æŠ¤çš„æ–¹ä¾¿
+\newcommand\fontnamehei{SimHei}              % é»‘ä½“
+\newcommand\fontnamesong{SimSun}             % å®‹ä½“
+\newcommand\fontnamezhsong{STZhongSong}      % åæ–‡ä¸­å®‹
+\newcommand\fontnamekai{STKaiti}             % åæ–‡æ¥·ä½“
+\newcommand\fontnameyouyuan{YouYuan}         % å¹¼åœ†
+\newcommand\fontnameLi{LiSu}                 % éš¶ä¹¦
 \newcommand\fontnamemono{DejaVu Sans Mono}  
 \newcommand\fontnameroman{Times New Roman}
 
-%%ÉèÖÃ³£ÓÃÖĞÎÄ×ÖºÅ£¬·½±ãµ÷ÓÃ
+%%è®¾ç½®å¸¸ç”¨ä¸­æ–‡å­—å·ï¼Œæ–¹ä¾¿è°ƒç”¨
 \newcommand{\erhao}{\fontsize{22pt}{\baselineskip}\selectfont}
 \newcommand{\xiaoerhao}{\fontsize{18pt}{\baselineskip}\selectfont}
 \newcommand{\sanhao}{\fontsize{16pt}{\baselineskip}\selectfont}
@@ -76,25 +76,25 @@ Latex¾ÍÏëÒ»ÃÅ±à³ÌÓïÑÔ£¬Ğ´ÍêºóĞèÒª±àÒë£¬±àÒëÉÏÊöÎÄµµµÄÃüÁîÎª£º`xelatex hello.tex`
 \newcommand{\xiaowuhao}{\fontsize{9pt}{\baselineskip}\selectfont}
 \newcommand{\liuhao}{\fontsize{7.5pt}{\baselineskip}\selectfont}
 
-%ÉèÖÃÎÄµµÕıÎÄ×ÖÌåÎªËÎÌå
+%è®¾ç½®æ–‡æ¡£æ­£æ–‡å­—ä½“ä¸ºå®‹ä½“
 \setmainfont[BoldFont=\fontnamehei]{\fontnamesong}
 \setsansfont[BoldFont=\fontnamehei]{\fontnamekai}
 \setmonofont{\fontnamemono}
 
-%¿¬Ìå
+%æ¥·ä½“
 \newfontinstance\KAI {\fontnamekai}
 \newcommand{\kai}[1]{{\KAI#1}}
 
-%ºÚÌå
+%é»‘ä½“
 \newfontinstance\HEI{\fontnamehei}
 \newcommand{\hei}[1]{{\HEI#1}}
 
-%Ó¢ÎÄ
+%è‹±æ–‡
 \newfontinstance\ENF{\fontnameroman}
 \newcommand{\en}[1]{\,{\ENF#1}\,}
 ```
 
-ÔÚ.texµÄLatexÎÄ¼şÖĞÊ¹ÓÃusepackage{zhfontcfg}¼´¿ÉÊ¹ÓÃÉÏÃæµÄºê°üÎÄ¼ş£¬ÏÂÃæÊÇÒ»¸öÊ¹ÓÃzhfontcfgºê°üÊéĞ´ÖĞÓ¢ÎÄ»ìºÏµÄÊµÀı£º
+åœ¨.texçš„Latexæ–‡ä»¶ä¸­ä½¿ç”¨usepackage{zhfontcfg}å³å¯ä½¿ç”¨ä¸Šé¢çš„å®åŒ…æ–‡ä»¶ï¼Œä¸‹é¢æ˜¯ä¸€ä¸ªä½¿ç”¨zhfontcfgå®åŒ…ä¹¦å†™ä¸­è‹±æ–‡æ··åˆçš„å®ä¾‹ï¼š
 
 ```
 % FileName: main.tex
@@ -104,30 +104,30 @@ Latex¾ÍÏëÒ»ÃÅ±à³ÌÓïÑÔ£¬Ğ´ÍêºóĞèÒª±àÒë£¬±àÒëÉÏÊöÎÄµµµÄÃüÁîÎª£º`xelatex hello.tex`
 \usepackage{zhfontcfg}
 \usepackage[colorlinks,linkcolor=black]{hyperref}
 
-\title{latex¶à×ÖÌå¼òÒ×Ê¾Àı}
-\author{ÏÄºî×ôöÎ}
+\title{latexå¤šå­—ä½“ç®€æ˜“ç¤ºä¾‹}
+\author{å¤ä¾¯ä½é‘«}
 
 \begin{document}
 \maketitle
-  \section{¿¬Ìå}
-  \kai{¿¬Ìå}
-  \section{ºÚÌå}
-  \hei{ºÚÌå}
+  \section{æ¥·ä½“}
+  \kai{æ¥·ä½“}
+  \section{é»‘ä½“}
+  \hei{é»‘ä½“}
 
-  ÎÒÊÇ±±¾©¿Æ¼¼´óÑ§µÄÑ§Éú.    % ÕâÀïÊÇÄ¬ÈÏµÄÕıÎÄËÎÌå
+  æˆ‘æ˜¯åŒ—äº¬ç§‘æŠ€å¤§å­¦çš„å­¦ç”Ÿ.    % è¿™é‡Œæ˜¯é»˜è®¤çš„æ­£æ–‡å®‹ä½“
   
-  \section{Ó¢ÎÄ}
+  \section{è‹±æ–‡}
   \en{English Times New Roman}
 \end{document}
 ```
 
-Ê¹ÓÃ`xelatex main.tex`±àÒëºóµÄ½á¹ûÎª£º
+ä½¿ç”¨`xelatex main.tex`ç¼–è¯‘åçš„ç»“æœä¸ºï¼š
 
 ![zhfontcfg]
 
-µ½ÕâÀï£¬Ã²ËÆÎÒÃÇÒÑ¾­ÄÜ¹»Ê¹ÓÃLatex¿ªÊ¼ÊéĞ´ÁË£¡
+åˆ°è¿™é‡Œï¼Œè²Œä¼¼æˆ‘ä»¬å·²ç»èƒ½å¤Ÿä½¿ç”¨Latexå¼€å§‹ä¹¦å†™äº†ï¼
 
-×¢Òâ£ºÒªÊ¹ÓÃxelatex±àÒëµÄÎÄ¼ş¸ñÊ½±ØĞëÊÇUTF-8£¬VIMÖĞÊ¹ÓÃÃüÁî`£ºset filetype=utf-8`¼´¿É£¬WindowsÏÂÊ¹ÓÃCTexÔòÁí´æÎªÑ¡ÔñUTF-8¸ñÊ½¡£µ±È»£¬WindowsÏÂÊ¹ÓÃÖĞÎÄ×ÖÌåÓĞ¸ü·½±ãµÄ·½·¨£º
+æ³¨æ„ï¼šè¦ä½¿ç”¨xelatexç¼–è¯‘çš„æ–‡ä»¶æ ¼å¼å¿…é¡»æ˜¯UTF-8ï¼ŒVIMä¸­ä½¿ç”¨å‘½ä»¤`ï¼šset filetype=utf-8`å³å¯ï¼ŒWindowsä¸‹ä½¿ç”¨CTexåˆ™å¦å­˜ä¸ºé€‰æ‹©UTF-8æ ¼å¼ã€‚å½“ç„¶ï¼ŒWindowsä¸‹ä½¿ç”¨ä¸­æ–‡å­—ä½“æœ‰æ›´æ–¹ä¾¿çš„æ–¹æ³•ï¼š
 
 ```
 \usepackage{xeCJK}
@@ -137,25 +137,25 @@ Latex¾ÍÏëÒ»ÃÅ±à³ÌÓïÑÔ£¬Ğ´ÍêºóĞèÒª±àÒë£¬±àÒëÉÏÊöÎÄµµµÄÃüÁîÎª£º`xelatex hello.tex`
 \setmainfont{Times New Roman}
 ```
 
-ÆäÖĞµÄ\\setCJKmainfont{SimSun}¾ÍÊÇÓÃÓÚÉèÖÃËÎÌåÎªÖĞÎÄÖ÷×ÖÌå¡£¶øÇÒÉÏÃæµÄÅäÖÃÔÚÖĞÓ¢»ìºÏµÄÎÄÕÂÖĞºÃ¿´¡£
+å…¶ä¸­çš„\\setCJKmainfont{SimSun}å°±æ˜¯ç”¨äºè®¾ç½®å®‹ä½“ä¸ºä¸­æ–‡ä¸»å­—ä½“ã€‚è€Œä¸”ä¸Šé¢çš„é…ç½®åœ¨ä¸­è‹±æ··åˆçš„æ–‡ç« ä¸­å¥½çœ‹ã€‚
 
 
 
-## LatexÓï·¨
+## Latexè¯­æ³•
 
 
-## LatexÄ£°å
+## Latexæ¨¡æ¿
 
 
 
 
-## ²Î¿¼ÎÄÏ×
+## å‚è€ƒæ–‡çŒ®
 
-1.	[Ò»·İ²»Ì«¼ò¶ÌµÄLATEX2¦Å½éÉÜÖĞÎÄ°æ](http://hhtao.weebly.com/uploads/3/3/7/2/3372398/lshort-zh-cn.pdf). °æ±¾ 4.20£¬¶ş¡ğ¡ğÆßÄê¾ÅÔÂ.
-2.	[The Not So Short Introduction to LATEX 2¦Å](http://mirror.neu.edu.cn/CTAN/info/lshort/english/lshort.pdf). Version 5.03, April 25, 2014.
-3.	LaTeXĞÂÈË½Ì³Ì¡ª¡ª30·ÖÖÓ´ÓÍêÈ«Ä°Éúµ½»ù±¾ÈëÃÅ.
+1.	[ä¸€ä»½ä¸å¤ªç®€çŸ­çš„LATEX2Îµä»‹ç»ä¸­æ–‡ç‰ˆ](http://hhtao.weebly.com/uploads/3/3/7/2/3372398/lshort-zh-cn.pdf). ç‰ˆæœ¬ 4.20ï¼ŒäºŒâ—‹â—‹ä¸ƒå¹´ä¹æœˆ.
+2.	[The Not So Short Introduction to LATEX 2Îµ](http://mirror.neu.edu.cn/CTAN/info/lshort/english/lshort.pdf). Version 5.03, April 25, 2014.
+3.	LaTeXæ–°äººæ•™ç¨‹â€”â€”30åˆ†é’Ÿä»å®Œå…¨é™Œç”Ÿåˆ°åŸºæœ¬å…¥é—¨.
 
 
-[hello]:../images/LatexÈëÃÅ/hello.png
-[zhfontcfg]:../images/LatexÈëÃÅ/zhfontcfg.png
+[hello]:../images/Latexå…¥é—¨/hello.png
+[zhfontcfg]:../images/Latexå…¥é—¨/zhfontcfg.png
 

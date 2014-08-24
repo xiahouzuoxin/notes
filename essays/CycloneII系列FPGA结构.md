@@ -1,9 +1,9 @@
-[<font size=4>��������Ŀ¼<font>](../README.md)
+[<font size=4>←返回主目录<font>](../README.md)
 </br></br></br>
 
-ѧϰFPGA�ⲻ���Ǻ͵�·�򽻵�������ȴ��FPGA�Ŀ�������Verilog������������������Щ����������֪Verilog���ۺ�Ӳ��ʵ�֣��Ǻ�����Ƴ���Ч�ĵ�·��ÿ��ĳĳĳ˵�һ�FPGA/Verilog����һ�����ƭ�˵Ļ������ѧ�ղ����������ӣ��ٺ٣���ʵ��Ҳ����������֮���������֮���Ҿ����������ֵ�·�ײ�ԭ����FPGA�Ŀ������������档
+学习FPGA免不了是和电路打交道，有人却把FPGA的开发看成Verilog的软件开发，看似有些道理。但不知Verilog的综合硬件实现，是很难设计出高效的电路。每当某某某说我会FPGA/Verilog，有一大半是骗人的话，这叫学艺不精还充胖子（嘿嘿，其实我也会这样，人之常情嘛）。总之，我觉得理解数字电路底层原理对FPGA的开发将大有裨益。
 
-���Ľ����Լ���ϰ�������ʹ������ıʼǡ�
+此文仅是自己复习锁存器和触发器的笔记。
 
 
 

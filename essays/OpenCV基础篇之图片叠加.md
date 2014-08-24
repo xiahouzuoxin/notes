@@ -1,7 +1,7 @@
-[<font size=4>��������Ŀ¼<font>](../README.md)
+[<font size=4>←返回主目录<font>](../README.md)
 </br></br></br>
 
-## ���򼰷���
+## 程序及分析
 
 ```c
 /*
@@ -64,21 +64,21 @@ int main(int argc, char *argv[])
 }
 ```
 
-�����ͼ�����ָ���Ե��ӣ���ͼ��A������ΪfA(x)��ͼ��B������ΪfB(x)������ϵ��Ϊ���������Ե��Ӳ���Ϊ��
+这里的图像叠加指线性叠加，设图像A的像素为fA(x)，图像B的像素为fB(x)，叠加系数为α，则线性叠加操作为：
 
 <img src="http://www.forkosh.com/mathtex.cgi? \Large g(x)=\alpha f_A(x)+(1-\alpha)f_B(x)">
 
-��Ϊ0-1֮���ֵ��������Ҳ���Կ��������ӱ��豣֤��������ͼ��ĳߴ��С��ͬ�������е�
+α为0-1之间的值，从上面也可以看出，叠加必需保证两幅输入图像的尺寸大小相同。程序中的
 
 ```
 addWeighted(src1, alpha, src2, beta, 0.0, dst);
 ```
 
-��ɵ��Ӳ�����
+完成叠加操作。
 
-## Ч��
+## 效果
 
 ![result]
 
 
-[result]:../images/OpenCV����ƪ֮ͼƬ����/result.png
+[result]:../images/OpenCV基础篇之图片叠加/result.png

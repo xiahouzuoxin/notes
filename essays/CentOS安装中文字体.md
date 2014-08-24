@@ -1,13 +1,13 @@
-[<font size=4>¡û·µ»ØÖ÷Ä¿Â¼<font>](../README.md)
+[<font size=4>â†è¿”å›žä¸»ç›®å½•<font>](../README.md)
 </br></br></br>
 
-## ´ÓWindows¿½±´×ÖÌå
+## ä»ŽWindowsæ‹·è´å­—ä½“
 
-Windows×ÖÌåÄ¿Â¼Îª`C:\Windows\Fonts\`£¬½«ÐèÒªµÄ×ÖÌåÎÄ¼þ¿½±´µ½LinuxÖÐ£¬¼ÙÉè·ÅÖÃÔÚ/homeÄ¿Â¼ÏÂ¡£
+Windowså­—ä½“ç›®å½•ä¸º`C:\Windows\Fonts\`ï¼Œå°†éœ€è¦çš„å­—ä½“æ–‡ä»¶æ‹·è´åˆ°Linuxä¸­ï¼Œå‡è®¾æ”¾ç½®åœ¨/homeç›®å½•ä¸‹ã€‚
 
-## ´´½¨ÖÐÎÄ×ÖÌåÎÄ¼þ¼Ð
+## åˆ›å»ºä¸­æ–‡å­—ä½“æ–‡ä»¶å¤¹
 
-CentOS×ÖÌåËùÔÚÄ¿Â¼Îª/usr/share/fonts£¬ÔÚ¸ÃÄ¿Â¼ÏÂÐÂ½¨ÎÄ¼þ¼Ðchinese£¬
+CentOSå­—ä½“æ‰€åœ¨ç›®å½•ä¸º/usr/share/fontsï¼Œåœ¨è¯¥ç›®å½•ä¸‹æ–°å»ºæ–‡ä»¶å¤¹chineseï¼Œ
 
 ```
 su root
@@ -15,7 +15,7 @@ mkdir /usr/share/fonts/chinese
 cd /usr/share/fonts/chinese
 ```
 
-## °²×°×ÖÌå
+## å®‰è£…å­—ä½“
 
 ```
 yum install mkfontscale
@@ -26,11 +26,11 @@ mkfontdir
 fc-cache -fv
 ```
 
-ÖØÆôÏµÍ³»òÕß`source /etc/profile`¡£
+é‡å¯ç³»ç»Ÿæˆ–è€…`source /etc/profile`ã€‚
 
-´ËÊ±£¬Ê¹ÓÃ`fc-list :lang=zh`¼´¿É¿´µ½°²×°µÄÖÐÎÄ×ÖÌå¡£
+æ­¤æ—¶ï¼Œä½¿ç”¨`fc-list :lang=zh`å³å¯çœ‹åˆ°å®‰è£…çš„ä¸­æ–‡å­—ä½“ã€‚
 
-ÎªÊ¹ÏµÍ³ËùÓÐÓÃ»§¶¼ÄÜÊ¹ÓÃ¸Ã×ÖÌå£¬ÐèÒª¸ø×ÖÌå·ÃÎÊÈ¨ÏÞ£º
+ä¸ºä½¿ç³»ç»Ÿæ‰€æœ‰ç”¨æˆ·éƒ½èƒ½ä½¿ç”¨è¯¥å­—ä½“ï¼Œéœ€è¦ç»™å­—ä½“è®¿é—®æƒé™ï¼š
 
 ```
 chmod -R 755 *.tff

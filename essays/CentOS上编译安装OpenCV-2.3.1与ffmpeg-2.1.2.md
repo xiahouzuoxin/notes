@@ -1,70 +1,70 @@
-[<font size=4>¡û·µ»ØÖ÷Ä¿Â¼<font>](../README.md)
+[<font size=4>â†è¿”å›ä¸»ç›®å½•<font>](../README.md)
 </br></br></br>
 
-ÒÑ²âÊÔ»·¾³£º
+å·²æµ‹è¯•ç¯å¢ƒï¼š
 
 1. CentOS 6.3 32bit
 2. CentOS 6.5 64bit
 
-Ôø¾­ÔÚCentOS 6.3 32bit°²×°¹ıOpenCV£¬²Î¼û[CentOS 6.3ÖĞ°²×°OpenCV2.3.1]£¬Èç½ñ»»ÁË64bitÏµÍ³£¬´óµ¶À«¸«£¬ÖØĞÂÀ´Ò»±é¡£
+æ›¾ç»åœ¨CentOS 6.3 32bitå®‰è£…è¿‡OpenCVï¼Œå‚è§[CentOS 6.3ä¸­å®‰è£…OpenCV2.3.1]ï¼Œå¦‚ä»Šæ¢äº†64bitç³»ç»Ÿï¼Œå¤§åˆ€é˜”æ–§ï¼Œé‡æ–°æ¥ä¸€éã€‚
 
-## ¼ì²é²¢°²×°Ïà¹Ø³ÌĞò£¬È·±£gtk°²×°³É¹¦£¬·ñÔòÎŞ·¨ÏÔÊ¾Í¼Æ¬
+## æ£€æŸ¥å¹¶å®‰è£…ç›¸å…³ç¨‹åºï¼Œç¡®ä¿gtkå®‰è£…æˆåŠŸï¼Œå¦åˆ™æ— æ³•æ˜¾ç¤ºå›¾ç‰‡
 
 ```
-yum install gcc-c++              # g++±àÒë
-yum install gtk-devel            # ·´ÕıÊÇgtkÉñÂíµÄ£¬²»Ò»¶¨¾ÍÊÇgtk-devel£¬¿ÉÒÔÊ¹ÓÃ*gtk-devel*Æ¥Åä
+yum install gcc-c++              # g++ç¼–è¯‘
+yum install gtk-devel            # åæ­£æ˜¯gtkç¥é©¬çš„ï¼Œä¸ä¸€å®šå°±æ˜¯gtk-develï¼Œå¯ä»¥ä½¿ç”¨*gtk-devel*åŒ¹é…
 yum install gimp-devel
 yum install gimp-devel-tools
 yum install gimp-help-browser
 yum install zlib-devel
-yum install libtiff-devel        # tiff¸ñÊ½Í¼Æ¬Ö§³Ö
-yum install libjpeg-devel        # jpegÍ¼Æ¬Ö§³Ö
-yum install libpng-devel         # pngÍ¼Æ¬Ö§³Ö
-yum install gstreamer-devel      # ´¦ÀíMP3¡¢Ogg¡¢MPEG1¡¢MPEG2¡¢AVIµÈ¸ñÊ½µÄ¶àÃ½ÌåÊı¾İ
-yum install libavc1394-devel     # 1394ÒôÆµ½Ó¿ÚµÄ¿ØÖÆÃüÁî¼¯
+yum install libtiff-devel        # tiffæ ¼å¼å›¾ç‰‡æ”¯æŒ
+yum install libjpeg-devel        # jpegå›¾ç‰‡æ”¯æŒ
+yum install libpng-devel         # pngå›¾ç‰‡æ”¯æŒ
+yum install gstreamer-devel      # å¤„ç†MP3ã€Oggã€MPEG1ã€MPEG2ã€AVIç­‰æ ¼å¼çš„å¤šåª’ä½“æ•°æ®
+yum install libavc1394-devel     # 1394éŸ³é¢‘æ¥å£çš„æ§åˆ¶å‘½ä»¤é›†
 yum install libraw1394-devel
 yum install libdc1394-devel
 yum install jasper-devel
 yum install jasper-utils
-yum install cmake                # ·½±ã±àÒë¹¹½¨OpenCVµÄ¹¤¾ß
+yum install cmake                # æ–¹ä¾¿ç¼–è¯‘æ„å»ºOpenCVçš„å·¥å…·
 yum install swig
-yum install python               # python»·¾³Ö§³Ö
+yum install python               # pythonç¯å¢ƒæ”¯æŒ
 yum install libtool
-yum install nasm                 # »ã±à¹¤¾ß
+yum install nasm                 # æ±‡ç¼–å·¥å…·
 ```
 
-## °²×°ffmpeg2.1.2
+## å®‰è£…ffmpeg2.1.2
 
-ffmpegÃ»ÓĞÏÖ³ÉµÄÓÃÓÚCentOSµÄrpm°ü£¬Òò´ËĞèÒªÊ¹ÓÃÔ´Âë±àÒë°²×°£¬
+ffmpegæ²¡æœ‰ç°æˆçš„ç”¨äºCentOSçš„rpmåŒ…ï¼Œå› æ­¤éœ€è¦ä½¿ç”¨æºç ç¼–è¯‘å®‰è£…ï¼Œ
 
 ```
-./configure --enable-shared ¨Cdisable-yasm
+./configure --enable-shared â€“disable-yasm
 make
 make install
 ```
 
-´ËÊ±£¬ffmpegÄ¬ÈÏ°²×°µ½/usr/localÏÂÃæ.
+æ­¤æ—¶ï¼Œffmpegé»˜è®¤å®‰è£…åˆ°/usr/localä¸‹é¢.
 
-## °²×°OpenCV-2.3.1
+## å®‰è£…OpenCV-2.3.1
 
 
 
-1.	Ê¹ÓÃvi´ò¿ªCMakeLists.txtÎÄ¼ş£¬ÕÒµ½ÏÂÃæÒ»ĞĞºó½«Æä×¢ÊÍ(#)
+1.	ä½¿ç”¨viæ‰“å¼€CMakeLists.txtæ–‡ä»¶ï¼Œæ‰¾åˆ°ä¸‹é¢ä¸€è¡Œåå°†å…¶æ³¨é‡Š(#)
 
 	```
 	set_property( CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS${CMAKE_CONFIGURATION_TYPES} )
 	# set_property( CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS${CMAKE_CONFIGURATION_TYPES} )
 	```
 
-2.	Ê¹ÓÃvi´ò¿ªCMakeLists.txtÎÄ¼ş£¬ËÑË÷¹Ø¼ü×Öffmpeg£¬ÕÒµ½¶ÔÓ¦Î»ÖÃ£¬
+2.	ä½¿ç”¨viæ‰“å¼€CMakeLists.txtæ–‡ä»¶ï¼Œæœç´¢å…³é”®å­—ffmpegï¼Œæ‰¾åˆ°å¯¹åº”ä½ç½®ï¼Œ
 
 	```
 	if(EXISTS /usr/include/ffmpeg/libavformat/avformat.hOR HAVE_FFMPEG_SWSCALE)
 	```
 
-	È·ÈÏÉÏÃæµÄÄ¿Â¼ÊÇ/usr/include£¬Èç¹ûÔÚ°²×°ffmpegÊ±£¬ĞŞ¸ÄÁËÂ·¾¶£¬Ôò×÷ÏàÓ¦µÄĞŞ¸Ä£¬ÏÖÔÚÎÒÃÇ¿ÉÒÔ²»¶¯¡£
+	ç¡®è®¤ä¸Šé¢çš„ç›®å½•æ˜¯/usr/includeï¼Œå¦‚æœåœ¨å®‰è£…ffmpegæ—¶ï¼Œä¿®æ”¹äº†è·¯å¾„ï¼Œåˆ™ä½œç›¸åº”çš„ä¿®æ”¹ï¼Œç°åœ¨æˆ‘ä»¬å¯ä»¥ä¸åŠ¨ã€‚
 
-3.	µ½opencvÔ´´úÂëÖ÷Ä¿Â¼Ğ´ÏÂ£¬ÒÀ´ÎÖ´ĞĞ
+3.	åˆ°opencvæºä»£ç ä¸»ç›®å½•å†™ä¸‹ï¼Œä¾æ¬¡æ‰§è¡Œ
 
 	```
 	mkdir release
@@ -74,9 +74,9 @@ make install
 	make install
 	```
 
-	µÈ´ı°²×°½áÊø£¬Ä¬ÈÏ°²×°µ½Î»ÖÃ/usr/local/¡£
+	ç­‰å¾…å®‰è£…ç»“æŸï¼Œé»˜è®¤å®‰è£…åˆ°ä½ç½®/usr/local/ã€‚
 
-## ²âÊÔ
+## æµ‹è¯•
 
 ```
 #include <cv.h>
@@ -101,7 +101,7 @@ int main( int argc, char** argv )
 }
 ```
 
-±àĞ´Makefile£¬
+ç¼–å†™Makefileï¼Œ
 
 ```
 SRC=DisplayImage.cpp
@@ -111,32 +111,32 @@ Test:$(SRC)
    g++ -o Test $(LIB)$(INC) -lopencv_core -lopencv_highgui -lopencv_ml $^
 ```
 
-Ö´ĞĞmake£¬Ã»ÓĞ´íÎó¡£¼ÌĞøÔËĞĞ£¬./Test {ImagePathName}£¬³öÏÖ¡°²»ÄÜÁ´½Óµ½¶¯Ì¬¿â¡±µÄ´íÎó£¬´óÖÂÈçÏÂ£º
+æ‰§è¡Œmakeï¼Œæ²¡æœ‰é”™è¯¯ã€‚ç»§ç»­è¿è¡Œï¼Œ./Test {ImagePathName}ï¼Œå‡ºç°â€œä¸èƒ½é“¾æ¥åˆ°åŠ¨æ€åº“â€çš„é”™è¯¯ï¼Œå¤§è‡´å¦‚ä¸‹ï¼š
 
 ```
 error while loading shared libraries: libopencv_core.so.2.3: cannot open shared object file: No such file or directory
 ```
 
-½â¾ö°ì·¨£º
+è§£å†³åŠæ³•ï¼š
 
 ```
-cd /etc/ld.so.conf.d/   # ¸ÃÎÄ¼ş¼ĞÏÂ´æ·ÅÁË¸÷ÖÖ¶¯Ì¬Á´½Ó¿âµÄÂ·¾¶ĞÅÏ¢
+cd /etc/ld.so.conf.d/   # è¯¥æ–‡ä»¶å¤¹ä¸‹å­˜æ”¾äº†å„ç§åŠ¨æ€é“¾æ¥åº“çš„è·¯å¾„ä¿¡æ¯
 vim usr-lib.conf
 ```
 
-Ìí¼ÓÈçÏÂĞÅÏ¢£¨opencvµÄlibËùÔÚÂ·¾¶£©
+æ·»åŠ å¦‚ä¸‹ä¿¡æ¯ï¼ˆopencvçš„libæ‰€åœ¨è·¯å¾„ï¼‰
 
 ```
 /usr/local/lib
 ```
 
-±£´æÎÄ¼şºóÖ´ĞĞldconfigÃüÁî¼´¿É¡£
+ä¿å­˜æ–‡ä»¶åæ‰§è¡Œldconfigå‘½ä»¤å³å¯ã€‚
  
-ÖØĞÂÔËĞĞ£¬Ã»ÎÊÌâ£¬ÊÕ¹¤¡£
+é‡æ–°è¿è¡Œï¼Œæ²¡é—®é¢˜ï¼Œæ”¶å·¥ã€‚
 
 ![result][]
 
 
-[CentOS 6.3ÖĞ°²×°OpenCV2.3.1]:http://blog.csdn.net/xiahouzuoxin/article/details/9831263
-[result]:../images/CentOSÉÏ±àÒë°²×°OpenCV-2.3.1Óëffmpeg-2.1.2/result.png
+[CentOS 6.3ä¸­å®‰è£…OpenCV2.3.1]:http://blog.csdn.net/xiahouzuoxin/article/details/9831263
+[result]:../images/CentOSä¸Šç¼–è¯‘å®‰è£…OpenCV-2.3.1ä¸ffmpeg-2.1.2/result.png
 

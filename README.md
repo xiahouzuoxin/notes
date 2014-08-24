@@ -1,185 +1,185 @@
+﻿
+本目录默认为[Markdown目录索引](README.md)，Markdown索引发现某些公式不能正常显示时，请下载本工程到本地，使用[html目录索引](index.md)浏览。
 
-��Ŀ¼Ĭ��Ϊ[MarkdownĿ¼����](README.md)��Markdown��������ĳЩ��ʽ����������ʾʱ�������ر����̵����أ�ʹ��[htmlĿ¼����](index.md)�����
+# 第一篇 分类目录
 
-# ��һƪ ����Ŀ¼
-
-## 1 Ƕ��ʽ
+## 1 嵌入式
 
 - DSP 	
 
-	- [�����źŴ����и���Ƶ�ʹ�ϵ](essays/�����źŴ����и���Ƶ�ʹ�ϵ.md)
-	- [�˲������ָ��](essays/�˲������ָ��.md)
-	- [ģ���źŲ�����ADת��](essays/ģ���źŲ�����ADת��.md)
-	- [��DSP671x��ʹ��Timerͳ���źŴ����㷨��ʱ������](essays/��DSP671x��ʹ��Timerͳ���źŴ����㷨��ʱ������.md)
-	- [TMS320C6713��дFlash��ͨ�÷���](essays/TMS320C6713��дFlash��ͨ�÷���.md)
-	- [DSP���Ӳ���CCS3.3����������](essays/DSP���Ӳ���CCS3.3����������.md)
-	- [��дFlash���DSP�������в��������������](essays/��дFlash���DSP�������в��������������.md)
-	- [����CCS3.3���ݼ�ʹ��matlab�����ķ���](essays/����CCS3.3���ݼ�ʹ��matlab�����ķ���.md)
-	- [�����׵�һ������](essays/�����׵�һ������.md)
-	- [TI-DSP��ѧ��֮c67xmathlib��ʹ��](essays/TI-DSP��ѧ��֮c67xmathlib��ʹ��.md)
-	- [DSP/BIOSʹ������](essays/DSP-BIOSʹ������.md)
-	- [DSP/BIOSʹ��֮�����ž������δ�ʱ�Ӽ���дFlash](essays/DSP-BIOSʹ��֮�����ž������δ�ʱ�Ӽ���дFlash.md)
+	- [数字信号处理中各种频率关系](essays/数字信号处理中各种频率关系.md)
+	- [滤波器设计指标](essays/滤波器设计指标.md)
+	- [模拟信号采样与AD转换](essays/模拟信号采样与AD转换.md)
+	- [在DSP671x上使用Timer统计信号处理算法的时间消耗](essays/在DSP671x上使用Timer统计信号处理算法的时间消耗.md)
+	- [TMS320C6713烧写Flash的通用方法](essays/TMS320C6713烧写Flash的通用方法.md)
+	- [DSP连接不上CCS3.3的问题讨论](essays/DSP连接不上CCS3.3的问题讨论.md)
+	- [烧写Flash后的DSP程序运行不正常的情况分析](essays/烧写Flash后的DSP程序运行不正常的情况分析.md)
+	- [导出CCS3.3数据及使用matlab处理的方法](essays/导出CCS3.3数据及使用matlab处理的方法.md)
+	- [功率谱的一点理解](essays/功率谱的一点理解.md)
+	- [TI-DSP数学库之c67xmathlib的使用](essays/TI-DSP数学库之c67xmathlib的使用.md)
+	- [DSP/BIOS使用入门](essays/DSP-BIOS使用入门.md)
+	- [DSP/BIOS使用之初窥门径——滴答时钟及烧写Flash](essays/DSP-BIOS使用之初窥门径——滴答时钟及烧写Flash.md)
 
 - FPGA
 
-	- [FPGA�ĸ�λ](essays/FPGA�ĸ�λ.md)
-	- [FPGA�ı��ؼ��](essays/FPGA�ı��ؼ��.md)
-	- [ʹ��Tcl�ű�����FPGA�ܽ�](essays/ʹ��Tcl�ű�����FPGA�ܽ�.md)
-	- [Quartus_ii��ʹ��Testbench����ķ���](essays/Quartus_ii��ʹ��Testbench����ķ���.md)
-	- [CycloneIIϵ��FPGA�ṹ](essays/CycloneIIϵ��FPGA�ṹ.md)
+	- [FPGA的复位](essays/FPGA的复位.md)
+	- [FPGA的边沿检测](essays/FPGA的边沿检测.md)
+	- [使用Tcl脚本分配FPGA管脚](essays/使用Tcl脚本分配FPGA管脚.md)
+	- [Quartus_ii中使用Testbench仿真的方法](essays/Quartus_ii中使用Testbench仿真的方法.md)
+	- [CycloneII系列FPGA结构](essays/CycloneII系列FPGA结构.md)
 
 - ARM
 
-	- [����SPI��˫MCUͨ��](essays/����SPI��˫MCUͨ��.md)
+	- [基于SPI的双MCU通信](essays/基于SPI的双MCU通信.md)
 
 
-- Ӳ�����
+- 硬件设计
 
-	- [��Ƶ�����ϵĴ�������](essays/��Ƶ�����ϵĴ�������.md)
-	- [FPGA��DSPͨ���е�EMIF��������](essays/FPGA��DSPͨ���е�EMIF��������.md)
-	- [���DSP��FPGA���ݲɼ�Ӳ��ϵͳʱ������һЩ��������](essays/���DSP��FPGA���ݲɼ�Ӳ��ϵͳʱ������һЩ��������.md)
-	- [�͹���ģʽ��﮵��ʹ��ʱ���Ĺ���](essays/�͹���ģʽ��﮵��ʹ��ʱ���Ĺ���.md)
-	- [AlteraFPGA���Ĺ��ƹ���](essays/AlteraFPGA���Ĺ��ƹ���.md)
-	- [EP2C8F256�Ĺٷ�ԭ��ͼ���������](essays/EP2C8F256�Ĺٷ�ԭ��ͼ���������.md)
-	- [PCB��Ʋο�����](essays/PCB��Ʋο�����.md)
-	- [�����ܵĵ�ƽת����������·����](essays/�����ܵĵ�ƽת����������·����.md)
-	- [DCDC�Ʋ�Сʵ��](essays/DCDC�Ʋ�Сʵ��.md)
-	- [�˷Ų������ͼ������˷�ѡ��](essays/�˷Ų������ͼ������˷�ѡ��.md)
-	- [ʹ��Pspice���е�·����](essays/ʹ��Pspice���е�·����.md)
+	- [高频总线上的串阻问题](essays/高频总线上的串阻问题.md)
+	- [FPGA与DSP通信中的EMIF速率问题](essays/FPGA与DSP通信中的EMIF速率问题.md)
+	- [设计DSP与FPGA数据采集硬件系统时遇到的一些问题整理](essays/设计DSP与FPGA数据采集硬件系统时遇到的一些问题整理.md)
+	- [低功耗模式下锂电池使用时长的估算](essays/低功耗模式下锂电池使用时长的估算.md)
+	- [AlteraFPGA功耗估计工具](essays/AlteraFPGA功耗估计工具.md)
+	- [EP2C8F256的官方原理图库存在问题](essays/EP2C8F256的官方原理图库存在问题.md)
+	- [PCB设计参考资料](essays/PCB设计参考资料.md)
+	- [三极管的电平转换及驱动电路分析](essays/三极管的电平转换及驱动电路分析.md)
+	- [DCDC纹波小实验](essays/DCDC纹波小实验.md)
+	- [运放参数解释及常用运放选型](essays/运放参数解释及常用运放选型.md)
+	- [使用Pspice进行电路仿真](essays/使用Pspice进行电路仿真.md)
 	
 
 
-## 2 ͼ�� ��Ƶ ����ѧϰ
+## 2 图像 音频 机器学习
 
 - OpenCV
 
-	- [CentOS�ϱ��밲װOpenCV-2.3.1��ffmpeg-2.1.2](essays/CentOS�ϱ��밲װOpenCV-2.3.1��ffmpeg-2.1.2.md)
-	- [OpenCV����ƪ֮��ȡ��ʾͼƬ](essays/OpenCV����ƪ֮��ȡ��ʾͼƬ.md)
-	- [OpenCV����ƪ֮ʹ��CMake��������](essays/OpenCV����ƪ֮ʹ��CMake��������.md)
-	- [OpenCV����ƪ֮Mat���ݽṹ](essays/OpenCV����ƪ֮Mat���ݽṹ.md)
-	- [OpenCV����ƪ֮���ط���](essays/OpenCV����ƪ֮���ط���.md)
-	- [OpenCV����ƪ֮ͼƬ����](essays/OpenCV����ƪ֮ͼƬ����.md)
-	- [OpenCV����ƪ֮���ز����Աȶȵ���](essays/OpenCV����ƪ֮���ز����Աȶȵ���.md)
-	- [OpenCV����ƪ֮���ұ�](essays/OpenCV����ƪ֮���ұ�.md)
-	- [OpenCV����ƪ֮��ͼ��RNG���������](essays/OpenCV����ƪ֮��ͼ��RNG���������.md)
+	- [CentOS上编译安装OpenCV-2.3.1与ffmpeg-2.1.2](essays/CentOS上编译安装OpenCV-2.3.1与ffmpeg-2.1.2.md)
+	- [OpenCV基础篇之读取显示图片](essays/OpenCV基础篇之读取显示图片.md)
+	- [OpenCV基础篇之使用CMake管理工程](essays/OpenCV基础篇之使用CMake管理工程.md)
+	- [OpenCV基础篇之Mat数据结构](essays/OpenCV基础篇之Mat数据结构.md)
+	- [OpenCV基础篇之像素访问](essays/OpenCV基础篇之像素访问.md)
+	- [OpenCV基础篇之图片叠加](essays/OpenCV基础篇之图片叠加.md)
+	- [OpenCV基础篇之像素操作对比度调节](essays/OpenCV基础篇之像素操作对比度调节.md)
+	- [OpenCV基础篇之查找表](essays/OpenCV基础篇之查找表.md)
+	- [OpenCV基础篇之绘图及RNG随机数对象](essays/OpenCV基础篇之绘图及RNG随机数对象.md)
 
-- ������Դ
+- 网络资源
 
-	- [ͼ��ţ�����Ӽ����ݿ���Դ](essays/ͼ��ţ�����Ӽ����ݿ���Դ.md)
-
-
-## 3 ��ѧ �㷨
-
-- [��ѧţ��matrix67](http://www.matrix67.com/blog/)
-- [����ͳ��֪ʶ���������ع�����뷽�����](essays/����ͳ��֪ʶ���������ع�����뷽�����.md)
-- [����ת�ַ�����һ�ֿ���ʵ��](essays/����ת�ַ�����һ�ֿ���ʵ��.md)
-- [ת��@��껣�����Ҷ����֮�����̳̣������棩](http://zhuanlan.zhihu.com/wille/19763358)
-- ת��@StackExchange�������㷨��ʵ����Ŀ�е�Ӧ�� [Ӣ�İ� ](http://cstheory.stackexchange.com/questions/19759/core-algorithms-deployed/19773#19773)[���İ�](http://blog.jobbole.com/52669/)
-- [��������ֵ�ֽ�������ֵ�ֽ⺬�������Ӧ��](essays/��������ֵ�ֽ�������ֵ�ֽ⺬�������Ӧ��.md)
-- [ѭ���ĽǶ����ֵ](essays/ѭ���ĽǶ����ֵ.md)
-- [λ��ת�㷨](essays/λ��ת�㷨.md)
+	- [图像牛人链接及数据库资源](essays/图像牛人链接及数据库资源.md)
 
 
-## 4 �����
+## 3 数学 算法
+
+- [数学牛人matrix67](http://www.matrix67.com/blog/)
+- [数理统计知识整理——回归分析与方差分析](essays/数理统计知识整理——回归分析与方差分析.md)
+- [整数转字符串的一种快速实现](essays/整数转字符串的一种快速实现.md)
+- [转载@韩昊：傅里叶分析之掐死教程（完整版）](http://zhuanlan.zhihu.com/wille/19763358)
+- 转载@StackExchange：常见算法在实际项目中的应用 [英文版 ](http://cstheory.stackexchange.com/questions/19759/core-algorithms-deployed/19773#19773)[中文版](http://blog.jobbole.com/52669/)
+- [矩阵特征值分解与奇异值分解含义解析及应用](essays/矩阵特征值分解与奇异值分解含义解析及应用.md)
+- [循环的角度求均值](essays/循环的角度求均值.md)
+- [位反转算法](essays/位反转算法.md)
+
+
+## 4 计算机
 
 - C/C++
 
-	- [ʵ��ѧϰgcc+gdb+make](essays/ʵ��ѧϰgcc+gdb+make.md)
-	- [�����ָ������](essays/�����ָ������.md)
-	- [λ����ľ����÷�](essays/λ����ľ����÷�.md)
+	- [实例学习gcc+gdb+make](essays/实例学习gcc+gdb+make.md)
+	- [数组的指针特性](essays/数组的指针特性.md)
+	- [位运算的绝妙用法](essays/位运算的绝妙用法.md)
 
 - Matlab 
 
-	- [Matlab�Ķ��̹߳���Timer](essays/Matlab�Ķ��̹߳���Timer.md)
-	- [Matlab�еĵѿ������꼰������](essays/Matlab�еĵѿ������꼰������.md)
-	- [matlab��C���ϱ��](essays/matlab��C���ϱ��.md)
+	- [Matlab的多线程工具Timer](essays/Matlab的多线程工具Timer.md)
+	- [Matlab中的笛卡尔坐标及极坐标](essays/Matlab中的笛卡尔坐标及极坐标.md)
+	- [matlab与C联合编程](essays/matlab与C联合编程.md)
 
 - Linux 
 
-	- [Linuxϵͳ����](essays/Linuxϵͳ����.md)
-	- [���������CentOS����̨��С](essays/���������CentOS����̨��С.md)
-	- [����CentOS����Ĭ�Ͻ������̨������ͼ�ν���](essays/����CentOS����Ĭ�Ͻ������̨������ͼ�ν���.md)
-	- [CentOS��Win7�µ�Ӳ�̰�װ](essays/CentOS��Win7�µ�Ӳ�̰�װ.md)
-	- [CentOS����yumԴ�ķ���](essays/CentOS����yumԴ�ķ���.md)
-	- [CentOS����smaba��Windows�����ļ�](essays/CentOS����smaba��Windows�����ļ�.md)
-	- [CentOS��װ��������](essays/CentOS��װ��������.md)
-	- [Shell��VIM����С����](essays/Shell��VIM����С����.md)
+	- [Linux系统备份](essays/Linux系统备份.md)
+	- [增大虚拟机CentOS控制台大小](essays/增大虚拟机CentOS控制台大小.md)
+	- [设置CentOS启动默认进入控制台而不是图形界面](essays/设置CentOS启动默认进入控制台而不是图形界面.md)
+	- [CentOS在Win7下的硬盘安装](essays/CentOS在Win7下的硬盘安装.md)
+	- [CentOS更新yum源的方法](essays/CentOS更新yum源的方法.md)
+	- [CentOS配置smaba与Windows共享文件](essays/CentOS配置smaba与Windows共享文件.md)
+	- [CentOS安装中文字体](essays/CentOS安装中文字体.md)
+	- [Shell及VIM命令小技巧](essays/Shell及VIM命令小技巧.md)
 
 - Git
 
-	- [Git�İ汾�ͷ�֧����](essays/Git�İ汾�ͷ�֧����.md)
-	- [Gitʹ�ò���](essays/Gitʹ�ò���.md)
+	- [Git的版本和分支管理](essays/Git的版本和分支管理.md)
+	- [Git使用补遗](essays/Git使用补遗.md)
 
-- ��λ��
+- 上位机
 
-	- [LabVIEW��λ���봮��ͨ��](essays/LabVIEW��λ���봮��ͨ��.md)
+	- [LabVIEW上位机与串口通信](essays/LabVIEW上位机与串口通信.md)
 
-## 5 �Ķ� д�� ����
+## 5 阅读 写作 其它
 
-- ����д��
+- 读书写作
 
-	- [�����Ķ�������](essays/�����Ķ�������.md)
-	- [�����Ѷ���ʧʵ��](essays/�����Ѷ���ʧʵ��.md)
-	- [��ӹ����С˵֮�ҵļ���](essays/��ӹ����С˵֮�ҵļ���.md)
-	- [һ��ʫ�����ʮ����](essays/һ��ʫ�����ʮ����.md)
-	- [���İ��������硪�����������粨��](essays/���İ��������硪�����������粨��.md)
-	- [����](essays/����.md)
-	- [ʹ��Markdown��д](essays/ʹ��Markdown��д.md)
-	- [Markdown�в�����ѧ��ʽ�ķ���](essays/Markdown�в�����ѧ��ʽ�ķ���.md)
-	- [Latex����](essays/Latex����.md)
-	- [ʰ���������껪](essays/ʰ���������껪.md)
-	- [�����ܴӿ����д�͸ǽ�崫����](essays/�����ܴӿ����д�͸ǽ�崫����.md)
+	- [关于阅读的名言](essays/关于阅读的名言.md)
+	- [读塞缪尔《失实》](essays/读塞缪尔《失实》.md)
+	- [金庸武侠小说之我的见解](essays/金庸武侠小说之我的见解.md)
+	- [一首诗熟记三十六计](essays/一首诗熟记三十六计.md)
+	- [此心安处是吾乡——苏轼《定风波》](essays/此心安处是吾乡——苏轼《定风波》.md)
+	- [秋意](essays/秋意.md)
+	- [使用Markdown书写](essays/使用Markdown书写.md)
+	- [Markdown中插入数学公式的方法](essays/Markdown中插入数学公式的方法.md)
+	- [Latex入门](essays/Latex入门.md)
+	- [拾掇起来的年华](essays/拾掇起来的年华.md)
+	- [声波能从空气中穿透墙体传播吗](essays/声波能从空气中穿透墙体传播吗.md)
 
-- ������
+- 读论文
 
-	- [�й������ѧ���Ƽ�����ѧ��������ڿ�Ŀ¼](http://www.ccf.org.cn/sites/ccf/paiming.jsp)
+	- [中国计算机学会推荐国际学术会议和期刊目录](http://www.ccf.org.cn/sites/ccf/paiming.jsp)
 	
 
-# �ڶ�ƪ ˵��
+# 第二篇 说明
 
-�������У�δ����˵���ıʼ�ȫ��ԭ����һ��һ�ִӼ������ó����ģ�ת����ע��������<https://github.com/xiahouzuoxin>��лл��
+本工程中，未特殊说明的笔记全部原创，一字一字从键盘上敲出来的，转载请注明出处：<https://github.com/xiahouzuoxin>，谢谢！
 
-�ʼ���ȫʹ��Markdown��д�������ȷ�����[Github](https://github.com/xiahouzuoxin)��Github֧��Markdown��ʽ��Ԥ���������ֱ����Github�����ϰ����������������ʹ��Markdown��д�����Բμ��ҵıʼǡ�[ʹ��Markdown��д](essays/ʹ��Markdown��д.md)����
+笔记完全使用Markdown书写，并首先发布在[Github](https://github.com/xiahouzuoxin)，Github支持Markdown格式的预览，你可以直接在Github上无障碍的阅览。关于如何使用Markdown书写，可以参见我的笔记“[使用Markdown书写](essays/使用Markdown书写.md)”。
 
-���Download��Щ�ʼǵ����أ���ʹ�á�ʹ��Google�����+Markdown Preview Plus������ķ�ʽ���б��������
+如果Download这些笔记到本地，则使用“使用Google浏览器+Markdown Preview Plus插件”的方式进行本地浏览：
 
-1.	���Markdown��ʽ�ʼǣ�����Ҫ��������ĵ��еĹ�ʽ�������ȷ������������������Ϊ��ʽ��ʹ�õ�<http://www.forkosh.com/mathtextutorial.html>��Latex��������
+1.	浏览Markdown格式笔记：，若要正常浏览文档中的公式，则必需确保网络连接正常，因为公式都使用到<http://www.forkosh.com/mathtextutorial.html>的Latex解析器。
 
-2.	ֱ�����html��ʽ�ʼ�
+2.	直接浏览html格式笔记
 
-�������ļ�Ŀ¼�İ������£�
+工程中文件目录的安排如下：
 
-	README.md  Markdown�ļ�����Ŀ¼
+	README.md  Markdown文件索引目录
 
-	index.md   html�ļ�����Ŀ¼
+	index.md   html文件索引目录
 
-	html/      ���бʼǵ�html�ı���ʽ
+	html/      所有笔记的html文本格式
 
-	essays/    ���бʼǵ�Markdown�ı���ʽ
+	essays/    所有笔记的Markdown文本格式
 
-	codes/     ��ſɹ����صĴ���
+	codes/     存放可供下载的代码
 
-	images/    ����ĵ��е�����ͼƬ
+	images/    存放文档中的所有图片
 
-	enclosure/ ��ſɹ����صĸ�����pdf�ȣ�
+	enclosure/ 存放可供下载的附件（pdf等）
 
-�ʼ���дʹ�õı༭����everedit��һ��С�ɵĹ����༭�������ĵ���Ĭ�ϱ����ʽ��������ͼ��`����->����->����`����`�༭`ѡ���У���
+笔记书写使用的编辑器是everedit（一款小巧的国产编辑器），文档的默认编码格式设置如下图（`工具->设置->常规`，在`编辑`选项中）：
 
 ![everedit](images/everedit.png)
 
-���ʼ���ʹ��Chrome+Markdown Preview Plus�����Markdwonת��html�ķ�����
+本笔记中使用Chrome+Markdown Preview Plus插件将Markdwon转成html的方法：
 
-ʹ��Chrome��md�ļ����ڹ�������ѡ��`Markdown Preview Plus`�����`Export to html`����ת�ɵ�html��ŵ�Ŀ¼`html/`�¡��޸�index.md�����ļ���
+使用Chrome打开md文件，在工具栏中选择`Markdown Preview Plus`插件，`Export to html`，将转成的html存放到目录`html/`下。修改index.md索引文件。
 
 
-# ����ƪ ������
+# 第三篇 关于我
 
-1. ѧ��
-	- 2009�����ƣ������Ƽ���ѧ��������Ϣ����רҵ
-	- 2013��˶ʿ�������Ƽ���ѧ�����������רҵ�����ͣ�
-2. ������
-	- ǧ�����������࣬������ɳʼ����    �������ƣ�������	
-3. ��ϵ���䣨��ӭѧϰ������
+1. 学历
+	- 2009级本科：北京科技大学，电子信息工程专业
+	- 2013级硕士：北京科技大学，计算机技术专业（保送）
+2. 座右铭
+	- 千淘万漉虽辛苦，吹尽狂沙始到金。    ——（唐）刘禹锡	
+3. 联系邮箱（欢迎学习交流）
 	- <xiahouzuoxin@163.com>
 	- <g20138503@xs.ustb.edu.cn>
 

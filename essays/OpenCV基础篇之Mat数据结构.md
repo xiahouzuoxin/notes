@@ -1,7 +1,7 @@
-[<font size=4>��������Ŀ¼<font>](../README.md)
+[<font size=4>←返回主目录<font>](../README.md)
 </br></br></br>
 
-## ���򼰷���
+## 程序及分析
 
 ```c
 /*
@@ -59,7 +59,7 @@ int main(void)
 }
 ```
 
-1.	Mat��OpenCV����������ݽṹ��Mat������Matrix������д��Mat���ݽṹ��Ҫ����2���֣�Header��Pointer��Header����Ҫ��������Ĵ�С���洢��ʽ���洢��ַ����Ϣ��Pointer�д洢ָ������ֵ��ָ�롣�����ڶ�ȡͼƬ��ʱ����ǽ�ͼƬ����ΪMat���ͣ������صĹ��캯��һ��ѣ�
+1.	Mat是OpenCV最基本的数据结构，Mat即矩阵（Matrix）的缩写，Mat数据结构主要包含2部分：Header和Pointer。Header中主要包含矩阵的大小，存储方式，存储地址等信息；Pointer中存储指向像素值的指针。我们在读取图片的时候就是将图片定义为Mat类型，其重载的构造函数一大堆，
 
 	```
 	class CV_EXPORTS Mat
@@ -101,27 +101,27 @@ int main(void)
 	    }
 	```
 
-	Ҫ�˽���γ�ʼ��Mat�ṹ����Ӧ���˽����Ĺ��캯������������еĵ�һ��ʼ����ʽ���ö����
+	要了解如何初始化Mat结构，就应该了解它的构造函数，比如程序中的第一初始化方式调用额就是
 
 	```
 	Mat(int _rows, int _cols, int _type, const Scalar& _s);
 	```
 	
-	������캯����
+	这个构造函数。
 
-	IplImage*��C���Բ���OpenCV�����ݽṹ���ڵ�ʱC����OpenCV��ʱ�򣬵�λ��ͬ��Mat��OpenCVΪ���ṩ��һ���ӿڣ��ܷ����ֱ�ӽ�IplImageת��ΪMat����ʹ�ù��캯��
+	IplImage*是C语言操作OpenCV的数据结构，在当时C操纵OpenCV的时候，地位等同于Mat，OpenCV为其提供了一个接口，很方便的直接将IplImage转化为Mat，即使用构造函数
 
 	```
 	Mat(const IplImage* img, bool copyData=false);
 	```
 
-	��������еĵڶ��ַ�������ʹ�õ�������캯����
+	上面程序中的第二种方法就是使用的这个构造函数。
 
-2.	����Mat���ݸ��ƣ�ǰ��˵��Mat����ͷ������ָ�룬��ʹ��Mat�Ĺ��캯����ʼ����ʱ�򣬻Ὣͷ������ָ�븴�ƣ�ע�⣺ֻ��ָ�븴�ƣ�ָ��ָ��ĵ�ַ���Ḵ�ƣ�����Ҫ������Ҳ���ƣ������ʹ��copyTo��clone����
+2.	关于Mat数据复制：前面说过Mat包括头和数据指针，当使用Mat的构造函数初始化的时候，会将头和数据指针复制（注意：只是指针复制，指针指向的地址不会复制），若要将数据也复制，则必须使用copyTo或clone函数
 
 	![mat]
 
-3.	Mat���м������õĳ�Ա��������֮��������н���ʹ�õ���
+3.	Mat还有几个常用的成员函数，在之后的文章中将会使用到：
 
 	```
 	//! returns true iff the matrix data is continuous
@@ -129,51 +129,51 @@ int main(void)
 	// similar to CV_IS_MAT_CONT(cvmat->type)
 	bool isContinuous() const;
 	```
-	���˽�����ĺ�������ǰ�����˽���OpenCV�д洢���صķ��������£��Ҷ�ͼ����ͨ�����洢�����д洢��
+	这了解上面的函数作用前，得了解下OpenCV中存储像素的方法，如下，灰度图（单通道）存储按行列存储，
 
 	![single_channel]
 
-	��ͨ��RGB�洢��ʽ���£�ÿ�к�������ͨ����
+	三通道RGB存储方式如下，每列含有三个通道，
 	
 	![rgb_channel]
 
-	Ϊ�˼ӿ���ʵ��ٶȣ�openCV���������ڴ��н��������������ش洢��һ�У�isContinus()���������þ��������ж��Ƿ������洢��һ�С��洢��һ����ʲô�ô��أ��������е�ͷָ��p����ֻҪʹ��p++������������������ݡ�
+	为了加快访问的速度，openCV往往会在内存中将像素数据连续地存储成一行，isContinus()函数的作用就是用于判断是否连续存储成一行。存储成一行有什么好处呢？给定这行的头指针p，则只要使用p++操作就能逐个访问数据。
 
-	��˵��жϴ����һ�е�ʱ�򣬿���ͨ������ָ��++�����ױ���ͼ�����أ�
+	因此当判断存放在一行的时候，可以通过数据指针++很容易遍历图像像素：
 
 	```
-	long nRows = M.rows * M.channels();  // channels()Ҳ��Mat��һ�����õĺ��������ڻ�ȡͨ������RGB=3���Ҷ�=1��
+	long nRows = M.rows * M.channels();  // channels()也是Mat中一个常用的函数，用于获取通道数（RGB=3，灰度=1）
 	long nCols = M.cols;
-	uchar *p = M.data;  // ����ָ��
+	uchar *p = M.data;  // 数据指针
 	if(M.isContinuous())
 	{
 		nCols *= nRows;
 		for (long i=0; i < nCols; i++) {
-			*p++ = ...; // ���ظ�ֵ���ȡ����
+			*p++ = ...; // 像素赋值或读取操作
 		}		
 	}
 	```
 
-	��ע�����ϼ������õ�Mat��Ա�����ͺ�����
+	请注意以上几个常用的Mat成员遍历和函数：
 
 	```
-	M.row; // ����ͼ������
-	M.nCols;  // ����ͼ������
-	M.channels();  //����ͨ����
-	M.isContinuous(); // ����bool���ͱ�ʾ�Ƿ������洢
+	M.row; // 返回图像行数
+	M.nCols;  // 返回图像列数
+	M.channels();  //返回通道数
+	M.isContinuous(); // 返回bool类型表示是否连续存储
 	```
 	
-4.	�������Mat����Ϣ��ο���װĿ¼�µ�include/opencv2/core.hpp�ļ�
+4.	更多关于Mat的信息请参考安装目录下的include/opencv2/core.hpp文件
 
 
-## Ч��
+## 效果
 
 ![result]
 
-����Ǿ����һЩ�������������ұߵ�ͼ��ͨ��IplImage *�ṹ���룬ת��ΪMat����ʾ�����
+左边是矩阵的一些操作输出结果，右边的图是通过IplImage *结构读入，转换为Mat后显示结果。
 
 
-[mat]:../images/OpenCV����ƪ֮Mat���ݽṹ/Mat.png
-[single_channel]:../images/OpenCV����ƪ֮Mat���ݽṹ/single_channel.png
-[rgb_channel]:../images/OpenCV����ƪ֮Mat���ݽṹ/rgb_channel.png
-[result]:../images/OpenCV����ƪ֮Mat���ݽṹ/result.png
+[mat]:../images/OpenCV基础篇之Mat数据结构/Mat.png
+[single_channel]:../images/OpenCV基础篇之Mat数据结构/single_channel.png
+[rgb_channel]:../images/OpenCV基础篇之Mat数据结构/rgb_channel.png
+[result]:../images/OpenCV基础篇之Mat数据结构/result.png

@@ -1,18 +1,18 @@
-[<font size=4>��������Ŀ¼<font>](../README.md)
+[<font size=4>←返回主目录<font>](../README.md)
 </br></br></br>
 
 
-��ǰ����һ��ɵ������ʹ��
+以前我曾一度傻乎乎的使用
 
 ```Verilog
 always @ (posedge signal)
 ```
 
-�����Ĵ���ȥ���signal�������أ��ֳ��˺ܶ����⡣
+这样的代码去检测signal的上升沿，闹出了很多问题。
 
-����ʵ���ҵ�һͬѧָ�̺���Ҳ����ɵ�������������ˡ���Ȼ���㿴������Ҳ�����������ˡ�
+当受实验室的一同学指教后，再也不会傻乎乎的这样干了。当然，你看完下文也不会这样干了。
 
-��������ص�ԭ����ʹ�ø�Ƶ��ʱ�Ӷ��źŽ��в��������Ҫʵ�������ؼ�⣬ʱ��Ƶ������Ҫ���ź����Ƶ�ʵ�2�����ϣ�����Ϳ��ܳ���©��⡣������μ�������롣
+检测上升沿的原理：使用高频的时钟对信号进行采样，因此要实现上升沿检测，时钟频率至少要在信号最高频率的2倍以上，否则就可能出现漏检测。具体请参见下面代码。
 
 ```Verilog
 module edge_check(clk, rst_n, signal, pos_edge, neg_edge, both_edge);
@@ -25,7 +25,7 @@ output neg_edge;
 output both_edge;
 
 
-reg sig_r0, sig_r1;  // ״̬�Ĵ���
+reg sig_r0, sig_r1;  // 状态寄存器
 always @ (posedge clk or negedge rst_n)
 	if (!rst_n) begin 
 		sig_r0 <= 1'b0;
@@ -37,22 +37,22 @@ always @ (posedge clk or negedge rst_n)
 
 assign pos_edge = (~sig_r1) & (sig_r0);
 assign neg_edge = sig_r1 & (~sig_r0);	
-assign both_edge = sig_r1 ^ sig_r0;  // ˫���ؼ�⣬��pos_edge|neg_edge
+assign both_edge = sig_r1 ^ sig_r0;  // 双边沿检测，或pos_edge|neg_edge
 	
 endmodule 
 ```
 
-ʹ��Quartus II�ۺϲ���֮���RTL��ͼ���£�
+使用Quartus II综合布线之后的RTL视图如下：
 
 ![check_regs]
 
-��RTL��ͼ�п��Կ�������·��ͨ��һ���첽��λ��D������ʵ�ֵġ�
+从RTL视图中可以看出，电路是通过一个异步复位的D触发器实现的。
 
-ModelSim�ķ�����ͼ���£����пɿ����Ѽ����������½��أ�������һ����ʱ��������Ϊʹ����ʱ��ͬ���ļ�⡣
+ModelSim的仿真视图如下，从中可看出已检测出上升和下降沿，但存在一个延时，这是因为使用了时钟同步的检测。
 
 ![modelsim1]
 
-���������Verilog���뻹���Ի�һ��д����Ч���ϲ��̫�ࣻ
+或者上面的Verilog代码还可以换一种写法，效率上差不了太多；
 
 ```Verilog
 module edge_check(clk, rst_n, signal, pos_edge, neg_edge, both_edge);
@@ -74,17 +74,17 @@ always @ (posedge clk or negedge rst_n)
 
 assign pos_edge = (sig_fifo == 2'b01);
 assign neg_edge = (sig_fifo == 2'b10);	
-assign both_edge = sig_fifo[0] ^ sig_fifo[1];  // ˫���ؼ�⣬��pos_edge|neg_edge
+assign both_edge = sig_fifo[0] ^ sig_fifo[1];  // 双边沿检测，或pos_edge|neg_edge
 	
 endmodule 
 ```
 
-���ɵ�RTL��ͼΪ
+生成的RTL视图为
 
 ![check_fifo]
 
 
 
-[check_regs]:../images/FPGA�ı��ؼ��/check_regs.png
-[check_fifo]:../images/FPGA�ı��ؼ��/check_fifo.png
-[modelsim1]:../images/FPGA�ı��ؼ��/modelsim1.png
+[check_regs]:../images/FPGA的边沿检测/check_regs.png
+[check_fifo]:../images/FPGA的边沿检测/check_fifo.png
+[modelsim1]:../images/FPGA的边沿检测/modelsim1.png

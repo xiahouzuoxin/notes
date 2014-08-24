@@ -1,49 +1,49 @@
-[<font size=4>��������Ŀ¼<font>](../README.md)
+[<font size=4>←返回主目录<font>](../README.md)
 </br></br></br>
 
 
-## �ӻ���˵�����һ������
+## 从环境说到搭建第一个工程
 
-��ע�⣬����Ĭ�϶����Ѿ���DSP��CCS V3.3������һ�����˽��ˣ�֪��cmd�ļ������ã�֪���½����̣����벢���ӷ��������أ���������Щ��������Ϥ��������Ϥ��Щ����Ȼ�����Ҫ�в���ϵͳ�Ļ�����������񡢵��ȡ��жϣ�
+请注意，此文默认读者已经对DSP及CCS V3.3环境有一定的了解了，知道cmd文件的配置，知道新建工程，编译并连接仿真器下载！如果你对这些还都不熟悉，请先熟悉这些！当然，最好要有操作系统的基本概念——任务、调度、中断！
 
-1.	��һ�����⣺DSP/BIOS���ðɣ�����һ������д����ʲô��
+1.	第一个问题：DSP/BIOS（好吧，我们一般这样写）是什么？
 
-	��TI��˾ר��ΪDSP������Ƕ��ʽʵʱ����ϵͳ����Ȼ��TI��˾Ϊ�Լ���DSP�����ġ����ٷ��ģ���Ȼ�����Ǹܸܵ��ˣ���Ȼ���һ������ţ����Ҳ�ǵ���;˵��û��ʵ����ᣩ����Ȼ˵��ʵʱ����ϵͳ���ǻ�����ЩǶ��ʽʵʱ����ϵͳ�أ�Linux���𡪡����ǣ�VxWorks�����ǣ�Ŷ������һ��С�Ŀ�Դϵͳ����uCOS IIҲ�ǡ�
+	是TI公司专门为DSP开发的嵌入式实时操作系统，既然是TI公司为自己的DSP开发的——官方的，当然性能是杠杠的了（当然，我还在入门，这点也是道听途说，没有实际体会）。既然说到实时操作系统，那还有哪些嵌入式实时操作系统呢？Linux是吗——不是，VxWorks——是，哦，还有一个小的开源系统——uCOS II也是。
 
-2.	�������Ҫʹ��DSP/BIOS����Ҫ��װʲô�����أ�
+2.	问题二：要使用DSP/BIOS，需要安装什么环境呢？
 
-	����ΪCCS v3.3��Ĭ�ϾͰ�װ��DSP/BIOS���汾ΪV5.31.2������ͨ��`Help->About...`�˵��鿴�汾������Ȼ�������Ҫ�����汾������ͬʱ��װ����汾�������Ե�TI�������أ����ӣ�
+	本文为CCS v3.3，默认就安装上DSP/BIOS，版本为V5.31.2（可以通过`Help->About...`菜单查看版本）。当然，如果需要其它版本（可以同时安装多个版本），可以到TI官网下载，链接：
 	
 	<http://software-dl.ti.com/dsps/dsps_public_sw/sdo_sb/targetcontent/bios/dspbios/index.html>
 
-	��ע�⣺DSP�������ͺš�CCS�汾��DSP/BIOS�汾֮����ڼ����ԣ���ע��ѡ��
+	请注意：DSP处理器型号、CCS版本、DSP/BIOS版本之间存在兼容性，请注意选择！
 
-	���غ�װ��CCS����Ŀ¼��ͨ��`Help->About...`�е�Managerѡ��ʹ�õ�BIOS�汾��
+	下载后安装到CCS所在目录，通过`Help->About...`中的Manager选择使用的BIOS版本！
 
 	![1]
 
-	����ʹ�õ���CCS V3.3Ĭ�ϵ�DSP/BIOS�汾����V5.31.2��������˵�������ĵ�����������TI��CCS 3.3��������ģʽ�£����滷���������£�ʹ��C6713���������棩��
+	本文使用的是CCS V3.3默认的DSP/BIOS版本，即V5.31.2。无特殊说明，本文的例子运行在TI的CCS 3.3软件仿真模式下，仿真环境配置如下（使用C6713处理器仿真）：
 	
 	![2]
 
-3.	����������ν�����һ��BIOS���̣�
+3.	问题三：如何建立第一个BIOS工程？
 
-	�Ƚ���һ����ͨ���̣�`Project->New...`�����£�
+	先建立一个普通工程，`Project->New...`，如下：
 
 	![3]
 
-	`File->New->DSP/BIOS Configuration...`�½�DSP/BIOS�����ļ���
+	`File->New->DSP/BIOS Configuration...`新建DSP/BIOS配置文件，
 
 	![4]
 	![5]
 
-	����һ�£������ļ��ĺ�׺Ϊ*.tcf.
+	保存一下，配置文件的后缀为*.tcf.
 
-	��__�����ļ����������ļ��Զ����ɵ�cmd�ļ�__���ӵ����̣�
+	将__配置文件和由配置文件自动生成的cmd文件__添加到工程，
 
 	![6]
 
-	�½�һ��main.c�ļ���__��main.c���ӵ�����__�������������Ȼ�󻹵��������⣩��д����򵥵Ĵ���ɣ�
+	新建一个main.c文件，__把main.c添加到工程__（总是忘记这个然后还到处找问题），写个最简单的代码吧，
 
 	```
 	int main(void)
@@ -53,32 +53,32 @@
 
 	```
 
-	����һ�¹��̣���ʱ���ִ�����ʾ��
+	编译一下工程，此时出现错误提示：
 
 	```
 	js: "./bios_first.tcf", line 11: Heaps are enabled, but the segment for DSP/BIOS Objects (MEM.BIOSOBJSEG) is not set correctly. Please create a heap in one of your data segments and set MEM.BIOSOBJSEG to it.
 	```
 
-	û��ϵ������һС�ڽ�������ôȥ���ô���
+	没关系，在下一小节将看到怎么去掉该错误！
 
-## DSP/BIOS�����÷���
+## DSP/BIOS的配置方法
 
-1.	ϵͳ����
+1.	系统配置
 	
 	![7]
 
-	��Global Setting���Ҽ����ԣ�����DSPĿ���ʱ�ӣ�CLKOUTʱ���Լ���С��ģʽ��
+	在Global Setting上右键属性，设置DSP目标板时钟，CLKOUT时钟以及大小端模式。
 	
-	����Call User Init Functionѡ�Ĭ���Ǵ򿪵ģ����������ʵ��Ŀ��壬������ڴ˴������û���ʼ��PLL��EMIF�ȵĴ���ĺ������й�PLL��ʼ�����Ĵ���ο�����C6713�Ĺ��̣���������������ģʽ�£���ȥ����ѡ����������ʱ���ⲻ�ٴ���
+	关于Call User Init Function选项，默认是打开的，如果连接有实体目标板，则最好在此处设置用户初始化PLL及EMIF等的代码的函数（有关PLL初始化话的代码参考其它C6713的工程）。否则软件仿真模式下，则去掉该选项能在运行时避免不少错误。
 
-	����������SDRAM���Ѵ�С��
+	接下来配置SDRAM及堆大小，
 
 	![8]
 	![9]
 
-	���ڿ������±���һ�¹����ˣ���ϲ��ϲ������ɹ���֮ǰ��ʾ�ĶѴ�������������ģ�
+	现在可以重新编译一下工程了，恭喜恭喜，编译成功！之前提示的堆错误就在这里解决的！
 
-	���ڣ�����Ҫ���������SDRAM�Ĵ洢�ռ���л��֣�������ǰûʹ�ò���ϵͳʱҪдcmd�ļ�һ��������Ļ��ֽ��Զ����ɻ��޸�cmd�ļ�����ʹ��DSP/BIOS�ܷ��㣬��MEM���Ҽ�`Insert MEM`�Ϳɲ�������ˣ��ⲿ�ֹ��ܶ�Ӧ��cmd�Ͼ���������cmd��MEMORY�Ĺ��ܣ�
+	现在，就需要根据需求对SDRAM的存储空间进行划分（就是以前没使用操作系统时要写cmd文件一样，这里的划分将自动生成或修改cmd文件）。使用DSP/BIOS很方便，在MEM上右键`Insert MEM`就可插入分区了！这部分功能对应到cmd上就是类似于cmd中MEMORY的功能，
 
 	```
 	MEMORY
@@ -96,18 +96,18 @@
 	}
 	```
 
-2.	LOG������
+2.	LOG的配置
 
-	LOG����˵���˾�������ʵ��printf�ģ�STS���������������ļ���ֵ��
+	LOG功能说白了就是用来实现printf的，STS用来捕获任意对象的计数值。
 
-	��LOG���Ҽ�`Insert LOG`������һ��trace�Ĵ�ӡ����
+	在LOG上右键`Insert LOG`，插入一个trace的打印对象，
 
 	![10]
 
-	��main.c�б�д���´��룬
+	在main.c中编写如下代码，
 
 	```
-	#include "bios_firstcfg.h" // DSP/BIOS�Զ����ɣ������ڹ������ҵ��������˶�trace�������Լ����ͷ�ļ��İ���
+	#include "bios_firstcfg.h" // DSP/BIOS自动生成，可以在工程下找到，包含了对trace的声明以及相关头文件的包含
 
 	int main(void)
 	{
@@ -118,11 +118,11 @@
 	} 
 	```
 
-	����ͨ����װ�س��򣬴򿪲˵�`DSP/BIOS->Message Log`�����г���Ч����ͼ��
+	编译通过后装载程序，打开菜单`DSP/BIOS->Message Log`，运行程序效果如图，
 
 	![11]
 
-	ע�⣬����ĳ�������ͨ��LOG_printf��������printf��ӡ��Ϣ�ģ��������й�LOG�ĺ������У�
+	注意，上面的程序中是通过LOG_printf函数而非printf打印消息的，其它的有关LOG的函数还有，
 
 	```
 	LOG_disable. Disable the system log.
@@ -136,34 +136,34 @@
 	LOG_reset. Reset the system log.
 	```
 
-	���ˣ���������ѧϰDSP/BIOS�����ĵ�1��ģ�飨Module������LOGģ�顣
+	好了，这是我们学习DSP/BIOS遇到的第1个模块（Module）——LOG模块。
 
-	��ʵDSP/BIOS�л��кܶ�ģ�飬�ο�TI�ĵ���SPRU430S��TMS320C6000 DSP/BIOS 5.x Application Programming Interface (API) Reference Guide��
+	其实DSP/BIOS中还有很多模块，参考TI文档《SPRU430S：TMS320C6000 DSP/BIOS 5.x Application Programming Interface (API) Reference Guide》
 
 	![12]
 
-3.	����ģ�������
+3.	任务模块的配置
 
-	����ϵͳ������ľ������������������������½����������Ҽ���������������������ͼ��
+	操作系统最基本的就是任务，我们先来看看任务！新建两个任务，右键属性设置任务函数名，如图，
 
 	![13]
 
-	��TSK_task1����ͬ�����ã���ע�⣬���е�Task functionҪ��C����ǰ���»��ߣ�
+	对TSK_task1做相同的配置，请注意，其中的Task function要在C函数前加下划线！
 
-	��main������������������Ĵ��룬
+	在main函数中添加两个任务的代码，
 
 	```
-	void func_task0(void)  // ��Ӧ�ղŵ�_func_task0
+	void func_task0(void)  // 对应刚才的_func_task0
 	{
 		static Uint16 TSK0 = 0;
 
-		while (1) {   // ����һ�㶼����ѭ����ִֻ��һ�ε��������岻��
+		while (1) {   // 任务一般都有死循环，只执行一次的任务意义不大
 	        LOG_printf(&trace, "TSK0=%u", TSK0++);
 			TSK_yield();
 		}		
 	}
 
-	void func_task1(void)  // ��Ӧ�ղŵ�_func_task1
+	void func_task1(void)  // 对应刚才的_func_task1
 	{
 		static Uint16 TSK1 = 0;
 
@@ -174,47 +174,47 @@
 	}
 	```
 
-	���±���װ�أ����к���Message Log�����¿�����Ч�����£�
+	重新编译装载，运行后在Message Log窗口下看到的效果如下：
 
 	![14]
 
-	����ϵͳ����������ѭ���Ľṹ��Ҫʵ��������ȱ���Ҫ��ÿ�������п��е�ʱ�䣬��������������е�TSK_yield()ע�͵������±���װ�����У���ʱ�����һֱ��func_task0��ִ�С�
+	操作系统的任务都是死循环的结构，要实现任务调度必须要让每个任务有空闲的时间，不妨把上面代码中的TSK_yield()注释掉，重新编译装载运行，此时程序会一直在func_task0中执行。
 
-	TSK_yield����������þ����������ͬ���ȼ�����������ȵ�ͬ���ȼ�����������ִ�У�
+	TSK_yield在这里的作用就是如果有相同优先级的任务，则调度到同优先级的其它任务执行！
 
-	TSKģ��������кܶ࣬�������ú������⣬�������������ȼ�����������ȣ����Ⱥ���Ҳ�кܶ࣬��һ�����õ���ʹ��˯�ߵ��Ⱥ�������TSK_sleep����ʹ�����£�
+	TSK模块的属性有很多，除了设置函数名外，还可以设置优先级、输入参数等！调度函数也有很多，另一个常用的是使用睡眠调度函数——TSK_sleep，其使用如下：
 
 	```
 	void func_task(void)
 	{
 	    while(1) {
-	    	// ��������
+	    	// 处理代码
 
-	    	TSK_sleep(100);  // 100��ʾϵͳʱ�Ӽ���
+	    	TSK_sleep(100);  // 100表示系统时钟计数
 	    }
 	}
 	```
 
-4.	���ж�SWIģ�������
+4.	软中断SWI模块的配置
 
-	�жϾ��б��κ����񶼸ߵ����ȼ���������Ӳ���жϣ�HWI���ֱ������жϣ�SWI�����ȼ����ߡ�
+	中断具有比任何任务都高的优先级，而其中硬件中断（HWI）又比软件中断（SWI）优先级更高。
 
 	![15]
 
-	���ж����䲻���ź��е���Ϣ���䣬���������ƣ������ֵΪ���ж�����ĸ�λֵ��
+	软中断邮箱不是信号中的消息邮箱，但机制类似，上面的值为软中断邮箱的复位值！
 
-	һ�����ж������ֵ�ﵽ0ʱ�����������жϣ�������һ��ִ����ɣ����Ǳ�Ӳ���жϴ�ϣ���ִ��������ж�����ָ�����λֵ��������һ��ִ����ɣ����������ͬ�����ж��о���������ѭ���������һֱִ�����жϣ�����ͱ�ִ���ˣ���
+	一旦软中断邮箱的值达到0时，触发软件中断，触发后一次执行完成（除非被硬件中断打断），执行完后软中断邮箱恢复到复位值！由于是一次执行完成，因此与任务不同，软中断中绝不会有死循环（否则就一直执行软中断，任务就别执行了）！
 
-	������������жϺ����е����ݣ�task1ÿִ��2�Σ�����һ�����жϣ����жϼ���ֵ+1��
+	接下来完成软中断函数中的内容：task1每执行2次，触发一次软中断，软中断计数值+1。
 
 	```
-	void func_task1(void)  // ��Ӧ�ղŵ�_func_task1
+	void func_task1(void)  // 对应刚才的_func_task1
 	{
 		static Uint16 TSK1 = 0;
 
 		while (1) {
 	        LOG_printf(&trace, "TSK1=%u", TSK1++);
-			SWI_dec(&ADC_swi);  // ���ж��������ֵ�ݼ�
+			SWI_dec(&ADC_swi);  // 软中断邮箱计数值递减
 			TSK_yield();
 		}		
 	}
@@ -225,42 +225,42 @@
 
 	    LOG_printf(&trace, "SWI_ADC=%u", adc_cnt++);
 
-		// һ��ִ���������ֵ�ָ�Ϊ��ʼֵ2
+		// 一次执行完后，邮箱值恢复为初始值2
 	}
 	```
 
 	![16]
 
-	SWI_dec()���������޸����ж�����ļ���ֵ�����������ж���������ĺ�����������
+	SWI_dec()函数用于修改软中断邮箱的计数值，其它对软中断邮箱操作的函数还包括：
 
 	```
-	void SWI_or(swi, mask);  // ����ֵ��mask���л��������ֵΪ0ʱ�������ж�
+	void SWI_or(swi, mask);  // 邮箱值与mask进行或操作，当值为0时触发软中断
 	SWI_Handle swi; /* SWI object handle*/
 	Uns mask; /* value to be ORed */
 
-	void SWI_andn(swi, mask);  // ����ֵ��mask������ǲ�������ֵΪ0ʱ�������ж�
+	void SWI_andn(swi, mask);  // 邮箱值与mask进行与非操作，当值为0时触发软中断
 	SWI_Handle swi; /* SWI object handle*/
 	Uns mask /* inverse value to be ANDed */
 
-	void SWI_inc(swi);  // Increment SWI��s mailbox value and post the SWI
+	void SWI_inc(swi);  // Increment SWI’s mailbox value and post the SWI
 	SWI_Handle swi; /* SWI object handle*/
 
-	void SWI_dec(swi);  // Decrement SWI��s mailbox value and post if mailbox becomes 0
+	void SWI_dec(swi);  // Decrement SWI’s mailbox value and post if mailbox becomes 0
 	SWI_Handle swi; /* SWI object handle*/
 	```
 
-	6000ϵ�е�DSP���ж�����Ϊ32λ��2000ϵ��Ϊ16λ�������Ǵ�����ï��DSP/BIOS����PPT�н�ȡ�����ж����亯���ĶԱ�ͼ������ʱ����ֵ�ı仯����ͼ��
+	6000系列的DSP软中断邮箱为32位，2000系列为16位。下面是从刘鑫茂的DSP/BIOS讲座PPT中截取的软中断邮箱函数的对比图及操作时邮箱值的变化过程图：
 
 	![17]
 	![18]
 
-5.	�ź���SEMģ�������
+5.	信号量SEM模块的配置
 
-	�ź����ֻ����ź����ͼ����ź����������ź���ֻ������״̬�������ڲ����ã������ź���ͨ������һ������ֵ���������ֵ����0��������������ź���ʱ����������
+	信号量分互斥信号量和计数信号量，互斥信号量只有两种状态：可用于不可用，计数信号量通过设置一个计数值，如果计数值大于0，则任务请求该信号量时不被阻塞。
 
 	![19]
 
-	��д��������������ִ��2�ν�һ�����жϣ����ｫ�ź�����ʼֵ��Ϊ1��task0��ʹ��SEM_pend�ȴ��ź�����task0ִ��1�ξͽ���ȴ�״̬���ٹ�һ�Σ��������жϣ����ж���ʹ��SEM_post�����ź������ź���ֵ��1��task0�յ��ź�����ӵȴ�״̬���أ�����ִ�У�
+	编写程序：现在是任务执行2次进一次软中断，这里将信号量初始值设为1，task0中使用SEM_pend等待信号量，task0执行1次就进入等待状态，再过一次，进入软中断，软中断中使用SEM_post发布信号量，信号量值增1，task0收到信号量后从等待状态返回，继续执行！
 
 	![20]
 
@@ -269,97 +269,97 @@
 	SEM_Handle sem; /* semaphore object handle */
 	Uns timeout; /* return after this many system clock ticks */
 
-	����ֵ��Bool status; /* TRUE if successful, FALSE if timeout */
+	返回值：Bool status; /* TRUE if successful, FALSE if timeout */
 	```
 
-	���timeout=0��ʾ���ȴ�����ִ�У�SYS_FOREVER��ʾһֱ�ȴ�ֱ���ź�����ֵ����0��SEM_post()������Լ򵥣���׸����
+	如果timeout=0表示不等待继续执行，SYS_FOREVER表示一直等待直到信号量的值大于0。SEM_post()函数相对简单，不赘述。
 
-6.	�����������ʵʱ���ݽ���ģ������
+6.	输入输出——实时数据交换模块配置
 
-	��֪ע�⵽û�У���������ģʽ�£�ʹ��Loadװ�س���ʱ�ܻᵯ�����µľ����
+	不知注意到没有，软件仿真模式下，使用Load装载程序时总会弹出如下的警告框，
 
 	![22]
 
-	�����RTDXģ��û�����õ����⣬�����������RTDXģ�����Ҽ����ԣ��������£�
+	这就是RTDX模块没有配置的问题，在输入输出的RTDX模块上右键属性，配置如下，
 
 	![23]
 
-	���úú����±��룬Loadʱ�Ͳ����ٵ����Ǿ�����ˣ�
+	配置好后，重新编译，Load时就不会再弹出那警告框了！
 
 
-�ܽ�һ�£���ʵ���������Ŀ�����һ����DSP/BIOS��ģ�黹�кܶ࣬����ֻ�����˼����Ƚϳ��õ�˵��˵���͹��ź�ͬ����һ���ͻ�����Ϣ���䡢��Ϣ���еȣ���ν��һ��������Щģ��Ĺ��ܼ��������壬�������˽�������DSP/BIOS֪ʶ�������Դ�������ֲ����ҵ���
+总结一下：其实，就让上文看到的一样，DSP/BIOS的模块还有很多，上面只是挑了几个比较常用的说了说，就光信号同步那一大块就还有消息邮箱、消息队列等，所谓举一反三，这些模块的功能及函数定义，或者想了解更多关于DSP/BIOS知识，都可以从下面的手册上找到：
 
 1. SPRU430S: TMS320C6000 DSP/BIOS 5.x Application Programming Interface (API) Reference Guide
 2. SPRU423F: TMS320 DSP BIOS User Guide
 3. SPRU616A: DSP-BIOS Driver Developer's Guide
 
-����֮�⣬Ҫ������ʹ��DSP/BIOS���Ͼ�����һ������ϵͳ����Ϥ����ϵͳ�Ļ����������Ҫ�����ѧϰ��ʹ�ù�uCOS ii��Linux��ЩȥѧϰDSP/BIOS��С��һ���ˣ�
+除此之外，要想灵活的使用DSP/BIOS，毕竟它是一个操作系统，熟悉操作系统的基本概念很重要，如果学习或使用过uCOS ii或Linux这些去学习DSP/BIOS就小菜一碟了！
 
-## DSP/BIOS���̵�����˳��
+## DSP/BIOS工程的启动顺序
 
-1. ��ʼ��DSP��DSP/BIOS�����C/C++�������c_int00��ʼ���С�����C6000ƽ̨����c_int00��ʼ����ϵͳջָ�루B15����ȫ��ҳָ�루B14�����ֱ������ڶ�ջ�ϵ�ĩβ��.bss�ϵĿ�ʼ�����ƼĴ���AMR��IER��CSR�ȱ���ʼ����
+1. 初始化DSP：DSP/BIOS程序从C/C++环境入口c_int00开始运行。对于C6000平台，在c_int00开始处，系统栈指针（B15）和全局页指针（B14）被分别设置在堆栈断的末尾和.bss断的开始。控制寄存器AMR、IER、CSR等被初始化；
 
-2. ��ʼ��.bss�Σ�����ջ��������ɺ󣬳�ʼ�����񱻵��ã�����.cinit�ļ�¼��.bss�ϵı������г�ʼ����
+2. 初始化.bss段：当堆栈被设置完成后，初始化任务被调用，利用.cinit的记录对.bss断的变量进行初始化；
 
-3. ����BIOS_init��ʼ���õ��ĸ���ģ�飺BIOS_init����MOD_init�������õ��ĸ���ģ����г�ʼ��������HWI_init��HST_init��IDL_init�ȣ�
+3. 调用BIOS_init初始化用到的各个模块：BIOS_init调用MOD_init对配置用到的各个模块进行初始化，包括HWI_init、HST_init、IDL_init等；
 
-4. ����.pinit����.pinit������һЩָ���ʼ��������ָ�룬��C++����ȫ�ֶ�����Ĵ���Ҳ�ڴ�ʱ��ɣ�
+4. 处理.pinit表：.pinit表包含一些指向初始化函数的指针，对C++程序，全局对象类的创建也在此时完成；
 
-5. �����û������main�������û�main����������C/C++�������߻�����Ժ��������ڻ�ຯ����ʹ��_main�ĺ����������ڴ�ʱ��Ӳ���������жϻ�û�б�ʹ�ܣ��������û��������ĳ�ʼ������Ҫע�⣬����ʹ�ܵ������ж�����λ�����ǲ��ܵ�������HWI_enable�Ľӿ���ʹ��ȫ���жϣ�
+5. 调用用户程序的main函数：用户main函数可以是C/C++函数或者汇编语言函数，对于汇编函数，使用_main的函数名。由于此时的硬件、软件中断还没有被使能，所以在用户主函数的初始化中需要注意，可以使能单独的中断屏蔽位，但是不能调用类似HWI_enable的接口来使能全局中断；
 
-6. ����BIOS_start����DSP/BIOS��BIOS_start���û�main�����˳��󱻵��ã�������ʹ��ʹ�õĸ���ģ�鲢����MOD_startup����ÿ��ģ�顣����CLK_startup��PIP_startup��SWI_startup��HWI_startup�ȡ���TSK����ģ���������б�ʹ��ʱ��TSK_startup��ִ�У�����BIOS_start������������أ�
+6. 调用BIOS_start启动DSP/BIOS：BIOS_start在用户main函数退出后被调用，它负责使能使用的各个模块并调用MOD_startup启动每个模块。包括CLK_startup、PIP_startup、SWI_startup、HWI_startup等。当TSK管理模块在配置中被使用时，TSK_startup被执行，并且BIOS_start将不会结束返回；
 
-7. ִ��idleѭ���������ַ�ʽ����idleѭ������TSK����ģ��ʹ��ʱ��������������е�TSK_idle�������IDL_loop�������������ʱ����idleѭ������TSKģ��δ��ʹ��ʱ��BIOS_start���ý����أ���ִ��IDL_loop�������õ�idleѭ������ʱӲ���������жϿ�����ռidleѭ���õ�ִ�С�����idleѭ���й�����������ͨ�ţ����������Ŀ���֮������ݽ������Խ�����
+7. 执行idle循环：有两种方式进入idle循环。当TSK管理模块使能时，任务调度器运行的TSK_idle任务调用IDL_loop在其它任务空闲时进入idle循环；当TSK模块未被使用时，BIOS_start调用将返回，并执行IDL_loop进入永久的idle循环，此时硬件和软件中断可以抢占idle循环得到执行。由于idle循环中管理和主机的通信，因此主机和目标机之间的数据交互可以进行了
 
-�������������������ǿ��Է���һ��Ϊʲô�ڲ���ϵͳ��main��������Ҫʹ��while(1)��ѭ������Ϊ��DSP/BIOS�У�main����ֻ�Ǳ�����ϵͳ�����������г�ʼ���ģ�ִ����main�����������������ϵͳ����Ҳ������һ����ʾ�������������һ�������мȿ���ʹ�ò���ϵͳ���ֿ�����ĳЩ����¼򵥵Ľ��ò���ϵͳ��ֻ�趨��һ���꿪��main������while(1)ѭ���Ϳ����ˣ�
+从上述的启动过程我们可以分析一下为什么在操作系统中main函数不需要使用while(1)死循环：因为在DSP/BIOS中，main函数只是被操作系统调用用来进行初始化的，执行完main函数后才能启动操作系统。这也给了我一个启示——如果我想在一个工程中既可以使用操作系统，又可以在某些情况下简单的禁用操作系统，只需定义一个宏开关main函数中while(1)循环就可以了！
 
 
-## DSP/BIOS��DSP��Ŀ�еĵ�λ
+## DSP/BIOS在DSP项目中的地位
 
-��ͼ��TI��˾������DSP�����ܹ���
+下图是TI公司倡导的DSP软件架构，
 
 ![21]
 
-��ͼ��֪��
+由图可知，
 
-1. ��CSL����DSPоƬ��������������ⲿ��������������Ա��ײ�Ĵ��룬DSP/BIOS����ײ�ĵ��ȣ�����Ӧ�ò�Ĺ���������Driverģ�飬����Ϊ�������ķ�DSPоƬ������������USB/PCI������ӿ�
+1. 由CSL负责DSP芯片级外设的驱动，这部分是软件开发人员最底层的代码，DSP/BIOS负责底层的调度，方便应用层的管理，还有Driver模块，我认为是其它的非DSP芯片级的驱动，如USB/PCI等外设接口
 
-2. �м����Ҫ���㷨��صĶ�����TI�ṩ��һ��DSP�㷨�ı�׼��ֻҪ���ñ�׼��д���㷨�ܺ����׵�ʵ�ֲ�ͬDSP֮�����ֲ
+2. 中间层主要是算法相关的东西，TI提供了一个DSP算法的标准，只要按该标准编写的算法能很容易的实现不同DSP之间的移植
 
-3. ���ϲ����Ӧ�ó�����
+3. 再上层就是应用程序了
 
-�����TI��DSP�߶˴����ϵ��ε����������ܹ���
+这就是TI的DSP高端大气上档次的三层软件架构！
 
-## �ο�����
+## 参考资料
 
 1. SPRU430S: TMS320C6000 DSP/BIOS 5.x Application Programming Interface (API) Reference Guide
 2. SPRU423F: TMS320 DSP BIOS User Guide
 3. SPRU616A: DSP-BIOS Driver Developer's Guide
-4. ����ï��DSP/BIOS����
+4. 刘鑫茂：DSP/BIOS讲座
 	
 
 
-[1]:../images/DSP-BIOSʹ������/1.png
-[2]:../images/DSP-BIOSʹ������/2.png
-[3]:../images/DSP-BIOSʹ������/3.png
-[4]:../images/DSP-BIOSʹ������/4.png
-[5]:../images/DSP-BIOSʹ������/5.png
-[6]:../images/DSP-BIOSʹ������/6.png
-[7]:../images/DSP-BIOSʹ������/7.png
-[8]:../images/DSP-BIOSʹ������/8.png
-[9]:../images/DSP-BIOSʹ������/9.png
-[10]:../images/DSP-BIOSʹ������/10.png
-[11]:../images/DSP-BIOSʹ������/11.png
-[12]:../images/DSP-BIOSʹ������/12.png
-[13]:../images/DSP-BIOSʹ������/13.png
-[14]:../images/DSP-BIOSʹ������/14.png
-[15]:../images/DSP-BIOSʹ������/15.png
-[16]:../images/DSP-BIOSʹ������/16.png
-[17]:../images/DSP-BIOSʹ������/17.png
-[18]:../images/DSP-BIOSʹ������/18.png
-[19]:../images/DSP-BIOSʹ������/19.png
-[20]:../images/DSP-BIOSʹ������/20.png
-[21]:../images/DSP-BIOSʹ������/21.png
-[22]:../images/DSP-BIOSʹ������/22.png
-[23]:../images/DSP-BIOSʹ������/23.png
+[1]:../images/DSP-BIOS使用入门/1.png
+[2]:../images/DSP-BIOS使用入门/2.png
+[3]:../images/DSP-BIOS使用入门/3.png
+[4]:../images/DSP-BIOS使用入门/4.png
+[5]:../images/DSP-BIOS使用入门/5.png
+[6]:../images/DSP-BIOS使用入门/6.png
+[7]:../images/DSP-BIOS使用入门/7.png
+[8]:../images/DSP-BIOS使用入门/8.png
+[9]:../images/DSP-BIOS使用入门/9.png
+[10]:../images/DSP-BIOS使用入门/10.png
+[11]:../images/DSP-BIOS使用入门/11.png
+[12]:../images/DSP-BIOS使用入门/12.png
+[13]:../images/DSP-BIOS使用入门/13.png
+[14]:../images/DSP-BIOS使用入门/14.png
+[15]:../images/DSP-BIOS使用入门/15.png
+[16]:../images/DSP-BIOS使用入门/16.png
+[17]:../images/DSP-BIOS使用入门/17.png
+[18]:../images/DSP-BIOS使用入门/18.png
+[19]:../images/DSP-BIOS使用入门/19.png
+[20]:../images/DSP-BIOS使用入门/20.png
+[21]:../images/DSP-BIOS使用入门/21.png
+[22]:../images/DSP-BIOS使用入门/22.png
+[23]:../images/DSP-BIOS使用入门/23.png
 

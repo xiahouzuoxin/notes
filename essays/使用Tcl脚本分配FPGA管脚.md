@@ -1,25 +1,25 @@
-[<font size=4>¡û·µ»ØÖ÷Ä¿Â¼<font>](../README.md)
+[<font size=4>â†è¿”å›ä¸»ç›®å½•<font>](../README.md)
 </br></br></br>
 
-## ×Ô¶¯Éú³ÉTclÎÄ¼ş
+## è‡ªåŠ¨ç”ŸæˆTclæ–‡ä»¶
 
 ```
 Project -> Generate Tcl File for Project...
 ```
 
-µ¯³öÈçÏÂ¶Ô»°¿ò£¬ÉèÖÃ½Å±¾Â·¾¶¡£
+å¼¹å‡ºå¦‚ä¸‹å¯¹è¯æ¡†ï¼Œè®¾ç½®è„šæœ¬è·¯å¾„ã€‚
 
 ![][Create-Tcl]
 
-## ±à¼­Òı½Å
+## ç¼–è¾‘å¼•è„š
 
-Ê¹ÓÃ`set_location_assignment`·ÖÅä¹Ü½ÅÈçÏÂ£º
+ä½¿ç”¨`set_location_assignment`åˆ†é…ç®¡è„šå¦‚ä¸‹ï¼š
 
 ![][Tcl]
 
-µÚÒ»´ÎÅäÖÆÊ±£¬Ã»ÓĞ`set_location_assignment`Óï¾ä£¬×ÔÒÑÔÚ`set_global_assignment`Óï¾äÏÂÒ»ĞĞÌí¼Ó¼´¿É¡£
+ç¬¬ä¸€æ¬¡é…åˆ¶æ—¶ï¼Œæ²¡æœ‰`set_location_assignment`è¯­å¥ï¼Œè‡ªå·²åœ¨`set_global_assignment`è¯­å¥ä¸‹ä¸€è¡Œæ·»åŠ å³å¯ã€‚
 
-## Ö´ĞĞTcl½Å±¾
+## æ‰§è¡ŒTclè„šæœ¬
 
 ```
 Tools -> Tcl Scripts...
@@ -27,13 +27,13 @@ Tools -> Tcl Scripts...
 
 ![][Run-Tcl]
 
-Ñ¡ÖĞ¸ÕĞÂ½¨µÄTclÎÄ¼ş£¬µã»÷RunÔËĞĞ¼´¿É£¡
+é€‰ä¸­åˆšæ–°å»ºçš„Tclæ–‡ä»¶ï¼Œç‚¹å‡»Runè¿è¡Œå³å¯ï¼
 
-## ´ğÒÉ½â»ó
+## ç­”ç–‘è§£æƒ‘
 
-1\. ÎªÊ²Ã´TclÖĞÃ»ÓĞÎªÃ¿¸öÒı½Å·ÖÅäÊäÈëÊä³öÊôĞÔ£¬Ò²ÄÜ±£Ö¤Òı½ÅÊôĞÔÕıÈ·£¿
+1\. ä¸ºä»€ä¹ˆTclä¸­æ²¡æœ‰ä¸ºæ¯ä¸ªå¼•è„šåˆ†é…è¾“å…¥è¾“å‡ºå±æ€§ï¼Œä¹Ÿèƒ½ä¿è¯å¼•è„šå±æ€§æ­£ç¡®ï¼Ÿ
 
-ÒòÎªÒı½ÅÊäÈëÊä³öÊôĞÔ¶¼ÒÑ¾­ÔÚVerilogÓïÑÔµÄmoduleÖĞ»òÔ­ÀíÍ¼ÖĞÉèÖÃÁË£¬ÈçÏÂÍ¼£¬
+å› ä¸ºå¼•è„šè¾“å…¥è¾“å‡ºå±æ€§éƒ½å·²ç»åœ¨Verilogè¯­è¨€çš„moduleä¸­æˆ–åŸç†å›¾ä¸­è®¾ç½®äº†ï¼Œå¦‚ä¸‹å›¾ï¼Œ
 
 ![Pin2]
 ![Pin1]
@@ -41,9 +41,9 @@ Tools -> Tcl Scripts...
 
 
 
-[Create-Tcl]:../images/Ê¹ÓÃTcl½Å±¾·ÖÅäFPGA¹Ü½Å/Create-Tcl.png
-[Tcl]:../images/Ê¹ÓÃTcl½Å±¾·ÖÅäFPGA¹Ü½Å/Tcl.png
-[Run-Tcl]:../images/Ê¹ÓÃTcl½Å±¾·ÖÅäFPGA¹Ü½Å/Tcl-Run.jpg
-[Pin1]:../images/Ê¹ÓÃTcl½Å±¾·ÖÅäFPGA¹Ü½Å/Pin1.png
-[Pin2]:../images/Ê¹ÓÃTcl½Å±¾·ÖÅäFPGA¹Ü½Å/Pin2.png
+[Create-Tcl]:../images/ä½¿ç”¨Tclè„šæœ¬åˆ†é…FPGAç®¡è„š/Create-Tcl.png
+[Tcl]:../images/ä½¿ç”¨Tclè„šæœ¬åˆ†é…FPGAç®¡è„š/Tcl.png
+[Run-Tcl]:../images/ä½¿ç”¨Tclè„šæœ¬åˆ†é…FPGAç®¡è„š/Tcl-Run.jpg
+[Pin1]:../images/ä½¿ç”¨Tclè„šæœ¬åˆ†é…FPGAç®¡è„š/Pin1.png
+[Pin2]:../images/ä½¿ç”¨Tclè„šæœ¬åˆ†é…FPGAç®¡è„š/Pin2.png
 

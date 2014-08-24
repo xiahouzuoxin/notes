@@ -1,75 +1,75 @@
-[<font size=4>��������Ŀ¼<font>](../README.md)
+[<font size=4>←返回主目录<font>](../README.md)
 </br></br></br>
 
-# 1 С٩GCC
+# 1 小侃GCC
 
-����ʽʹ��gcc֮ǰ����������٩٩gcc��ɶ�������
+在正式使用gcc之前，我们先来侃侃gcc是啥玩意儿？
 
-### ��ʷ
+### 历史
 
-���ڵ�GCC��GNU Compiler Collection�ļ�ƣ���Ȼ��Collection������ָһЩ�������ļ��ϡ�
+现在的GCC是GNU Compiler Collection的简称，既然是Collection，就是指一些工具链的集合。
 
-�����GCC����ʱ��ֻ��C��������GCC����GNU C Comiler�ļ�д������Richard Stallman�����ģ�StallmanҲ��GNU���̵��״��ߣ���ʱ������1984�ꡣ
+最初的GCC（当时还只有C编译器，GCC还是GNU C Comiler的简写）是由Richard Stallman开发的，Stallman也是GNU工程的首创者，那时还是在1984年。
 
-���ų���������Եķ�չ��GCC�𽥿�ʼ֧��C����֮������ԣ���C++��Objective-C��Java��Fortran�Լ�Ada�ȣ���ϸ�ɷ���GCC��ҳ[http://gcc.gnu.org/][GCC]
+随着程序设计语言的发展，GCC逐渐开始支持C语言之外的语言，如C++、Objective-C、Java、Fortran以及Ada等，详细可访问GCC主页[http://gcc.gnu.org/][GCC]
 
-GNU������������
+GNU工具链包括：
 
-1. GNU Compiler Collection(GCC)������GCC��ָ���������������ӵ���������
-2. GNU Make������͹������̵��Զ������ߣ���Makefile
-3. GNU Binutils�������ƹ��ߣ������������ͻ����
-4. GNU Debugger(GDB)��������gcc�µ��Թ���
-5. GNU Autotools�����Թ���Makefile
+1. GNU Compiler Collection(GCC)：这里GCC纯指编译器，包括链接等其它操作
+2. GNU Make：编译和构建工程的自动化工具，即Makefile
+3. GNU Binutils：二进制工具，包括链接器和汇编器
+4. GNU Debugger(GDB)：著名的gcc下调试工具
+5. GNU Autotools：可以构建Makefile
 6. GNU Binson
 
-������Ҫ����gcc��gdb��Makefile��ʹ�á�
+本文主要讨论gcc，gdb和Makefile的使用。
 
-���⣬����ָ��gcc�����������ڱ���c++�Ĺ��ߣ�����ʵ��ʹ�õ�g++�����������̵��õ�����C����gcc��ͬ�Ĺ��ߣ�ֻ�������ӹ���������ͬ����������˵����gcc�����ʹ��g++������Ҳ�����á�
+另外，这里指的gcc还包括了用于编译c++的工具，我们实际使用的g++命令其编译过程调用的是与C语言gcc相同的工具，只不过链接过程有所不同。如无特殊说明，gcc命令的使用g++命令上也都适用。
 
-### ��װ
+### 安装
 
-GCC�汾�Ƚ϶࣬����Ӧ����Ƕ��ʽARM��AVR��ƽ̨�Ľ�����빤�ߣ���RHEL/CentOS Linux�£�ֻҪʹ��
+GCC版本比较多，还有应用在嵌入式ARM、AVR等平台的交叉编译工具，在RHEL/CentOS Linux下，只要使用
 ```Shell
 yum install gcc
 yum install g++
 yum install gdb
 ``` 
-Ĭ�������һ���ǰ�װ�õġ�
+默认情况下一般是安装好的。
 
-��Window�£���ѡ���gcc��װ��ʽ����[MinGW][MinGW]��[Cygwin][Cygwin]�����ĵĲ��������ͻ���Cygwin��Cygwin��һ��Window��ģ��Linux�����Ŀ�Դ������������ʹ��gcc��gdb�ȹ����⣬����ʹ����������Shell���������ʽ��Linux�µ��ն���̫�����𡣱��ĺ��潲���������в������ǻ����ն˵ġ�
+在Window下，可选择的gcc安装方式包括[MinGW][MinGW]和[Cygwin][Cygwin]。本文的操作环境就基于Cygwin，Cygwin是一个Window下模拟Linux环境的开源软件，除了能使用gcc、gdb等工具外，还能使用其它许多Shell命令，操作方式与Linux下的终端无太大区别。本文后面讲述到的所有操作都是基于终端的。
 
 
-### �汾������
+### 版本及帮助
 
-��װ���˹��ߺ�ʹ��
+安装好了工具后，使用
 ```Shell
 gcc --version
 gdb --version
 ```
-�ɷֱ�鿴gcc��gdb�İ汾��Ϣ��
+可分别查看gcc和gdb的版本信息，
 
 ![][gcc-v]
 
-���ʹ������ģ�
+你可使用下面的，
 ```Shell
 gcc --help
 gdb --help
 g++ --help
 ```
-������������ù���gcc�Լ�gdb�İ�����Ϣ����ʹ��gccʱż��������һ�����������⼸������ͷǳ����á�
+或下面的命令获得关于gcc以及gdb的帮助信息。在使用gcc时偶尔会忘掉一两个参数，这几个命令就非常有用。
 ```Shell
 man gcc
 man gdb 
 man g++ 
 ```
-������㿴��������������ô�鷳�Ļ�����[http://linux.die.net/man/1/gcc][gcc-man]Ҳ���Ի��gcc�İ�����Ϣ��
+如果在你看来，上网不是那么麻烦的话，则[http://linux.die.net/man/1/gcc][gcc-man]也可以获得gcc的帮助信息。
 
 
-# 2 GCC��ʹ��
+# 2 GCC的使用
 
-�ðɣ��������ڿ�ʼ��һ�����ӣ���ֻ��ϤC���ԣ������������۵����Ӷ���C���Ե����ӣ���
+好吧，我们现在开始第一个例子（我只熟悉C语言，我们这里讨论的例子都是C语言的例子）。
 
-������ѧϰC����ʱ�ĵ�1�����ӡ���Hello, world!��ֻ����������Ǹ�Ӧ��˵Hello, GCC��
+又遇到学习C语言时的第1个例子——Hello, world!，只不过这次我们更应该说Hello, GCC。
 ```C
 #include <stdio.h>
 int main(void)
@@ -80,48 +80,48 @@ int main(void)
     return 0;
 }
 ```
-���Ǿͽ�����ĳ���洢��main.c���ļ��У������������������ɣ�
+我们就将上面的程序存储到main.c的文件中，下面请跟着我敲命令吧，
 ```Shell
 gcc main.c
 ls
 ```
-����ls������㿴����ʲô��main.cĿ¼�¶��˸�a.exe�ĳ���Linux�¿�ִ�г�����a.out�����ðɣ���Ȼ����exe��ʽ�����аɣ�
+在敲ls命令后你看到了什么？main.c目录下多了个a.exe的程序（Linux下可执行程序是a.out）。好吧，既然你是exe格式，运行吧，
 ```Shell
 ./a.out
 ```
-����ʲô��û����Hello, GCC.
+看到什么，没错：Hello, GCC.
 
 > NOTES:    
-> ��Linux/Cygwin��ִ�г���ʹ��"./��ִ���ļ���"��Ĭ�ϲ�����ʱ��ִ���ļ���Ϊa.out��a.exe��
+> 在Linux/Cygwin下执行程序使用"./可执行文件名"。默认不设置时可执行文件名为a.out或a.exe。
 
-���ˣ���͸�˵�����Ѿ���ʹ��gcc�ˣ�Ȼ������ʵ�㻹��Զ�ˣ�
+到此，你就该说，我已经会使用gcc了，然而，其实你还差远了：
 
-1. ��֪����ô���ɻ���ļ���
-2. ��֪����ô����c++�ļ���
-3. ��֪����ô�鿴Ԥ����֮��Ľ����
-4. �㿴VC++���˼Ҷ����������*.obj���ļ�����֪����ôʹ��gcc����õ���
-5. ��֪����ô�������ļ���
-6. ��֪���������ܵ�����
-7. ����
+1. 你知道怎么生成汇编文件吗？
+2. 你知道怎么编译c++文件吗？
+3. 你知道怎么查看预处理之后的结果吗？
+4. 你看VC++，人家都会编译生成*.obj的文件，你知道怎么使用gcc编译得到吗？
+5. 你知道怎么编译多个文件吗？
+6. 你知道怎样才能调试吗？
+7. ……
 
-����������֪�������ż�����Go on��
+如果你有哪项不知道，不着急，请Go on！
 
-����֮ǰ��������˽�C�������ɿ�ִ���ļ��Ĺ��̣���4����Ԥ���������롢��ࡢ���ӡ�
+在这之前，你必须了解C代码生成可执行文件的过程，共4步：预处理、编译、汇编、链接。
 
 ![][gcc-process]
 
-### gcc���ɿ�ִ���ļ��Ĺ���
+### gcc生成可执行文件的过程
 
-����Hello, GCC�����ӣ�����������
+还是Hello, GCC的例子，请跟着敲命令，
 ```Shell
 gcc main.c -o main
 ```
-**-o** ѡ���ʾ����Ŀ���ļ���Ϊmain.exe��
+**-o** 选项表示生成目标文件名为main.exe。
 
 ```Shell
 gcc -E main.c -o main.i
 ```
-**-E** ѡ���ʾԤ����������Ԥ�������ǽ��궨��չ����ͷ�ļ�չ����Ԥ����֮���Ŀ���ļ�������main.i����ʱ������Բ鿴main.i��Ԥ���������
+**-E** 选项表示预处理操作，预处理就是将宏定义展开，头文件展开。预处理之后的目标文件保存在main.i，这时，你可以查看main.i的预处理结果，
 ```Shell
 cat _main.c
 ```
@@ -129,7 +129,7 @@ cat _main.c
 ```Shell
 gcc -S main.c -o main.s
 ```
-**-S** ѡ���ʾ������������������ɻ���ļ���*.s�ļ�������ʹ��-oѡ���Ŀ���ļ�Ϊmain.s��������Ҳ���Բ鿴��������Hello����Ļ����룬
+**-S** 选项表示编译操作，其结果将生成汇编文件（*.s文件，这里使用-o选项定义目标文件为main.s）。我们也可以查看分析上述Hello代码的汇编代码，
 ```C
 	.file	"main.c"
 	.def	___main;	.scl	2;	.type	32;	.endef
@@ -164,40 +164,40 @@ _main:
 	ret
 	.def	_printf;	.scl	3;	.type	32;	.endef
 ```
-��DSP��ARM��Ƕ��ʽƽ̨�ϣ�ʹ��gcc����õ���࣬�ٸ��ݻ���������Ż���һ�ֳ��õķ�����
+在DSP、ARM等嵌入式平台上，使用gcc编译得到汇编，再根据汇编代码进行优化是一种常用的方法。
 
 > NOTES:	
-> ���ɻ���ļ���������������ļ����Ĺ����Ǳ��룬���ǻ�࣬����ǽ�������ת����Ŀ���ļ�*.obj�Ĺ��̡�
-> ����������⣬����ļ����ɿ�ִ���ļ��Ĺ�����û�б�������ġ�
+> 生成汇编文件（包含汇编代码的文件）的过程是编译，不是汇编，汇编是将汇编代码转换成目标文件*.obj的过程。
+> 从这点上理解，汇编文件生成可执行文件的过程是没有编译操作的。
 
 ```Shell
 gcc -c main.c -o main.obj  
 ```
-**-c** ѡ�Դ�ļ�����Ŀ���ļ�main.obj��main.obj��ʵ�Ѿ���һ�ֽ��ƿ�ִ���ļ��ˣ�ͨ�����Ӳ���������Ӧ�Ŀ�Ϳ���ִ���ˡ�
+**-c** 选项将源文件生成目标文件main.obj，main.obj其实已经是一种近似可执行文件了，通过链接操作链接相应的库就可以执行了。
 
 
-��4��������ֱ��ʹ��gcc main.c -o main�Ϳ�����ɡ�
+第4步的链接直接使用gcc main.c -o main就可以完成。
 
-### gcc�ǹ��ߵļ���
+### gcc是工具的集合
 
-������������㽫����ֱ�۵Ŀ�����gcc��ʵ��һ�״�Ԥ���������롢��ൽ���ӹ��ߵļ��ϡ�
+从下面的命令你将更加直观的看到：gcc其实是一套从预处理、编译、汇编到链接工具的集合。
 ```Shell
 rm main.i main.s main.obj 
 cpp main.c > main.i
 gcc -S main.i
 as main.s -o main.o
 ```
-����ֱ�ʹ����cppԤ������gcc���롢as��ࡣ���ӿ���ʹ��ld���������������Щ��
+上面分别使用了cpp预处理、gcc编译、as汇编。链接可以使用ld命令，不过操作复杂些。
 
-��ˣ�gccֻ�ǰ����ǽ�������ӵĲ�������һ�������У������ǵ������������̱�ø��Ӹ�Ч�Զ�����
+因此，gcc只是帮我们将多个复杂的操作放在一个命令中，是我们的软件开发过程变得更加高效自动化。
 
-### gcc��һЩ����ѡ��
+### gcc的一些其它选项
 
-* -C ֻ�����-Eʹ�ã�����Ԥ��������Ҫ����ע��.
+* -C 只能配合-E使用，告诉预处理器不要丢弃注释.
 ```Shell
 gcc -E -C main.c -o main.i  
 ```
-* -M ����Ԥ���������һ���ʺ�make�Ĺ���,����������Ŀ���ļ���������ϵ.
+* -M 告诉预处理器输出一个适合make的规则,用于描述各目标文件的依赖关系.
 ```Shell
 gcc -M main.c -o main_makerule
 cat main_makerule
@@ -218,18 +218,18 @@ main.o: main.c /usr/include/stdio.h /usr/include/_ansi.h \
   /usr/include/byteswap.h /usr/include/sys/stdio.h \
   /usr/include/sys/cdefs.h
 ```
-* -w ��ֹ�������͵ľ��棬���Ƽ�ʹ��
-* -Wall ��ʾ�������͵ľ��棬�Ƽ�ʹ�ã���������Լ��ĳ����ø��ӹ淶��
-* -v ��ʾ������̵���ϸ��Ϣ��Verbos���
-* -llibrary  ������Ϊlibrary�Ŀ��ļ�.
-* -Idir  ��ͷ�ļ�������·���б�������dirĿ¼
-* -Ldir  ��`-llibrary'ѡ�������·���б�������dirĿ¼. 
+* -w 禁止各种类型的警告，不推荐使用
+* -Wall 显示各种类型的警告，推荐使用，这可以让自己的程序变得更加规范化
+* -v 显示编译过程的详细信息，Verbos简称
+* -llibrary  连接名为library的库文件.
+* -Idir  在头文件的搜索路径列表中添加dir目录
+* -Ldir  在`-llibrary'选项的搜索路径列表中添加dir目录. 
 
 > NOTES:    
-> �ڴ󹤳̱������ӹ����У��ܶ������ڡ�Undefined ...���Ĵ�������-llibrary��-Idir��-Ldir�����ô�����ɵġ�
+> 在大工程编译链接过程中，很多类似于“Undefined ...”的错误都是由-llibrary、-Idir或-Ldir的设置错误造成的。
 
-* -Dname �궨��ĳ��name�꣬�������ȫ�ֵģ��ڿ��Ƴ����Ϻ��а���
-����������main.cԴ����ͨ��_DEBUG����Կ����Ƿ��ӡ�����
+* -Dname 宏定义某个name宏，这个宏是全局的，在控制程序上很有帮助
+比如有如下main.c源程序，通过_DEBUG宏可以控制是否打印结果，
 ```c
 	#include <stdio.h>
 	int main(void)
@@ -244,27 +244,27 @@ main.o: main.c /usr/include/stdio.h /usr/include/_ansi.h \
 	    return 0;
 	}
 ```
-�Ա�����ʹ�úͲ�ʹ��-D_DEBUG�����н��
+对比下面使用和不使用-D_DEBUG的运行结果
 ```
 	gcc -D_DEBUG main.c -o main 
 	./main 
 	gcc main.c -o main 
 	./mian
 ```
-* -O/O1 �����Ż������ڴ������Ż�����ռ����΢���ʱ����൱����ڴ�
-* -O2 ���Ż�һЩ.�����漰�ռ���ٶȽ������Ż�ѡ��,ִ�м������е��Ż�����.���粻����ѭ��չ��(loopunrolling)�ͺ�����Ƕ(inlining).��-Oѡ��Ƚ�,���ѡ��������˱���ʱ��,Ҳ��������ɴ���� ����Ч��.
-* -O3 �Ż��ĸ���.���˴�-O2������һ��,��������-finline-functionsѡ��.
+* -O/O1 代码优化，对于大函数，优化编译占用稍微多的时间和相当大的内存
+* -O2 多优化一些.除了涉及空间和速度交换的优化选项,执行几乎所有的优化工作.例如不进行循环展开(loopunrolling)和函数内嵌(inlining).和-O选项比较,这个选项既增加了编译时间,也提高了生成代码的 运行效果.
+* -O3 优化的更多.除了打开-O2所做的一切,它还打开了-finline-functions选项.
 
-* -g �Բ���ϵͳ�ı��ظ�ʽ(stabs,COFF,XCOFF,��DWARF)����������Ϣ. ֻ��ʹ����-g����ʹ��gdb���߽��е���
+* -g 以操作系统的本地格式(stabs,COFF,XCOFF,或DWARF)产生调试信息. 只有使用了-g才能使用gdb工具进行调试
 ```
 gcc -g main.c -o main 
 gdb main 
 ```
-�й�gdb�Ĳ����кܶ࣬��ר��������
+有关gdb的操作有很多，将专门详述。
 
-### ���ļ�����
+### 多文件编译
 
-�ðɣ�����д�����ļ�С����Example2��
+好吧，我们写个多文件小程序：Example2。
 
 _main.c_
 ```C
@@ -302,32 +302,32 @@ extern int add(int a, int b);
 #endif
 ```
 
-ʹ��gcc������ļ��ķ����ǽ����Դ�ļ����ӵ�gcc����ѡ���У�
+使用gcc编译多文件的方法是将多个源文件添加到gcc编译选项中，
 ```Shell
 gcc -D_DEBUG main.c add.c -o main 
 ./main 
 ```
-��ʾ����ִ�н����
+显示如下执行结果，
 
 ![][prog-2]
 
 > NOTES:  
-> ����δ��add.h���ӵ������ļ�������Ϊ��C���Եı�������.c�ļ�Ϊ��λ�ģ�ÿ��.c�ļ���������Ӧ��һ��.s��.obj�ļ�����.h�ļ����ᡣ������������У�����ֻҪ��
-> ֤��main.c�ڱ����ʱ���ܹ��ҵ�add����������ͨ��#include "add.h"ʵ�ֵġ������ӵ�ʱ��main.obj���Զ��ҵ���add.obj�е�add���ţ��ⶼ���������Ĺ��͡�
+> 上面未将add.h添加到编译文件中是因为：C语言的编译是以.c文件为单位的，每个.c文件都会编译对应到一个.s和.obj文件，而.h文件不会。在上面的例子中，我们只要保
+> 证在main.c在编译的时候能够找到add函数，这是通过#include "add.h"实现的。在链接的时候，main.obj会自动找到到add.obj中的add符号，这都是链接器的功劳。
 
 
-### �������뾲̬��
+### 共享库与静态库
 
-��ʱ����õ�Ŀ���ļ���һ�������������ʱ�����ص������У���Ϊ������;�̬�⡣��֮ǰʹ�õ���printf������ڿ�libc�У�����ֻҪ����stdio.h����ʹ���ˣ���ʵ��Ҫ��gcc��ʹ��-llibrayѡ�ֻ����gccĬ�ϰ����˸�ѡ���
+库时编译好的目标文件的一个打包，在链接时被加载到程序中，分为共享库和静态库。如之前使用到的printf定义就在库libc中，我们只要包含stdio.h就能使用了（其实还要在gcc中使用-llibray选项，只不过gcc默认包含了该选项）。
 
-* ��̬�⣺��Linux����.a�ļ�����Windows����.lib�ļ���__������ʱ���û�������ʹ�õ��ⲿ���������뿽���������ִ����__��
-* �����⣺��Linux����.so�ļ�����Windows����.dll�ļ���������ʱ��ֻ�ڳ����ִ��������һ�������������������������롣__�ڳ���ִ��ʱ���Ÿ��������������ⲿ�����Ļ�����__������������ھ�̬����ŵ��Ǽ����˿�ִ�г���������Ĵ�С��ͬʱ�������ͬʱ��������г�����ã�Ҳ�ܼ����ڴ�ռ䡣
+* 静态库：在Linux下是.a文件，在Windows下是.lib文件。__在链接时将用户程序中使用到外部函数机器码拷贝到程序可执行区__。
+* 共享库：在Linux下是.so文件，在Windows下是.dll文件。在链接时，只在程序可执行区建立一个索引表，而不拷贝机器代码。__在程序执行时，才根据索引表加载外部函数的机器码__。共享库相对于静态库的优点是减少了可执行程序代码量的大小，同时共享库可同时被多个运行程序调用，也能减少内存空间。
 
 	![][lib]
 
-�����Ǿ�̬�⻹�ǹ����⣬��gccѡ���ж�Ҫʹ��-l��-L�ֱ��ƶ������Ϳ�·����
+无论是静态库还是共享库，在gcc选项中都要使用-l和-L分别制定库名和库路径。
 
-�����ϸ�add����Ϊ����˵˵��̬��͹�����Ĵ�����ʹ�ã�������sub������
+仍以上个add程序为例，说说静态库和共享库的创建和使用，先添加sub函数，
 _sub.c_
 ```C
 int sub(int a, int b)
@@ -367,7 +367,7 @@ int main(void)
 }
 ```
 
-* ��̬���������Ҫʹ�õ�gcc��ar����
+* 静态库的生成需要使用到gcc和ar工具
 
 ```
 gcc -c add.c sub.c
@@ -376,120 +376,120 @@ ar -r libmymath.a add.o sub.o
 
 ![][static-lib]
 
-����������ֻҪ��.a�ļ���.h�ļ������add��sub�Ϳ���������ط�ʹ���ˡ�
+这样，我们只要将.a文件和.h文件打包，add和sub就可以在任意地方使用了。
 
 > NOTES:    
-> ��ע����ͼ�������ڱ���main.cʱ������ӵ���̬��ģ���-lmymath -staticѡ�
+> 请注意上图给出的在编译main.c时如何链接到静态库的？（-lmymath -static选项）
 
-֮ǰ˵������̬�����ӵĴ��������ȹ���������Ҫ���������ȿ�����̬���Ӻ�Ĵ��������Ժ����Ƚ�
+之前说过，静态库链接的代码量将比共享库链接要大，我们且先看看静态链接后的代码量，稍后做比较
 ![][size-static]
 
-* �������������Ҫʹ�õ�gcc����
+* 共享库的生成需要使用到gcc工具
 
 ```
 gcc -shared -fPIC add.c sub.c -o libmymath.so 
-ln -s libmymath.so libmymath.dll   # Windows�²���Ҫ
+ln -s libmymath.so libmymath.dll   # Windows下才需要
 gcc main.c -lmymath -L./ -o main 
 ```
 
--shared ��ʾ�����⣬-fPIC ��ʾ������λ���޹صĴ��롣
+-shared 表示共享库，-fPIC 表示生成与位置无关的代码。
 
 ![][share-lib]
 
 > NOTES:    
-> ��Linux�£����������ӵĵĿ�ִ�г���_ִ��ʱ_���ǻ�����Ҳ��������⣬��ʱ�����ַ�����
->> 1. ���԰ѵ�ǰ·������/etc/ld.so.conf��Ȼ������ldconfig�������Ե�ǰ·��Ϊ��������ldconfig��Ҫ��rootȨ�ޣ�
->> 2. �ѵ�ǰ·�����뻷������LD_LIBRARY_PATH ��
+> 在Linux下，共享库链接的的可执行程序_执行时_还是会出现找不到库问题，这时有两种方法：
+>> 1. 可以把当前路径加入/etc/ld.so.conf中然后运行ldconfig，或者以当前路径为参数运行ldconfig（要有root权限）
+>> 2. 把当前路径加入环境变量LD_LIBRARY_PATH 中
 
-ͬ����������ʹ�ù��������ɵĿ�ִ���ļ���С��
+同样，来看看使用共享库生成的可执行文件大小，
 
 ![][size-share]
 
-����0x9d4���˼Ҿ�̬���ܴ�С��0x990�ֽڣ�����ô˵��̬��Ҫ�ȹ�������أ�
+诶，0x9d4，人家静态库总大小才0x990字节，你怎么说静态库要比共享库大呢？
 
-��һ����̬�����ɴ������ȹ������ָ���ǡ���������������洢��text�Σ���������������δ�С1712Ҫ�Ⱦ�̬���1728С��
+第一，静态库生成代码量比共享库大指的是——代码量，代码存储在text段，明显嘛，共享库代码段大小1712要比静态库的1728小；
 
-�ڶ��� ǰ��˵���������������ӳɿ�ִ���ļ���ʱ����ֱ�ӿ���Ŀ���ļ������룬�������ɷ��ű����ԣ����ű���������Ľ�����������ű�Ӧ�ô洢��data�Σ����Թ������data�αȾ�̬��Ҫ����Ϊ���������add.c��sub.c�Ĵ��������ɵĻ����붼�ǳ�С��ʹ�ù��������ɷ��ű��ķ�������ʹ��ִ���ļ�ռ�õĴ��̿ռ�����ˡ�ֻ��һ������£�ʹ�ù�����Ŀ�ִ���ļ�ռ�õĴ��̿ռ佫�Ⱦ�̬���С.
+第二， 前面说过，共享库在链接成可执行文件的时候不是直接拷贝目标文件机器码，而是生成符号表。对，符号表！从上面的结果来看，符号表应该存储在data段，所以共享库的data段比静态库要大。因为我们这里的add.c和sub.c的代码量生成的机器码都非常小，使用共享库生成符号表的方法反而使可执行文件占用的磁盘空间更大了。只是一般情况下，使用共享库的可执行文件占用的磁盘空间将比静态库的小.
 
 
-### ��·�����ļ�·���뻷������
+### 库路径、文件路径与环境变量
 
-֮ǰ�Ѿ�˵����ͨ��-I����ָ��ͷ�ļ�·����-Lָ����·����-lָ������������һ��Ҳ���������ǵ�ʹ�á�
+之前已经说过，通过-I可以指定头文件路径，-L指定库路径，-l指定库名。从上一节也看到了它们的使用。
 
-��ôϵͳĬ�ϵ�ͷ�ļ�·���Ϳ�·���������أ�
+那么系统默认的头文件路径和库路径是在哪呢？
 
 ```
 cpp -v
 ```
 
-���Բ鿴Ĭ�ϵ�ͷ�ļ�·��.
+可以查看默认的头文件路径.
 
 ```
 gcc -v main.c -lmymath -L. -o main
 ```
 
-����-vѡ��Ϳ��Բ鿴Ĭ�ϵ�ͷ�ļ�·��.
+添加-v选项，就可以查看默认的头文件路径.
 
-gcc�ṩ����Ĭ�ϵĻ���������
+gcc提供几个默认的环境变量：
 
-1. PATH����ִ���ļ��Ͷ�̬�⣨.so, .dll��������·��
-2. CPATH��ͷ�ļ�����·��
-3. LIBRARY_PATH��������·����������̬��;�̬��
+1. PATH：可执行文件和动态库（.so, .dll）的搜索路径
+2. CPATH：头文件搜索路径
+3. LIBRARY_PATH：库搜索路径，包括动态库和静态库
 
 
-### �������ò鿴Ŀ���ļ��Ĺ���
+### 几个有用查看目标文件的工具
 
 * file
 
-	��ʾĿ���ļ���ʽ�����л�������ϵ�ṹ��ARM����x86��
+	显示目标文件格式和运行环境的体系结构（ARM还是x86）
 
 * nm
 
-	�г�Ŀ���ļ��ķ��ű�
+	列出目标文件的符号表
 
 * ldd
 
-	�г���ִ���ļ�������ʱ����Ҫ�Ĺ�����
+	列出可执行文件在运行时所需要的共享库
 
 * size
 
-	�г�Ŀ���ļ��нڵ����ƺʹ�С�������Ѿ�ʹ�ù��ù��ߡ�
+	列出目标文件中节的名称和大小。上面已经使用过该工具。
 
 * readelf
 
-	��ʾelfĿ���ļ��������ṹ������elfͷ�еı�����Ϣ������size��nm���ܡ���õķ����ǲ�����-d��-h������
+	显示elf目标文件的完整结构，包括elf头中的编码信息，包括size和nm功能。最常用的方法是参数是-d和-h参数。
 
 * objdump
 
-	���ж����ƹ���֮ĸ����������Ƿ����.text���еĶ�������Ϣ����õĸ�ʽ��objdump -D -S filename����ʾ�������Ϣ����Ҫ�������Դ��ͬʱ��ʾ������gcc����ʱҪʹ��-gѡ�
+	所有二进制工具之母，最大作用是反汇编.text节中的二进制信息。最常用的格式是objdump -D -S filename，显示反汇编信息。若要反汇编与源码同时显示，则在gcc编译时要使用-g选项。
 
 
 > NOTES:
-> �������еĹ��߶�����ͨ�� [toolname] --help�����صĲ���������Ϣ��
+> 上面所有的工具都可以通过 [toolname] --help获得相关的参数帮助信息。
 
 
-# 3 GDB��ʹ��
+# 3 GDB的使用
 
-gdb��һ�����Թ��ߣ���gccһ����gdb�ɵ��԰���C��C++��Java��Fortran�����ȶ������ԡ�gdb��ԭʼ��������Richard M.StallmanҲ�ǿ�Դ�˶��е�һλ���伶�����
+gdb是一个调试工具，与gcc一样，gdb可调试包括C、C++、Java、Fortran、汇编等多种语言。gdb的原始开发者是Richard M.Stallman也是开源运动中的一位领袖级级人物。
 
-### �ڴ沼�ּ�ջ�ṹ
+### 内存布局及栈结构
 
-����㻹��֪��malloc���������ֲ�����������Ļ������㻹�������Ϊ����Ա����Ϊ�����еĶ�����κε��ڴ���䶼ֱ�ӺͿ�ִ���ļ����û��������ռ�Ĳ���ӳ���йأ�
+如果你还不知道malloc分配变量与局部变量的区别的话，那你还不够格称为程序员。因为程序中的定义或任何的内存分配都直接和可执行文件在用户进程虚存空间的布局映射有关，
 
 ![][mem-layout]
 
-����ͼ��ʾ��������
+如上图所示，包括：
 
-- �ں�����ռ䣨�ߵ�ַ�����û��������޷����ʵ���
-- �û�ջ���ֲ������洢�ĵط����ò�����Ҫ�û��ֶ���ʼ��
-- ����ʱ������ռ䣺C�⺯��һ�㶼��ӳ�䵽����
-- �û��ѣ�malloc����Ŀռ�
-- ��ʼ����д���������ò���ϵͳ���ڱ���ʱ��ʼ��������ȫ�ֱ�����static����������
-- ֻ������Σ���ų������ĵ�ַ����������ʱ��Ҫ�������ִ�д���װ�ص��ڴ���������
+- 内核虚拟空间（高地址）：用户进程是无法访问到的
+- 用户栈：局部变量存储的地方，该部分需要用户手动初始化
+- 运行时共享库空间：C库函数一般都会映射到这里
+- 用户堆：malloc分配的空间
+- 初始化读写数据区：该部分系统会在编译时初始化，包括全局变量、static声明变量等
+- 只读代码段：存放程序代码的地址，程序运行时都要将程序可执行代码装载到内存后才能运行
 
 
-### gdb����C����
-����һ�γ���main.c��
+### gdb调试C程序
+给定一段程序main.c：
 
 ```
 #include <stdio.h>
@@ -509,13 +509,13 @@ int main(void)
 }
 ```
 
-ʹ��gcc���뼰gdb���Գ���ķ������£�
+使用gcc编译及gdb调试程序的方法如下：
 
 ```
-Administrator@DADI-20131210YK /cygdrive/e/MyDesigner/Projects/notes/codes/ʵ��ѧϰgcc+gdb+make/gdb
-$ gcc -g main.c -o main          ### ע������ʱʹ��-gѡ��������ɷ��ű�����gdb����
+Administrator@DADI-20131210YK /cygdrive/e/MyDesigner/Projects/notes/codes/实例学习gcc+gdb+make/gdb
+$ gcc -g main.c -o main          ### 注：编译时使用-g选项才能生成符号表用于gdb调试
 
-Administrator@DADI-20131210YK /cygdrive/e/MyDesigner/Projects/notes/codes/ʵ��ѧϰgcc+gdb+make/gdb
+Administrator@DADI-20131210YK /cygdrive/e/MyDesigner/Projects/notes/codes/实例学习gcc+gdb+make/gdb
 $ gdb main
 GNU gdb (GDB) 7.3.50.20110821-cvs (cygwin-special)
 Copyright (C) 2011 Free Software Foundation, Inc.
@@ -526,9 +526,9 @@ and "show warranty" for details.
 This GDB was configured as "i686-cygwin".
 For bug reporting instructions, please see:
 <http://www.gnu.org/software/gdb/bugs/>...
-Reading symbols from /cygdrive/e/MyDesigner/Projects/notes/codes/ʵ��ѧϰgcc+gdb+make/gdb/main...don
+Reading symbols from /cygdrive/e/MyDesigner/Projects/notes/codes/实例学习gcc+gdb+make/gdb/main...don
 e.
-(gdb) l main                     ### ע��list�鿴����l [������/����]
+(gdb) l main                     ### 注：list查看程序，l [函数名/行数]
 16
 17          return c;
 18      }
@@ -539,87 +539,87 @@ e.
 23          int j = 3;
 24
 25          int k = add(i,j);
-(gdb)                            ### ע��Enter��������������鿴����
+(gdb)                            ### 注：Enter按键接上面继续查看程序
 26
 27          printf("i=%d, j=%d, k=%d\n", i,j,k);
 28
 29          return 0;
 30      }
 31
-(gdb) b 23                       ### ע����23�����Ӷϵ�
+(gdb) b 23                       ### 注：在23行添加断点
 Breakpoint 1 at 0x4010d5: file main.c, line 23.
-(gdb) b add                      ### ע����add����������Ӷϵ�
+(gdb) b add                      ### 注：在add函数入口添加断点
 Breakpoint 2 at 0x401096: file main.c, line 15.
-(gdb) b 29                       ### ע����29�����Ӷϵ�
+(gdb) b 29                       ### 注：在29行添加断点
 Breakpoint 3 at 0x401112: file main.c, line 29.
-(gdb) info break                 ### ע���鿴�����ӵĶϵ���Ϣ
+(gdb) info break                 ### 注：查看已添加的断点信息
 Num     Type           Disp Enb Address    What
 1       breakpoint     keep y   0x004010d5 in main at main.c:23
 2       breakpoint     keep y   0x00401096 in add at main.c:15
 3       breakpoint     keep y   0x00401112 in main at main.c:29
-(gdb) r                          ### ע�����г���
-Starting program: /cygdrive/e/MyDesigner/Projects/notes/codes/ʵ��ѧϰgcc+gdb+make/gdb/main
+(gdb) r                          ### 注：运行程序
+Starting program: /cygdrive/e/MyDesigner/Projects/notes/codes/实例学习gcc+gdb+make/gdb/main
 [New Thread 2492.0x36c]
 [New Thread 2492.0x1140]
 
 Breakpoint 1, main () at main.c:23
 23          int j = 3;
-(gdb) p i                        ### ע��print��ӡ����i��ֵ
+(gdb) p i                        ### 注：print打印变量i的值
 $1 = 0
-(gdb) n                          ### ע��next��һ�����Ѻ�����һ�����ֱ��������
+(gdb) n                          ### 注：next下一步（把函数当一条语句直接跳过）
 25          int k = add(i,j);
-(gdb) s                          ### ע��step��һ������ִ�е������ڲ���
+(gdb) s                          ### 注：step下一步（会执行到函数内部）
 
 Breakpoint 2, add (a=0, b=3) at main.c:15
 15          int c = a + b;
-(gdb) c                          ### ע��continue�����е��ĵ�ǰλ�ü�������ִ�У�ֱ��������һ���ϵ�
+(gdb) c                          ### 注：continue从运行到的当前位置继续往下执行，直到遇到下一个断点
 Continuing.
 i=0, j=3, k=3
 
 Breakpoint 3, main () at main.c:29
 29          return 0;
-(gdb) finish                     ### ע��ֱ��ִ�е���ǰ�����Ľ�β������main������������
+(gdb) finish                     ### 注：直接执行到当前函数的结尾处，对main函数不起作用
 "finish" not meaningful in the outermost frame.
-(gdb) c                          ### ע��continue����ִ��
+(gdb) c                          ### 注：continue继续执行
 Continuing.
 [Inferior 1 (process 2492) exited normally]
-(gdb) q                          ### ע������ִ�н�����quit�˳�gdb
+(gdb) q                          ### 注：程序执行结束，quit退出gdb
 
-Administrator@DADI-20131210YK /cygdrive/e/MyDesigner/Projects/notes/codes/ʵ��ѧϰgcc+gdb+make/gdb
+Administrator@DADI-20131210YK /cygdrive/e/MyDesigner/Projects/notes/codes/实例学习gcc+gdb+make/gdb
 $
 ```
 
-���ˣ�����ô�򵥣�ֻҪ�������ϼ��������Ϳ��Կ������ĵ�ʹ��gdb�ˡ�
+好了，就这么简单，只要会了以上几个命令，你就可以开开心心的使用gdb了。
 
-gdb���кܶ�߼������ݣ�����Ŀ��Ϊ���ţ��������벻�������ָ�����û���
+gdb还有很多高级的内容，本文目标为入门，更多内请不吝你的手指依次敲击：
 
 ```
 >> gdb
 >> help  
 ```
 
-�μ��ο�����[6]������gdb��һ�ݹٷ��ֲᡣ
+参见参考文献[6]，这是gdb的一份官方手册。
 
 
-# 4 ʹ��Makefile��������
+# 4 使用Makefile构建工程
 
-Make�ǹ������̵Ĺ��ߣ�Make���߶��û���д��Makefile���н�����ʵ��ֻ��Ҫһ������Ϳ��Ա��롢�����������̡��󲿷���ϤVC++���˶�Į����Make���ߵĴ��ڣ�VC++��Make���߽�nmake���������Ϊʲôʹ��VC++���ļ�����������һ���㶨��ԭ�����ڡ�
+Make是构建工程的工具，Make工具对用户编写的Makefile进行解析，实现只需要一个命令就可以编译、链接整个工程。大部分熟悉VC++的人都漠视了Make工具的存在（VC++的Make工具叫nmake），这就是为什么使用VC++多文件编译链接能一步搞定的原因所在。
 
-�������ﵱȻ����ȥ����VC++��nmake����Ҫ���۵���GNU Make��Makefile��Makefile�ļ����������������̵ı��롢���ӵĹ���
+我们这里当然不是去讨论VC++的nmake，而要讨论的是GNU Make的Makefile。Makefile文件用于描述整个工程的编译、链接的规则。
 
-### ��дMakefile
+### 编写Makefile
 
-����Example2Ϊ����Դ����Ŀ¼���½�Makefile�ļ������ˣ��ļ������ǡ�Makefile����û.txt���κκ�׺����
+仍以Example2为例，源代码目录下新建Makefile文件（对了，文件名就是“Makefile”，没.txt等任何后缀），
 
 ```shell
 vim Makefile
 ```
 
-Makefile�ļ�����Ϊ
+Makefile文件内容为
 
 ```
-main:main.o add.o sub.o                 # Ŀ��:����
-	gcc main.o add.o sub.o -o main      # ���������TAB��ͷ��
+main:main.o add.o sub.o                 # 目标:依赖
+	gcc main.o add.o sub.o -o main      # 命令（必需以TAB开头）
 
 main.o:main.c
 	gcc -c -D_DEBUG main.c -o main.o
@@ -634,42 +634,42 @@ clean:
 	-rm main *.o
 ```
 
-���ˣ��ص������У�ʹ��make�����Makefile��Ч����
+好了，回到命令行，使用make命令看看Makefile的效果：
 
 ```shell
 make 
 ./main 
 ```
 
-ʲô���������ȷ�Ľ�����ǾͶ��ˡ����������������������Makefile��
+什么，输出了正确的结果，那就对了。下面我们来分析下上面的Makefile。
 
-- Makefile�ĸ�ʽ
+- Makefile的格式
 
 ```
-Ŀ�꣺����
-	�����TAB��ͷ��
+目标：依赖
+	命令（以TAB开头）
 ```
-Ŀ�������Ӻ�Ŀ�ִ���ļ����������ǹ����е����ڱ����c�ļ����������ӵ�*.o�ļ��ļ��ϣ�����gcc����Ĺ��̶��ԣ��������gcc�������ʹ�������gcc������
+目标是链接后的可执行文件名；依赖是工程中的用于编译的c文件和用于连接的*.o文件的集合；就用gcc编译的工程而言，命令就是gcc命令，可以使用任意的gcc参数。
 
-- ʹ��make�������Makefile�ļ����������ļ���������Makefile��makefile��������������ƣ�����Ҫʹ��make -f [filename]ָ���ļ�����ǿ�ҽ���ʹ��Makefile��Ϊ�ļ���������Linux����ѧ������ࡢ����ĸ��д����ͻ���ļ�λ�ã���
+- 使用make命令解析Makefile文件，解析的文件名可以是Makefile或makefile，如果是其它名称，则需要使用make -f [filename]指定文件名。强烈建议使用Makefile作为文件名（符合Linux的哲学——简洁、首字母大写容易突出文件位置）。
 
-- Makefile�����ж��Ŀ�꣨main.o add.o sub.o������ֻ����һ������Ŀ�꣨main����Makefile�ļ��е�һ�������е�Ŀ�꽫ȷ��Ϊ����Ŀ�ꡣmake����Ĭ��ִ������Ŀ�꣬��ִֻ��Makefile������Ŀ�꣬ʹ��make [Target]����Ҫ��������µ�Ŀ���ļ���ʹ��
+- Makefile可以有多个目标（main.o add.o sub.o），但只能有一个最终目标（main）。Makefile文件中第一条规则中的目标将确定为最终目标。make命令默认执行最终目标，若只执行Makefile中其它目标，使用make [Target]，如要清除工程下的目标文件，使用
 
 ```
 make clean
 ```
 
-- Makefile�н���Щû���κ�����ֻ��ִ�ж�����Ŀ���αĿ�꣨clean����ʹ��.PHONY������αĿ�겻����Ϊ����Ŀ�ꡣ
+- Makefile中将那些没有任何依赖只有执行动作的目标称伪目标（clean），使用.PHONY声明。伪目标不能作为最终目标。
 
-- Makefile��ʹ�ñ�����Makefile�еı������ǰ��ַ����ķ�ʽ�����滻��������һЩϵͳ����ı�����
+- Makefile中使用变量：Makefile中的变量将是按字符串的方式进行替换，下面是一些系统特殊的变量。
 
 ```
-$^: �������������ļ�
-$@������Ŀ��
-$<�����������ļ��еĵ�һ�������ļ�
+$^: 代表所有依赖文件
+$@：代表目标
+$<：代表依赖文件中的第一个依赖文件
 ```
 
-�������Դ���Makefile�ı�д���Ӷȣ�ʹ�ñ������Makefile���£�
+变量可以大大简化Makefile的编写复杂度，使用变量后的Makefile如下：
 
 ```
 CC=gcc
@@ -691,9 +691,9 @@ clean:
 	-rm main *.o
 ```	
 
-����CC��OBJS��CFLAGS�����Զ����Makefile������$^��$@��ϵͳ����ı�����
+其中CC、OBJS、CFLAGS都是自定义的Makefile变量，$^和$@是系统特殊的变量。
 
-- �����Makefile����̫���ӣ��ɲ������ټ򵥵㣬û���⣺ʹ��ģʽƥ�䡣
+- 上面的Makefile还是太复杂，可不可以再简单点，没问题：使用模式匹配。
 
 ```
 CC=gcc
@@ -711,17 +711,17 @@ clean:
 	-rm main *.o
 ```
 
-�����Makefileʹ��%����ƥ���κηǿ��ַ�����
+上面的Makefile使用%用来匹配任何非空字符串。
 
-1. ģʽ����%.o:%.c��������ʾ�ĺ����ǣ����е�.o�ļ������ڶ�Ӧ��.c�ļ���
-2. 	ģʽ����%.o:debug.h����ʾ���е�.o�ļ���������ͷ�ļ���debug.h��
+1. 模式规则“%.o:%.c”，它表示的含义是：所有的.o文件依赖于对应的.c文件。
+2. 	模式规则%.o:debug.h，表示所有的.o文件都依赖于头文件“debug.h”
 
-�ڱ�д���ͳ���ʱ�����������е�.c������֮��Ӧ��.h�ļ������������÷���Makfile�ܳ��á�
+在编写大型程序时，常常工程中的.c都有与之对应的.h文件，以上两种用法在Makfile很常用。
 
-����ģʽƥ�䣬Makefile�л�����ʹ��ͨ�����*��
-�������αĿ���о�ʹ��*.o�ʹ������к�׺Ϊ.o���ļ���
+除了模式匹配，Makefile中还可以使用通配符：*。
+如上面的伪目标中就使用*.o就代表所有后缀为.o的文件。
 
-- �ðɣ������������ټ򵥵㣺ʹ��Makefile���Զ��Ƶ�������ע�⣬����Լ�һЩMakefile��������㲻ע�⣬�Ϳ��ܳ�������˲��Ƽ�ʹ�á�
+- 好吧，加足马力，再简单点：使用Makefile的自动推导规则。请注意，这可以简化一些Makefile，但如果你不注意，就可能出错，因此不推荐使用。
 
 ```
 CC=gcc
@@ -740,9 +740,9 @@ clean:
 	-rm main *.o
 ```
 
-��ľ�У�������main.o add.o sub.oĿ��ʱ�����ʡȥ�ˣ�Makefile���Զ��Ƶ�ʹ��gcc������룬��֪��Ҫ��-D_DEBUGѡ���ô���棿�ⶼҪ�鹦��CC��CFLAGS�������㻻�ɱ�ı��������ԣ��������в�������˵��Makefile���Զ��Ƶ�����������ã���������ȷ����ȷ��
+有木有，在生成main.o add.o sub.o目标时连命令都省去了，Makefile能自动推导使用gcc命令编译，还知道要加-D_DEBUG选项，这么神奇？这都要归功于CC和CFLAGS变量，你换成别的变量名试试，看看还行不。所以说：Makefile的自动推导规则最好慎用，除非你能确保正确。
 
-�����ǽ�ģʽƥ����Զ��Ƶ������ϵ�һ���Makefile�ļ���
+下面是将模式匹配和自动推导规则结合到一起的Makefile文件。
 
 ```
 CC=gcc
@@ -759,39 +759,39 @@ clean:
 	-rm main *.o
 ```
 
-֪�㳣�֣�����̫̰�ˣ��ܼ򻯵�������OK�ˡ�
+知足常乐，不雅太贪了，能简化到这样就OK了。
 
-- Makefile��ע��ʹ��#��������ǰ����@��ȡ������
+- Makefile中注释使用#，在命令前加上@能取消回显
 
-- ��Ŀ¼��Makefile
+- 多目录的Makefile
 
-1. include�ɰ�������Ŀ¼��Makefile�ļ�
-2. export�ɵ�����ǰMakefile�еı���������Makefileʹ��
-3. VPATH��������ָ�������ļ�������Ŀ¼�����Ŀ¼��ʹ��:��������
+1. include可包含其它目录的Makefile文件
+2. export可导出当前Makefile中的变量共其它Makefile使用
+3. VPATH变量可以指定依赖文件的搜索目录，多个目录间使用:隔开，如
 
 ```
-VPATH = src:../headers   # ����·��Ĭ�ϰ�����ǰ·��
+VPATH = src:../headers   # 搜索路径默认包括当前路径
 ```
 	
-4. �ؼ���vpath����ָ����ĳĿ¼��ѡ��������ĳģʽƥ��������ļ�����
+4. 关键字vpath可以指定在某目录下选择性搜索某模式匹配的依赖文件，如
 
 ```
-vpath %.h ../headers     # ����·��Ĭ�ϰ�����ǰ·��
+vpath %.h ../headers     # 搜索路径默认包括当前路径
 ```
 
-�����ᵽ��4�����ݽ���֮���Makefileʵ���п�����
+上面提到的4点内容将在之后的Makefile实例中看到。
 
-- ֪��һЩ�򵥵�Makefile��Ƕ����
+- 知道一些简单的Makefile内嵌函数
 
-����Makefile��Ƕ����������������ο�����[5].
+关于Makefile内嵌函数及更多内容请参考文献[5].
 
-### Makefile����ģ��ʵ��
+### Makefile工程模板实例
 
-��С�ڽ���������ͨ�õĹ���Makefileʵ��������Ϊģ��ֱ��Ӧ�õ��Լ��Ĺ����У���Щʵ������Դ�����磬ԭ���߱�����Ȩ��
+本小节将给出两个通用的工程Makefile实例，可作为模板直接应用到自己的工程中，这些实例都来源于网络，原作者保留版权。
 
-�Ķ�MakefileҲ��һ�����ܣ��������ţ�̶���С˵�����������Hacker�ǣ��о�ȥ�ɣ�
+阅读Makefile也是一种享受，就像喝着牛奶读着小说，热情洋溢的Hacker们，研究去吧！
 
-- ��һ��ģ�壺����ģ�����ӵ���������Ŀ¼��ָ����صı�������ʹ�ã����߻����вο�����
+- 第一个模板：将该模板添加到工程所在目录，指定相关的变量即可使用（作者还附有参考哈）
 
 ```
 #############################################################
@@ -1068,19 +1068,19 @@ show:
 ##############################################################
 ```
 
-���Ǵ������ҵ���һ��ģ��ģ�[http://www.iteye.com/topic/774919]��ʹ�ñ��ĵĵ�Example2���ԡ�
+我是从这里找到第一个模板的：[http://www.iteye.com/topic/774919]。使用本文的的Example2测试。
 
-- �ڶ���ģ�壺�������д��͹��̣�ʹ�ö��Makefile��ͨ��include��ʽ����
+- 第二个模板：适用于中大型工程，使用多个Makefile，通过include方式调用
 
-�����ļ�����֯��ʽΪ��
+工程文件的组织方式为：
 
 ![][Makefile-Template2]
 
-�ò�������������CSDN��һƪ���ģ���Ŀʵ��makefile��[http://blog.csdn.net/zhouyulu/article/details/8449263]����
+该部分内容来自于CSDN的一篇博文：项目实用makefile（[http://blog.csdn.net/zhouyulu/article/details/8449263]）。
 
-��ɲο��ò��ģ�������Դ���о��£����а�����
+你可参考该博文，或下载源码研究下，很有帮助。
 
-����ʹ���ļ���Ϊmake.global��Makefile����ȫ�ֱ����һЩ�����趨���������£�
+作者使用文件名为make.global的Makefile进行全局编译的一些规则设定，内容如下：
 
 ```
 # compile macro
@@ -1108,7 +1108,7 @@ cleansubdirs:
 	${CC} ${CFLAGS} ${INCLUDES} -c $< -o $@	
 ```
 
-��Ŀ���ڵ��Makefileʹ��export��include��������make.global�еı�����Ϣ�������������£�
+项目根节点的Makefile使用export和include命令将上面的make.global中的变量信息导出，具体如下：
 
 ```
 # target, subdir, objects in current dir
@@ -1131,7 +1131,7 @@ export MAKEINCLUDE=${PROJECTPATH}/makeconfig/make.global
 include ${MAKEINCLUDE}
 ```
 
-����Ŀ¼�µ�Makefile�ȽϾ���һ���ԣ���srcĿ¼��Makefile��
+其它目录下的Makefile比较具有一致性，如src目录下Makefile：
 
 ```
 # subdir and objects in current dir
@@ -1145,7 +1145,7 @@ clean:cleansubdirs
 	
 include ${MAKEINCLUDE}
 ```
-Ҷ�ӽڵ��Ŀ¼�£��磺
+叶子节点的目录下，如：
 
 src/module-a
 ```
@@ -1175,19 +1175,19 @@ clean:cleansubdirs
 include ${MAKEINCLUDE}
 ```
 
-��ˣ�ֻҪ����Ŀ��Ŀ¼ʹ��һ��make��������Զ��ݹ�ĵ�������Ŀ¼�µ�Makefile���������̽��б��룬�����ʺ϶��˺�������Ŀ�С�
+因此，只要在项目根目录使用一个make命令就能自动递归的调用其它目录下的Makefile对整个工程进行编译，尤其适合多人合作的项目中。
 
-�Ұ����ߵ��ⲿ�ִ��������Example3ʵ���С�
+我把作者的这部分代码放在了Example3实例中。
 
 
-# 5 �ο���Դ
+# 5 参考资源
 1. GCC Manual "Using the GNU Compiler Collection (GCC)" @ http://gcc.gnu.org/onlinedocs.
 2. GNU 'make' manual @ http://www.gnu.org/software/make/manual/make.html.
 3. GCC and Make http://www3.ntu.edu.sg/home/ehchua/programming/cpp/gcc_make.html
 4. Robert Mecklenburg, "Managing Projects with GNU Make", 3rd Edition, 2004.
-5. GNU make�����ֲ�. �����������캣��, 2004-09-11 
+5. GNU make中文手册. 翻译整理：徐海兵, 2004-09-11 
 6. The gnu Source-Level Debugger for gdb (GDB). https://sourceware.org/gdb/download/onlinedocs/gdb/index.html. 
-7. ���ĵĴ���ʵ���� [CODES]
+7. 本文的代码实例： [CODES]
 
 
 
@@ -1204,17 +1204,17 @@ include ${MAKEINCLUDE}
 [http://www.iteye.com/topic/774919]: http://www.iteye.com/topic/774919
 [http://blog.csdn.net/zhouyulu/article/details/8449263]: http://blog.csdn.net/zhouyulu/article/details/8449263
 
-[gcc-v]:../images/ʵ��ѧϰgcc+gdb+make/gcc-v.png
-[gcc-process]:../images/ʵ��ѧϰgcc+gdb+make/GCC_CompilationProcess.png
-[prog-2]:../images/ʵ��ѧϰgcc+gdb+make/prog-2.png
-[static-lib]:../images/ʵ��ѧϰgcc+gdb+make/static-lib.png
-[share-lib]:../images/ʵ��ѧϰgcc+gdb+make/share-lib.png
-[size-static]:../images/ʵ��ѧϰgcc+gdb+make/size-static.png
-[size-share]:../images/ʵ��ѧϰgcc+gdb+make/size-share.png
-[Makefile-Template2]:../images/ʵ��ѧϰgcc+gdb+make/Makefile-Template2.png
+[gcc-v]:../images/实例学习gcc+gdb+make/gcc-v.png
+[gcc-process]:../images/实例学习gcc+gdb+make/GCC_CompilationProcess.png
+[prog-2]:../images/实例学习gcc+gdb+make/prog-2.png
+[static-lib]:../images/实例学习gcc+gdb+make/static-lib.png
+[share-lib]:../images/实例学习gcc+gdb+make/share-lib.png
+[size-static]:../images/实例学习gcc+gdb+make/size-static.png
+[size-share]:../images/实例学习gcc+gdb+make/size-share.png
+[Makefile-Template2]:../images/实例学习gcc+gdb+make/Makefile-Template2.png
 
 
-[mem-layout]:../images/ʵ��ѧϰgcc+gdb+make/mem_layout.png
+[mem-layout]:../images/实例学习gcc+gdb+make/mem_layout.png
 
 
-[CODES]:../codes/ʵ��ѧϰgcc+gdb+make
+[CODES]:../codes/实例学习gcc+gdb+make

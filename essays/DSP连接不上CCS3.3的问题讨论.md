@@ -1,56 +1,56 @@
-[<font size=4>��������Ŀ¼<font>](../README.md)
+[<font size=4>←返回主目录<font>](../README.md)
 </br></br></br>
 
-## ����
+## 环境
 
-- ����ϵͳ��Win7, 64bit
-- IDE��CCS V3.3
-- ��������SEED XDS510PLUS
-- DSP�ͺţ�TMS320C6713GDP(DSP6713)
+- 操作系统：Win7, 64bit
+- IDE：CCS V3.3
+- 仿真器：SEED XDS510PLUS
+- DSP型号：TMS320C6713GDP(DSP6713)
 
-## ��鲽��
+## 检查步骤
 
-1.	���Ű��¸�λ�������ٵ��Connect����
+1.	试着按下复位按键后再点击Connect连接
 
-2.	�����Դ�����Ƿ����������ĵ�ѹ�Ƿ�Ϊ1.2V��IO�ڵ�ѹ�Ƿ��ȶ�Ϊ3.3V��
+2.	请检查电源供电是否正常（核心电压是否为1.2V，IO口电压是否稳定为3.3V）
 
-	ʹ��ʾ����AC���Լ�鹩����Ʋ���TMS320C6713�����ֲ��99ҳ���Ʋ��ķ�ΧҪ��
+	使用示波器AC测试检查供电的纹波，TMS320C6713数据手册的99页有纹波的范围要求
 
 	![][wenbo]
 
-3.	������õ�ع��磬����ص�ѹ����ص�ѹ���ͻ��������ʧ�ܣ��Ƽ�ʹ�õ�ѹ���оƬTPS3823-33
+3.	如果是用电池供电，检查电池电压，电池电压过低会造成连接失败，推荐使用电压监控芯片TPS3823-33
 
-4.	����ϵ縴λ�Ƿ��������ϵ�ʱ�и�λ���壬�ϵ��λ����Ϊ�ߵ�ƽ����DSP6713�ĸ�λ��������������
+4.	检查上电复位是否正常（上电时有复位脉冲，上电后复位引脚为高电平），DSP6713的复位引脚有上拉电阻
 
-5.	���ʱ������Ƿ��������������������ECLKOUT��TMS320C6713��Ĭ��=����ʱ��/2�������ECLKOUT�ܽ��������������˵��оƬ����
+5.	检查时钟输出是否正常，包括晶振输出和ECLKOUT（TMS320C6713中默认=晶振时钟/2），如果ECLKOUT管脚输出不正常，则说明芯片坏了
 
-6.	CCS3.3�����������GEL�ļ��Ƿ���ȷ���硰�洢���ĳ�ʼ������
+6.	CCS3.3工程中载入的GEL文件是否正确（如“存储器的初始化”）
 
-7.	��ȷ���������Ǻõģ�����õ�DSP�����ԣ�������һ�㲻�ᵹù������������ɣ�һ���������ù��أ�
+7.	请确保仿真器是好的（换块好的DSP板试试），不过一般不会倒霉到是这种问题吧（一个仿真器好贵呢）
 
-8.	���JTAG�ӿڵ�EMU0��EMU1�Ƿ����������裬NC�ܽ�Ӧ�ñ�������
+8.	检查JTAG接口的EMU0与EMU1是否有上拉电阻，NC管脚应该保持悬空
 
 	![JTAG]
 
-9.	���PLL�˲��ܽ��Ƿ���ȷ���˲����Ƿ񺸽Ӻ�
+9.	检查PLL滤波管脚是否正确，滤波器是否焊接好
 
 	![PLL]
 
-	�Ҿ���һ��EXCCET103��GND��û���ã���ô��������
+	我就有一次EXCCET103的GND脚没焊好，怎么都连不上
 
-10.	оƬ��ص����ã������ֲ���˵�����������ţ��Ƿ�ʹ������/��������������ã�TMS320C6713Ҫ�������µ�����
+10.	芯片相关的配置（数据手册上说明的特殊引脚）是否使用上拉/下拉电阻进行配置？TMS320C6713要进行如下的配置
 
 	![Config]
 
-	���⣬�����ܽ�RSV1~7�������Ƿ���ȷҲ��ο�Datasheet
+	另外，保留管脚RSV1~7的配置是否正确也请参考Datasheet
 
-11.	ʵ��û�а취����������ļ�鶼����ȷ�ģ���ϲ���н��ˡ����Ͻ���оƬ�ɡ���	
-
-
+11.	实在没有办法，发现上面的检查都是正确的，恭喜你中奖了——赶紧换芯片吧……	
 
 
 
-[wenbo]:../images/DSP���Ӳ���CCS3.3����������/wenbo.png
-[PLL]:../images/DSP���Ӳ���CCS3.3����������/PLL.png
-[JTAG]:../images/DSP���Ӳ���CCS3.3����������/JTAG.png
-[Config]:../images/DSP���Ӳ���CCS3.3����������/Config.png
+
+
+[wenbo]:../images/DSP连接不上CCS3.3的问题讨论/wenbo.png
+[PLL]:../images/DSP连接不上CCS3.3的问题讨论/PLL.png
+[JTAG]:../images/DSP连接不上CCS3.3的问题讨论/JTAG.png
+[Config]:../images/DSP连接不上CCS3.3的问题讨论/Config.png

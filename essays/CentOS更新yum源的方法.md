@@ -1,27 +1,27 @@
-[<font size=4>¡û·µ»ØÖ÷Ä¿Â¼<font>](../README.md)
+[<font size=4>â†è¿”å›ä¸»ç›®å½•<font>](../README.md)
 </br></br></br>
 
-²Ù×÷»·¾³£ºCentOS 6.5 64bit ¿í´øÍâÍø
+æ“ä½œç¯å¢ƒï¼šCentOS 6.5 64bit å®½å¸¦å¤–ç½‘
 
-## ¹úÄÚµÄyumÔ´¶¼ÔÚÄÄÀï
+## å›½å†…çš„yumæºéƒ½åœ¨å“ªé‡Œ
 
-1.	ÉÏº£½»´ó£º<http://ftp.sjtu.edu.cn/centos/>£¬µØÀíÎ»ÖÃÔÚ±±·½£¬½ÌÓıÍøÖĞ½Ï¿ì
-2.	ÖĞ¹ú¿Æ´ó£º<http://centos.ustc.edu.cn/>£¬µØÀíÎ»ÖÃÔÚºÏ·Ê£¬ÄÏ·½
-3.	ÍøÒ×163£º<http://mirrors.163.com/centos>£¬ÍâÍøÍÆ¼ö
-4.	ËÑºü¾µÏñ£º<http://mirrors.sohu.com/>£¬É½¶«ÁªÍ¨ÍøÂç
+1.	ä¸Šæµ·äº¤å¤§ï¼š<http://ftp.sjtu.edu.cn/centos/>ï¼Œåœ°ç†ä½ç½®åœ¨åŒ—æ–¹ï¼Œæ•™è‚²ç½‘ä¸­è¾ƒå¿«
+2.	ä¸­å›½ç§‘å¤§ï¼š<http://centos.ustc.edu.cn/>ï¼Œåœ°ç†ä½ç½®åœ¨åˆè‚¥ï¼Œå—æ–¹
+3.	ç½‘æ˜“163ï¼š<http://mirrors.163.com/centos>ï¼Œå¤–ç½‘æ¨è
+4.	æœç‹é•œåƒï¼š<http://mirrors.sohu.com/>ï¼Œå±±ä¸œè”é€šç½‘ç»œ
 
 
-## ÈçºÎÌæ»»Ô­ÓĞµÄyumÔ´
+## å¦‚ä½•æ›¿æ¢åŸæœ‰çš„yumæº
 
-±¾ÎÄ½«Ìæ»»Ô­À´CentOS¹Ù·½µÄyumÎª163µÄyumÔ´£º
+æœ¬æ–‡å°†æ›¿æ¢åŸæ¥CentOSå®˜æ–¹çš„yumä¸º163çš„yumæºï¼š
 
 ```shell
 su root
 cd /etc/yum.repos.d
-mv CentOS-Base.repo CentOS-Base.repo.bak                 # ±¸·İÔ­ÓĞµÄyumÔ´
-wget http://mirrors.163.com/.help/CentOS6-Base-163.repo  # »ñÈ¡163µÄyumÔ´ÎÄ¼ş
-mv CentOS6-Base-163.repo CentOS-Base.repo                # Ê¹ÓÃ163µÄyumÔ´×÷ÎªÄ¬ÈÏµÄyumÔ´
-yum clean all && yum makecache && yum update -y          # yum¸üĞÂ
+mv CentOS-Base.repo CentOS-Base.repo.bak                 # å¤‡ä»½åŸæœ‰çš„yumæº
+wget http://mirrors.163.com/.help/CentOS6-Base-163.repo  # è·å–163çš„yumæºæ–‡ä»¶
+mv CentOS6-Base-163.repo CentOS-Base.repo                # ä½¿ç”¨163çš„yumæºä½œä¸ºé»˜è®¤çš„yumæº
+yum clean all && yum makecache && yum update -y          # yumæ›´æ–°
 ```
 
-ÍøÒ×613Ìá¹©ÁËyumÔ´µÄCentOS-Base.repoÎÄ¼ş£¬¶øÉÏº£½»´óºÍÖĞ¿Æ´óµÄyumÔ´¿ÉÄÜĞèÒª×Ô¼ºĞ´£¬Ïà¶ÔÀ´Ëµ£¬Ê¹ÓÃ163µÄyum¸üĞÂ¸ü·½±ãĞ©¡£
+ç½‘æ˜“613æä¾›äº†yumæºçš„CentOS-Base.repoæ–‡ä»¶ï¼Œè€Œä¸Šæµ·äº¤å¤§å’Œä¸­ç§‘å¤§çš„yumæºå¯èƒ½éœ€è¦è‡ªå·±å†™ï¼Œç›¸å¯¹æ¥è¯´ï¼Œä½¿ç”¨163çš„yumæ›´æ–°æ›´æ–¹ä¾¿äº›ã€‚

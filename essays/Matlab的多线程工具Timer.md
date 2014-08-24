@@ -1,20 +1,20 @@
-[<font size=4>��������Ŀ¼<font>](../README.md)
+[<font size=4>←返回主目录<font>](../README.md)
 </br></br></br>
 
 
-��Ϊһ���ӱ��Ƶ�����Ϣ����ת�������о�����ͬѧ��һֱ�о�Ƕ��ʽ���źŴ�����ط���һֱ���ҷ�Ϊ�������Ծ���C��Matlab��
+作为一个从本科电子信息工程转入计算机研究生的同学，一直研究嵌入式、信号处理相关方向，一直被我奉为最经典的语言就是C和Matlab。
 
-�������ǣ��Ҽ������Ը��κ�����ɵ����顣
+有了它们，我几乎可以干任何我想干的事情。
 
-�ö���Matlab�����棬��ʱ�ͻ�������Matlab���ʵ�ֵĶ�ʱ���Ĺ��ܵ��أ����磺
+用多了Matlab做仿真，有时就会遇到：Matlab如何实现的定时器的功能的呢？比如：
 
-1. �������˽ṹÿ��10s����һ��
-2. �����������5s��ͽ�����
+1. 网络拓扑结构每隔10s更新一次
+2. 让这个程序在5s后就结束吧
 
-��Matlab���ṩ��һ�����̵߳ķ�������Timer��
+在Matlab中提供了一个多线程的方法——Timer。
 
 
-ÿ��ʹ��һ���µ�Matlab������������Ͼ��ǰ����ĵ���
+每当使用一个新的Matlab函数，最好资料就是帮助文档：
 
 
 ```
@@ -22,22 +22,22 @@
 >> doc timer 
 ```
 
-ʹ��Timer�Ĳ������£�
+使用Timer的步骤如下：
 
-## 1 ����Timer����
+## 1 创建Timer对象
 
-timer����Ĵ���ֱ��ͨ��timer������ɵģ�
+timer对象的创建直接通过timer函数完成的，
 
 ```
 iter     = 400; 
 interval = 0.5;  % s
-t = timer('TimerFcn', @caputure, ...  % �ص�����caputure����ѡ����
-    'Period', interval, ...  % ÿ��interval (s)����һ��caputure����
+t = timer('TimerFcn', @caputure, ...  % 回调函数caputure，必选参数
+    'Period', interval, ...  % 每隔interval (s)调用一次caputure函数
     'ExecutionMode', 'fixedSpacing', ...
-    'TasksToExecute', iter); % ����caputure�����趨Ϊiter
+    'TasksToExecute', iter); % 调用caputure次数设定为iter
 ```
 
-Timer����ĸ�ʽΪ��
+Timer对象的格式为：
 
 ```
 >> t
@@ -57,58 +57,58 @@ Timer����ĸ�ʽΪ��
             StopFcn: ''
 ```
 
-- Timer Settings�бȽ���Ҫ�Ĳ����У�
+- Timer Settings中比较重要的参数有：
 
-	- ExecutionMode   ִ�е�ģʽ
+	- ExecutionMode   执行的模式
 
-	����ȷ��TimerFcnִ�����ڼ����ʼĩ��
+	就是确定TimerFcn执行周期计算的始末点
 
-	'singleShot'    ��ֻ��ִ��һ�Σ���Period���Բ������ã�����ģʽ������ִ�ж��
+	'singleShot'    ：只能执行一次，故Period属性不起作用，其他模式都可以执行多次
 
-	'fixedSpacing'  ����һ��TimerFcnִ�����ʱ�̵���һ��TimerFcn���������ʱ��֮��ļ��
+	'fixedSpacing'  ：上一次TimerFcn执行完毕时刻到下一次TimerFcn被加入队列时刻之间的间隔
 
-	'fixedDelay'    ����һ�ο�ʼִ�е���һ�α��������֮��ļ��      
+	'fixedDelay'    ：上一次开始执行到下一次被加入队列之间的间隔      
 	 
-	'fixedRate'     ��ǰ�����α����뵽ִ��������ʱ��֮��ļ��
+	'fixedRate'     ：前后两次被加入到执行语句队列时刻之间的间隔
 
-	- Period  ʱ����(ִ������)
+	- Period  时间间隔(执行周期)
 
-	Ҳ����ÿ��Periodִ��һ��TimerFcn��ִ�����ڵ���ָ����������ʱ��֮��ļ����ExecutionMode����
+	也就是每个Period执行一次TimerFcn，执行周期到底指的是哪两个时刻之间的间隔由ExecutionMode决定
 
-	- StartDelay   ����ʱ��
+	- StartDelay   启动时延
 
-	������Timer��ʼ����һ�ΰ�TimerFcn�ļ��뵽Matlab��ִ����������ȥ��ʱ��, Ĭ��ֵΪ0s           
+	从启动Timer开始到第一次把TimerFcn的加入到Matlab的执行语句队列中去的时延, 默认值为0s           
 
-	- TasksToExecute    ִ�д���
+	- TasksToExecute    执行次数
 
-	TimerFcn��ִ�еĴ�����Ĭ��Ϊ1�Σ����ö��ʱ��Ҫ����ִ������Period
+	TimerFcn被执行的次数，默认为1次，设置多次时需要设置执行周期Period
 
-- Timer�������һ�����ǻص�������Callbacks��
+- Timer对象的另一部分是回调函数（Callbacks）
 
-	- TimerFcn    Timer����
+	- TimerFcn    Timer函数
 	
-	��Timer����ĺ��ģ�Timer�Ķ��߾���ͨ��ִ�����TimerFcn��ʵ�ֵģ�Ҳ��Timer����ı�ѡ����
+	是Timer对象的核心，Timer的多线就是通过执行这个TimerFcn来实现的，也是Timer对象的必选参数
 
 	- ErrorFcn
 	
-	- StartFcn   ����Timerʱ���õĺ������������ڳ�ʼ��
+	- StartFcn   启动Timer时调用的函数，可以用于初始化
 	
-	- StopFcn	 ֹͣTimerʱ���õĺ���
+	- StopFcn	 停止Timer时调用的函数
 
-## 2 �趨�Ͷ�ȡTimer����Ĳ���
+## 2 设定和读取Timer对象的参数
 
-���˿����ڴ���Timerʱ�趨��ز����⣬���������ķ���������ʱ���ã�
+除了可以在创建Timer时设定相关参数外，还有其它的方法可以随时设置：
 
-- ʹ��set/get����
+- 使用set/get函数
 
 ```
-%����һ��Ĭ�ϵ�Timer����
+%创建一个默认的Timer对象
 TaskTimer=timer
 set(TaskTimer,'Name','Matlabsky','TimerFcn',@caputure)
 get(TaskTimer,'Name')
 ````
 
-- ֱ�Ӳ��ݽṹ��
+- 直接操纵结构体
 
 ```
 TaskTimer=timer
@@ -116,9 +116,9 @@ TaskTimer.Name='Matlabsky'
 TaskTimer.TimerFcn=@caputure
 ```
 	
-## 3 �����ص�����
+## 3 创建回调函数
 
-�ص������ĸ�ʽΪ��
+回调函数的格式为：
 
 ```
 function my_callback_fcn(obj,event,p1,p2)
@@ -126,23 +126,23 @@ function my_callback_fcn(obj,event,p1,p2)
 % see also http://www.matlabsky.com
 % 20092.15
 %
-% ==== obj��eventΪ��ѡ�������
+% ==== obj和event为必选输入参数
 %
-% 1. obj����ǰ�洴����Timer������������Timer�����в���
+% 1. obj就是前面创建的Timer对象，它包含着Timer的所有参数
 %
-% 2. event��һ���ṹ�壬����Type��Data�����ֶ�
-%    Type������ǵ�ǰ��Timer����ִ�е�ʱ�䣬����StartFcn��StopFcn��
-%    Data��һ���ṹ�壬����timeһ���ֶΣ��������ִ�и��¼���ϵͳʱ��
+% 2. event是一个结构体，包含Type和Data两个字段
+%    Type保存的是当前的Timer对象执行的时间，比如StartFcn、StopFcn等
+%    Data是一个结构体，包含time一个字段，保存的是执行该事件的系统时间
 %
-%    ����event��ʹ����event.Type��ȡTimer������ִ���ĸ��¼���event.Data.time��ȡִ�и�ʱ���ϵͳʱ��
+%    所以event的使用是event.Type获取Timer到底在执行哪个事件，event.Data.time获取执行该时间的系统时间
 %
-% ==== p1,p2...���������Զ�������������������Ҫ���Լ�����
+% ==== p1,p2...等是其它自定义的输入参数，根据需要在自己添加
 ```
 
 
 
 
-# �ο�
+# 参考
 
 1. http://www.matlabsky.com/thread-646-1-1.html
 

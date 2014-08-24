@@ -1,56 +1,56 @@
-[<font size=4>��������Ŀ¼<font>](../README.md)
+[<font size=4>←返回主目录<font>](../README.md)
 </br></br></br>
 
-�Դ�ʹ��Markdown�������Ϳ�ʼһֱʹ��Markdown+Github��д���£������Լ�����ѧ��˼����������ͨ�����ַ�ʽ��ɵġ�
+自从使用Markdown以来，就开始一直使用Markdown+Github在写文章，整理自己的所学所思。本文亦是通过这种方式完成的。
 
-Ȼ����Markdown������д�����Ժܺã�Ψ��������ѧ��ʽʱ��Ҫɷ�ѿ��ġ���ÿ�ζ�����ʹ��Latex��д(���ߵ�Latex�༭���ο�[1])��Ȼ�󱣴�ΪͼƬ��ʹ��img��ǩ�������ã�����ʽ�ܶ��ʱ�����Ը��ӡ�
+然而，Markdown自由书写的特性很好，唯独遇到数学公式时就要煞费苦心——每次都是先使用Latex书写(在线的Latex编辑器参考[1])，然后保存为图片，使用img标签进行引用，当公式很多的时候稍显复杂。
 
-���ĵķ���ʹ��html���﷨������[1]�Ĺ�ʽ����API����������Latex��ѧ��ʽ����ȥ����ʽ����ΪͼƬ���鷳����Ȼ���׶�Ҳ���еģ���ʽ̫�࣬���ܻ����ˢ�±�һ�����ҳ��һЩ��
+本文的方法使用html的语法，调用[1]的公式生成API，在线生成Latex数学公式，免去将公式保存为图片的麻烦。当然，弊端也是有的，公式太多，可能会造成刷新比一般的网页慢一些。
 
-## ����һ��ʹ��Google Chart�ķ�����
+## 方法一：使用Google Chart的服务器
 
 ```
-<img src="http://chart.googleapis.com/chart?cht=tx&chl= �ڴ˲���Latex��ʽ" style="border:none;">
+<img src="http://chart.googleapis.com/chart?cht=tx&chl= 在此插入Latex公式" style="border:none;">
 ```
 
-һ�����ӣ�
+一个例子，
 
 ```
 <img src="http://chart.googleapis.com/chart?cht=tx&chl=\Large x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}" style="border:none;">
 ```
 
-��ʽ��ʾ���Ϊ��
+公式显示结果为：
 
 <img src="http://chart.googleapis.com/chart?cht=tx&chl=\Large x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}" style="border:none;">
 
-�������£�Google Chart����������Ӧ�ٶȻ����ԣ�����˵���ܸ���һЩ��Latex��ʽ�����޷��������ο�[2]����
+适用了下，Google Chart服务器的响应速度还可以，但据说可能复杂一些的Latex公式可能无法解析（参考[2]）。
 
-## ��������ʹ��forkosh������
+## 方法二：使用forkosh服务器
 
-forkosh���ṩ�˹���Latex��ʽ��һ�ݼ�̶������õİ������ο�[1]��[3].
+forkosh上提供了关于Latex公式的一份简短而很有用的帮助，参考[1]和[3].
 
-ʹ��forkosh���빫ʽ�ķ�����
+使用forkosh插入公式的方法是
 
 ```
-<img src="http://www.forkosh.com/mathtex.cgi? �ڴ˴�����Latex��ʽ">
+<img src="http://www.forkosh.com/mathtex.cgi? 在此处插入Latex公式">
 ```
 
-�������ӣ�
+给个例子，
 
 ```
 <img src="http://www.forkosh.com/mathtex.cgi? \Large x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}">
 ```
 
-��ʾ���Ϊ��
+显示结果为：
 
 <img src="http://www.forkosh.com/mathtex.cgi? \Large x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}">
 
 
-��Ϊ��ҳ���빫ʽ��ԭ���ǵ��á�ĳĳ��վ�ķ���������̬���ɵģ����б�֤��ʽ������ʾ��ǰ���Ǹ���ַ��һֱ������Ϊ�ҵ�С����ЩСС�ķ���forkosh�������˿�2���ˣ�һֱ�ܺã��Ƽ���
+因为网页插入公式的原理是调用“某某网站的服务器”动态生成的，所有保证公式正常显示的前提是该网址能一直存在着为我等小生做些小小的服务。forkosh我是用了快2年了，一直很好，推荐！
 
-## ��������ʹ��MathJax����
+## 方法三：使用MathJax引擎
 
-��Ҷ�����[Stackoverflow](http://stackoverflow.com/)�ϵĹ�ʽ�ɣ�Ư���������ɵĲ���ͼƬ�����Ҫ�õ�MathJax���棬��Markdown������MathJax����Ҳ�ܼ򵥣�
+大家都看过[Stackoverflow](http://stackoverflow.com/)上的公式吧，漂亮，其生成的不是图片。这就要用到MathJax引擎，在Markdown中添加MathJax引擎也很简单，
 
 ```
 <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
@@ -58,52 +58,52 @@ forkosh���ṩ�˹���Latex��ʽ��һ�ݼ�̶������õİ������ο�[1]��[3].
 
 <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
 
-Ȼ����ʹ��Texд��ʽ��`$$��ʽ$$`��ʾ�м乫ʽ������Tex��ʹ��`\(��ʽ\)`��ʾ���ڹ�ʽ������ΪMarkdown��`\`��ת���ַ���������Markdown���������ڹ�ʽʹ��`\\(��ʽ\\)`�����´��룺
+然后，再使用Tex写公式。`$$公式$$`表示行间公式，本来Tex中使用`\(公式\)`表示行内公式，但因为Markdown中`\`是转义字符，所以在Markdown中输入行内公式使用`\\(公式\\)`，如下代码：
 
 ```
 $$x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}$$
 \\(x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}\\)
 ```
 
-�ֱ���ʾ������м乫ʽ����
+分别显示结果（行间公式）：
 
 $$x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}$$
 
-���ڹ�ʽ��
+行内公式：
 
 \\(x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}\\)
 
-���ţ��������һ�£��ڹ�ʽ�ϻ�����ʹ������Ҽ�������
+不信，你可以试一下，在公式上还可以使用鼠标右键操作。
 
-## ����Ƭ��
+## 代码片段
 
-��û���ù�Sublime Text�༭������˵�����Ƭ�ι��ܷǳ�ǿ��Ȼ��������Ը�Ƽ�һ������༭��Everedit��С��ʵ�á���Ҳ֧��Markdown��Ҳ�д���Ƭ�ι��ܣ���ʹ�õ�������Ѱ汾2.���ɡ�
+我没有用过Sublime Text编辑器，听说其代码片段功能非常强大，然而我这宁愿推荐一款国产编辑器Everedit，小巧实用。它也支持Markdown，也有代码片段功能，我使用的是其免费版本2.几吧。
 
-�˵���`����->����Ƭ��`������Ƭ�����Ҽ�`����`����д�������£�
+菜单项`查找->代码片段`，代码片段中右键`插入`，填写内容如下：
 
-1.	ʹ��forkosh������������ʽ
+1.	使用forkosh服务器解析公式
 
 ```
-@����:Equation
-@�����ı�:Equation
-@����Ƭ��:������һ�п�ʼ��������!
+@名称:Equation
+@触发文本:Equation
+@代码片段:请在下一行开始输入内容!
 
 <img src="http://www.forkosh.com/mathtex.cgi? \Large x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}">
 
 ```
 
-2.	ʹ��MathJax������ʽ
+2.	使用MathJax解析公式
 
 ```
-@����:MathJax
-@�����ı�:MathJax
-@����Ƭ��:������һ�п�ʼ��������!
+@名称:MathJax
+@触发文本:MathJax
+@代码片段:请在下一行开始输入内容!
 <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
 ```
 
-���֮��������Equation��MathJax�Ĵ���Ƭ�Σ�ÿ�����ӹ�ʽʱֻ��Ҫ˫���ô���Ƭ�����Զ����������ģ�壬����ʡ�£�
+完成之后，则多出叫Equation和MathJax的代码片段，每次添加公式时只需要双击该代码片段则自动添加上面的模板，方便省事！
 
-## �ο�
+## 参考
 
 [1] <http://www.forkosh.com/mathtextutorial.html>
 

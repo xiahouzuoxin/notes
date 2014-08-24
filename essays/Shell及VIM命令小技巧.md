@@ -1,74 +1,74 @@
-[<font size=4>��������Ŀ¼<font>](../README.md)
+[<font size=4>←返回主目录<font>](../README.md)
 </br></br></br>
 
-˵����
+说明：
 
-1.	�����еĴ�д��ĸһ��Ҫ����Shift����ϣ���J��ʾ����Shift+J
+1.	命令中的大写字母一般要求是Shift的组合，如J表示按下Shift+J
 
-## Shell����С����
+## Shell命令小技巧
 
-### ͳ�ƴ�������
+### 统计代码行数
 
-ͳ�Ƶ����ļ�ֱ��ʹ��`wc -l file`����ɣ�ͳ��ĳ��Ŀ¼������ĳ�����ļ���������
+统计单个文件直接使用`wc -l file`命令即可，统计某个目录下所有某类型文件的行数：
 
 ```
 find . -name *.[ch] | xargs wc -l | sort -n
 ```
 
-��ʾͳ�Ƶ�ǰĿ¼��.c��.h�ļ�������������������С����.
+表示统计当前目录下.c与.h文件的行数，并按行数大小排序.
 
-### grep����
+### grep命令
 
-ʹ�ø�ʽΪgrep [-acinvr] [--color=auto] '��Ѱ�ַ���' filename
+使用格式为grep [-acinvr] [--color=auto] '搜寻字符串' filename
 
-	ѡ���������
+	选项与参数：
 
-	-a ���� binary �ļ��� text �ļ��ķ�ʽ��Ѱ����
-	-c �������ҵ� '��Ѱ�ַ���' �Ĵ���
-	-i �����Դ�Сд�Ĳ�ͬ�����Դ�Сд��Ϊ��ͬ
-	-n ��˳������к�
-	-v ������ѡ���༴��ʾ��û�� '��Ѱ�ַ���' ���ݵ���һ�У�
-	-r : �ݹ�Ŀ¼�������һ��Դ�빤���в���ĳ��tag���ֵ�λ�ú�����
-	--color=auto �����Խ��ҵ��Ĺؼ��ʲ��ּ�����ɫ����ʾร�
+	-a ：将 binary 文件以 text 文件的方式搜寻数据
+	-c ：计算找到 '搜寻字符串' 的次数
+	-i ：忽略大小写的不同，所以大小写视为相同
+	-n ：顺便输出行号
+	-v ：反向选择，亦即显示出没有 '搜寻字符串' 内容的那一行！
+	-r : 递归目录，这个在一个源码工程中查找某个tag出现的位置很有用
+	--color=auto ：可以将找到的关键词部分加上颜色的显示喔！
 
-grep����������ʽ�Լ��ܵ�����ͳ�ƴ������������ʵ�ã�
+grep结合正则表达式以及管道（如统计代码行数）会很实用！
 
-�������������У�����ʹ��`dmesg`����鿴ϵͳ���Ĳ�������Ϣ��Ȼ��ʹ��`dmesg | grep 'eth'`�Ϳɴ���Ϣ�й��˳�������һ����.
+如在驱动开发中，常会使用`dmesg`命令查看系统核心产生的信息，然后使用`dmesg | grep 'eth'`就可从信息中过滤出网卡那一行了.
 
 
-## VIM����С����
+## VIM命令小技巧
 
-###	�ؼ��ʲ�ȫ
+###	关键词补全
 
-��ѡ��`Ctrl + P`����Ȼ��������Ctrl+X����ϣ�
+首选是`Ctrl + P`，当然还有其它Ctrl+X的组合：
 
-1. `Ctrl + X` �� `Ctrl + D` �궨�岹��
-2. `Ctrl + X` �� `Ctrl + ]` ��Tag ����
-3. `Ctrl + X` �� `Ctrl + F` ���ļ�������
-4. `Ctrl + X` �� `Ctrl + I` Ҳ�ǹؼ��ʲ��룬���ǹؼ��ʺ���и��ļ���������������ؼ������ĸ��ļ���
-5. `Ctrl + X` �� `Ctrl +V` �Ǳ���ʽ����
-6. `Ctrl + X` �� `Ctrl +L` ����Զ������в���
+1. `Ctrl + X` 和 `Ctrl + D` 宏定义补齐
+2. `Ctrl + X` 和 `Ctrl + ]` 是Tag 补齐
+3. `Ctrl + X` 和 `Ctrl + F` 是文件名补齐
+4. `Ctrl + X` 和 `Ctrl + I` 也是关键词补齐，但是关键词后会有个文件名，告诉你这个关键词在哪个文件中
+5. `Ctrl + X` 和 `Ctrl +V` 是表达式补齐
+6. `Ctrl + X` 和 `Ctrl +L` 这可以对整个行补齐
 
-### ���в���һ��
+### 多行并成一行
 
-�ðɣ�ʹ��`v`����Visualģʽ��ѡ����У�ֱ��`J`�Ϳ�����
+好吧，使用`v`进入Visual模式，选择多行，直接`J`就可以了
 
-### �ַ����
+### 字符相关
 
-1.	ʹ��`v`����Visualģʽ��ѡ��Ҫת�����ַ�����`u`תСд��`U`ת��д
-2.	`ga`�鿴��괦�ַ���ascii�룬�ܺ���
-3.	`g8`�鿴��괦�ַ���utf-8����
-4.	`gf`�򿪹�괦���ļ����ҳ�������C�а�����ͷ�ļ�
-5.	`*`��`#`�ڵ�ǰ�ļ���������ǰ��������ַ�
+1.	使用`v`进入Visual模式，选择要转换的字符串，`u`转小写，`U`转大写
+2.	`ga`查看光标处字符的ascii码，很好用
+3.	`g8`查看光标处字符的utf-8编码
+4.	`gf`打开光标处的文件，我常用来打开C中包含的头文件
+5.	`*`或`#`在当前文件中搜索当前光标所在字符
 
-### ������
+### 软链接
 
 `ln -s [Src] [Dst]`
 
-�ڶ�汾gcc�����ʱ��`ln -s`��������ã�
+在多版本gcc共存的时候`ln -s`命令很有用，
 
 ```
-sudo ln -s /usr/bin/gcc-4.1 /usr/bin/gcc    " ����GCC��gcc-4.1��������
+sudo ln -s /usr/bin/gcc-4.1 /usr/bin/gcc    " 建立GCC到gcc-4.1的软链接
 ```
 
 
@@ -76,8 +76,8 @@ sudo ln -s /usr/bin/gcc-4.1 /usr/bin/gcc    " ����GCC��gcc-4.1��������
 
 
 
-## �ο�
+## 参考
 
-[1] [��ǣ�����Vim��������](http://coolshell.cn/articles/5426.html)
+[1] [酷壳：简明Vim练级攻略](http://coolshell.cn/articles/5426.html)
 
-[2] [��磺Linux˽���˻���ƪ](http://vbird.dic.ksu.edu.tw/linux_basic/linux_basic.php)
+[2] [鸟哥：Linux私房菜基础篇](http://vbird.dic.ksu.edu.tw/linux_basic/linux_basic.php)

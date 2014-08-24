@@ -1,12 +1,12 @@
-[<font size=4>¡û·µ»ØÖ÷Ä¿Â¼<font>](../README.md)
+[<font size=4>â†è¿”å›žä¸»ç›®å½•<font>](../README.md)
 </br></br></br>
 
 
-## ÔÚMATLABÖÐÅäÖÃCÓïÑÔ±àÒëÆ÷
+## åœ¨MATLABä¸­é…ç½®Cè¯­è¨€ç¼–è¯‘å™¨
 
-ÔÚÕâÖ®Ç°±ØÐë°²×°ºÃ±àÒëÆ÷£¬¿ÉÒÔÊÇVCÍêÕû°æ£¬ÂÌÉ«°æÃ²ËÆ²»ÐÐ°¡£¬
+åœ¨è¿™ä¹‹å‰å¿…é¡»å®‰è£…å¥½ç¼–è¯‘å™¨ï¼Œå¯ä»¥æ˜¯VCå®Œæ•´ç‰ˆï¼Œç»¿è‰²ç‰ˆè²Œä¼¼ä¸è¡Œå•Šï¼Œ
 
-1\.	`mex ¨Csetup`ÉèÖÃ±àÒëÆ÷Ñ¡Ïî£¬½«Èë¿Úº¯ÊýÎªmexFunctionµÄC/C++ÎÄ¼þ±àÒë³Émex(DLL)ÎÄ¼þ
+1\.	`mex â€“setup`è®¾ç½®ç¼–è¯‘å™¨é€‰é¡¹ï¼Œå°†å…¥å£å‡½æ•°ä¸ºmexFunctionçš„C/C++æ–‡ä»¶ç¼–è¯‘æˆmex(DLL)æ–‡ä»¶
 
 ```	
 >> mex -setup
@@ -42,7 +42,7 @@ From template:              D:\PROGRA~1\MATLAB\R2010b\bin\win64\mexopts\msvc90op
 Done . . . 
 ```
 
-2\. `mbuild -setup`ÉèÖÃ±àÒëÆ÷Ñ¡Ïî£¬½«Èë¿Úº¯ÊýÎªmainµÄC/C++ÎÄ¼þÉú³É¿ÉÒÔ¶ÀÁ¢ÔËÐÐµÄCÓ¦ÓÃ³ÌÐò
+2\. `mbuild -setup`è®¾ç½®ç¼–è¯‘å™¨é€‰é¡¹ï¼Œå°†å…¥å£å‡½æ•°ä¸ºmainçš„C/C++æ–‡ä»¶ç”Ÿæˆå¯ä»¥ç‹¬ç«‹è¿è¡Œçš„Cåº”ç”¨ç¨‹åº
 
 ```
 >> mbuild -setup
@@ -78,9 +78,9 @@ From template:              D:\PROGRA~1\MATLAB\R2010b\bin\win64\mbuildopts\msvc9
 Done . . . 
 ```
 
-## MATLABµ÷ÓÃC³ÌÐò²âÊÔ
+## MATLABè°ƒç”¨Cç¨‹åºæµ‹è¯•
 
-1.	C´úÂëÈçÏÂ£¬ÎÄ¼þÃûÎªtest.c£¬¼ÙÉè±£´æÔÚE:/testÏÂ£¬
+1.	Cä»£ç å¦‚ä¸‹ï¼Œæ–‡ä»¶åä¸ºtest.cï¼Œå‡è®¾ä¿å­˜åœ¨E:/testä¸‹ï¼Œ
 
 	```c
 	#include "mex.h"
@@ -97,26 +97,26 @@ Done . . .
 	}
 	```
 	
-2.	ÔÚMATLABÖÐÔËÐÐ`cd E:/test`×ªµ½´æ·ÅCÎÄ¼þÂ·¾¶£¬Ê¹ÓÃ`mex test.c`±àÒë£¬È»ºóÔËÐÐtest£¬ÔòÔÚCommond windowsÏÂÊä³öHello World, 5!
+2.	åœ¨MATLABä¸­è¿è¡Œ`cd E:/test`è½¬åˆ°å­˜æ”¾Cæ–‡ä»¶è·¯å¾„ï¼Œä½¿ç”¨`mex test.c`ç¼–è¯‘ï¼Œç„¶åŽè¿è¡Œtestï¼Œåˆ™åœ¨Commond windowsä¸‹è¾“å‡ºHello World, 5!
 
-3.	ÔÚC/C++ÖÐÒýÓÃ³£ÓÃÍ·ÎÄ¼þ
+3.	åœ¨C/C++ä¸­å¼•ç”¨å¸¸ç”¨å¤´æ–‡ä»¶
 
 	```
 	#include "mex.h"
 	#include "matrix.h"
 	```
 
-4.	ÔÚC/C++ÖÐ³£ÓÃÓëmatlab²Ù×÷Ïà¹ØµÄº¯Êý
+4.	åœ¨C/C++ä¸­å¸¸ç”¨ä¸Žmatlabæ“ä½œç›¸å…³çš„å‡½æ•°
 
-	mexErrMsgTxt : ´òÓ¡´íÎóÐÅÏ¢£¬»áÖÐ¶Ï³ÌÐòÖ´ÐÐ
+	mexErrMsgTxt : æ‰“å°é”™è¯¯ä¿¡æ¯ï¼Œä¼šä¸­æ–­ç¨‹åºæ‰§è¡Œ
 	
-	mxGetM/mxGetN£º»ñÈ¡matlabÖÐ¾ØÕóµÄÐÐÁÐ
+	mxGetM/mxGetNï¼šèŽ·å–matlabä¸­çŸ©é˜µçš„è¡Œåˆ—
 	
-	mxGetPr : »ñÈ¡ÊäÈë¾ØÕóµÄÖ¸Õë
+	mxGetPr : èŽ·å–è¾“å…¥çŸ©é˜µçš„æŒ‡é’ˆ
 	
-	mxGetScale:Èç¹û´«ÈëµÄÎªµ¥¸öÖµ£¬Ôò»ñÈ¡´«ÈëµÄÖµ
+	mxGetScale:å¦‚æžœä¼ å…¥çš„ä¸ºå•ä¸ªå€¼ï¼Œåˆ™èŽ·å–ä¼ å…¥çš„å€¼
 	
-	mxCreateNumericMatrix/mxCreateDoubleMatrix:´´½¨Êä³ö¾ØÕó
+	mxCreateNumericMatrix/mxCreateDoubleMatrix:åˆ›å»ºè¾“å‡ºçŸ©é˜µ
 
 	```
 	void
@@ -166,16 +166,16 @@ Done . . .
 	}
 	```
 
-5.	MATLAB¾ØÕóÓëC/C++Êý×éÖ®¼äµÄ×ª»»
+5.	MATLABçŸ©é˜µä¸ŽC/C++æ•°ç»„ä¹‹é—´çš„è½¬æ¢
 
-	matlabÖÐµÄÔªËØË÷Òý´Ó1¿ªÊ¼£¬¶øC/C++ÔòÊÇ´Ó0¿ªÊ¼¡£
+	matlabä¸­çš„å…ƒç´ ç´¢å¼•ä»Ž1å¼€å§‹ï¼Œè€ŒC/C++åˆ™æ˜¯ä»Ž0å¼€å§‹ã€‚
 
-	matlabÖÐµÄ¾ØÕóË÷ÒýË³ÐòÊÇ´ÓÁÐ¿ªÊ¼µÄ£¬Òò´ËmatlabÖÐµÄa(i,j)½«×ª»¯ÎªC/C++ÖÐµÄa[j'][i'] (ÆäÖÐj'=j-1, i'=i-1)
+	matlabä¸­çš„çŸ©é˜µç´¢å¼•é¡ºåºæ˜¯ä»Žåˆ—å¼€å§‹çš„ï¼Œå› æ­¤matlabä¸­çš„a(i,j)å°†è½¬åŒ–ä¸ºC/C++ä¸­çš„a[j'][i'] (å…¶ä¸­j'=j-1, i'=i-1)
 
 
-## C³ÌÐòµ÷ÓÃMATLAB²âÊÔ
+## Cç¨‹åºè°ƒç”¨MATLABæµ‹è¯•
 
-1.	±àÐ´C³ÌÐòºóºóÊ¹ÓÃÏÂÃæµÄ±àÒëÑ¡Ïî
+1.	ç¼–å†™Cç¨‹åºåŽåŽä½¿ç”¨ä¸‹é¢çš„ç¼–è¯‘é€‰é¡¹
 	mcc -B csharedlib:MyFunc MyFunc.m
 
-2.	ÔÚC±àÒëÆ÷ÖÐÊ¹ÓÃ¹²Ïí¿âÀ´µ÷ÓÃmatlab³ÌÐò
+2.	åœ¨Cç¼–è¯‘å™¨ä¸­ä½¿ç”¨å…±äº«åº“æ¥è°ƒç”¨matlabç¨‹åº
