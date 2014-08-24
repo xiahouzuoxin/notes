@@ -1,3 +1,5 @@
+本目录为[html目录索引](index.md)，浏览[Markdown目录索引](README.md)请移步[Markdown目录索引](README.md)。
+
 # 第一篇 分类目录
 
 ## 1 嵌入式
@@ -138,7 +140,11 @@
 
 笔记完全使用Markdown书写，并首先发布在[Github](https://github.com/xiahouzuoxin)，Github支持Markdown格式的预览，你可以直接在Github上无障碍的阅览。关于如何使用Markdown书写，可以参见我的笔记“[使用Markdown书写](essays/使用Markdown书写.md)”。
 
-如果Download这些笔记到本地，则可以使用Google浏览器+Markdown Preview Plus插件的方式进行本地浏览，若要正常浏览文档中的公式，则必需确保网络连接正常，因为公式都使用到<http://www.forkosh.com/mathtextutorial.html>的Latex解析器。
+如果Download这些笔记到本地，则使用“使用Google浏览器+Markdown Preview Plus插件”的方式进行本地浏览：
+
+1.	浏览Markdown格式笔记：，若要正常浏览文档中的公式，则必需确保网络连接正常，因为公式都使用到<http://www.forkosh.com/mathtextutorial.html>的Latex解析器。
+
+2.	直接浏览html格式笔记
 
 工程中文件目录的安排如下：
 
@@ -156,7 +162,13 @@
 
 	enclosure/ 存放可供下载的附件（pdf等）
 
+笔记书写使用的编辑器是everedit（一款小巧的国产编辑器），文档的默认编码格式设置如下图（`工具->设置->常规`，在`编辑`选项中）：
 
+![everedit](images/everedit.png)
+
+本笔记中使用Chrome+Markdown Preview Plus插件将Markdwon转成html的方法：
+
+使用Chrome打开md文件，在工具栏中选择`Markdown Preview Plus`插件，`Export to html`，将转成的html存放到目录`html/`下。修改index.md索引文件。
 
 # 第三篇 关于我
 
