@@ -78,6 +78,7 @@
 - [矩阵特征值分解与奇异值分解含义解析及应用](essays/矩阵特征值分解与奇异值分解含义解析及应用.md)
 - [循环的角度求均值](essays/循环的角度求均值.md)
 - [位反转算法](essays/位反转算法.md)
+- [白话压缩感知](essays/白话压缩感知.md)
 
 
 ## 4 计算机
@@ -143,7 +144,7 @@
 
 1.	[Github](https://github.com/xiahouzuoxin/notes)上的Markdown格式，但可能有些公式显示不正常
 
-2.	[我的博客](http://xiahouzuoxin.github.io/notes/)，但在博客上浏览Markdown格式需要使用“Google浏览器+Markdown Preview Plus插件”，但我推荐这种方式——公式图片神马都无障碍显示。
+2.	[博客](http://xiahouzuoxin.github.io/notes/)，但在博客上浏览Markdown格式需要使用“Google浏览器+Markdown Preview Plus插件”，但我推荐这种方式——公式图片神马都无障碍显示。
 
 本笔记完全使用Markdown书写，并首先发布在[Github](https://github.com/xiahouzuoxin)，Github支持Markdown格式的预览，你可以直接在[Github](https://github.com/xiahouzuoxin/notes)上无障碍的阅览。我也为本工程使用Github的Pages功能设置了博客，你也可以到<http://xiahouzuoxin.github.io/notes/>浏览。
 
@@ -178,6 +179,30 @@
 本笔记中使用Chrome+Markdown Preview Plus插件将Markdwon转成html的方法：
 
 使用Chrome打开md文件，在工具栏中选择`Markdown Preview Plus`插件，`Export to html`，将转成的html存放到目录`html/`下。修改README.html索引文件。
+
+## 文章更新流程
+
+1.	查看当前分支是否为master，否则切换到master分支（保证在master分支写文章，最后合并到gh-pages分支发布到博客）
+
+	```
+	git branch
+	git checkout master
+	```
+
+2.	在master分支的essays内使用Markdown添加文章
+3.	使用`Chrome`浏览器+`Markdown Preview Plus`插件，将文章导出一份html格式，并同名保存在html目录下
+4.	修改README.md目录文件：添加essays/下的新添的文章链接到目录中
+5.	修改README.html目录文件：添加html/下的新添的文章链接到目录中
+6.	提交到Github
+
+	```
+	git add .
+	git commit -m "my comments"
+	git push -u origin master      # 提交master分支，保证这时在master分支
+	git checkout gh-pages          # 切换到gh-pages分支
+	git merge master               # 将master分支内容合并到gh-pages 
+	git push -u origin gh-pages    # 将更新内容发布到Github静态博客
+	```
 
 
 # 第三篇 关于我
