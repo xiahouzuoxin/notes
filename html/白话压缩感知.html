@@ -127,7 +127,7 @@ if freq_sparse
 else
 
 end
-plot(f+noise);
+plot(f);
 hold on
 plot(real(xp), '</span>r.<span class="string">');
 legend('</span><span class="constant">Original</span><span class="string">', '</span><span class="constant">Recovered</span><span class="string">');</span></code></pre>
@@ -141,20 +141,24 @@ legend('</span><span class="constant">Original</span><span class="string">', '</
 <p>在恢复时域稀疏信号时，所使用的测量矩阵Phi为初始化的随机阵，因为信号只在频域稀疏，所以稀疏变换矩阵为傅里叶变换基，所以稀疏表达矩阵就是Psi = inv(fft(eye(n,n)))。同理，上面的频域稀疏恢复结果显得没有误差是因为没有给原始信号添加噪声。</p>
 </li>
 <li><p>上面都是没有添加噪声的算法结果，我们给信号添加一些噪声，以时域信号为例，</p>
-<pre><code class="language-matlab nginx"><span class="title">if</span> freq_sparse
-  t = [<span class="number">0</span>: n-<span class="number">1</span>]<span class="string">';
-  f = cos(2*pi/256*t) + sin(2*pi/128*t);   % 产生频域稀疏的信号
-else
-  tmp = randperm(n);    
-  f = zeros(n,1);
-  f(tmp(1:s)) = randn(s,1);     % 产生时域稀疏的信号
-end
+<pre><code class="language-matlab ruby">% 原信号增加噪声
+noise = random(<span class="string">'norm'</span>, <span class="number">0</span>, <span class="number">0</span>.<span class="number">01</span>, [n <span class="number">1</span>]); % 噪声
+f = f+ noise;                    % 信号添加噪声
 
-noise = random('</span>norm<span class="string">', 0, 0.01, [n 1]);
-f = f + noise;                    % 添加噪声
+% ....
+% 以下是含噪声的优化，添加噪声项e
+e = random(<span class="string">'norm'</span>, <span class="number">0</span>, <span class="number">0</span>.<span class="number">01</span>, [m <span class="number">1</span>]);     % 噪声
+addpath(<span class="string">'../../cvx-w64/cvx/'</span>);
+cvx_startup;                            % 设置cvx环境
+cvx_begin
+  variable xp(n) complex;             % 如果xp是复数，则添加complex，否则不加
+  minimize (norm(xp, <span class="number">1</span>));
+  subject to
+      <span class="constant">A</span> * xp + e == y;                % 含噪声的优化 
+cvx_end
 
-%% Remaining code not changed</span></code></pre>
-<p>从下图的恢复结果看，已经能看到一些恢复误差了，</p>
+<span class="string">%% Remaining code not changed</span></code></pre>
+<p>从下图的恢复结果看，已经能看到一些恢复误差了</p>
 <p><img src="../images/白话压缩感知/err.png" alt="err"></p>
 </li>
 </ol>
