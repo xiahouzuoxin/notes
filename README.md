@@ -1,5 +1,7 @@
 ﻿
-本目录默认为[Markdown目录索引](README.md)，在[这里](README.html)使用[html目录索引](README.html)浏览。
+<font size=4>本目录为[Markdown目录索引](README.md)，在[这里](README.html)使用[html目录索引](README.html)浏览。<font>
+
+</br>
 
 # 第一篇 分类目录
 
@@ -130,7 +132,7 @@
 	- [Latex入门](essays/Latex入门.md)
 	- [拾掇起来的年华](essays/拾掇起来的年华.md)
 	- [声波能从空气中穿透墙体传播吗](essays/声波能从空气中穿透墙体传播吗.md)
-	- [（转载）成功并不像想象的那么难](essyas/成功并不像想象的那么难.md)
+	- [（转载）成功并不像想象的那么难](essays/成功并不像想象的那么难.md)
 
 - 读论文
 
@@ -191,7 +193,10 @@
 	```
 
 2.	在master分支的essays内使用Markdown添加文章
-3.	使用`Chrome`浏览器+`Markdown Preview Plus`插件，将文章导出一份html格式，并同名保存在html目录下
+3.	使用`Chrome`浏览器+`Markdown Preview Plus`插件，将文章导出一份html格式，并同名保存在html目录下。
+
+	修改html文件：1.替换css样式为`../stylesheets/Github.css`； 2.替换“返回主目录”字符串的链接为`../README.html`即html格式的README文件
+	
 4.	修改README.md目录文件：添加essays/下的新添的文章链接到目录中
 5.	修改README.html目录文件：添加html/下的新添的文章链接到目录中
 6.	提交到Github

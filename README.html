@@ -1,10 +1,11 @@
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"><link rel="stylesheet" id="theme" href="chrome-extension://febilkbfcbhebfnokafefeacimjdckgl/theme/Github.css">
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"><link rel="stylesheet" id="theme" href="stylesheets/Github.css">
 </head>
 
 <body>
-<p>本目录为<a href="README.html">Html目录索引</a>，在<a href="README.md">这里</a>使用<a href="README.md">Markdown目录索引</a>浏览。</p>
+<p><font size="4"><p>本目录为<a href="README.html">Html目录索引</a>，在<a href="README.md">这里</a>使用<a href="README.md">Markdown目录索引</a>浏览。</p>
+<p><br></p>
 <h1>第一篇 分类目录</h1>
 <h2>1 嵌入式</h2>
 <ul>
@@ -159,12 +160,12 @@
 <ol>
 <li><p><a href="https://github.com/xiahouzuoxin/notes">Github</a>上的Markdown格式，但可能有些公式显示不正常</p>
 </li>
-<li><p><a href="http://xiahouzuoxin.github.io/notes/">我的博客</a>，但在博客上浏览Markdown格式需要使用“Google浏览器+Markdown Preview Plus插件”，但我推荐这种方式——公式图片神马都无障碍显示。</p>
+<li><p><a href="http://xiahouzuoxin.github.io/notes/">博客</a>，但在博客上浏览Markdown格式需要使用“Google浏览器+Markdown Preview Plus插件”，但我推荐这种方式——公式图片神马都无障碍显示。</p>
 </li>
 </ol>
 <p>本笔记完全使用Markdown书写，并首先发布在<a href="https://github.com/xiahouzuoxin">Github</a>，Github支持Markdown格式的预览，你可以直接在<a href="https://github.com/xiahouzuoxin/notes">Github</a>上无障碍的阅览。我也为本工程使用Github的Pages功能设置了博客，你也可以到<a href="http://xiahouzuoxin.github.io/notes/">http://xiahouzuoxin.github.io/notes/</a>浏览。</p>
 <p>如果Download这些笔记到本地，则使用“使用Google浏览器+Markdown Preview Plus插件”的方式进行本地浏览。</p>
-<p>关于如何使用Markdown书写，可以参见我的笔记“<a href="essays/使用Markdown书写.md">使用Markdown书写</a>”。</p>
+<p>关于如何使用Markdown书写，可以参见我的笔记“<a href="html/使用Markdown书写.html">使用Markdown书写</a>”。</p>
 <h2>目录结构</h2>
 <p>工程中文件目录的安排如下：</p>
 <pre><code class="undefined">README.md     Markdown文件索引目录
@@ -185,6 +186,26 @@ enclosure/    存放可供下载的附件（pdf等）</code></pre>
 <p><img src="images/everedit.png" alt="everedit"></p>
 <p>本笔记中使用Chrome+Markdown Preview Plus插件将Markdwon转成html的方法：</p>
 <p>使用Chrome打开md文件，在工具栏中选择<code>Markdown Preview Plus</code>插件，<code>Export to html</code>，将转成的html存放到目录<code>html/</code>下。修改README.html索引文件。</p>
+<h2>文章更新流程</h2>
+<ol>
+<li><p>查看当前分支是否为master，否则切换到master分支（保证在master分支写文章，最后合并到gh-pages分支发布到博客）</p>
+<pre><code class="nginx"><span class="title">git</span> branch
+git checkout master</code></pre>
+</li>
+<li><p>在master分支的essays内使用Markdown添加文章</p>
+</li>
+<li>使用<code>Chrome</code>浏览器+<code>Markdown Preview Plus</code>插件，将文章导出一份html格式，并同名保存在html目录下</li>
+<li>修改README.md目录文件：添加essays/下的新添的文章链接到目录中</li>
+<li>修改README.html目录文件：添加html/下的新添的文章链接到目录中</li>
+<li><p>提交到Github</p>
+<pre><code class="nginx"><span class="title">git</span> add .
+git commit -m <span class="string">"my comments"</span>
+git push -u origin master      <span class="comment"># 提交master分支，保证这时在master分支</span>
+git checkout gh-pages          <span class="comment"># 切换到gh-pages分支</span>
+git merge master               <span class="comment"># 将master分支内容合并到gh-pages </span>
+git push -u origin gh-pages    <span class="comment"># 将更新内容发布到Github静态博客</span></code></pre>
+</li>
+</ol>
 <h1>第三篇 关于我</h1>
 <ol>
 <li>学历<ul>
@@ -203,4 +224,4 @@ enclosure/    存放可供下载的附件（pdf等）</code></pre>
 </li>
 </ol>
 <p>Created in 2014.03.</p>
-</body></html>
+</font></font></body></html>

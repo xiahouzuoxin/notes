@@ -71,6 +71,22 @@ git stash clear
 如果只是要比较某个文件而不是所有的变化，则在响应的命令后添加文件名即可，如`git diff README.md`。
 
 
+## 放弃工作区的修改
+
+`git checkout [filename]`可以放弃工作区（没有使用git add.命令添加到暂存区）的修改。
+
+放弃的修改无法找回，谨慎使用！
+
+## 放弃本地修改，强制更新
+
+```
+git fetch --all
+git reset --hard origin/master
+```
+
+`git fetch`命令只是从远程下载而不进行merge，之后的`git reset`命令直接将HEAD指向刚刚下载的最新版本。
+
+
 
 
 
