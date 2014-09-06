@@ -8,7 +8,7 @@
 <p>那天，我开始思考：是什么情况导致RAM中跑得很Happy的程序烧写到Flash就运行得如此的不堪——众多的囧相。</p>
 <p>“且行且珍惜”，珍惜这些次发现Bug的机会，因此，我要总结：在RAM中能正常运行，而烧写到Flash后无法正常运行的一些情况讨论。</p>
 <h2>请检查中断向量表</h2>
-<p>中断向量表包含了所有中断的入口，在烧写Flash的时候，有两种方式可以保证中断能正常工作。具体可参见<a href="./TMS320C6713烧写Flash的通用方法.md">TMS320C6713烧写Flash的通用方法</a>的第5小节。</p>
+<p>中断向量表包含了所有中断的入口，在烧写Flash的时候，有两种方式可以保证中断能正常工作。具体可参见<a href="./TMS320C6713烧写Flash的通用方法.html">TMS320C6713烧写Flash的通用方法</a>的第5小节。</p>
 <h2>请检查cmd链接文件</h2>
 <p>也不知道什么原因，我曾经在DSP的内部RAM中使用#pragma分配一个3x1024x8字节的区域，在烧写到Flash后运行会死机，</p>
 <pre><code class="language-c ruby"><span class="comment">#pragma DATA_SECTION(g_ad_fifo, "FIFO")</span>

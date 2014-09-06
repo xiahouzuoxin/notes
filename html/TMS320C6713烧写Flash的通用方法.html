@@ -793,5 +793,5 @@ _vector15:  VEC_ENTRY _vec_dummy</code></pre>
 <p>这样，每次修改user_size和USER_SIZE后，挂着仿真器运行程序，此时Flash中的user_size还是上一次的，因此执行if条件中的烧写代码。烧写完成后，重新上电，因为Flash中的user_size在刚才使用仿真器烧写时已经更新，所以if条件中的烧写代码不执行，直接跳过if执行用户程序，这就为什么DSP能在单一工程中自烧写！</p>
 <h2>7 参考</h2>
 <p>[1] Creating a Second-Level Bootloader for FLASH Bootloading on TMS320C6000 Platform With Code Composer Studio</p>
-<p>[2] <a href="../codes/TMS320C6713烧写Flash的通用方法/burn_flash">My Flash burn CCS project</a></p>
+<p>[2] <a href="https://github.com/xiahouzuoxin/notes/tree/master/codes/TMS320C6713烧写Flash的通用方法/burn_flash">My Flash burn CCS project</a></p>
 </font></font></body></html>

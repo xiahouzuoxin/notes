@@ -1,6 +1,7 @@
 ﻿
-<font size=4>本目录为[Markdown目录索引](README.md)，在[这里](README.html)使用[html目录索引](README.html)浏览。<font>
-
+<font size=4>
+欢迎访问<a href="http://xiahouzuoxin.github.io/notes/">个人网站</a>，所有文章都可在网站上浏览。
+<font>
 </br>
 
 # 第一篇 分类目录
@@ -133,6 +134,7 @@
 	- [拾掇起来的年华](essays/拾掇起来的年华.md)
 	- [声波能从空气中穿透墙体传播吗](essays/声波能从空气中穿透墙体传播吗.md)
 	- [（转载）成功并不像想象的那么难](essays/成功并不像想象的那么难.md)
+	- [百家讲坛《曾国藩家训》——无一日不读书](essays/百家讲坛《曾国藩家训》——无一日不读书.md)
 
 - 读论文
 
@@ -145,13 +147,13 @@
 
 ## 浏览方式选择
 
-1.	[Github](https://github.com/xiahouzuoxin/notes)上的Markdown格式，但可能有些公式显示不正常
+1.	[本Github](https://github.com/xiahouzuoxin/notes)上的Markdown格式
 
-2.	[博客](http://xiahouzuoxin.github.io/notes/)，但在博客上浏览Markdown格式需要使用“Google浏览器+Markdown Preview Plus插件”，但我推荐这种方式——公式图片神马都无障碍显示。
+2.	[个人博客](http://xiahouzuoxin.github.io/notes/)，但在博客上浏览Markdown格式需要使用“Google浏览器+Markdown Preview Plus插件”，但我推荐这种方式——公式图片神马都无障碍显示。
 
 本笔记完全使用Markdown书写，并首先发布在[Github](https://github.com/xiahouzuoxin)，Github支持Markdown格式的预览，你可以直接在[Github](https://github.com/xiahouzuoxin/notes)上无障碍的阅览。我也为本工程使用Github的Pages功能设置了博客，你也可以到<http://xiahouzuoxin.github.io/notes/>浏览。
 
-如果Download这些笔记到本地，则使用“使用Google浏览器+Markdown Preview Plus插件”的方式进行本地浏览。
+如果Download这些笔记到本地，则推荐“Google浏览器+Markdown Preview Plus插件”的方式进行本地浏览。
 
 关于如何使用Markdown书写，可以参见我的笔记“[使用Markdown书写](essays/使用Markdown书写.md)”。
 
@@ -161,7 +163,15 @@
 
 	README.md     Markdown文件索引目录
 
-	README.html   html文件索引目录
+	README.html   html文件索引目录，对应个人网站下的Category标签
+
+	Archives.html 记录文档创建的日期，可在个人网站上按日期浏览
+
+	AboutMe.html  关于作者的一些个人信息
+
+	Links.html    搜集的一些很有用的链接
+
+	index.html    个人网站主页
 
 	html/         所有笔记的html文本格式
 
@@ -173,7 +183,7 @@
  
 	enclosure/    存放可供下载的附件（pdf等）
 
-## 编辑器
+## 编辑器与Html生成
 
 笔记书写使用的编辑器是everedit（一款小巧的国产编辑器），文档的默认编码格式设置如下图（`工具->设置->常规`，在`编辑`选项中）：
 
@@ -181,7 +191,7 @@
 
 本笔记中使用Chrome+Markdown Preview Plus插件将Markdwon转成html的方法：
 
-使用Chrome打开md文件，在工具栏中选择`Markdown Preview Plus`插件，`Export to html`，将转成的html存放到目录`html/`下。修改README.html索引文件。
+使用Chrome打开md文件，在工具栏中选择`Markdown Preview Plus`插件，`Export to html`，将转成的html存放到目录`html/`下。
 
 ## 文章更新流程
 
@@ -192,14 +202,22 @@
 	git checkout master
 	```
 
-2.	在master分支的essays内使用Markdown添加文章
-3.	使用`Chrome`浏览器+`Markdown Preview Plus`插件，将文章导出一份html格式，并同名保存在html目录下。
+2.	写正文：在master分支的essays内使用Markdown写文章
+3.	转Html：使用`Chrome`浏览器+`Markdown Preview Plus`插件，将文章导出一份html格式，并同名保存在html目录下。
 
-	修改html文件：1.替换css样式为`../stylesheets/Github.css`； 2.替换“返回主目录”字符串的链接为`../README.html`即html格式的README文件
+	修改html文件：1.替换css样式为`../stylesheets/Github.css`； 2.替换“返回主目录”字符串的链接为`../README.html`即html格式的README文件；
 	
-4.	修改README.md目录文件：添加essays/下的新添的文章链接到目录中
-5.	修改README.html目录文件：添加html/下的新添的文章链接到目录中
-6.	提交到Github
+4.	修改文件：
+
+	4.1.	修改README.md目录文件：添加essays/下的新添的文章链接到目录中
+	
+	4.2.	修改README.html目录文件：添加html/下的新添的文章链接到目录中
+
+	4.3.	修改Archives.html文件：保存文件创建日期
+
+	4.4.	修改index.html即个人网站的首页，更新Updates项
+	
+8.	提交到Github
 
 	```
 	git add .

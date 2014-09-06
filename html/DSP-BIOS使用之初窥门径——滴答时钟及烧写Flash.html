@@ -56,7 +56,7 @@
     i = (i + <span class="number">1</span>) &amp; <span class="number">0x01</span>;
     GPIO_pinWrite(hGpio,GPIO_PIN3, i);
 }</code></pre>
-<p>搭建基本的BIOS工程基于上篇文章<a href="./DSP-BIOS使用入门.md">DSP-BIOS使用入门</a>，func_task0、func_task1和swi_adc都是上篇文章中的在DSP/BIOS中使用任务和软中断的例程，这里其实没什么用，暂且不管。</p>
+<p>搭建基本的BIOS工程基于上篇文章<a href="./DSP-BIOS使用入门.html">DSP-BIOS使用入门</a>，func_task0、func_task1和swi_adc都是上篇文章中的在DSP/BIOS中使用任务和软中断的例程，这里其实没什么用，暂且不管。</p>
 <p>要在硬件上跑，一定要在Global Setting中设置好,</p>
 <p><img src="../images/DSP-BIOS使用入门之烧写Flash/5.png" alt="5"></p>
 <p>另外硬件上——我的板子上GPIO_PIN3连接着LED，低电平点亮！cmd文件都是DSP/BIOS配置文件自动配置好了，不用管了暂时。挂上仿真器，下载到板子的RAM上运行！OK，成功！</p>
@@ -72,7 +72,7 @@
 </ol>
 <p>其实除了其中第1步对我们烧写Flash有指导意义外，其它各步骤都是无关紧要的（当然，仅就这里讨论的问题而言）。基于此，这里烧写Flash的思路就是：在系统复位后，程序跳转到_c_init00之前，写一段从Flash拷贝应用程序到内存的代码就好了！</p>
 <h2>迁移到操作系统的Flash烧写</h2>
-<p>在之前“<a href="./TMS320C6713烧写Flash的通用方法.md">TMS320C6713烧写Flash的通用方法</a>”一文中，已经详述了如何烧写裸机的代码，这里只需要对DSP/BIOS工程做很少的改动，就可无缝的将之前的烧写方法用在这里，下面还是按步骤来，主要描述一些不同的地方（这样清晰些）：</p>
+<p>在之前“<a href="./TMS320C6713烧写Flash的通用方法.html">TMS320C6713烧写Flash的通用方法</a>”一文中，已经详述了如何烧写裸机的代码，这里只需要对DSP/BIOS工程做很少的改动，就可无缝的将之前的烧写方法用在这里，下面还是按步骤来，主要描述一些不同的地方（这样清晰些）：</p>
 <ol>
 <li><p>添加二级Bootloader用到的文件（3个）到工程中，如下图，</p>
 <p><img src="../images/DSP-BIOS使用入门之烧写Flash/6.png" alt="6"></p>
@@ -93,7 +93,7 @@
 </li>
 <li><p>划分Memory，设置“段”</p>
 <p><img src="../images/DSP-BIOS使用入门之烧写Flash/7.png" alt="7"></p>
-<p>这就按照“<a href="./TMS320C6713烧写Flash的通用方法.md">TMS320C6713烧写Flash的通用方法</a>”中裸机划分内存的方法划分，</p>
+<p>这就按照“<a href="./TMS320C6713烧写Flash的通用方法.html">TMS320C6713烧写Flash的通用方法</a>”中裸机划分内存的方法划分，</p>
 <pre><code class="nginx"><span class="title">MEMORY</span>
 {
   <span class="title">BOOT_RAM</span>   : o=<span class="number">00000000h</span>,l=<span class="number">00000400h</span>
@@ -103,7 +103,7 @@
 }</code></pre>
 <p>heap放在了IRAM上。</p>
 <p><img src="../images/DSP-BIOS使用入门之烧写Flash/8.png" alt="8"></p>
-<p>如上图，也按照“<a href="./TMS320C6713烧写Flash的通用方法.md">TMS320C6713烧写Flash的通用方法</a>”按中的cmd分配的，大都分配到IRAM中不容易出问题（虽然说多占用一些RAM吧）。</p>
+<p>如上图，也按照“<a href="./TMS320C6713烧写Flash的通用方法.html">TMS320C6713烧写Flash的通用方法</a>”按中的cmd分配的，大都分配到IRAM中不容易出问题（虽然说多占用一些RAM吧）。</p>
 </li>
 <li><p>写cmd文件（user.cmd，如上图）</p>
 <p>DSP/BIOS已经自动生成了一个CMD文件，最好不要去修改，只需要将DSP/BIOS自动生成的从工程中移除（不是删了，而是Remove），自己新建一个，将DSP/BIOS的包含进来就行了，</p>
@@ -120,7 +120,7 @@
 <p>-lbios_firstcfg.cmd将自动生成的包含进来，关键是增加了.boot_load段，该段专门用于放置二级Bootloader。将user.cmd包含到工程中。</p>
 </li>
 <li><p>修改DSP/BIOS复位中断</p>
-<p>在“<a href="./TMS320C6713烧写Flash的通用方法.md">TMS320C6713烧写Flash的通用方法</a>”中，曾经修改vecs.s汇编文件，将原来的复位向量</p>
+<p>在“<a href="./TMS320C6713烧写Flash的通用方法.html">TMS320C6713烧写Flash的通用方法</a>”中，曾经修改vecs.s汇编文件，将原来的复位向量</p>
 <pre><code class="sql">vectors:
 vector0:   VEC_ENTRY _c_int00    ;RE<span class="operator"><span class="keyword">SET</span>
 vector1:   VEC_ENTRY _vec_dummy  ;</span>NMI
@@ -134,14 +134,14 @@ vector2:   VEC_ENTRY _vec_dummy  ;RSVD</code></pre>
 <p><img src="../images/DSP-BIOS使用入门之烧写Flash/9.png" alt="9"></p>
 <p>这里的_boot就是二级Bootloader文件boot_c671x.s62中的boot段。</p>
 </li>
-<li><p>好了，没什么事了，你可以编译，接着按“<a href="./TMS320C6713烧写Flash的通用方法.md">TMS320C6713烧写Flash的通用方法</a>”中的方法完成烧写了。</p>
+<li><p>好了，没什么事了，你可以编译，接着按“<a href="./TMS320C6713烧写Flash的通用方法.html">TMS320C6713烧写Flash的通用方法</a>”中的方法完成烧写了。</p>
 </li>
 </ol>
 <h2>给自己也给大家的忠告</h2>
 <p>还在1~2个月之前，我还对DSP烧写Flash一无所知，更对DSP/BIOS一无所知，然后，从网络上Download了十来篇论文，然后一篇一篇的看了一遍，虽说不能立刻完全明白，但零星的还是感觉知道了那么一点，然后准备自己动手写，却发现无处着手——那些论文尽是框架大论！完全无法满足初学者的需求。</p>
 <p>于是又在网上Google/Baidu浪淘沙一样的想找一些简单的，尤其是给出几乎每步详细步骤的，可惜的是——毫无所获！后来想想，折腾了这么几天，还是不知道从哪入手，不行了，于是去找来了TI的关于二级Bootloader的手册<a href="http://www.ti.com.cn/cn/lit/an/spra999a/spra999a.pdf">http://www.ti.com.cn/cn/lit/an/spra999a/spra999a.pdf</a>，一页页的看（其实手册很短，也就十几二十页），突然发现慢慢有了些眉目。TI的手册上给出了二级引导的源码，并描述了那样做的原因和过程，于是根据该手册提供的相关资料一点点将Bootloader的过程拼凑了起来！关键是在_c_int00和main函数之间下功夫。</p>
 <p>后来就参考TI的文档开始写了，但启动文件是写好了，但怎么烧写到Flash中一直困扰着我，如果烧写和应用程序在同一个程序中，那不是就成了“鸡生蛋还是蛋生鸡”的问题了吗？（其实这个可以通过硬件上外置一个拨码开关来设置，就可以令程序自烧写）。然而我也没有开关，从一个QQ群里咨询了一位大牛，大牛给了我一份他烧写的方法，顿时豁然开朗，把DSP张载程序后在内存运行的东西先都读出来，在通过另一个工程烧写不就可以了吗？我最后就是这么做的，在这过程中还一直庆幸自己对cmd文件、内存等还算了解，甚至在将从内存中导出的东西修改成头文件还用到了VIM（神一样的编辑器）。学习DSP/BIOS，我庆幸之前已经用过了uCOS ii，很快就入门了，所谓“书到用时方恨少”，当然自知其中韵味了。</p>
-<p>有些网友看过我的“<a href="./TMS320C6713烧写Flash的通用方法.md">TMS320C6713烧写Flash的通用方法</a>”一文，于是来问我：</p>
+<p>有些网友看过我的“<a href="./TMS320C6713烧写Flash的通用方法.html">TMS320C6713烧写Flash的通用方法</a>”一文，于是来问我：</p>
 <pre><code class="undefined">“怎么我直接拷贝哪些汇编过去不行呢？”</code></pre>
 <p>然后，我回答：</p>
 <pre><code class="undefined">“您能回去看看那汇编是干什么的吗？”</code></pre>

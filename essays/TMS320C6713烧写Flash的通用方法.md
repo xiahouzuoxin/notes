@@ -1,55 +1,55 @@
-[<font size=4>��������Ŀ¼<font>](../README.md)
+﻿[<font size=4>←返回主目录<font>](../README.md)
 </br></br></br>
 
-## 1 �����֪����TMS320C6000��������
+## 1 你必须知道的TMS320C6000启动过程
 
-�ⲿ���������ҵ���һƪ����
+这部分内容在我的另一篇博客
 
-[DSP TMS320C6000����ѧϰ��7������ Bootloader��VectorTable]
+[DSP TMS320C6000基础学习（7）—— Bootloader与VectorTable]
 
-���ᵽ������������ժ¼һ�顣
+有提到过，这里重新摘录一遍。
 
 ![][reset]
 
-����ͼ
+如上图
 
-- ��Device Reset�׶Σ��豸��ʼ��ΪĬ��״̬���󲿷���̬���������Ϊ����̬��
-- ��CPU Reset�׶Σ���RS�����ش���ʼ�����ʱ��HD[4:3]��������ģʽ��HD8���ô�С��ģʽ��CLKMODE��������ʱ��Դ������HPI_EN�������蹦�ܣ����������������ģʽHD[4:3]������bootloader����
+- 在Device Reset阶段：设备初始化为默认状态，大部分三态输出都配置为高阻态。
+- 在CPU Reset阶段：从RS上升沿处开始（这个时候，HD[4:3]配置启动模式，HD8配置大小端模式，CLKMODE配置输入时钟源，根据HPI_EN配置外设功能），处理器检查启动模式HD[4:3]，启动bootloader程序。
 
 ![HD43]
 
-����ͼ���Կ�����CE1��ַ�ռ��������FlashоƬ����ʹ���ⲿFlash����ģʽ���ڵ�·���ʱҪע�⡣
+从上图可以看出，CE1地址空间必需连接Flash芯片才能使用外部Flash引导模式，在电路设计时要注意。
 
-��HD[4:3]=10�����ĵĲ����������ڴˣ���EDMA�Զ���CE1��ʼλ�õ�1KB���뿽�����ڲ�����洢����0��ַ���ⲿ�ֹ�������Ӳ����ɵģ���__һ������Bootloader__��
+若HD[4:3]=10（本文的操作环境基于此），EDMA自动将CE1起始位置的1KB代码拷贝到内部程序存储器的0地址，这部分功能是由硬件完成的，称__一级引导Bootloader__。
 
 ![][copy1KB]
 
-��ˣ��ⲿFlash��������򵥵��뷨���ǣ���Ҫ���еĳ���ŵ�CE1����ʼ1KB��ַ�ռ䡣����ֻҪ����HD[4:3]=10�����������ˡ�����ô�򵥣��������۱��ĵı�Ҫ��
+因此，外部Flash启动的最简单的想法就是：把要运行的程序放到CE1的起始1KB地址空间。这样只要设置HD[4:3]=10就能自启动了。那这么简单，还有讨论本文的必要吗？
 
-����������˼ά��ͣ����С���ӹ��Ҽҵĳ̶ȣ���������1KB��1KB���ܴ���ٴ��룿Ҫ�Ǵ���������1KB�أ������Ǳ���Ҫ̽�ֵ�����ĳ��ԣ�__�������>1KB�������C6713�ĳ�����ⲿFlash��������__
+呃，如果你的思维还停留在小孩子过家家的程度，唉。。。1KB？1KB才能存多少代码？要是代码量超过1KB呢？这正是本文要探讨的问题的初衷：__程序代码>1KB，如何让C6713的程序从外部Flash自启动？__
 
-����漰��һ��Bootloader�ˣ����ǳ�֮Ϊ__��������Bootloader__��˵���˾���һ��С���򣩡�����Bootloader�����У���1�����ϵ縴λ���û���Ӧ�ó����Flash������RAM��ִ�У���2����ת��Ӧ�ó������ں�������
+这就涉及另一个Bootloader了，我们称之为__二级引导Bootloader__（说白了就是一段小程序）。二级Bootloader作用有：（1）在上电复位后将用户的应用程序从Flash拷贝到RAM中执行；（2）跳转到应用程序的入口函数处。
 
-����Bootloader��ִ��Ҫ��һ��Bootloader������RAM��ִ�У���������ˣ�����Bootloader��������ⲿFlash����ʼ��1KBλ�ô���
+二级Bootloader的执行要由一级Bootloader拷贝到RAM中执行，这就明白了，二级Bootloader必须放在外部Flash的起始的1KB位置处。
 
 
-���Ǽ�Ҫ���ø�ͼ��������ν�Ķ���Bootloader�����������̼���Ҫ˼·��
+我们简要的用个图描述下所谓的二级Bootloader的自启动过程及主要思路。
 
 ![][2levelboot]
 
-Ҫ���������̣�
+要完成这个过程，
 
-- ����Ҫ��дһ�γ�Ϊ2 Level Bootloader���������벢��д��Flash�ĳ�ʼ1KB��ַ����DSP6713��CE1��ʼ��ַΪ0x90000000����1 Level Bootloader���ô��뿽����RAM����ʼ0��ַ����ʼִ�С�
-- ��д�û�����0x90000400��ʼ��Flash��ַ��
-- 2 Level Bootloader��0x90000400��ʼ���û����뿽����RAM��0x400��ַ��
-- 2 Level Bootloader����_c_int00�û���ڳ���Ȼ�����main������ʼִ���û�����
+- 首先要编写一段称为2 Level Bootloader的启动代码并烧写到Flash的初始1KB地址处（DSP6713的CE1起始地址为0x90000000），1 Level Bootloader将该代码拷贝到RAM的起始0地址，开始执行。
+- 烧写用户程序到0x90000400开始的Flash地址处
+- 2 Level Bootloader将0x90000400开始的用户代码拷贝到RAM的0x400地址处
+- 2 Level Bootloader调用_c_int00用户入口程序，然后调用main函数开始执行用户代码
 
-����_c_int00�Ľ���Ҳ��ο�[DSP TMS320C6000����ѧϰ��7������  Bootloader��VectorTable]�������в�����ǰ�������Ѿ����ú����ж��������������ڵ���_c_int00ʱ������ȷ�Ľ��뵽�û����򣩡�
+关于_c_int00的介绍也请参考[DSP TMS320C6000基础学习（7）——  Bootloader与VectorTable]本文所有操作的前提是您已经配置好了中断向量表（这样在调用_c_int00时才能正确的进入到用户程序）。
 
 
-## 2 ��д����Bootloader 
+## 2 编写二级Bootloader 
 
-�Ⱥ궨��һ��EMIF��صļĴ�������Ϊ����Ҫ��Flash�������ڶ���������������ǰҪ����EMIF�Ĵ�����
+先宏定义一下EMIF相关的寄存器，因为我们要读Flash，所以在二级引导程序运行前要配置EMIF寄存器，
 
 ```asm
 ;
@@ -81,7 +81,7 @@ EMIF_SDRAMTIM_V .equ  0x00000578  ;SDRAM timing (refresh)
 EMIF_SDRAMEXT_V .equ  0x000a8529  ;SDRAM extended control
 ```
 
-�궨���EMIF�Ĵ�������Ϊȫ�ַ��ţ�.global��C�����е�externЧ��һ�£�����Ϊ�ⲿ���š�
+宏定义的EMIF寄存器声明为全局符号，.global与C语言中的extern效果一致，声明为外部符号。
 
 ```asm
 ;
@@ -115,9 +115,9 @@ BOOT_C671X_	.set	1
 
 ```
 
-����Ĵ������.boot_load���㽫��֮���cmd�ļ��п�������
+下面的代码段名.boot_load，你将在之后的cmd文件中看到它。
 
-�������ȶ�EMIF���г�ʼ����Ȼ����copy_section_top�ж�ȡ�û�����Ķ���Ϣ���ε�Flash���ص�ַ���ε�RAM���е�ַ�Լ��εĳ��ȣ�����copy_loop��ִ��ѭ������������
+代码首先对EMIF进行初始化，然后在copy_section_top中读取用户程序的段信息（段的Flash加载地址，段的RAM运行地址以及段的长度），在copy_loop中执行循环拷贝操作。
 
 ```asm
 ;A;
@@ -299,16 +299,16 @@ copyTable:
     		.word 0
 ```
 
-��ʹ��ʱ������Ҫ����������е�
+在使用时，我们要对上面程序中的
 
 ```asm
 user_size      .equ  0x00001798
 user_ld_start  .equ  0x90000400
 user_rn_start  .equ  0x00000400
 ```
-�����޸ģ�user_size��ʾ�û�����ε��ֽڴ�С�����ǽ�����һ�ڿ�������ͨ���鿴*.map�ļ������޸ģ�user_ld_start��ʾ�û������Flash��ʼ��ַ����Ĭ��ʹ��0x90000400��һ�㲻�ģ���user_rn_start��ʾ�û�����Ҫ��ŵ�RAM����ʼ��ַ����֮ǰ��ͼ���������Ҳһ�㲻�ģ���С������һ��ֻ�޸��û�����ε��ֽڴ�С����������Ҫ��copyTable�����Ʊ������е�����
+进行修改，user_size表示用户程序段的字节大小，我们将在下一节看到可以通过查看*.map文件进行修改；user_ld_start表示用户代码的Flash起始地址（我默认使用0x90000400，一般不改），user_rn_start表示用户代码要存放到RAM的起始地址（从之前的图看，这个我也一般不改）。小程序我一般只修改用户程序段的字节大小。大程序可能要对copyTable（复制表）进行调整。
 
-Ҫ��������ĵ�ַ�ķֲ����޸��û�Ӧ�ó����cmd�ļ����£�
+要满足上面的地址的分布，修改用户应用程序的cmd文件如下：
 
 ```
 -c
@@ -342,70 +342,70 @@ SECTIONS
 }
 ```
 
-ע�����е�.boot_load�Σ���������������.sect ".boot_load"��Ӧ������û�Ӧ�ó������������ĶΣ��ɶ�cmd�ļ�����Ӧ�޸ģ���.boot_load:> BOOT_RAM���ܸģ��Ҳ�Ҫ�������η���BOOT_RAM�洢���С�
+注意其中的.boot_load段，与二级引导程序的.sect ".boot_load"对应。如果用户应用程序定义了其它的段，可对cmd文件做相应修改，但.boot_load:> BOOT_RAM不能改，且不要把其它段放在BOOT_RAM存储区中。
 
-������3������ļ���һ��cmd�ļ��ӵ��û�����Ĺ��������±��빤�̡�
+将以上3个汇编文件盒一个cmd文件加到用户程序的工程中重新编译工程。
 
 
-## 3 ��ȡҪ��д�Ķ���������
+## 3 提取要烧写的二进制数据
 
-�ⲿ���Ǵ��ֹ��������ʹ��VIM�������ݴ��������ͼ򵥶��ˡ�
+这部分是纯手工活，如果你会使用VIM，那数据处理起来就简单多了。
 
-���ȣ���Jtag������TMS320C6713�����壬�����û�Ӧ�ó���ʹ��CCS V3.3��File->Data->Save...���ܣ����ڴ��еĶ����ƵĴ������ݱ��浽.dat�ļ���
+首先，将Jtag连接上TMS320C6713开发板，下载用户应用程序，使用CCS V3.3的File->Data->Save...功能，将内存中的二进制的代码数据保存到.dat文件。
 
 ![][storedat]
 
-Address���������cmd�ļ��趨�õġ�
+Address都是上面的cmd文件设定好的。
 
-Ҫ�����*.dat���������ļ���һ����Ŷ���Bootloader�Ļ����������루boot.dat����һ������û�Ӧ�ó���Ķ������루text.dat��
+要保存的*.dat包括两个文件：一个存放二级Bootloader的机器二进制码（boot.dat），一个存放用户应用程序的二进制码（text.dat）
 
 - boot.dat: Address=0x00000000, Length=0x00000100
 - text.dat: Address=0x00000400, Length=?
 
-ร��û�����ĳ�����ô֪�������У�����˵һ��Bootloader�´��1KB������������ô��Length=0x000001000
+喔？用户代码的长度怎么知道？还有，不是说一级Bootloader会拷贝1KB长度吗，上面怎么是Length=0x000001000
 
-�뵽CCS���̵�DebugĿ¼�´�.map�ļ�������ͼ������ϸ�Ľ������ͼ��ע���С�
+请到CCS工程的Debug目录下打开.map文件（如下图），详细的解答在下图的注释中。
 
 ![][map]
 
-����ͼ�м�����д����ʱ/4������ΪCCS�б���*.dat���ȵĵ�λΪ4�ֽڣ���Ҫע�⣬����Ĵ�С���ܲ���һ����4�ֽڵ�������������ڳ���4ʱ�������ɶ��գ�Ҳ����һ���ֽڡ���ʹ������ȡ�������㡣
+上面图中计算烧写长度时/4就是因为CCS中保存*.dat长度的单位为4字节，但要注意，程序的大小可能并不一定是4字节的整数倍，因此在除以4时，“宁可多烧，也不少一个字节”，使用向上取整的运算。
 
 	Length = ceil( Length(Used in *.map) / 4) );
 
-���ˣ�No�������ˣ�ǰһ��������û�취�趨User Code�ĳ��ȣ���ͷȥ�ģ�
+好了？No，别忘了，前一节中我们没办法设定User Code的长度，回头去改，
 
 ```asm
-user_size      .equ  0x00001798 (�����Ϊ��ͼ�е�0x00001798)
+user_size      .equ  0x00001798 (这里改为上图中的0x00001798)
 user_ld_start  .equ  0x90000400
 user_rn_start  .equ  0x00000400
 ```
 
-��������±���Ӧ�ó���Ĺ��̣���ͺ��ˡ�����ҿ���������boot.dat�ļ���
+改完后重新编译应用程序的工程，这就好了。给大家看看保存后的boot.dat文件，
 
 ![][bootdat]
 
-���˵�һ�У�ÿ�ж���һ��4�ֽڳ��ȵ���������Ҫ�����ǣ��ֱ��boot.dat����Щ����text.dat�е���Щ���ŵ�boot[]��text[]�������У��������鱣����ͷ�ļ��С�
+除了第一行，每行都是一个4字节长度的数。下面要做得是，分别把boot.dat中这些数和text.dat中的这些数放到boot[]和text[]的数组中，并将数组保存在头文件中。
 
-���ˣ����ý��ˣ���Ҹ��Ա��������ݵĸ�ʽ�������ɣ������ҵ�VIM�༭�������ɸ㶨��
+好了，不用讲了，大家各显本事做数据的格式化处理吧，我用我的VIM编辑器，轻松搞定：
 
-- ����ɾ��ͷ��
-- vim�������Ӷ���:%s/$/,/g
-- ����������
+- 首先删除头行
+- vim命令添加逗号:%s/$/,/g
+- 添加数组名
 
-�㶨��Ľ������boot.h�ļ���text.h�ļ����£�
+搞定后的结果，如boot.h文件和text.h文件如下：
 
 ![][booth] ![][texth]
 
-���ˣ�����Ͳ���ˣ���ʾ������Ķ�������񱣴������ǵ�C����ͷ�ļ����ˣ��������Ҫ��ͷ�ļ������еĻ�������д��Flash�Ķ�Ӧ�ĵ�ַ�ռ䡣
+好了，到这就差不多了，表示机器码的二进制如今保存在我们的C语言头文件中了，下面就是要把头文件数组中的机器码烧写到Flash的对应的地址空间。
 
 
-## 4 ��дFlash 
+## 4 烧写Flash 
 
-���Ĳ���������ʹ�õ�Flash�ͺ���AM29LV800BT��
+本文操作环境下使用的Flash型号是AM29LV800BT。
 
-Ϊ����д��������Ҫ�����������½�һ������Flash��д�Ĺ��̡�
+为了烧写，首先你要做的是重新新建一个用于Flash烧写的工程。
 
-��дFlash�ĳ�������Ҳ�кིܶ�⣬�������дFlash���˳������͵�����Ҹ��������ҵ�Flash���������������
+烧写Flash的程序网上也有很多讲解，今天把烧写Flash调了出来，就当给大家福利，把我的Flash驱动程序给出来，
 
 ```c
 /*
@@ -528,7 +528,7 @@ void Flash_Writes(uint32_t addr,uint16_t data)
 	j = 0;
 	while (j<255) j++;  // with delay
 
-	while(*(uint16_t *)addr != data);  // У��
+	while(*(uint16_t *)addr != data);  // 校验
 }
 
 /* 
@@ -579,7 +579,7 @@ void Flash_Readm(uint32_t addr,uint16_t *ptr,uint32_t length)
 }
 ```
 
-��ʹ�õ�Flash_Writem������ÿ��16λ��2�ֽڣ���д��������main�е���д������
+我使用的Flash_Writem函数按每次16位（2字节）烧写，主程序main中的烧写代码是
 
 ```c
 #include <c6x.h>
@@ -613,28 +613,28 @@ main()
 }
 ```
 
-ע�������Flash_Writem���ø�ʽ������boot_loader����д��Flash��ʼ��ַΪ0x90000000�ĵ�ַ�ռ䣬�û�Ӧ�ó�����д��Flash��ʼ��ַΪ0x90000400�ĵ�ַ�ռ䡣
+注意上面的Flash_Writem调用格式，二级boot_loader被烧写到Flash起始地址为0x90000000的地址空间，用户应用程序被烧写到Flash起始地址为0x90000400的地址空间。
 
-��д�ɹ����뿴���ģ�
+烧写成功，请看下文，
 
 ![][Burn]
 
-������д������ο�[2]������������д�����õ�CCS���̣���д��ͬ��Ӧ�ó���ֻ��Ҫ�滻�����text.h��boot.h���ɡ�
+更多烧写内容请参考[2]，里面是我烧写程序用的CCS工程，烧写不同的应用程序只需要替换里面的text.h和boot.h即可。
 
 
-������дС�δ�����Գɹ������쳢���ø÷�����д��δ��룬���˸ı���2 Level Bootloader�ĳ����иı�use_code_Size�⣬���κ������ı䣬�ɹ���д300KB���ϵĴ��루��SST39VF1601�ͺŵ�Flash�����ò��ԣ������£�
+昨天烧写小段代码测试成功，今天尝试用该方法烧写大段代码，除了改变在2 Level Bootloader的程序中改变use_code_Size外，无任何其它改变，成功烧写300KB以上的代码（在SST39VF1601型号的Flash上做得测试），如下：
 
 
 ![][test2]
 
-- ��ע����дFlashҪע�����ϵ��κ�һ��ϸ�ڣ�ĳ��ϸ�ڳ��������������д���ɹ�����Ӧ�ó������мɶ�Flash���в�д������ĪҪ������ԭ��������д�����Flash����
+- 后注：烧写Flash要注意以上的任何一个细节，某个细节出错都可能造成烧写不成功！在应用程序中切忌对Flash进行擦写操作，莫要覆盖了原保存了烧写程序的Flash区域。
 
 
-## 5 ��д�����е��ж�������
+## 5 烧写过程中的中断向量表
 
-��ǰ�����д�����У���˼��һ�����⣬�����ǴӺ�ʱ�δ���ת��main����ִ�еģ�
+就前面的烧写方法中，请思考一个问题，程序是从何时何处跳转到main函数执行的？
 
-�������дFlash�����Ƕ�Ӧ��֪������vecs.asm��
+如果不烧写Flash，我们都应该知道是在vecs.asm中
 
 ```
 ********************************************************************************
@@ -731,37 +731,37 @@ _vector15:  VEC_ENTRY _vec_dummy
 * End of vecs.asm
 ********************************************************************************
 ```
-_vectorΪ�ж����������׵�ַ��ʶ����ϵͳ��λ��Ĭ��ת��ִ�и�λ��������λ����ʼ�ձ�����RAM��0��ַ������Ҳ����Ϊʲô֮ǰ�ᵽϵͳӲ����λ���0��ַ��ʼִ�У���
+_vector为中断向量表的首地址标识符，系统复位后默认转入执行复位向量（复位向量始终保存在RAM的0地址处，这也就是为什么之前提到系统硬件复位后从0地址开始执行）。
 
-����дFlash��ֻҪ��cmd�ļ��н�.vectors���趨��0��ַ����Ȼ�����c_int00����ת��main����ִ�С�
+不烧写Flash，只要在cmd文件中将.vectors段设定在0地址处，然后调用c_int00，跳转到main函数执行。
 
-ʹ������ķ�����дFlash��������copy table���֮�����c_int00��������ת��main�����Ļ�����һ���ġ�
+使用上面的方法烧写Flash，则是在copy table完成之后调用c_int00。两者跳转到main函数的机理是一样的。
 
-��������дFlash��ʱ��Ҫע���һ��������ǣ��ж���������������
+但是在烧写Flash的时候，要注意的一个问题就是：中断向量表存放在哪里？
 
-ǰ����дFlash��ʱ����ʵ��һ��û���ᵽ����ϵͳ���ã����綨ʱ���жϣ�����β����ҵ�����ʱ�����ж���������ں�����
+前面烧写Flash的时候，其实有一点没有提到：当系统调用（比如定时器中断），如何才能找到（定时器）中断向量的入口函数？
 
-��ˣ�ǰ����дFlash�ķ����ڲ����޸ĵ���������޷�ִ���жϷ������ġ�
+因此，前面烧写Flash的方法在不做修改的情况下是无法执行中断服务程序的。
 
-�޸ķ�����2������һһ�ֽ⡣
+修改方法有2，且听一一分解。
 
-#### ����һ
+#### 方法一
 
-�ڽ���main����֮���ض�λ�ж���������λ�ã��������������ض�λ�ο�[DSP TMS320C6000����ѧϰ��7������ Bootloader��VectorTable]��
+在进入main函数之后，重定位中断向量表的位置（关于向量表的重定位参考[DSP TMS320C6000基础学习（7）—— Bootloader与VectorTable]）
 
-�ж����������ض�λ������ʹ���ж�֮ǰ��
+中断向量表的重定位必须在使用中断之前。
 
 ```
-extern far void vectors();   /* ����vectors����Ϊ_vectors�����ڻ���ļ�vecs.asm�� */
+extern far void vectors();   /* 声明vectors，因为_vectors定义在汇编文件vecs.asm中 */
 
-IRQ_setVecs(vectors);   /* �ض�λ�ж������� */       
+IRQ_setVecs(vectors);   /* 重定位中断向量表 */       
 ```
 
-#### ������
+#### 方法二
 
-�޸Ļ���ļ���cmd�ļ�������˼·�ǣ����ж�������������0��ַ������������֮��洢����Bootloader��ͨ����λ�ж���ת������Bootloader��
+修改汇编文件和cmd文件。基本思路是：把中断向量表保存在0地址处，在向量表之后存储二级Bootloader，通过复位中断跳转到二级Bootloader。
 
-- ���޸�cmd�ļ�
+- 先修改cmd文件
 
 ```
 -c
@@ -778,7 +778,7 @@ MEMORY
 }
 SECTIONS
 {
-      .vectors  :> BOOT_RAM    /* �޸������vectors�ζ�����vecs.asm�У��ж�����������RAM 0��ַ�� */
+      .vectors  :> BOOT_RAM    /* 修改在这里，vectors段定义在vecs.asm中，中断向量表放在RAM 0地址处 */
       .boot_load:> BOOT_RAM
 
 	  /* Initialized User code section */
@@ -796,13 +796,13 @@ SECTIONS
 }
 ```
 
-- �޸�vecs.asm��ֻ�������޸Ĳ��֣�
+- 修改vecs.asm（只给出了修改部分）
 
 ```
 ...
 
    .ref _c_int00
-   .ref _boot   ; �޸������_boot��Ϊ��������������ڣ�������boot_c671x.s62��
+   .ref _boot   ; 修改在这里，_boot段为二次引导程序入口，定义在boot_c671x.s62中
 
 ...
 
@@ -810,7 +810,7 @@ SECTIONS
  .align 1024
 
 _vectors:
-_vector0:   VEC_ENTRY _boot       ;RESET   �޸�������(��_c_init�ĳ���_boot)����λ����ת��_bootִ�ж�����������
+_vector0:   VEC_ENTRY _boot       ;RESET   修改在这里(将_c_init改成了_boot)，复位后跳转到_boot执行二次引导程序
 _vector1:   VEC_ENTRY _vec_dummy  ;NMI
 _vector2:   VEC_ENTRY _vec_dummy  ;RSVD
 _vector3:   VEC_ENTRY _vec_dummy
@@ -828,20 +828,20 @@ _vector14:  VEC_ENTRY _vec_dummy
 _vector15:  VEC_ENTRY _vec_dummy
 ```
 
-���ַ������������ԣ����ǿ��еģ�
+两种方法都做过测试，都是可行的！
 
 
-## 6 ���ס�����һ���̵�����д
+## 6 进阶——单一工程的自烧写
 
-��Ȼ����������֮ǰ������һֱ�ܺã�����д������ٻ�����Щ�鷳�������Ĳ������ǣ�
+虽然上述方法在之前用起来一直很好，但烧写步骤多少还是有些麻烦，上述的步骤大概是：
 
-1.	�޸�user_size������װ��Ҫ��д�Ĺ���
-2.	���ڴ��е���Ҫ��д������
-3.	����װ��Flash��д���̣�ʹ�øù��̽�2�е�����������д��Flash
+1.	修改user_size，编译装载要烧写的工程
+2.	从内存中导出要烧写的内容
+3.	编译装载Flash烧写工程，使用该工程将2中导出的内容烧写到Flash
 
-�������鷳���ǣ�ÿ�ζ�Ҫ���ڴ����ȵ�����д���ݣ�ת��Ϊ.hͷ�ļ�����д���������̻������а��ʧ����������һ�����鷳���ǣ��������DSP�����и����뿪�ؿ��ƵĻ����Ϳ��������������д�ˣ�����д��ʱ�򲦵�һ�ߣ���д��󲦵���һ�����У���
+里面最麻烦的是，每次都要从内存中先导出烧写内容，转化为.h头文件再烧写，导出过程还不能有半点失误。这无疑是一件很麻烦的是，本来如果DSP板上有个拨码开关控制的话，就可以轻松完成自烧写了（在烧写的时候拨到一边，烧写完后拨到另一边运行）。
 
-���ǣ�����û�У�����ϲ��͵���ģ�����������user_size�����˵㹦�򡪡��β���user_size���б��������Flash�е�user_size�����ڹ��ŷ������������ŵĳ����user_size��һ�£��ͽ�����д���Ϳ����������ҵ�main�����ͱ��������������
+但是，现在没有，人是喜欢偷懒的，于是我又在user_size上下了点功夫——何不用user_size作判别量，如果Flash中的user_size与现在挂着仿真器的运行着的程序的user_size不一致，就进行烧写不就可以吗？于是我的main函数就变成了下面那样：
 
 ```c
 int main(void) {
@@ -882,17 +882,17 @@ int main(void) {
 }
 ```
 
-����һ��ע�⼸���ؼ�������
+里面一定注意几个关键的量：
 
-1.	�����е�0x23d68���ҵ�user_size��С�����ʱ��ÿ��Ҫ��д��ʱ��user_size����Ҫ��boot_c671x.s62�ļ����޸ģ�main�����е�USER_SIZE�궨��ҲҪ�޸�
+1.	代码中的0x23d68是我的user_size大小，这个时候，每当要烧写的时候，user_size不仅要在boot_c671x.s62文件中修改，main函数中的USER_SIZE宏定义也要修改
 
-2.	��ע����������е�0x9000030C
+2.	请注意下面代码中的0x9000030C
 
 	```c
 	if (0x23d68 !=  *(uint32_t *)(0x9000030C))
 	```
 
-	0x9000030C��ʾ���������ڵ�Flash�У�user_size��ŵĵ�ַ�������ַ����ͨ������ķ���ȷ�������úõ������ļ��󽫹���ͨ�����������ص�DSP�ϣ���boot_c671x.s62������
+	0x9000030C表示的是在现在的Flash中，user_size存放的地址。这个地址可以通过下面的方法确定：配置好的启动文件后将工程通过仿真器下载到DSP上，从boot_c671x.s62代码中
 
 	```
 	_copyTable: 
@@ -912,36 +912,36 @@ int main(void) {
 	    		.word 0
 	```
 
-	���Կ������ҵ�user_size�Ǵ����_copyTableλ�ã���ע�⣬1~5С��Ϊ֮ǰ�İ汾����Ϊû�п��Ǻ�C���Խ��������Ի����ֻʹ��copyTable�����￼�ǵ���C�������������copyTable����ǰ�»��߸ĳ���_copyTable����������Ҳû��ϵ����Ϊ����Ƿ���û���ϣ�����Memory����������copyTable��
+	可以看到，我的user_size是存放在_copyTable位置（请注意，1~5小节为之前的版本，因为没有考虑和C语言交互，所以汇编中只使用copyTable，这里考虑到和C交互，将汇编中copyTable都加前下划线改成了_copyTable，不过不改也没关系，因为最后还是发现没用上）。在Memory窗口中搜索copyTable，
 
 	![copyTable]
 
-	��Ϊ���Ϸ��������copyTable=0x0000030C��ָ�ڴ��е�copyTable����Ӧ��д��Flash�е�copyTable����0x90000000+0x0000030C=0x9000030C�����������if��������п�����ֵ�ˡ�
+	因为挂上仿真器后的copyTable=0x0000030C是指内存中的copyTable，对应烧写到Flash中的copyTable就是0x90000000+0x0000030C=0x9000030C，这就是上面if条件语句中看到的值了。
 
-	if�������Flash��д�Ĵ��룬��֮ǰʹ��Flash������д����һ�£�ֻ������д����ʼ��ַ�ͳ���Ҫ�ı�ı���ѣ���νѧ����˼���裬���������������ɡ�
+	if里面就是Flash烧写的代码，和之前使用Flash工程烧写几乎一致，只不过烧写的起始地址和长度要改变改变而已，所谓学而不思则罔，留给读者慢慢体会吧。
 
-������ÿ���޸�user_size��USER_SIZE�󣬹��ŷ��������г��򣬴�ʱFlash�е�user_size������һ�εģ����ִ��if�����е���д���롣��д��ɺ������ϵ磬��ΪFlash�е�user_size�ڸղ�ʹ�÷�������дʱ�Ѿ����£�����if�����е���д���벻ִ�У�ֱ������ifִ���û��������ΪʲôDSP���ڵ�һ����������д��
+这样，每次修改user_size和USER_SIZE后，挂着仿真器运行程序，此时Flash中的user_size还是上一次的，因此执行if条件中的烧写代码。烧写完成后，重新上电，因为Flash中的user_size在刚才使用仿真器烧写时已经更新，所以if条件中的烧写代码不执行，直接跳过if执行用户程序，这就为什么DSP能在单一工程中自烧写！
 
-## 7 �ο�
+## 7 参考
 
 [1] Creating a Second-Level Bootloader for FLASH Bootloading on TMS320C6000 Platform With Code Composer Studio
 
 [2] [My Flash burn CCS project][burnflash]
 
 
-[DSP TMS320C6000����ѧϰ��7������ Bootloader��VectorTable]:http://blog.csdn.net/xiahouzuoxin/article/details/9713461
+[DSP TMS320C6000基础学习（7）—— Bootloader与VectorTable]:http://blog.csdn.net/xiahouzuoxin/article/details/9713461
 
 
-[reset]:../images/TMS320C6713��дFlash��ͨ�÷���/reset.jpg
-[copy1KB]:../images/TMS320C6713��дFlash��ͨ�÷���/copy_1KB.jpg
-[HD43]:../images/TMS320C6713��дFlash��ͨ�÷���/HD43.png
-[2levelboot]:../images/TMS320C6713��дFlash��ͨ�÷���/2levelboot.png
-[storedat]:../images/TMS320C6713��дFlash��ͨ�÷���/store_dat.png
-[map]:../images/TMS320C6713��дFlash��ͨ�÷���/map.png
-[bootdat]:../images/TMS320C6713��дFlash��ͨ�÷���/boot_dat.png
-[booth]:../images/TMS320C6713��дFlash��ͨ�÷���/booth.png
-[texth]:../images/TMS320C6713��дFlash��ͨ�÷���/texth.png
-[Burn]:../images/TMS320C6713��дFlash��ͨ�÷���/Burn.png
-[burnflash]:../codes/TMS320C6713��дFlash��ͨ�÷���/burn_flash
-[test2]:../images/TMS320C6713��дFlash��ͨ�÷���/test2.png
-[copyTable]:../images/TMS320C6713��дFlash��ͨ�÷���/copyTable.png
+[reset]:../images/TMS320C6713烧写Flash的通用方法/reset.jpg
+[copy1KB]:../images/TMS320C6713烧写Flash的通用方法/copy_1KB.jpg
+[HD43]:../images/TMS320C6713烧写Flash的通用方法/HD43.png
+[2levelboot]:../images/TMS320C6713烧写Flash的通用方法/2levelboot.png
+[storedat]:../images/TMS320C6713烧写Flash的通用方法/store_dat.png
+[map]:../images/TMS320C6713烧写Flash的通用方法/map.png
+[bootdat]:../images/TMS320C6713烧写Flash的通用方法/boot_dat.png
+[booth]:../images/TMS320C6713烧写Flash的通用方法/booth.png
+[texth]:../images/TMS320C6713烧写Flash的通用方法/texth.png
+[Burn]:../images/TMS320C6713烧写Flash的通用方法/Burn.png
+[burnflash]:../codes/TMS320C6713烧写Flash的通用方法/burn_flash
+[test2]:../images/TMS320C6713烧写Flash的通用方法/test2.png
+[copyTable]:../images/TMS320C6713烧写Flash的通用方法/copyTable.png
