@@ -1,8 +1,9 @@
 *{margin:0;padding:0;}
 body {
 	font:13.34px helvetica,arial,freesans,clean,sans-serif;
-	color:black;
+	color:black; /*#eaeaea;*/
 	line-height:1.4em;
+	/*background: #151515 url("../images/bkg5.png") 0 0;*/
 	background-color: #F8F8F8;
 	padding: 0.7em;
 }
