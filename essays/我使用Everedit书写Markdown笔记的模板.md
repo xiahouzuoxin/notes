@@ -1,6 +1,8 @@
 [<font size=4>←返回主目录<font>](../README.md)</br>
 
-__文题__：我使用Everedit书写Markdwon笔记的模板</br>
+<div align="right"><a href="../index.html" target="_self" title="返回主页"><img src="../images/Home.png"></a> <a href="#bottom" name="bottom" target="_self" title="跳转底部"><img src="../images/bottom.png"></a></div>
+
+__文题__：我使用Everedit书写Markdown笔记的模板</br>
 __作者__：xiahouzuoxin</br>
 __日期__：2014-09-06</br>
 
@@ -16,6 +18,8 @@ Everedit是一款非常棒的编辑器，短小精悍，功能上虽然比上不
 @代码片段:请在下一行开始输入内容!
 [<font size=4>←返回主目录<font>](../README.md)</br>
 
+<div align="right"><a href="../index.html" target="_self" title="返回主页"><img src="../images/Home.png"></a> <a href="#bottom" name="bottom" target="_self" title="跳转底部"><img src="../images/bottom.png"></a></div>
+
 __文题__：[文题]</br>
 __作者__：xiahouzuoxin</br>
 __日期__：[日期]</br>
@@ -23,11 +27,18 @@ __日期__：[日期]</br>
 -----------------------------------
 
 
-
 <div align="right"><a href="../index.html" target="_self" title="返回主页"><img src="../images/Home.png"></a> <a href="#top" target="_self" title="返回顶部"><img src="../images/top.png"></a></div>
 
 [<font size=4>←返回主目录<font>](../README.md)</br>
+```
 
+主要功能包括：返回主页、返回顶部等。
+
+## 一键分享
+
+```
+<div class="bdsharebuttonbox"><a href="#" class="bds_more" data-cmd="more"></a><a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a><a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a><a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博"></a><a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网"></a><a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a></div>
+<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{},"image":{"viewList":["qzone","tsina","tqq","renren","weixin"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["qzone","tsina","tqq","renren","weixin"]}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
 ```
 
 ## MathJax脚本支持
