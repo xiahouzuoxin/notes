@@ -3,7 +3,9 @@
 <div align="right"><a href="../index.html" target="_self" title="返回主页"><img src="../images/Home.png"></a> <a href="#bottom" name="bottom" target="_self" title="跳转底部"><img src="../images/bottom.png"></a></div>
 
 __文题__：我使用Everedit书写Markdown笔记的模板</br>
+
 __作者__：xiahouzuoxin</br>
+
 __日期__：2014-09-06</br>
 
 -----------------------------------

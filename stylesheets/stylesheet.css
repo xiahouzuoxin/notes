@@ -11,9 +11,10 @@
 /* General & 'Reset' Stuff */
 
 .container {
-  width: 90%;
+  width: 80%;
   max-width: 600px;
   margin: 0 auto;
+  text-align: justify;
 }
 
 .menu {
@@ -22,6 +23,21 @@
   margin: 0 auto;
   float: left;
   text-align:right;
+}
+
+.sider {
+  width: 20%;
+  max-width: 600px;
+  margin: 0 0 0 0;
+  float: right;
+  text-align:left;
+  font-family: Arial, "MS Trebuchet", sans-serif;
+}
+
+.sider_text {
+  text-align: justify;  /* 用于文字对齐 */
+  margin: 0 50px 0 0;
+  color: #C0C0C0;
 }
 
 .footer {
@@ -247,6 +263,16 @@ a {
   text-shadow: 0 0 5px rgba(104, 182, 255, 0.5);
 }
 
+a{ text-decoration:none;}
+a:hover{ text-decoration:underline;}
+
+/*
+ * Click Change
+ */
+.click_change {
+	color: #8F8F8F;
+}
+
 /* Clearfix */
 
 .cf:before, .cf:after {
@@ -260,4 +286,14 @@ a {
 
 .cf {
   zoom:1;
+}
+
+/*
+ * Most Length of One Line
+ */
+.text-hide{
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  overflow:hidden;
+  width:600px;
 }

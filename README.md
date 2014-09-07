@@ -206,7 +206,7 @@
 2.	写正文：在master分支的essays内使用Markdown写文章
 3.	转Html：使用`Chrome`浏览器+`Markdown Preview Plus`插件，将文章导出一份html格式，并同名保存在html目录下。
 
-	修改html文件：1.替换css样式为`../stylesheets/Github.css`； 2.替换“返回主目录”字符串的链接为`../README.html`即html格式的README文件；
+	修改html文件：1.替换css样式为`../stylesheets/Github.css`； 2.替换“返回主目录”字符串的链接为`../README.html`即html格式的README文件； 3.选择是否添加“一键分享”按钮
 	
 4.	修改文件：
 
