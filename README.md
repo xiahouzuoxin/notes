@@ -136,6 +136,7 @@
 	- [（转载）成功并不像想象的那么难](essays/成功并不像想象的那么难.md)
 	- [百家讲坛《曾国藩家训》——无一日不读书](essays/百家讲坛《曾国藩家训》——无一日不读书.md)
 	- [我使用Everedit书写Markdown笔记的模板](essays/我使用Everedit书写Markdown笔记的模板.md)
+	- [插入视频测试](essays/插入视频测试.md)
 
 - 读论文
 
