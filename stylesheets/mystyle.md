@@ -27,6 +27,22 @@ var duoshuoQuery = {short_name:"xiahouzuoxin"};
 <!-- 多说公共JS代码 end -->
 ```
 
+## 站长统计及脚注源码
+
+源码插入到评论之后，`</body>`之前，注意字体颜色！
+
+```
+<hr>
+<div class="footer">
+<center>
+	<font size=2 face="Courier" color="black">
+	<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1253219218'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1253219218%26online%3D1%26show%3Dline' type='text/javascript'%3E%3C/script%3E"));</script>
+	<br>Copyright (c) xiahouzuoxin.
+	</font>
+<center>
+</div>
+```
+
 ## 插入公式源码
 
 ```
