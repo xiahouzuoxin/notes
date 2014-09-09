@@ -11,7 +11,7 @@
 /* General & 'Reset' Stuff */
 
 .container {
-  width: 80%;
+  width: 60%;
   max-width: 600px;
   margin: 0 auto;
   text-align: justify;
@@ -28,15 +28,15 @@
 .sider {
   width: 20%;
   max-width: 600px;
-  margin: 0 0 0 0;
+  margin: 0 auto;
   float: right;
   text-align:left;
   font-family: Arial, "MS Trebuchet", sans-serif;
 }
 
 .sider_text {
-  text-align: justify;  /* 用于文字对齐 */
-  margin: 0 50px 0 0;
+  text-align: Right;  /* 用于文字对齐 */
+  margin: 0 auto;
   color: #C0C0C0;
 }
 
