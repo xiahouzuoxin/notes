@@ -1,0 +1,105 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"><link rel="stylesheet" id="theme" href="../stylesheets/Github.css"></head><body><p><a href="../README.html"><font size="4">←返回主目录<font></font></font></a><font size="4"><font><br></font></font></p><font size="4"><font>
+<div align="right"><a href="../index.html" target="_self" title="返回主页"><img src="../images/Home.png"></a> <a href="#bottom" target="_self" title="跳转底部"><img src="../images/bottom.png"></a></div>
+
+<p><strong>文题</strong>：自适应含噪信号过零率算法<br></p>
+<p><strong>作者</strong>：xiahouzuoxin<br></p>
+<p><strong>日期</strong>：2014-09-11<br></p>
+<hr>
+<p>本文讨论的是实际使用过程中计算过零率的一种自适应方法。过零率常用于语音检测识别中，一般叫短时过零率更贴切些（指一段短时平稳信号才能计算过零率），简单有效，近期亦打算将这个简单的概念用于识别脚步声和卡车声（近似短时平稳）。过零率的定义计算一般通过下面的表达式描述：</p>
+<p><img src="http://www.forkosh.com/mathtex.cgi? \Large Z_n=\frac{1}{2}\sum_{m=0}^{N-1}\|{sgn[x_n(m+1)]-sgn[x_n(m)]}\|"></p>
+<p>过零率是对频率从时域进行的一种简单的度量，一般情况下，过零率越大频率近似越高，反正亦然，相关推倒可参考相关文献。</p>
+<p>自然信号由于电路、环境引入的噪声会在0水平位置波动，直接按上式计算过零率，严重影响识别效果。因此，本文在计算过零率时，对信号的幅值进行阈值限定，阈值的计算方法是：</p>
+<blockquote>
+<p>因为信号处理肯定是加窗一段一段的，所以使用上一次及本次采集的短时信号峰峰值Vpp的均值，再乘以对应的系数因子F（根据实际噪声环境确定，本文定义在0.1与0.2之间），作为本段信号计算过零率的限定阈值。</p>
+</blockquote>
+<p>用数学形式表述更直观：</p>
+<p><img src="http://www.forkosh.com/mathtex.cgi? \Large THR=F*\frac{1}{2}\{V_{pp}(t)+V_{pp}(t-1)\}, F=[0.1\ 0.2]"></p>
+<p>因此增加阈值判别后计算过零率的流程图为：</p>
+<center><img src="../images/自适应含噪信号过零率算法/过零率流程图.png" alt="过零率流程图"></center>
+
+<p>对应的C程序为：</p>
+<pre><code class="language-c python">
+/* signal thresh adaptive structure */
+struct st_zerorate_thr{
+    uint32_t pre;
+    uint32_t cur;
+};
+
+/*
+ * <span class="decorator">@brief   </span>
+ *   Calculate short time zero cross rate. Short time means n, n often choose to
+ *   be a frame(<span class="number">256</span>,<span class="number">512</span> <span class="keyword">and</span> so on)
+ *
+ *   The diffrence <span class="keyword">with</span> upstairs <span class="keyword">is</span> that this one consider the adaptive thresh 
+ *   when checking the signal, which removes the influence of noise.
+ * <span class="decorator">@inputs  </span>
+ *   x[] - input sound signal
+ *   n   - size of a frame
+ * <span class="decorator">@outputs </span>
+ * <span class="decorator">@retval  </span>
+ *   zero cross rate <span class="keyword">in</span> a frame length
+ */
+uint16_t zero_rate(int16_t x[], int n, struct st_zerorate_thr thr)
+{
+    int      i        = <span class="number">1</span>;   /* Init to <span class="number">1</span> */
+    uint16_t zero_cnt = <span class="number">0</span>;
+    float    tmp      = <span class="number">0</span>;
+    uint8_t  x_pre    = <span class="number">0</span>;
+
+    <span class="keyword">while</span> ( (x[i] &lt; thr.cur) &amp;&amp; (x[i] &gt; -thr.cur) &amp;&amp; (i&lt;n) ) {
+        i++;
+    }
+    x_pre = x[i++];
+    <span class="keyword">while</span> ((i &lt; n) &amp;&amp; ((x[i] &gt; thr.cur) || (x[i] &lt; -thr.cur)) ) {
+        tmp   = x[i] * x_pre;
+        <span class="keyword">if</span> (tmp &lt; <span class="number">0</span>) {
+            zero_cnt = zero_cnt + <span class="number">1</span>;
+        }
+        x_pre = x[i];
+        i++;
+    }
+
+    <span class="keyword">return</span> zero_cnt;
+}</code></pre>
+<p>上面代码定义了阈值结构体<code>st_zerorate_thr</code>，更新阈值的方法按(2)式执行，</p>
+<pre><code class="sql">#define TH_FACTOR        (0.2f)   <span class="comment">/* 0.1~0.2 */</span>
+
+void zerorate_thr_<span class="operator"><span class="keyword">update</span>(struct st_zerorate_thr thr, uint32_t peak_value)
+{ 
+    thr.pre = thr.cur;</span>
+    thr.cur = (uint32_t)(TH_FACTOR * ((thr.pre + peak_value)&gt;&gt;1) );
+}</code></pre>
+<p></p><div align="right"><a href="../index.html" target="_self" title="返回主页"><img src="../images/Home.png"></a> <a href="#top" target="_self" title="返回顶部"><img src="../images/top.png"></a></div>
+<a name="bottom"></a>
+<a href="../README.html"><font size="4">←返回主目录<font></font></font></a><font size="4"><font><br><p></p>
+<!-- 
+
+本模板为转成Html后需要修改的地方:
+1. 修改README.md为README.html，共2处
+2. 修改Github样式目录
+3. 添加一键分享功能，源码在stylesheets目录下mystyle.md
+4. 添加评论功能，并修改评论中的标题项等，源码在stylesheets目录下mystyle.md
+5. 修正其它可能不正确的链接 
+
+-->
+
+<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"slide":{"type":"slide","bdImg":"5","bdPos":"right","bdTop":"200"},"image":{"viewList":["qzone","tsina","tqq","renren","weixin"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["qzone","tsina","tqq","renren","weixin"]}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+
+<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="自适应含噪信号过零率算法" data-title="自适应含噪信号过零率算法" data-url="xiahouzuoxin.github.io/notes/html/自适应含噪信号过零率算法.html"></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"xiahouzuoxin"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- 多说公共JS代码 end -->
+
+</font></font></font></font></body></html>
