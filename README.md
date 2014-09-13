@@ -116,9 +116,10 @@
 	- [Git的版本和分支管理](essays/Git的版本和分支管理.md)
 	- [Git使用补遗](essays/Git使用补遗.md)
 
-- 上位机
+- Tools
 
 	- [LabVIEW上位机与串口通信](essays/LabVIEW上位机与串口通信.md)
+	- [推荐一个不错的代码搜索引擎](essays/推荐一个不错的代码搜索引擎.md)
 
 ## 5 阅读 写作 其它
 
