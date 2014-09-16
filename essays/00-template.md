@@ -9,6 +9,8 @@ __作者__：xiahouzuoxin</br>
 
 __日期__：[日期]</br>
 
+_转载请注明出处：<http://xiahouzuoxin.github.io/note>_
+
 -----------------------------------
 
 

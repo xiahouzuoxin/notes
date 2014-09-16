@@ -1,0 +1,208 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"><link rel="stylesheet" id="theme" href="../stylesheets/Github.css"></head><body><p><a href="../README.html"><font size="4">←返回主目录<font></font></font></a><font size="4"><font><br></font></font></p><font size="4"><font>
+<div align="right"><a href="../index.html" target="_self" title="返回主页"><img src="../images/Home.png"></a> <a href="#bottom" target="_self" title="跳转底部"><img src="../images/bottom.png"></a></div>
+
+<p><strong>文题</strong>：OpenCV基础篇之图像频域<br></p>
+<p><strong>作者</strong>：xiahouzuoxin<br></p>
+<p><strong>日期</strong>：2014-09-16<br></p>
+<p><em>转载请注明出处：<a href="http://xiahouzuoxin.github.io/note">http://xiahouzuoxin.github.io/note</a></em></p>
+<hr>
+<h2>程序及分析</h2>
+<pre><code class="language-c cpp"><span class="comment">/*
+ * FileName : fft2.cpp
+ * Author   : xiahouzuoxin @163.com
+ * Version  : v1.0
+ * Date     : Wed 30 Jul 2014 09:42:12 PM CST
+ * Brief    : 
+ * 
+ * Copyright (C) MICL,USTB
+ */</span>
+
+<span class="preprocessor">#include &lt;iostream&gt;</span>
+<span class="preprocessor">#include &lt;cv.h&gt;</span>
+<span class="preprocessor">#include &lt;highgui.h&gt;</span>
+<span class="preprocessor">#include "imgproc/imgproc.hpp"</span>
+
+<span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;
+<span class="keyword">using</span> <span class="keyword">namespace</span> cv;
+
+<span class="keyword">int</span> main(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])
+{
+    <span class="keyword">if</span> (argc &lt; <span class="number">2</span>) {
+        <span class="built_in">cout</span>&lt;&lt;<span class="string">"Usage:./fft2 [image name]"</span>&lt;&lt;endl;
+        <span class="keyword">return</span> -<span class="number">1</span>;
+    }
+
+    <span class="comment">// Read as grayscale image</span>
+    Mat image = imread(argv[<span class="number">1</span>], CV_LOAD_IMAGE_GRAYSCALE);
+    <span class="keyword">if</span> (!image.data) {
+        <span class="built_in">cout</span> &lt;&lt; <span class="string">"Read image error"</span>&lt;&lt;endl;
+        <span class="keyword">return</span> -<span class="number">1</span>;
+    }
+
+    Mat padded;
+    <span class="keyword">int</span> m = getOptimalDFTSize(image.rows);  <span class="comment">// Return size of 2^x that suite for FFT</span>
+    <span class="keyword">int</span> n = getOptimalDFTSize(image.cols);
+    <span class="comment">// Padding 0, result is @padded</span>
+    copyMakeBorder(image, padded, <span class="number">0</span>, m-image.rows, <span class="number">0</span>, n-image.cols, BORDER_CONSTANT, Scalar::all(<span class="number">0</span>));
+
+    <span class="comment">// Create planes to storage REAL part and IMAGE part, IMAGE part init are 0</span>
+    Mat planes[] = {Mat_&lt;<span class="keyword">float</span>&gt;(padded), Mat::zeros(padded.size(), CV_32F) };
+    Mat complexI;
+    merge(planes, <span class="number">2</span>, complexI);
+
+    dft(complexI, complexI);
+
+    <span class="comment">// compute the magnitude and switch to logarithmic scale</span>
+    split(complexI, planes);
+    magnitude(planes[<span class="number">0</span>], planes[<span class="number">0</span>], planes[<span class="number">1</span>]);
+    Mat magI = planes[<span class="number">0</span>];
+
+    <span class="comment">// =&gt; log(1+sqrt(Re(DFT(I))^2+Im(DFT(I))^2))</span>
+    magI += Scalar::all(<span class="number">1</span>);
+    log(magI, magI);
+
+    <span class="comment">// crop the spectrum</span>
+    magI = magI(Rect(<span class="number">0</span>, <span class="number">0</span>, magI.cols &amp; (-<span class="number">2</span>), magI.rows &amp; (-<span class="number">2</span>)));
+    Mat _magI = magI.clone();
+    normalize(_magI, _magI, <span class="number">0</span>, <span class="number">1</span>, CV_MINMAX);
+
+    <span class="comment">// rearrange the quadrants of Fourier image so that the origin is at the image center</span>
+    <span class="keyword">int</span> cx = magI.cols/<span class="number">2</span>;
+    <span class="keyword">int</span> cy = magI.rows/<span class="number">2</span>;
+
+    Mat q0(magI, Rect(<span class="number">0</span>,<span class="number">0</span>,cx,cy));    <span class="comment">// Top-Left</span>
+    Mat q1(magI, Rect(cx,<span class="number">0</span>,cx,cy));   <span class="comment">// Top-Right</span>
+    Mat q2(magI, Rect(<span class="number">0</span>,cy,cx,cy));   <span class="comment">// Bottom-Left</span>
+    Mat q3(magI, Rect(cx,cy,cx,cy));  <span class="comment">// Bottom-Right</span>
+
+    <span class="comment">// exchange Top-Left and Bottom-Right</span>
+    Mat tmp;
+    q0.copyTo(tmp);
+    q3.copyTo(q0);
+    tmp.copyTo(q3);
+
+    <span class="comment">// exchange Top-Right and Bottom-Left</span>
+    q1.copyTo(tmp);
+    q2.copyTo(q1);
+    tmp.copyTo(q2);
+
+    normalize(magI, magI, <span class="number">0</span>, <span class="number">1</span>, CV_MINMAX);
+
+    imshow(<span class="string">"Input image"</span>, image);
+    imshow(<span class="string">"Spectrum magnitude before shift frequency"</span>, _magI);
+    imshow(<span class="string">"Spectrum magnitude after shift frequency"</span>, magI);
+    waitKey();
+
+    <span class="keyword">return</span> <span class="number">0</span>;
+}</code></pre>
+<p>本程序的作用是：将图像从空间域转换到频率域，并绘制频域图像。</p>
+<ol>
+<li><p>二维图像的DFT（离散傅里叶变换），</p>
+<p><img src="http://www.forkosh.com/mathtex.cgi? \Large F(k,l)={\sum_{i=0}^{i=N-1}}{\sum_{j=0}^{j=N-1}}f(i,j)e^{-j2\pi{(\frac{ki}{N}+\frac{lj}{N}})}"></p>
+<p>图像的频域表示的是什么含义呢？又有什么用途呢？图像的频率是表征图像中灰度变化剧烈程度的指标，是灰度在平面空间上的梯度。图像的边缘部分是突变部分，变化较快，因此反应在频域上是高频分量；图像的噪声大部分情况下是高频部分；图像大部分平缓的灰度变化部分则为低频分量。也就是说，傅立叶变换提供另外一个角度来观察图像，可以将图像从灰度分布转化到频率分布上来观察图像的特征。</p>
+<p>频域在图像处理中，就我所知的用途主要在两方面：图像压缩和图像去噪。关于这两点将在下面给出图片DFT的变换结果后说明。</p>
+<p>有关DFT的更多性质请参考胡广书教授的《数字信号处理》教材。</p>
+</li>
+<li><p>请注意读图片的函数与之前有所不同：</p>
+<pre><code class="language-c nginx"><span class="title">Mat</span> image = imread(argv[<span class="number">1</span>], CV_LOAD_IMAGE_GRAYSCALE);</code></pre>
+<p><code>CV_LOAD_IMAGE_GRAYSCALE</code>参数表示将原图像转换为灰度图后读入，这是因为后面的DFT变换都是基于二维信号的，而彩色图像是三维信号。当然，也可以对RGB每一通道都进行DFT运算。</p>
+</li>
+<li><p>DFT算法的原理要求输入信号的长度最好为2^n，这样可以使用快速傅里叶变换算法（FFT算法）进行加速。所以程序中使用</p>
+<pre><code class="language-c css"><span class="tag">copyMakeBorder</span>(<span class="tag">image</span>, <span class="tag">padded</span>, 0, <span class="tag">m</span>-<span class="tag">image</span><span class="class">.rows</span>, 0, <span class="tag">n</span>-<span class="tag">image</span><span class="class">.cols</span>, <span class="tag">BORDER_CONSTANT</span>, <span class="tag">Scalar</span><span class="pseudo">::all(0))</span>;</code></pre>
+<p>填充0使横纵长度都为2^n。</p>
+<p>对于一维信号，原DFT直接运算的复杂度是O(N^2)，而快速傅里叶变换的复杂度降低到O(Nlog2(N))，假设N为512，足足提高了512/9≈57倍。</p>
+</li>
+<li><p>由DFT的性质知，输入为实信号（图像）的时候，频域输出为复数，因此将频域信息分为幅值和相位。频域的幅值高的代表高频分量，幅值低的地方代表低频分量，因此程序中使用</p>
+<pre><code class="language-c javascript"><span class="comment">// =&gt; log(1+sqrt(Re(DFT(I))^2+Im(DFT(I))^2))</span>
+magI += Scalar::all(<span class="number">1</span>);
+log(magI, magI);
+
+<span class="comment">// crop the spectrum</span>
+magI = magI(Rect(<span class="number">0</span>, <span class="number">0</span>, magI.cols &amp; (-<span class="number">2</span>), magI.rows &amp; (-<span class="number">2</span>)));
+Mat _magI = magI.clone();
+normalize(_magI, _magI, <span class="number">0</span>, <span class="number">1</span>, CV_MINMAX);</code></pre>
+<p>进行log幅值计算及归一化幅值（归一化目的主要是方便将频域通过图像的形式进行显示）。</p>
+</li>
+<li><p>关于频域中心平移：将图像的高频分量平移到图像的中心，便于观测。</p>
+<pre><code class="cpp"><span class="keyword">int</span> cx = magI.cols/<span class="number">2</span>;
+<span class="keyword">int</span> cy = magI.rows/<span class="number">2</span>;
+
+Mat q0(magI, Rect(<span class="number">0</span>,<span class="number">0</span>,cx,cy));    <span class="comment">// Top-Left</span>
+Mat q1(magI, Rect(cx,<span class="number">0</span>,cx,cy));   <span class="comment">// Top-Right</span>
+Mat q2(magI, Rect(<span class="number">0</span>,cy,cx,cy));   <span class="comment">// Bottom-Left</span>
+Mat q3(magI, Rect(cx,cy,cx,cy));  <span class="comment">// Bottom-Right</span>
+
+<span class="comment">// exchange Top-Left and Bottom-Right</span>
+Mat tmp;
+q0.copyTo(tmp);
+q3.copyTo(q0);
+tmp.copyTo(q3);
+
+<span class="comment">// exchange Top-Right and Bottom-Left</span>
+q1.copyTo(tmp);
+q2.copyTo(q1);
+tmp.copyTo(q2);</code></pre>
+<p>其原理就是将左上角的频域和右下角的互换，右上角和左下角互换。</p>
+<p>请注意：频域点和空域点的坐标没有一一对应的关系，两者的关系只是上面的DFT公式所见到的。</p>
+</li>
+<li><p>本程序因为使用到图像处理相关的函数，所以包含了头文件<code>imgproc/imgproc.hpp</code>，该文件位于opencv安装目录的include/opencv2/目录下，在编写Makefile时也要增加相关的头文件路径和库，本程序使用的Makefile如下：</p>
+<pre><code class="language-c ruby"><span class="constant">TARG</span>=fft2
+<span class="constant">SRC</span>=fft2.cpp
+<span class="constant">LIB</span>=-<span class="constant">L</span>/usr/local/lib/
+<span class="constant">INC</span>=-<span class="constant">I</span>/usr/local/<span class="keyword">include</span>/opencv/ -<span class="constant">I</span>/usr/local/<span class="keyword">include</span>/opencv2
+<span class="constant">CFLAGS</span>=
+
+<span class="variable">$(</span><span class="constant">TARG</span>)<span class="symbol">:</span><span class="variable">$(</span><span class="constant">SRC</span>)
+  g++ -g -o <span class="variable">$@</span> <span class="variable">${</span><span class="constant">CFLAGS</span>} <span class="variable">$(</span><span class="constant">LIB</span>) <span class="variable">$(</span><span class="constant">INC</span>) \
+      -lopencv_core -lopencv_highgui -lopencv_imgproc \
+      <span class="variable">$^</span>
+
+.<span class="constant">PHONY</span><span class="symbol">:clean</span>
+
+<span class="symbol">clean:</span>
+  -rm <span class="variable">$(</span><span class="constant">TARG</span>) tags -f</code></pre>
+<p>其中Makefile中的\表示换行（反斜杠后不能再有任何字符，包括空格），如上库增加了<code>-lopencv_imgproc</code>，头文件路径增加了<code>-I/usr/local/include/opencv2</code>。</p>
+</li>
+</ol>
+<h2>效果</h2>
+<p><img src="../images/OpenCV基础篇之图像频域/dft.png" alt="dft"></p>
+<ol>
+<li><p>上图从左到右分别是：原始灰度图（我大爱的杨过啊）、频域平移前的频域图像、频域中心平移后的频域图像。</p>
+</li>
+<li><p>提到图像频域变换的用途：压缩和去噪。压缩的原理就是在频域中，大部分频域的值为0（或接近0，可以进行有损压缩，如jpeg图像），只要压缩频域中的少数非0值即可达到图片压缩的目的。去噪则是通过频域的滤波实现，因为噪声大部分情况下体现为高频信号，使用低通滤波器即可滤除高频噪声（当然，也会带来损失，那就是边缘会变得模糊（之前说过，边缘也是高频信号））。</p>
+</li>
+</ol>
+<p></p><div align="right"><a href="../index.html" target="_self" title="返回主页"><img src="../images/Home.png"></a> <a href="#top" target="_self" title="返回顶部"><img src="../images/top.png"></a></div>
+<a name="bottom"></a>
+<a href="../README.html"><font size="4">←返回主目录<font></font></font></a><font size="4"><font><br><p></p>
+<!-- 
+
+本模板为转成Html后需要修改的地方:
+1. 修改README.md为README.html，共2处
+2. 修改Github样式目录
+3. 添加一键分享功能，源码在stylesheets目录下mystyle.md
+4. 添加评论功能，并修改评论中的标题项等，源码在stylesheets目录下mystyle.md
+5. 修正其它可能不正确的链接 
+
+-->
+
+<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"slide":{"type":"slide","bdImg":"5","bdPos":"right","bdTop":"200"},"image":{"viewList":["qzone","tsina","tqq","renren","weixin"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["qzone","tsina","tqq","renren","weixin"]}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+
+<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="OpenCV基础篇之图像频域" data-title="OpenCV基础篇之图像频域" data-url="xiahouzuoxin.github.io/notes/html/OpenCV基础篇之图像频域.html"></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"xiahouzuoxin"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- 多说公共JS代码 end -->
+
+</font></font></font></font></body></html>
