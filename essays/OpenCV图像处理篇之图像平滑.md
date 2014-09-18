@@ -232,7 +232,7 @@ static void salt(Mat &I, int n=3000)
 		-rm $(TARG) tags -f 
 	```
 
-[LenaNoise]:../images/OpenCV图像处理篇之图像平滑/LenaNoise.png
+[LenaNoise]:../images/OpenCV图像处理篇之图像平滑/LenaNoise.PNG
 [blur]:../images/OpenCV图像处理篇之图像平滑/blur.gif
 	
 
