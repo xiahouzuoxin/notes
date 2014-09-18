@@ -1,0 +1,235 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"><link rel="stylesheet" id="theme" href="../stylesheets/Github.css"></head><body><p><a href="../README.html"><font size="4">←返回主目录<font></font></font></a><font size="4"><font><br></font></font></p><font size="4"><font>
+<div align="right"><a href="../index.html" target="_self" title="返回主页"><img src="../images/Home.png"></a> <a href="#bottom" target="_self" title="跳转底部"><img src="../images/bottom.png"></a></div>
+
+<p><strong>文题</strong>：OpenCV图像处理篇之图像平滑<br></p>
+<p><strong>作者</strong>：xiahouzuoxin<br></p>
+<p><strong>日期</strong>：2014-09-18<br></p>
+<p><em>转载请注明出处：<a href="http://xiahouzuoxin.github.io/notes">http://xiahouzuoxin.github.io/notes</a></em></p>
+<hr>
+<h2>图像平滑算法</h2>
+<p>图像平滑与图像模糊是同一概念，主要用于图像的去噪。平滑要使用滤波器，为不改变图像的相位信息，一般使用线性滤波器，其统一形式如下：</p>
+<p><img src="http://www.forkosh.com/mathtex.cgi? \Large g(i,j)=\sum_{k,l}f(i+k,j+l)h(k,l)"></p>
+<p>其中h称为滤波器的核函数，说白了就是权值。不同的核函数代表不同的滤波器，有不同的用途。</p>
+<p>在图像处理中，常见的滤波器包括：</p>
+<ol>
+<li><p>归一化滤波器（Homogeneous blur）</p>
+<p>也是<strong>均值滤波器</strong>，用输出像素点核窗口内的像素均值代替输出点像素值。</p>
+</li>
+<li><p>高斯滤波器（Guassian blur）</p>
+<p>是实际中最常用的滤波器，高斯滤波是将输入数组的每一个像素点与 高斯内核 卷积将卷积和当作输出像素值。高斯核相当于对输出像素的邻域赋予不同的权值，输出像素点所在位置的权值最大（对应高斯函数的均值位置）。二维高斯函数为，</p>
+<p><img src="http://www.forkosh.com/mathtex.cgi? \Large G(x,y) = Ae^{\frac{-(x-u_x)^2}{2\delta_x^2}+\frac{-(y-y_x)^2}{2\delta_y^2}"></p>
+</li>
+</ol>
+<ol>
+<li><p>中值滤波器（median blur）</p>
+<p>中值滤波将图像的每个像素用邻域(以当前像素为中心的正方形区域)像素的中值代替。对椒盐噪声最有效的滤波器，去除跳变点非常有效。</p>
+</li>
+<li><p>双边滤波器（Bilatrial blur）</p>
+<p>为避免滤波器平滑图像去噪的同时使边缘也模糊，这种情况下使用双边滤波器。关于双边滤波器的解释参见<a href="http://homepages.inf.ed.ac.uk/rbf/CVonline/LOCAL_COPIES/MANDUCHI1/Bilateral_Filtering.html">http://homepages.inf.ed.ac.uk/rbf/CVonline/LOCAL_COPIES/MANDUCHI1/Bilateral_Filtering.html</a></p>
+</li>
+</ol>
+<p>下面的程序将先给标准Lena图像添加椒盐噪声，分别使用4种不同的滤波器进行平滑操作，请注意观察不同滤波器对椒盐噪声的去噪效果！</p>
+<h2>程序分析及结果</h2>
+<pre><code class="language-c cpp"><span class="comment">/*
+ * FileName : image_smoothing.cpp
+ * Author   : xiahouzuoxin @163.com
+ * Version  : v1.0
+ * Date     : Wed 17 Sep 2014 08:30:25 PM CST
+ * Brief    : 
+ * 
+ * Copyright (C) MICL,USTB
+ */</span>
+<span class="preprocessor">#include "cv.h"</span>
+<span class="preprocessor">#include "imgproc/imgproc.hpp"</span>
+<span class="preprocessor">#include "highgui/highgui.hpp"</span>
+
+<span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;
+<span class="keyword">using</span> <span class="keyword">namespace</span> cv;
+
+<span class="keyword">const</span> <span class="keyword">int</span> MAX_KERNEL_LENGTH = <span class="number">10</span>;
+
+<span class="keyword">const</span> <span class="keyword">char</span> *wn_name = <span class="string">"Smoothing"</span>;
+
+<span class="keyword">static</span> <span class="keyword">void</span> salt(Mat &amp;I, <span class="keyword">int</span> n);
+<span class="keyword">static</span> <span class="keyword">void</span> disp_caption(<span class="keyword">const</span> <span class="keyword">char</span> *wn_name, Mat src, <span class="keyword">const</span> <span class="keyword">char</span> *caption);
+<span class="keyword">static</span> <span class="keyword">void</span> disp_image(<span class="keyword">const</span> <span class="keyword">char</span> *wn_name, Mat I);
+
+<span class="comment">/*
+ * @brief   
+ * @inputs  
+ * @outputs 
+ * @retval  
+ */</span>
+<span class="keyword">int</span> main(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])
+{
+    <span class="keyword">if</span> (argc&lt;<span class="number">2</span>) {
+        <span class="built_in">cout</span>&lt;&lt;<span class="string">"Usage: ./image_smoothing [file name]"</span>&lt;&lt;endl;
+        <span class="keyword">return</span> -<span class="number">1</span>;
+    }
+
+    Mat I = imread(argv[<span class="number">1</span>], CV_LOAD_IMAGE_GRAYSCALE);
+    salt(I, <span class="number">6000</span>);
+    imshow(wn_name, I);
+    waitKey(<span class="number">0</span>);
+
+    Mat dst;  <span class="comment">// Result</span>
+
+    <span class="comment">/* Homogeneous blur */</span>
+    disp_caption(wn_name, I, <span class="string">"Homogeneous blur"</span>);
+    <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;MAX_KERNEL_LENGTH; i+=<span class="number">2</span>) {
+        blur(I, dst, Size(i, i), Point(-<span class="number">1</span>,-<span class="number">1</span>));
+        disp_image(wn_name, dst);
+    }
+
+    <span class="comment">/* Guassian blur */</span>
+    disp_caption(wn_name, I, <span class="string">"Gaussian blur"</span>);
+    <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;MAX_KERNEL_LENGTH; i+=<span class="number">2</span>) {
+        GaussianBlur(I, dst, Size(i, i), <span class="number">0</span>, <span class="number">0</span>);
+        disp_image(wn_name, dst);
+    }
+
+    <span class="comment">/* Median blur */</span>
+    disp_caption(wn_name, I, <span class="string">"Median blur"</span>);
+    <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;MAX_KERNEL_LENGTH; i+=<span class="number">2</span>) {
+        medianBlur(I, dst, i);
+        disp_image(wn_name, dst);
+    }
+
+    <span class="comment">/* Bilatrial blur */</span>
+    disp_caption(wn_name, I, <span class="string">"Bilatrial blur"</span>);
+    <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">1</span>; i&lt;MAX_KERNEL_LENGTH; i+=<span class="number">2</span>) {
+        bilateralFilter(I, dst, i, i*<span class="number">2</span>, i/<span class="number">2</span>);
+        disp_image(wn_name, dst);
+    }
+    waitKey(<span class="number">0</span>);
+
+    <span class="keyword">return</span> <span class="number">0</span>;
+}
+
+
+<span class="comment">/*
+ * @brief   显示提示文字（滤波方法）
+ * @inputs  
+ * @outputs 
+ * @retval  
+ */</span>
+<span class="keyword">static</span> <span class="keyword">void</span> disp_caption(<span class="keyword">const</span> <span class="keyword">char</span> *wn_name, Mat src, <span class="keyword">const</span> <span class="keyword">char</span> *caption)
+{
+    Mat dst = Mat::zeros(src.size(), src.type());
+
+    putText(dst, caption, Point(src.cols/<span class="number">4</span>, src.rows/<span class="number">2</span>), CV_FONT_HERSHEY_COMPLEX, <span class="number">1</span>, Scalar(<span class="number">255</span>,<span class="number">255</span>,<span class="number">255</span>));
+
+    imshow(wn_name, dst);
+    waitKey(<span class="number">0</span>);
+}
+
+
+
+<span class="comment">/*
+ * @brief   显示图像
+ * @inputs  
+ * @outputs 
+ * @retval  
+ */</span>
+<span class="keyword">static</span> <span class="keyword">void</span> disp_image(<span class="keyword">const</span> <span class="keyword">char</span> *wn_name, Mat I)
+{
+    imshow(wn_name, I);
+    waitKey(<span class="number">1000</span>);
+}
+
+
+<span class="comment">/*
+ * @brief   添加椒盐噪声
+ * @inputs  
+ * @outputs 
+ * @retval  
+ */</span>
+<span class="keyword">static</span> <span class="keyword">void</span> salt(Mat &amp;I, <span class="keyword">int</span> n=<span class="number">3000</span>)
+{
+    <span class="keyword">for</span> (<span class="keyword">int</span> k=<span class="number">0</span>; k&lt;n; k++) {
+        <span class="keyword">int</span> i = rand() % I.cols;
+        <span class="keyword">int</span> j = rand() % I.rows;
+
+        <span class="keyword">if</span> (I.channels()) {
+            I.at&lt;uchar&gt;(j,i) = <span class="number">255</span>;
+        } <span class="keyword">else</span> {
+            I.at&lt;Vec3b&gt;(j,i)[<span class="number">0</span>] = <span class="number">255</span>;
+            I.at&lt;Vec3b&gt;(j,i)[<span class="number">1</span>] = <span class="number">255</span>;
+            I.at&lt;Vec3b&gt;(j,i)[<span class="number">2</span>] = <span class="number">255</span>;
+        }
+    }
+}</code></pre>
+<p>上面程序的逻辑非常清晰：</p>
+<ol>
+<li><p>读入灰度图，并添加椒盐噪声（6000个噪声点）：</p>
+<pre><code class="language-c undefined">Mat I = imread(argv[1], CV_LOAD_IMAGE_GRAYSCALE);
+salt(I, 6000);</code></pre>
+<p><img src="../images/OpenCV图像处理篇之图像平滑/LenaNoise.png" alt="LenaNoise"></p>
+</li>
+<li><p><code>disp_caption</code>和<code>disp_image</code>函数分别是用于显示提示文字和平滑过程中的变化图像的，平滑过程中图像的变化如下图：</p>
+<p><img src="../images/OpenCV图像处理篇之图像平滑/blur.gif" alt="blur"></p>
+<p>注意观察上面的图，中值滤波（Median Blur）对椒盐噪声的效果最好！</p>
+</li>
+<li><p>四种滤波方法分别使用到4个OpenCV函数，这些函数的声明都在<code>imgproc.hpp</code>中，这些函数的前2个参数都是原图像和滤波后图像。</p>
+<p>归一化滤波器<code>blur</code>的第3个参数为滤波核窗口的大小，Size(i,i)表示ixi大小的窗口。</p>
+<p>高斯滤波器<code>GaussianBlur</code>第3个参数也是滤波核窗口的大小，第4、第5个参数分辨表示x方向和y方向的δ。</p>
+<p>中值滤波器<code>medianBlur</code>第3个参数是滤波器的长度，该滤波器的窗口为正方形。</p>
+<p>双边滤波器的函数原型如下：</p>
+<pre><code class="cpp"><span class="comment">//! smooths the image using bilateral filter</span>
+CV_EXPORTS_W <span class="keyword">void</span> bilateralFilter( InputArray src, OutputArray dst, <span class="keyword">int</span> d,
+                             <span class="keyword">double</span> sigmaColor, <span class="keyword">double</span> sigmaSpace,
+                             <span class="keyword">int</span> borderType=BORDER_DEFAULT );</code></pre>
+</li>
+<li><p>本程序使用的Makefile文件为：</p>
+<pre><code class="ruby"> <span class="constant">TARG</span>=image_smoothing
+ <span class="constant">SRC</span>=image_smoothing.cpp
+ <span class="constant">LIB</span>=-<span class="constant">L</span>/usr/local/lib/
+ <span class="constant">INC</span>=-<span class="constant">I</span>/usr/local/<span class="keyword">include</span>/opencv/ -<span class="constant">I</span>/usr/local/<span class="keyword">include</span>/opencv2
+ <span class="constant">CFLAGS</span>=
+
+ <span class="variable">$(</span><span class="constant">TARG</span>)<span class="symbol">:</span><span class="variable">$(</span><span class="constant">SRC</span>)
+     g++ -g -o <span class="variable">$@</span> <span class="variable">${</span><span class="constant">CFLAGS</span>} <span class="variable">$(</span><span class="constant">LIB</span>) <span class="variable">$(</span><span class="constant">INC</span>) \
+         -lopencv_core -lopencv_highgui -lopencv_imgproc \
+         <span class="variable">$^</span>
+
+ .<span class="constant">PHONY</span><span class="symbol">:clean</span>
+
+ <span class="symbol">clean:</span>
+     -rm <span class="variable">$(</span><span class="constant">TARG</span>) tags -f</code></pre>
+</li>
+</ol>
+<p></p><div align="right"><a href="../index.html" target="_self" title="返回主页"><img src="../images/Home.png"></a> <a href="#top" target="_self" title="返回顶部"><img src="../images/top.png"></a></div>
+<a name="bottom"></a>
+<a href="../README.html"><font size="4">←返回主目录<font></font></font></a><font size="4"><font><br><p></p>
+<!-- 
+
+本模板为转成Html后需要修改的地方:
+1. 修改README.md为README.html，共2处
+2. 修改Github样式目录
+3. 添加一键分享功能，源码在stylesheets目录下mystyle.md
+4. 添加评论功能，并修改评论中的标题项等，源码在stylesheets目录下mystyle.md
+5. 修正其它可能不正确的链接 
+
+-->
+
+<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"slide":{"type":"slide","bdImg":"5","bdPos":"right","bdTop":"200"},"image":{"viewList":["qzone","tsina","tqq","renren","weixin"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["qzone","tsina","tqq","renren","weixin"]}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+
+<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="OpenCV图像处理篇之图像平滑" data-title="OpenCV图像处理篇之图像平滑" data-url="xiahouzuoxin.github.io/notes/html/OpenCV图像处理篇之图像平滑.html"></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"xiahouzuoxin"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- 多说公共JS代码 end -->
+
+
+</font></font></font></font></body></html>

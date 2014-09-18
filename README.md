@@ -66,6 +66,8 @@
 	- [OpenCV基础篇之像素操作对比度调节](essays/OpenCV基础篇之像素操作对比度调节.md)
 	- [OpenCV基础篇之查找表](essays/OpenCV基础篇之查找表.md)
 	- [OpenCV基础篇之绘图及RNG随机数对象](essays/OpenCV基础篇之绘图及RNG随机数对象.md)
+	- [OpenCV基础篇之图像频域](essays/OpenCV基础篇之图像频域.md)
+	- [OpenCV图像处理篇之图像平滑](essays/OpenCV图像处理篇之图像平滑.md)
 
 - 网络资源
 
