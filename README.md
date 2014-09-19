@@ -68,6 +68,7 @@
 	- [OpenCV基础篇之绘图及RNG随机数对象](essays/OpenCV基础篇之绘图及RNG随机数对象.md)
 	- [OpenCV基础篇之图像频域](essays/OpenCV基础篇之图像频域.md)
 	- [OpenCV图像处理篇之图像平滑](essays/OpenCV图像处理篇之图像平滑.md)
+	- [OpenCV图像处理篇之腐蚀与膨胀](essays/OpenCV图像处理篇之腐蚀与膨胀.md)
 
 - 网络资源
 

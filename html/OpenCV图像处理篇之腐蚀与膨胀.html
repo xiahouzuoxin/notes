@@ -1,0 +1,251 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"><link rel="stylesheet" id="theme" href="../stylesheets/Github.css"></head><body><p><a href="../README.html"><font size="4">←返回主目录<font></font></font></a><font size="4"><font><br></font></font></p><font size="4"><font>
+<div align="right"><a href="../index.html" target="_self" title="返回主页"><img src="../images/Home.png"></a> <a href="#bottom" target="_self" title="跳转底部"><img src="../images/bottom.png"></a></div>
+
+<p><strong>文题</strong>：OpenCV图像处理篇之腐蚀与膨胀<br></p>
+<p><strong>作者</strong>：xiahouzuoxin<br></p>
+<p><strong>日期</strong>：2014-09-19<br></p>
+<p><em>转载请注明出处：<a href="http://xiahouzuoxin.github.io/notes">http://xiahouzuoxin.github.io/notes</a></em></p>
+<hr>
+<h2>腐蚀与膨胀</h2>
+<p>腐蚀和膨胀是图像的形态学处理中最基本的操作，之后遇见的开操作和闭操作都是腐蚀和膨胀操作的结合运算。腐蚀和膨胀的应用非常广泛，而且效果还很好：</p>
+<ol>
+<li>腐蚀可以分割(isolate)独立的图像元素，膨胀用于连接(join)相邻的元素，这也是腐蚀和膨胀后图像最直观的展现</li>
+<li>去噪：通过低尺寸结构元素的腐蚀操作很容易去掉分散的椒盐噪声点</li>
+<li>图像轮廓提取：腐蚀操作</li>
+<li>图像分割</li>
+<li>等等...（在文后给出一则简单实用膨胀操作提取车牌数字区域的例子）</li>
+</ol>
+<p><em>结构元素</em>是形态学操作中最重要的概念，</p>
+<p><img src="../images/OpenCV图像处理篇之腐蚀与膨胀/erode_show.png" alt="erode_show">  <img src="../images/OpenCV图像处理篇之腐蚀与膨胀/dilate_show.png" alt="dilate_show"></p>
+<p>如上图，B为结构元素。</p>
+<p>腐蚀操作描述为：扫描图像的每一个像素，用结构元素与其覆盖的二值图像做“与”操作：如果都为1，结果图像的该像素为1，否则为0。</p>
+<p>膨胀操作描述为：扫描图像的每一个像素，用结构元素与其覆盖的二值图像做“与”操作：如果都为0，结果图像的该像素为0，否则为1。</p>
+<p>以上都是关于二值图像的形态学操作，对于灰度图像：</p>
+<ol>
+<li><p>腐蚀操作</p>
+<p><img src="http://www.forkosh.com/mathtex.cgi? \Large g(x,y)=erode[f(x,y),B]=\min{\{f(x+dx,y+dy)-B(dx,dy)|(dx,dy)\in{D_B}\}}"></p>
+<p>其中，g(x,y)为腐蚀后的灰度图像，f(x,y)为原灰度图像，B为结构元素。腐蚀运算是由结构元素确定的邻域块中选取图像值与结构元素值的差的最小值。</p>
+</li>
+<li><p>膨胀操作</p>
+<p><img src="http://www.forkosh.com/mathtex.cgi? \Large g(x,y)=dilate[f(x,y),B]=\min{\{f(x-dx,y-dy)+B(dx,dy)|(dx,dy)\in{D_B}\}}"></p>
+<p>其中，g(x,y)为腐蚀后的灰度图像，f(x,y)为原灰度图像，B为结构元素。 膨胀运算是由结构元素确定的邻域块中选取图像值与结构元素值的和的最大值。</p>
+</li>
+</ol>
+<p>在灰度图的形态学操作中，一般选择“平摊”的结构元素，即结构元素B的值为0，则上面对灰度图的形态学操作可简化如下：</p>
+<p><img src="http://www.forkosh.com/mathtex.cgi? \Large g(x,y)=erode[f(x,y),B]=\min{\{f(x+dx,y+dy)|(dx,dy)\in{D_B}\}}"></p>
+<p><img src="http://www.forkosh.com/mathtex.cgi? \Large g(x,y)=dilate[f(x,y),B]=\min{\{f(x-dx,y-dy)|(dx,dy)\in{D_B}\}}"></p>
+<p>好了，这就是基本的形态学操作——腐蚀和膨胀，下面是使用OpenCV对图像进行腐蚀和膨胀的程序，还是秉承我们一贯的原则：搁下理论，先直观地感觉图像处理算法的效果，实际项目需要时再深入挖掘！</p>
+<h2>程序分析</h2>
+<pre><code class="language-c cpp"><span class="comment">/*
+ * FileName : eroding_and_dilating.cpp
+ * Author   : xiahouzuoxin @163.com
+ * Version  : v1.0
+ * Date     : Fri 19 Sep 2014 07:42:12 PM CST
+ * Brief    : 
+ * 
+ * Copyright (C) MICL,USTB
+ */</span>
+<span class="preprocessor">#include "cv.h" </span>
+<span class="preprocessor">#include "highgui.h"</span>
+<span class="preprocessor">#include "opencv2/imgproc/imgproc.hpp"</span>
+
+<span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;
+<span class="keyword">using</span> <span class="keyword">namespace</span> cv;
+
+<span class="preprocessor">#define TYPE_MORPH_RECT      (0)</span>
+<span class="preprocessor">#define TYPE_MORPH_CROSS     (1)</span>
+<span class="preprocessor">#define TYPE_MORPH_ELLIPSE   (2)</span>
+
+<span class="preprocessor">#define MAX_ELE_TYPE         (2)</span>
+<span class="preprocessor">#define MAX_ELE_SIZE         (20)</span>
+
+Mat src, erode_dst, dilate_dst;
+
+<span class="keyword">const</span> <span class="keyword">char</span> *erode_wn  = <span class="string">"eroding demo"</span>;
+<span class="keyword">const</span> <span class="keyword">char</span> *dilate_wn = <span class="string">"dilating demo"</span>;
+
+<span class="keyword">int</span> erode_ele_type;
+<span class="keyword">int</span> dilate_ele_type;
+<span class="keyword">int</span> erode_ele_size;
+<span class="keyword">int</span> dilate_ele_size;
+
+<span class="keyword">static</span> <span class="keyword">void</span> Erosion(<span class="keyword">int</span>, <span class="keyword">void</span> *);
+<span class="keyword">static</span> <span class="keyword">void</span> Dilation(<span class="keyword">int</span>, <span class="keyword">void</span> *);
+
+<span class="comment">/*
+ * @brief   
+ * @inputs  
+ * @outputs 
+ * @retval  
+ */</span>
+<span class="keyword">int</span> main(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])
+{
+    <span class="keyword">if</span> (argc &lt; <span class="number">2</span>) {
+        <span class="built_in">cout</span>&lt;&lt;<span class="string">"Usage: ./eroding_and_dilating [file name]"</span>&lt;&lt;endl;
+        <span class="keyword">return</span> -<span class="number">1</span>;
+    }
+
+    src = imread(argv[<span class="number">1</span>]);
+    <span class="keyword">if</span> (!src.data) {
+        <span class="built_in">cout</span>&lt;&lt;<span class="string">"Read image failure."</span>&lt;&lt;endl;
+        <span class="keyword">return</span> -<span class="number">1</span>;
+    }
+
+    <span class="comment">// Windows</span>
+    namedWindow(erode_wn, WINDOW_AUTOSIZE);
+    namedWindow(dilate_wn, WINDOW_AUTOSIZE);
+
+    <span class="comment">// Track Bar for Erosion</span>
+    createTrackbar(<span class="string">"Element Type\n0:Rect\n1:Cross\n2:Ellipse"</span>, erode_wn, 
+            &amp;erode_ele_type, MAX_ELE_TYPE, Erosion);  <span class="comment">// callback @Erosion</span>
+    createTrackbar(<span class="string">"Element Size: 2n+1"</span>, erode_wn, 
+            &amp;erode_ele_size, MAX_ELE_SIZE, Erosion);
+
+    <span class="comment">// Track Bar for Dilation</span>
+    createTrackbar(<span class="string">"Element Type\n0:Rect\n1:Cross\n2:Ellipse"</span>, dilate_wn, 
+            &amp;dilate_ele_type, MAX_ELE_TYPE, Dilation);  <span class="comment">// callback @Erosion</span>
+    createTrackbar(<span class="string">"Element Size: 2n+1"</span>, dilate_wn, 
+            &amp;dilate_ele_size, MAX_ELE_SIZE, Dilation);
+
+    <span class="comment">// Default start</span>
+    Erosion(<span class="number">0</span>, <span class="number">0</span>);
+    Dilation(<span class="number">0</span>, <span class="number">0</span>);
+
+    waitKey(<span class="number">0</span>);
+
+    <span class="keyword">return</span> <span class="number">0</span>;
+}
+
+<span class="comment">/*
+ * @brief   腐蚀操作的回调函数
+ * @inputs  
+ * @outputs 
+ * @retval  
+ */</span>
+<span class="keyword">static</span> <span class="keyword">void</span> Erosion(<span class="keyword">int</span>, <span class="keyword">void</span> *)
+{
+    <span class="keyword">int</span> erode_type;
+
+    <span class="keyword">switch</span> (erode_ele_type) {
+    <span class="keyword">case</span> TYPE_MORPH_RECT:
+       erode_type = MORPH_RECT; 
+       <span class="keyword">break</span>;
+    <span class="keyword">case</span> TYPE_MORPH_CROSS:
+       erode_type = MORPH_CROSS;
+       <span class="keyword">break</span>;
+    <span class="keyword">case</span> TYPE_MORPH_ELLIPSE:
+       erode_type = MORPH_ELLIPSE;
+       <span class="keyword">break</span>;
+    <span class="keyword">default</span>:
+       erode_type = MORPH_RECT;
+       <span class="keyword">break</span>;
+    }
+
+    Mat ele = getStructuringElement(erode_type, Size(<span class="number">2</span>*erode_ele_size+<span class="number">1</span>, <span class="number">2</span>*erode_ele_size+<span class="number">1</span>), 
+            Point(erode_ele_size, erode_ele_size));
+
+    erode(src, erode_dst, ele);
+
+    imshow(erode_wn, erode_dst);
+}
+
+<span class="comment">/*
+ * @brief   膨胀操作的回调函数
+ * @inputs  
+ * @outputs 
+ * @retval  
+ */</span>
+<span class="keyword">static</span> <span class="keyword">void</span> Dilation(<span class="keyword">int</span>, <span class="keyword">void</span> *)
+{
+    <span class="keyword">int</span> dilate_type;
+
+    <span class="keyword">switch</span> (dilate_ele_type) {
+    <span class="keyword">case</span> TYPE_MORPH_RECT:
+       dilate_type = MORPH_RECT; 
+       <span class="keyword">break</span>;
+    <span class="keyword">case</span> TYPE_MORPH_CROSS:
+       dilate_type = MORPH_CROSS;
+       <span class="keyword">break</span>;
+    <span class="keyword">case</span> TYPE_MORPH_ELLIPSE:
+       dilate_type = MORPH_ELLIPSE;
+       <span class="keyword">break</span>;
+    <span class="keyword">default</span>:
+       dilate_type = MORPH_RECT;
+       <span class="keyword">break</span>;
+    }
+
+    Mat ele = getStructuringElement(dilate_type, Size(<span class="number">2</span>*dilate_ele_size+<span class="number">1</span>, <span class="number">2</span>*dilate_ele_size+<span class="number">1</span>), 
+            Point(dilate_ele_size, dilate_ele_size));
+
+    dilate(src, dilate_dst, ele);
+
+    imshow(dilate_wn, dilate_dst);
+}</code></pre>
+<ol>
+<li><p>膨胀和腐蚀操作的函数分别是<code>erode</code>和<code>dilate</code>，传递给他们的参数也都依次是原图像、形态学操作后的图像、结构元素ele。本程序中给出了3种结构元素类型，分别是</p>
+<pre><code class="ruby"><span class="comment">#define TYPE_MORPH_RECT      (0)  // 矩形</span>
+<span class="comment">#define TYPE_MORPH_CROSS     (1)  // 十字交叉型</span>
+<span class="comment">#define TYPE_MORPH_ELLIPSE   (2)  // 椭圆型</span></code></pre>
+<p>再通过OpenCV提供的<code>getStructuringElement</code>函数创建Mat类型的结构元素。</p>
+<p><code>getStructuringElement</code>的参数依次是结构元素类型（OpenCV中提供了宏定义MORPH_RECT、MORPH_CROSS和MORPH_ELLIPSE表示）、结构元素大小。</p>
+</li>
+<li><p>这里我们首次接触了<code>createTrackbar</code>函数（声明在<code>highgui.hpp</code>中），该函数的功能是给窗口添加滑动条。其原型是：</p>
+<pre><code class="cpp">CV_EXPORTS <span class="keyword">int</span> createTrackbar( <span class="keyword">const</span> <span class="built_in">string</span>&amp; trackbarname, <span class="keyword">const</span> <span class="built_in">string</span>&amp; winname,
+                         <span class="keyword">int</span>* value, <span class="keyword">int</span> count,
+                         TrackbarCallback onChange=<span class="number">0</span>,
+                         <span class="keyword">void</span>* userdata=<span class="number">0</span>);</code></pre>
+<p><code>trackbarname</code>为滑动条的名称，将会显示在滑动条的前面，参见结果中的图片显示；
+<code>winname</code>为窗口名；
+<code>value</code>为滑动条关联的变量，如上面程序中第一个滑动条关联到<code>erode_ele_type</code>，表示——当滑动条滑动变化时，erode_ele_type的值发生响应的变化；
+<code>count</code>表示滑动条能滑动到的最大值；
+<code>TrackbarCallback onChange</code>其实是这个函数的关键，是滑动条变化时调用的回调函数。当滑动条滑动时，value值发生变化，系统立刻调用<code>onChange</code>函数，执行相关的操作，回调函数的定义形式是固定的：</p>
+<pre><code class="language-c nginx"><span class="title">void</span> <span class="built_in">on</span>Change(int, void *)</code></pre>
+<p>程序中的回调函数<code>Erosion</code>和<code>Dilation</code>函数的定义都遵循该形式：</p>
+<pre><code class="cpp"><span class="keyword">static</span> <span class="keyword">void</span> Erosion(<span class="keyword">int</span>, <span class="keyword">void</span> *);
+<span class="keyword">static</span> <span class="keyword">void</span> Dilation(<span class="keyword">int</span>, <span class="keyword">void</span> *);</code></pre>
+</li>
+</ol>
+<h2>结果及实际应用</h2>
+<p>对“黑白小猪”进行膨胀操作的变化（随着结构元素大小的变化）如下图：</p>
+<p><img src="../images/OpenCV图像处理篇之腐蚀与膨胀/dilating_demo.gif" alt="dilating_demo"></p>
+<p>对“黑白小猪”进行腐蚀操作的变化（随着结构元素大小的变化）如下图：</p>
+<p><img src="../images/OpenCV图像处理篇之腐蚀与膨胀/eroding_demo.gif" alt="eroding_demo"></p>
+<p>膨胀与腐蚀在图像处理中具有广泛的用途，比如提取车牌过程中，可以通过膨胀运算确定车牌的区域。如下图为通过sobel算子提取边缘后的车牌，</p>
+<p><img src="../images/OpenCV图像处理篇之腐蚀与膨胀/car_plate.png" alt="car_plate"></p>
+<p>为去掉边界，确定车牌在图中的位置，可以通过膨胀操作，结果如下：</p>
+<p><img src="../images/OpenCV图像处理篇之腐蚀与膨胀/car_plate_dilate.png" alt="car_plate_dilate"></p>
+<p>上图中的红线区域就是膨胀后能用于确定车牌的连通区域，再通过对连通区域的搜索及“车牌的矩形特性”即可确定含有车牌数字在图片中的位置。</p>
+<p></p><div align="right"><a href="../index.html" target="_self" title="返回主页"><img src="../images/Home.png"></a> <a href="#top" target="_self" title="返回顶部"><img src="../images/top.png"></a></div>
+<a name="bottom"></a>
+<a href="../README.html"><font size="4">←返回主目录<font></font></font></a><font size="4"><font><br><p></p>
+<!-- 
+
+本模板为转成Html后需要修改的地方:
+1. 修改README.md为README.html，共2处
+2. 修改Github样式目录
+3. 添加一键分享功能，源码在stylesheets目录下mystyle.md
+4. 添加评论功能，并修改评论中的标题项等，源码在stylesheets目录下mystyle.md
+5. 修正其它可能不正确的链接 
+
+-->
+
+<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"slide":{"type":"slide","bdImg":"5","bdPos":"right","bdTop":"200"},"image":{"viewList":["qzone","tsina","tqq","renren","weixin"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["qzone","tsina","tqq","renren","weixin"]}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+
+<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="OpenCV图像处理篇之腐蚀与膨胀" data-title="OpenCV图像处理篇之腐蚀与膨胀" data-url="xiahouzuoxin.github.io/notes/html/OpenCV图像处理篇之腐蚀与膨胀.html"></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"xiahouzuoxin"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- 多说公共JS代码 end -->
+
+</font></font></font></font></body></html>
