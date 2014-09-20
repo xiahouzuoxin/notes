@@ -69,6 +69,7 @@
 	- [OpenCV基础篇之图像频域](essays/OpenCV基础篇之图像频域.md)
 	- [OpenCV图像处理篇之图像平滑](essays/OpenCV图像处理篇之图像平滑.md)
 	- [OpenCV图像处理篇之腐蚀与膨胀](essays/OpenCV图像处理篇之腐蚀与膨胀.md)
+	- [OpenCV图像处理篇之采样金字塔](essays/OpenCV图像处理篇之采样金字塔.md)
 
 - 网络资源
 
