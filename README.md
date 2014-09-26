@@ -34,6 +34,10 @@
 - ARM
 
 	- [基于SPI的双MCU通信](essays/基于SPI的双MCU通信.md)
+	- [STM32串口通信记](essays/STM32串口通信记.md)
+	- [STM32复位和系统时钟](essays/STM32复位和系统时钟.md)
+	- [STM32用作编码器接口的原理](essays/STM32用作编码器接口的原理.md)
+	- [STM32中NVIC(嵌套向量中断控制)的理解](essays/STM32中NVIC(嵌套向量中断控制)的理解.md)
 
 
 - 硬件设计
@@ -88,6 +92,7 @@
 - [位反转算法](essays/位反转算法.md)
 - [白话压缩感知](essays/白话压缩感知.md)
 - [自适应含噪信号过零率算法](essays/自适应含噪信号过零率算法.md)
+- [Kalman滤波器从原理到实现](essays/Kalman滤波器从原理到实现.md)
 
 
 ## 4 计算机

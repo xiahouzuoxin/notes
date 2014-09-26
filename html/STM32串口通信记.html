@@ -1,0 +1,89 @@
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"><link rel="stylesheet" id="theme" href="../stylesheets/Github.css"></head><body><p><a href="../README.html"><font size="4">←返回主目录<font></font></font></a><font size="4"><font><br></font></font></p><font size="4"><font>
+<div align="right"><a href="../index.html" target="_self" title="返回主页"><img src="../images/Home.png"></a><a href="../Archives.html" target="_self" title="文章存档"><img src="../images/Archives.jpg"></a><a href="#bottom" target="_self" title="跳转底部"><img src="../images/bottom.png"></a></div>
+
+<p><strong>文题</strong>：STM32串口通信记<br></p>
+<p><strong>作者</strong>：xiahouzuoxin<br></p>
+<p><strong>日期</strong>：2011-10-04 16:01，整理于2014-09-25<br></p>
+<p><em>转载请注明出处：<a href="http://xiahouzuoxin.github.io/notes">http://xiahouzuoxin.github.io/notes</a></em></p>
+<hr>
+<p>这是一篇旧文，早在上大二的时候，在地下室（当时实验室在防空地下室）顺手在word上写的，当时STM32正刚刚开始蓬勃发展，如今时隔3年，整理到这里！</p>
+<p>接着刚才的NVIC简单记录下串口通信吧。何为串口通信？两个人之间互发短信见过吧，这叫串口通信，假如群发短信就是并口通信了。</p>
+<p>在STM32的串口通信操作中，作为应用者可以从两方面来操纵，一方面是寄存器直接操作，另一方面则是库函数操作。两种方法比较，前一种是智者的技巧，后一种则是傻瓜的聪慧。下面亮一下代码先。</p>
+<ol>
+<li><p>智者的技巧：寄存器直接操作</p>
+<pre><code class="javascript">RCC-&gt;APB2ENR|=<span class="number">1</span>&lt;<span class="xml"><span class="tag">&lt;<span class="title">2;</span>       //使能<span class="attribute">PORTA</span>口时钟  
+<span class="attribute">RCC-</span>&gt;</span>APB2ENR|=1<span class="tag">&lt;<span class="title">&lt;14;</span>      //使能串口时钟 
+<span class="attribute">GPIOA-</span>&gt;</span>CRH=0X444444B4;    //IO状态设置
+
+RCC-&gt;APB2RSTR|=1<span class="tag">&lt;<span class="title">&lt;14;</span>     //复位串口<span class="attribute">1</span>
+<span class="attribute">RCC-</span>&gt;</span>APB2RSTR&amp;=~(1<span class="tag">&lt;<span class="title">&lt;14);</span>  //停止复位              
+//波特率设置
+<span class="attribute">USART1-</span>&gt;</span>BRR=uBound;       // 波特率设置     
+USART1-&gt;CR1|=0X200C;      //1位停止,无校验位</span></code></pre>
+</li>
+<li><p>傻瓜的智慧：库函数操作</p>
+<pre><code class="javascript"><span class="comment">/*第一步:使能端口时钟*/</span>
+RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);
+
+<span class="comment">/*第二步:配置RXD和TXD端口*/</span>
+GPIO_Usart_InitStructure.GPIO_Pin = USART1_TXD;
+GPIO_Usart_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
+GPIO_Usart_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+GPIO_Init(GPIOA, &amp;GPIO_Usart_InitStructure);
+
+GPIO_Usart_InitStructure.GPIO_Pin = USART1_RXD;
+GPIO_Usart_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
+GPIO_Init(GPIOA, &amp;GPIO_Usart_InitStructure);
+
+<span class="comment">/*第三步:使能串口时钟*/</span>
+RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1, ENABLE);
+
+<span class="comment">/*第四步：串口配置*/</span>
+Usart_InitStruct.USART_BaudRate = uBound;
+Usart_InitStruct.USART_WordLength = USART_WordLength_8b;
+Usart_InitStruct.USART_StopBits = USART_StopBits_1;
+Usart_InitStruct.USART_Parity = USART_Parity_No;
+Usart_InitStruct.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;
+Usart_InitStruct.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
+USART_Init(USART1, &amp;Usart_InitStruct);
+
+<span class="comment">/*第五步：使能串口*/</span>
+USART_Cmd(USART1, ENABLE);</code></pre>
+</li>
+</ol>
+<p>图个方便，贴个代码而不赘述，以上代码全部测试通过，有兴趣朋友可以自己研究。</p>
+<p>在这说明点，“傻瓜的智慧”虽然傻点，但结构明晰，操作方便；而“智者的技巧”虽然简单精炼，但看上去意思难辨。傻瓜并不傻，智者也不是可以顾及无边，因此操作STM32时可权衡自己能力和喜好选择自己的操作方式。</p>
+<p></p><div align="right"><a href="../index.html" target="_self" title="返回主页"><img src="../images/Home.png"></a><a href="../Archives.html" target="_self" title="文章存档"><img src="../images/Archives.jpg"></a><a href="#top" target="_self" title="返回顶部"><img src="../images/top.png"></a></div>
+<a name="bottom"></a>
+<a href="../README.html"><font size="4">←返回主目录<font></font></font></a><font size="4"><font><br><p></p>
+<!-- 
+
+本模板为转成Html后需要修改的地方:
+1. 修改README.md为README.html，共2处
+2. 修改Github样式目录
+3. 添加一键分享功能，源码在stylesheets目录下mystyle.md
+4. 添加评论功能，并修改评论中的标题项等，源码在stylesheets目录下mystyle.md
+5. 修正其它可能不正确的链接 
+
+-->
+
+<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"slide":{"type":"slide","bdImg":"5","bdPos":"right","bdTop":"200"},"image":{"viewList":["qzone","tsina","tqq","renren","weixin"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["qzone","tsina","tqq","renren","weixin"]}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+
+<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="STM32串口通信记" data-title="STM32串口通信记" data-url="xiahouzuoxin.github.io/notes/html/STM32串口通信记.html"></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"xiahouzuoxin"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- 多说公共JS代码 end -->
+
+</font></font></font></font></body></html>
