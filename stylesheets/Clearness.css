@@ -29,6 +29,7 @@ a img {
     max-width: 50%;
 }
 p {
+	background-color: white;
     margin-bottom: 9px; 
 }
 h1,

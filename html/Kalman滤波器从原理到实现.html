@@ -1,17 +1,9 @@
-<html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"><link rel="stylesheet" id="theme" href="../stylesheets/Github.css"></head><body><p><a href="../README.html"><font size="4">←返回主目录<font></font></font></a><font size="4"><font><br></font></font></p><font size="4"><font>
-<div align="right"><a href="../index.html" target="_self" title="返回主页"><img src="../images/Home.png"></a><a href="../Archives.html" target="_self" title="文章存档"><img src="../images/Archives.jpg"></a><a href="#bottom" target="_self" title="跳转底部"><img src="../images/bottom.png"></a></div>
-
-<p margin="0px">
-<strong>文题</strong>：Kalman滤波器从原理到实现<br>
-
-<strong>作者</strong>：xiahouzuoxin<br>
-
-<strong>日期</strong>：2014-09-25<br>
-</p>
-
-<p><em>转载请注明出处：<a href="http://xiahouzuoxin.github.io/notes">http://xiahouzuoxin.github.io/notes</a></em></p>
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"><link rel="stylesheet" id="theme" href="../stylesheets/Github.css"></head><body><p><br></p>
+<h3 id="kalman-">Kalman滤波器从原理到实现</h3>
+<p>Author: <a href="http://xiahouzuoxin.github.io">xiahouzuoxin</a> / Date: <a href="http://xiahouzuoxin.github.io/notes/Archives.html">2014-09-25</a></p>
+<p>转载请注明出处：<a href="http://xiahouzuoxin.github.io">http://xiahouzuoxin.github.io</a></p>
 <hr>
-<h2>Kalman滤波器的历史渊源</h2>
+<h2 id="kalman-">Kalman滤波器的历史渊源</h2>
 <blockquote>
 <p>We are like dwarfs on the shoulders of giants, by whose grace we see farther than they. 
 Our study of the works of the ancients enables us to give fresh life to their finer ideas, 
@@ -26,7 +18,7 @@ and rescue them from time’s oblivion and man’s neglect.  </p>
 <p>在1950末期，大部分工作开始对维纳滤波器中协方差的先验知识通过状态空间模型进行描述。通过状态空间表述后的算法就和今天看到的Kalman滤波已经极其相似了。Johns Hopkins大学首先将这个算法用在了导弹跟踪中，那时在RAND公司工作的Peter Swerling将它用在了卫星轨道估计，Swerling实际上已经推导出了（1959年发表的）无噪声系统动力学的Kalman滤波器，在他的应用中，他还考虑了使用非线性系统动力学和和测量方程。可以这样说，Swerling和发明Kalman滤波器是失之交臂，一线之隔。在kalman滤波器闻名于世之后，他还写信到AIAA Journal声讨要获得Kalman滤波器发明的荣誉（然而这时已经给滤波器命名Kalman了）。总结其失之交臂的原因，主要是Swerling没有直接在论文中提出Kalman滤波器的理论，而只是在实践中应用。</p>
 <p>Rudolph Kalman在1960年发现了离散时间系统的Kalman滤波器，这就是我们在今天各种教材上都能看到的，1961年Kalman和Bucy又推导了连续时间的Kalman滤波器。Ruslan Stratonovich也在1960年也从最大似然估计的角度推导出了Kalman滤波器方程。</p>
 <p>目前，卡尔曼滤波已经有很多不同的实现。卡尔曼最初提出的形式现在一般称为简单卡尔曼滤波器。除此以外，还有施密特扩展滤波器、信息滤波器以及很多Bierman, Thornton开发的平方根滤波器的变种。也许最常见的卡尔曼滤波器是锁相环，它在收音机、计算机和几乎任何视频或通讯设备中广泛存在。</p>
-<h2>从牛顿到卡尔曼</h2>
+<h2 id="-">从牛顿到卡尔曼</h2>
 <p>从现在开始，就要进行Kalman滤波器探讨之旅了，我们先回到高一，从物理中小车的匀加速直线运动开始。</p>
 <p>话说，有一辆质量为m的小车，受恒定的力F，沿着r方向做匀加速直线运动。已知小车在t-ΔT时刻的位移是s(t-1)，此时的速度为v(t-1)。求：t时刻的位移是s(t)，速度为v(t)？</p>
 <p>由牛顿第二定律，求得加速度：<img src="http://www.forkosh.com/mathtex.cgi? \large a=F/m"></p>
@@ -62,7 +54,7 @@ and rescue them from time’s oblivion and man’s neglect.  </p>
 <img src="../images/Kalman滤波器从原理到实现/img2.png" alt="img2"></p>
 <p>现在就有了两种方法（如上图）可以得到n时刻的位移和速度：一种就是通过(3)式的状态空间递推计算（Prediction），另一种就是通过(4)式直接拿尺子和传感器测量（Measurement）。致命的是没一个是精确无误的，就像上图看到的一样，分别都存在0均值高斯分布的误差w(n)和v(n)。</p>
 <p>那么，我最终的结果是取尺子量出来的好呢，还是根据我们伟大的牛顿第二定律推导出来的好呢？抑或两者都不是！</p>
-<h2>一场递推的游戏</h2>
+<h2 id="-">一场递推的游戏</h2>
 <p>为充分利用测量值（Measurement）和预测值（Prediction），Kalman滤波并不是简单的取其中一个作为输出，也不是求平均。</p>
 <p>设预测过程噪声w(n)~N(0,Q)，测量噪声v(n)~N(0,R)。Kalman计算输出分为预测过程和修正过程如下：</p>
 <ol>
@@ -112,7 +104,7 @@ and rescue them from time’s oblivion and man’s neglect.  </p>
 <p>综上，借用一张图说明一下Kalman滤波算法的流程：</p>
 <p><img src="../images/Kalman滤波器从原理到实现/img3.png" alt="img3"></p>
 <p>图中的符号和本文符号稍有差异，主要是P的表示上。从上图也可以看出，Kalman滤波就是给定-1时刻的初始值，然后在预测（状态空间）和修正（观测空间）之间不停的递推，求取n时刻的估计x和均方误差矩阵P。</p>
-<h2>均方误差中的门道</h2>
+<h2 id="-">均方误差中的门道</h2>
 <p>到这里，应该对Kalman滤波有个总体的概念了，有几个观点很重要，是建立Kalman滤波器的基础：</p>
 <ol>
 <li>一个是n-1对n时刻估计值，一个是n时刻的测量值，估计值和测量值都存在误差，且误差都假设满足独立的高斯分布</li>
@@ -146,9 +138,9 @@ and rescue them from time’s oblivion and man’s neglect.  </p>
 <p>假设状态空间的n-1时刻估计值和观测空间的n时刻测量值都满足独立高斯分布，Kalman滤波器就是通过高斯分布的乘积运算将估计值和测量值结合，获得最接近真值的n时刻估计。</p>
 <p>高斯分布乘积运算的结果仍为高斯分布，高斯分布的均值对应n时刻的估计值，高斯分布的方差对应n时刻的均方误差。</p>
 </blockquote>
-<h2>Matlab程序看过来</h2>
+<h2 id="matlab-">Matlab程序看过来</h2>
 <p>下面的一段Matlab代码是从网上找到的，程序简单直接，但作为学习分析用很棒，</p>
-<pre><code class="language-matlab sql">% KALMANF - updates a system state vector estimate based upon an
+<pre><code class="lang-matlab sql">% KALMANF - updates a system state vector estimate based upon an
 %           observation, using a discrete Kalman filter.
 %
 % Version 1.0, June 30, 2004
@@ -300,9 +292,10 @@ else
 
 end
 
-return</code></pre>
+return
+</code></pre>
 <p>该程序中使用的符号的含义与本文一致，函数前的注释再清晰不过了，就不多说。下面是一段测试代码：</p>
-<pre><code class="language-matlab delphi">% Define the system as a constant <span class="keyword">of</span> <span class="number">12</span> volts:
+<pre><code class="lang-matlab delphi">% Define the system as a constant <span class="keyword">of</span> <span class="number">12</span> volts:
 clear all
 s.x = <span class="number">12</span>;
 s.A = <span class="number">1</span>;
@@ -335,13 +328,14 @@ hk=plot([s(<span class="number">2</span>:<span class="keyword">end</span>).x],<s
 ht=plot(tru,<span class="string">'g-'</span>);
 legend([hz hk ht],<span class="string">'observations'</span>,<span class="string">'Kalman output'</span>,<span class="string">'true voltage'</span>,<span class="number">0</span>)
 title(<span class="string">'Automobile Voltimeter Example'</span>)
-hold off</code></pre>
+hold off
+</code></pre>
 <p>Kalman的参数中s.Q和s.R的设置非常重要，之前也提过，一般要通过实验统计得到，它们分布代表了状态空间估计的误差和测量的误差。</p>
 <p><img src="../images/Kalman滤波器从原理到实现/img5.png" alt="img5"></p>
 <p>Kalman滤波器的效果是使输出变得更平滑，但没办法去除信号中原有的椒盐噪声，而且，Kalman滤波器也会跟踪这些椒盐噪声点，因此推荐在使用Kalman滤波器前先使用中值滤波去除椒盐噪声。</p>
-<h2>Kalman滤波C程序</h2>
+<h2 id="kalman-c-">Kalman滤波C程序</h2>
 <p>我就在上面公式的基础上实现了基本的Kalman滤波器，包括1维和2维状态的情况。先在头文件中声明1维和2维Kalman滤波器结构：</p>
-<pre><code class="language-c cpp"><span class="comment">/*
+<pre><code class="lang-c cpp"><span class="comment">/*
  * FileName : kalman_filter.h
  * Author   : xiahouzuoxin @163.com
  * Version  : v1.0
@@ -385,9 +379,10 @@ hold off</code></pre>
 <span class="keyword">extern</span> <span class="keyword">void</span> kalman2_init(kalman2_state *state, <span class="keyword">float</span> *init_x, <span class="keyword">float</span> (*init_p)[<span class="number">2</span>]);
 <span class="keyword">extern</span> <span class="keyword">float</span> kalman2_filter(kalman2_state *state, <span class="keyword">float</span> z_measure);
 
-<span class="preprocessor">#endif  /*_KALMAN_FILTER_H*/</span></code></pre>
+<span class="preprocessor">#endif  /*_KALMAN_FILTER_H*/</span>
+</code></pre>
 <p>我都给了有详细的注释，<code>kalman1_state</code>是状态空间为1维/测量空间1维的Kalman滤波器，<code>kalman2_state</code>是状态空间为2维/测量空间1维的Kalman滤波器。两个结构体都需要通过初始化函数初始化相关参数、状态值和均方差值。</p>
-<pre><code class="language-c cpp"><span class="comment">/*
+<pre><code class="lang-c cpp"><span class="comment">/*
  * FileName : kalman_filter.c
  * Author   : xiahouzuoxin @163.com
  * Version  : v1.0
@@ -533,7 +528,8 @@ hold off</code></pre>
     state-&gt;p[<span class="number">1</span>][<span class="number">1</span>] = (<span class="number">1</span> - state-&gt;gain[<span class="number">1</span>] * state-&gt;H[<span class="number">1</span>]) * state-&gt;p[<span class="number">1</span>][<span class="number">1</span>];
 
     <span class="keyword">return</span> state-&gt;x[<span class="number">0</span>];
-}</code></pre>
+}
+</code></pre>
 <p>其实，Kalman滤波器由于其递推特性，实现起来很简单。但调参有很多可研究的地方，主要需要设定的参数如下：</p>
 <ol>
 <li>init_x：待测量的初始值，如有中值一般设成中值（如陀螺仪）</li>
@@ -549,7 +545,7 @@ hold off</code></pre>
 <p>Kalman滤波结果比原信号更平滑。但是有椒盐突变噪声的地方，Kalman滤波器并不能滤除椒盐噪声的影响，也会跟踪椒盐噪声点。因此，推荐在Kalman滤波器之前先使用中值滤波算法去除椒盐突变点的影响。</p>
 </blockquote>
 <p>上面所有C程序的源代码及测试程序都公布在我的<a href="https://github.com/xiahouzuoxin/kalman_filter">Github</a>上，希望大家批评指正其中可能存在的错误。</p>
-<h2>参考资料</h2>
+<h2 id="-">参考资料</h2>
 <ol>
 <li>Understanding the Basis of the Kalman Filter Via a Simple and Intuitive Derivation. Ramsey Faragher, Lecture Notes.</li>
 <li>An Introduction to the Kalman Filter. Greg Welch and Gary Bishop.</li>
@@ -557,9 +553,7 @@ hold off</code></pre>
 <li><a href="http://alumni.media.mit.edu/~wad/mas864/psrc/kalman.c.txt">http://alumni.media.mit.edu/~wad/mas864/psrc/kalman.c.txt</a>包含Kalman滤波的C代码</li>
 <li><a href="http://www.cs.unc.edu/~welch/kalman/">http://www.cs.unc.edu/~welch/kalman/</a>比较全的Kalman链接</li>
 </ol>
-<p></p><div align="right"><a href="../index.html" target="_self" title="返回主页"><img src="../images/Home.png"></a><a href="../Archives.html" target="_self" title="文章存档"><img src="../images/Archives.jpg"></a><a href="#top" target="_self" title="返回顶部"><img src="../images/top.png"></a></div>
-<a name="bottom"></a>
-<a href="../README.html"><font size="4">←返回主目录<font></font></font></a><font size="4"><font><br><p></p>
+
 <!-- 
 
 本模板为转成Html后需要修改的地方:
@@ -571,7 +565,7 @@ hold off</code></pre>
 
 -->
 
-<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"slide":{"type":"slide","bdImg":"5","bdPos":"right","bdTop":"200"},"image":{"viewList":["qzone","tsina","tqq","renren","weixin"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["qzone","tsina","tqq","renren","weixin"]}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"slide":{"type":"slide","bdImg":"5","bdPos":"right","bdTop":"300"},"image":{"viewList":["qzone","tsina","tqq","renren","weixin"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["qzone","tsina","tqq","renren","weixin"]}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
 
 <!-- 多说评论框 start -->
 	<div class="ds-thread" data-thread-key="Kalman滤波器从原理到实现" data-title="Kalman滤波器从原理到实现" data-url="xiahouzuoxin.github.io/notes/html/Kalman滤波器从原理到实现.html"></div>
@@ -590,4 +584,26 @@ var duoshuoQuery = {short_name:"xiahouzuoxin"};
 	</script>
 <!-- 多说公共JS代码 end -->
 
-</font></font></font></font></body></html>
+<script type="text/javascript">
+window.onscroll = function () {
+    var div = document.getElementById("divSuspended");
+    div.style.top = document.body.scrollTop;
+}
+window.onresize = window.onscroll;
+function init(){
+    var df = document.createDocumentFragment();
+    for(var i=0;i<20;i++){
+        var p = document.createElement("p");
+        p.appendChild(document.createTextNode(" Line "+i));
+        df.appendChild(p);
+    }
+    document.body.appendChild(df);
+    window.onscroll();
+}
+</script>
+<div id="divSuspended" style="position: absolute; bottom: 10px; right: 0px; color: #FFFFFF; width: 200px; height: 30px; background-color: white" align="right">
+</br></br></br>
+<a href="#top" target="_self" title="返回顶部"><img src="../images/top.png"></a></br><a href="http://xiahouzuoxin.github.io/notes/index.html" target="_self" title="返回主页"><img src="../images/Home.png"></a></br><a href="http://xiahouzuoxin.github.io/notes/Archives.html" target="_self" title="文章存档"><img src="../images/Archives.png"></a></br><a href="http://xiahouzuoxin.github.io/notes/README.html" target="_self" title="分类目录"><img src="../images/Contents.png"></a>
+</div>
+
+</body></html>

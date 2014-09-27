@@ -1,9 +1,9 @@
 /* Original css Name: Github */
 *{margin:0;padding:0;}
 body {
-	font:13.34px helvetica,arial,freesans,clean,sans-serif;
+	font:16px helvetica,arial,freesans,clean,sans-serif;
 	color:black; /*#eaeaea;*/
-	line-height:1.4em;
+	line-height:1.6em;
 	/*background: #151515 url("../images/bkg2.png") 0 0;*/
 	/* background-color: #F8F8F8; */
 	background: #FFFFFF;
@@ -208,10 +208,4 @@ pre .diff .change {
 
 pre .chunk {
   color: #aaa
-}
-
-/* xiahouzuoxin */
-
-zx_title {
-	color: #FF0000;
 }
