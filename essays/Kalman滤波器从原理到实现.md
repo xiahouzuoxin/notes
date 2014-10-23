@@ -642,9 +642,9 @@ Matlab绘出的跟踪结果显示：
 
 1.	Understanding the Basis of the Kalman Filter Via a Simple and Intuitive Derivation. Ramsey Faragher, Lecture Notes.
 2.	An Introduction to the Kalman Filter. Greg Welch and Gary Bishop.
-3.	<http://robotsforroboticists.com/kalman-filtering/>公式彩色着色，含pyhton源码
-4.	<http://alumni.media.mit.edu/~wad/mas864/psrc/kalman.c.txt>包含Kalman滤波的C代码
-5.	<http://www.cs.unc.edu/~welch/kalman/>比较全的Kalman链接
+3.	http://robotsforroboticists.com/kalman-filtering/, 公式彩色着色，含pyhton源码
+4.	http://alumni.media.mit.edu/~wad/mas864/psrc/kalman.c.txt, 包含Kalman滤波的C代码
+5.	http://www.cs.unc.edu/~welch/kalman/, 比较全的Kalman链接
 
 
 [img1]:../images/Kalman滤波器从原理到实现/img1.png
