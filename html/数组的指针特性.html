@@ -1,58 +1,62 @@
-<html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"><link rel="stylesheet" id="theme" href="../stylesheets/Github.css"></head><body><p><a href="../README.html"><font size="4">←返回主目录<font></font></font></a><font size="4"><font>
-<br><br><br></font></font></p><font size="4"><font>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="../stylesheets/Github.css" type="text/css" />
+</head>
+<body>
+<p><a href="../README.md"><font size=4>←返回主目录<font></a> </br></br></br></p>
 <p>从一道小题下手（该考点曾被腾讯等大公司作为基础笔试题考过），</p>
-<pre><code class="cpp"><span class="preprocessor">#include &lt;stdio.h&gt;</span>
+<pre><code>#include &lt;stdio.h&gt;
 
-<span class="keyword">int</span> size(<span class="keyword">char</span> a[<span class="number">10</span>])
+int size(char a[10])
 {
-    <span class="keyword">return</span> <span class="keyword">sizeof</span>(a);
+    return sizeof(a);
 }
 
-<span class="keyword">int</span> main(<span class="keyword">void</span>)
+int main(void)
 {
-    <span class="keyword">char</span> a[] = {<span class="string">'C'</span>,<span class="string">'h'</span>,<span class="string">'i'</span>,<span class="string">'n'</span>,<span class="string">'a'</span>,<span class="string">'\0'</span>};
-    <span class="keyword">char</span> *p = <span class="string">"China"</span>;
-    <span class="keyword">char</span> *q = a;
+    char a[] = {&#39;C&#39;,&#39;h&#39;,&#39;i&#39;,&#39;n&#39;,&#39;a&#39;,&#39;\0&#39;};
+    char *p = &quot;China&quot;;
+    char *q = a;
 
-    printf(<span class="string">"sizeof(a)=%d\n"</span>, <span class="keyword">sizeof</span>(a));
-    printf(<span class="string">"sizeof(p)=%d\n"</span>, <span class="keyword">sizeof</span>(p));
-    printf(<span class="string">"sizeof(q)=%d\n"</span>, <span class="keyword">sizeof</span>(q));
-    printf(<span class="string">"size(a)=%d\n"</span>, size(a));
+    printf(&quot;sizeof(a)=%d\n&quot;, sizeof(a));
+    printf(&quot;sizeof(p)=%d\n&quot;, sizeof(p));
+    printf(&quot;sizeof(q)=%d\n&quot;, sizeof(q));
+    printf(&quot;size(a)=%d\n&quot;, size(a));
 
-    <span class="keyword">return</span> <span class="number">0</span>;
+    return 0;
 }</code></pre>
 <p>在32位机的编译环境下，对C语言很熟悉的人一眼就能看出结果为：</p>
-<pre><code class="cpp"><span class="keyword">sizeof</span>(a)=<span class="number">6</span>
-<span class="keyword">sizeof</span>(p)=<span class="number">4</span>
-<span class="keyword">sizeof</span>(q)=<span class="number">4</span>
-size(a)=<span class="number">4</span></code></pre>
+<pre><code>sizeof(a)=6
+sizeof(p)=4
+sizeof(q)=4
+size(a)=4</code></pre>
 <p>基于本小题，主要考究以下几点：</p>
-<h3>数组名退化成指针</h3>
+<h3 id="数组名退化成指针">数组名退化成指针</h3>
 <p>仅在以下3种情况中，数组不会退化成指针，</p>
-<ol>
-<li><p>使用sizeof(a)的时候，所以上面sizeof(a)的结果为6字节</p>
-</li>
-<li><p>对数组名取地址操作：&amp;a。&amp;a的类型为pointer to array of 6 chars，而对字符串指针取地址结果为pointer to pointer to char.</p>
-</li>
-<li><p>使用字符串初始化数组的时候也不会退化。</p>
-</li>
+<ol style="list-style-type: decimal">
+<li><p>使用sizeof(a)的时候，所以上面sizeof(a)的结果为6字节</p></li>
+<li><p>对数组名取地址操作：&amp;a。&amp;a的类型为pointer to array of 6 chars，而对字符串指针取地址结果为pointer to pointer to char.</p></li>
+<li><p>使用字符串初始化数组的时候也不会退化。</p></li>
 </ol>
 <p>其它情况都会退化成“指向数组首元素的指针”，比如：</p>
-<ol>
-<li><p>数组名做函数参数时，a都会退化成&amp;a[0]指针。如上面的size函数和printf函数中的a[]都是这种情况</p>
-</li>
-<li><p>二维数组，char s[10][8]数组的首元素（得理解这个首元素，从一维数组的角度看的）是一维数组s[0]，因此退化成&amp;s[0]指针</p>
-</li>
+<ol style="list-style-type: decimal">
+<li><p>数组名做函数参数时，a都会退化成&amp;a[0]指针。如上面的size函数和printf函数中的a[]都是这种情况</p></li>
+<li><p>二维数组，char s[10][8]数组的首元素（得理解这个首元素，从一维数组的角度看的）是一维数组s[0]，因此退化成&amp;s[0]指针</p></li>
 </ol>
-<h3>数组定义字符串和指针定义字符串的区别</h3>
-<ol>
-<li><p>使用数字定义的字符串只分配字符串所需的空间（上例中为6个字节），数字名没有单独的存储空间；使用指针定义字符串，除了字符串占用的空间，还要为指针变量分配对应的空间。</p>
-</li>
+<h3 id="数组定义字符串和指针定义字符串的区别">数组定义字符串和指针定义字符串的区别</h3>
+<ol style="list-style-type: decimal">
+<li><p>使用数字定义的字符串只分配字符串所需的空间（上例中为6个字节），数字名没有单独的存储空间；使用指针定义字符串，除了字符串占用的空间，还要为指针变量分配对应的空间。</p></li>
 <li><p>数组退化成指针为“常量指针”，不可更改，而直接指向字符串的指针可修改，如</p>
-<pre><code class="cpp"> <span class="keyword">char</span> a[<span class="number">10</span>] = <span class="string">"China"</span>;
- <span class="keyword">char</span> *p = <span class="string">"China"</span>;
- a++;   <span class="comment">// 错误的</span>
- p++;   <span class="comment">// 正确的</span></code></pre>
-</li>
+<pre><code>char a[10] = &quot;China&quot;;
+char *p = &quot;China&quot;;
+a++;   // 错误的
+p++;   // 正确的</code></pre></li>
 </ol>
-</font></font></body></html>
+</body>
+</html>

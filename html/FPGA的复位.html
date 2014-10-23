@@ -1,111 +1,145 @@
-<html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"><link rel="stylesheet" id="theme" href="../stylesheets/Github.css"></head><body><p><a href="../README.html"><font size="4">←返回主目录<font></font></font></a><font size="4"><font>
-<br><br><br></font></font></p><font size="4"><font>
-<h3>关于FGPA的复位</h3>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
+  </style>
+  <link rel="stylesheet" href="../stylesheets/Github.css" type="text/css" />
+</head>
+<body>
+<p><a href="../README.md"><font size=4>←返回主目录<font></a> </br></br></br></p>
+<h3 id="关于fgpa的复位">关于FGPA的复位</h3>
 <p>当初开始学FPGA的时候，总是疑惑：FPGA不是没有复位管教么，但总在always看到有复位信号。这个复位信号（我们暂且称为rst_n）从哪里来？</p>
 <p>实际上是可以从两个方面获得的，这与我们的MCU一样。</p>
-<ol>
+<ol style="list-style-type: decimal">
 <li>上电自动复位</li>
 <li>手动按键复位</li>
 </ol>
 <p>考虑到系统的初始化可能需要一定的时间，需要写一段Verilog代码进行延时复位，这段代码综合后就是上电自动复位的过程，上电自动复位也要外部硬件提供一个低电平脉冲，第二种方法要求有按键复位的按键电路。作为一个正常的系统，上电自动复位和手动的按键复位都是必须的，且两者实际上是不可分割的。</p>
-<h3>上电自动复位</h3>
+<h3 id="上电自动复位">上电自动复位</h3>
 <p>原理上很简单，写一个复位模块，等待一段稳定时间，将复位信号拉低一段足够长的时间，再将复位信号拉高。</p>
 <p>如下Verilog源码，外部按键复位也将作为模块的一个引脚输入，用于异步的全局复位操作，正常的复位操作要进行，必须要求外部有一个短暂的脉冲作用在rst_n信号上，这可以通过按键电路中的RC电路实现。</p>
-<pre><code class="language-Verilog sql"><span class="comment">/**************************************
-*  功能：上电复位模块
-*  输入参数：
-*         clk： 50M 时钟输入
-*         rst_n：外部按键全局复位信号
-*  输出参数：
-*         sys_rst_n:系统全局同步复位信号
-***************************************/</span>
-module    re<span class="operator"><span class="keyword">set</span>
+<pre class="sourceCode verilog"><code class="sourceCode verilog"><span class="co">/**************************************</span>
+<span class="co">*  功能：上电复位模块</span>
+<span class="co">*  输入参数：</span>
+<span class="co">*         clk： 50M 时钟输入</span>
+<span class="co">*         rst_n：外部按键全局复位信号</span>
+<span class="co">*  输出参数：</span>
+<span class="co">*         sys_rst_n:系统全局同步复位信号</span>
+<span class="co">***************************************/</span>
+<span class="kw">module</span>    reset
 (
-    <span class="keyword">input</span>    clk,
-    <span class="keyword">input</span>    rst_n,
-    <span class="keyword">output</span>   sys_rst_n
-);</span>
+    <span class="dt">input</span>    clk,
+    <span class="dt">input</span>    rst_n,
+    <span class="dt">output</span>   sys_rst_n
+);
 
-//<span class="comment">------------------------------------------</span>
-// Delay 100ms for steady state
-reg    [22:0] cnt;
-always@(posedge clk or negedge rst_n)
-<span class="operator"><span class="keyword">begin</span>
-    if(!rst_n)
-        cnt &lt;= <span class="number">0</span>;</span>
-    else
-        <span class="operator"><span class="keyword">begin</span>
-        if(cnt &lt; <span class="number">23</span><span class="string">'d50_00000) //100ms
-            cnt &lt;= cnt+1'</span>b1;</span>
-        else
+<span class="co">//------------------------------------------</span>
+<span class="co">// Delay 100ms for steady state</span>
+<span class="dt">reg</span>    [<span class="dv">22</span>:<span class="dv">0</span>] cnt;
+always@(<span class="kw">posedge</span> clk <span class="dt">or</span> <span class="kw">negedge</span> rst_n)
+<span class="kw">begin</span>
+    <span class="kw">if</span>(!rst_n)
+        cnt &lt;= <span class="dv">0</span>;
+    <span class="kw">else</span>
+        <span class="kw">begin</span>
+        <span class="kw">if</span>(cnt &lt; <span class="bn">23&#39;d50_00000</span>) <span class="co">//100ms</span>
+            cnt &lt;= cnt<span class="dv">+1</span><span class="bn">&#39;b1</span>;
+        <span class="kw">else</span>
             cnt &lt;= cnt;
-        end
-end
+        <span class="kw">end</span>
+<span class="kw">end</span>
 
-//<span class="comment">------------------------------------------</span>
-//rst_n synchronism
-reg    rst_nr0;
-reg    rst_nr1;
-always@(posedge clk or negedge rst_n)
-<span class="operator"><span class="keyword">begin</span>
-    if(!rst_n)
-        <span class="keyword">begin</span>
-        rst_nr0 &lt;= <span class="number">0</span>;</span>
-        rst_nr1 &lt;= 0;
-        end
-    else if(cnt == 23'd50_00000)
-        <span class="operator"><span class="keyword">begin</span>
-        rst_nr0 &lt;= <span class="number">1</span>;</span>
+<span class="co">//------------------------------------------</span>
+<span class="co">//rst_n synchronism</span>
+<span class="dt">reg</span>    rst_nr0;
+<span class="dt">reg</span>    rst_nr1;
+always@(<span class="kw">posedge</span> clk <span class="dt">or</span> <span class="kw">negedge</span> rst_n)
+<span class="kw">begin</span>
+    <span class="kw">if</span>(!rst_n)
+        <span class="kw">begin</span>
+        rst_nr0 &lt;= <span class="dv">0</span>;
+        rst_nr1 &lt;= <span class="dv">0</span>;
+        <span class="kw">end</span>
+    <span class="kw">else</span> <span class="kw">if</span>(cnt == <span class="bn">23&#39;d50_00000</span>)
+        <span class="kw">begin</span>
+        rst_nr0 &lt;= <span class="dv">1</span>;
         rst_nr1 &lt;= rst_nr0;
-        end
-    else
-        <span class="operator"><span class="keyword">begin</span>
-        rst_nr0 &lt;= <span class="number">0</span>;</span>
-        rst_nr1 &lt;= 0;
-        end
-end
+        <span class="kw">end</span>
+    <span class="kw">else</span>
+        <span class="kw">begin</span>
+        rst_nr0 &lt;= <span class="dv">0</span>;
+        rst_nr1 &lt;= <span class="dv">0</span>;
+        <span class="kw">end</span>
+<span class="kw">end</span>
 
-assign    sys_rst_n = rst_nr1;
+<span class="kw">assign</span>    sys_rst_n = rst_nr1;
 
-endmodule</code></pre>
-<h3>按键手动复位电路</h3>
+<span class="kw">endmodule</span></code></pre>
+<h3 id="按键手动复位电路">按键手动复位电路</h3>
 <p>不使用专用芯片的参考低电平复位电路如下：</p>
-<p><img src="../images/FPGA的复位/reset1.png" alt="reset1"></p>
+<div class="figure">
+<img src="../images/FPGA的复位/reset1.png" alt="reset1" /><p class="caption">reset1</p>
+</div>
 <p>电路中的复位管脚一端连接到FPGA的某个普通通用管脚，这样电路中的RC电路将产生上面Verilog代码中的rst_n上电低脉冲，这就是本文开头说自动上电复位和硬件按键复位相辅相成。</p>
 <p>请注意两个电阻的值，R21要是R22的两个数量级以上，这样才能保证按键按下后被识别为低电平。</p>
 <p>手动复位过程中为保证按键复位的稳定性，还可以修改上面的Verilog代码进行按键消抖检测。下面是抓到的按键在闭合的时候的波形：</p>
-<p><img src="../images/FPGA的复位/key_bounce.png" alt="key_bounce"></p>
+<div class="figure">
+<img src="../images/FPGA的复位/key_bounce.png" alt="key_bounce" /><p class="caption">key_bounce</p>
+</div>
 <p>按键在几个us之内就能达到低电平，该期间触点抖动比较严重。</p>
-<pre><code class="language-Verilog nginx"><span class="title">module</span> RMV_BJ (
-    BJ_CLK,    //采集时钟，40Hz
-    RESET,     //系统复位信号
-    BUTTON_IN, //按键输入信号
-    BUTTON_OUT //消抖后的输出信号
+<pre class="sourceCode verilog"><code class="sourceCode verilog"><span class="kw">module</span> RMV_BJ (
+    BJ_CLK,    <span class="co">//采集时钟，40Hz</span>
+    RESET,     <span class="co">//系统复位信号</span>
+    BUTTON_IN, <span class="co">//按键输入信号</span>
+    BUTTON_OUT <span class="co">//消抖后的输出信号</span>
 );
-<span class="title">input</span> B_CLK;
-<span class="title">input</span> RESET;
-<span class="title">input</span> BUTTON_IN;
-<span class="title">output</span> BUTTON_OUT;
-<span class="title">reg</span> BUTTON_IN_Q, BUTTON_IN_2Q, BUTTON_IN_3Q;
+<span class="dt">input</span> B_CLK;
+<span class="dt">input</span> RESET;
+<span class="dt">input</span> BUTTON_IN;
+<span class="dt">output</span> BUTTON_OUT;
+<span class="dt">reg</span> BUTTON_IN_Q, BUTTON_IN_2Q, BUTTON_IN_3Q;
 
-<span class="title">always</span> @(posedge BJ_CLK or negedge RESET)
-begin
-    if(~RESET)
-    begin
-        BUTTON_IN_Q &lt;= <span class="number">1</span><span class="string">'b1;
-        BUTTON_IN_2Q &lt;= 1'</span>b1;
-        <span class="title">BUTTON_IN_3Q</span> &lt;= <span class="number">1</span><span class="string">'b1;
-    end
-    else
-    begin
+<span class="kw">always</span> @(<span class="kw">posedge</span> BJ_CLK <span class="dt">or</span> <span class="kw">negedge</span> RESET)
+<span class="kw">begin</span>
+    <span class="kw">if</span>(~RESET)
+    <span class="kw">begin</span>
+        BUTTON_IN_Q &lt;= <span class="bn">1&#39;b1</span>;
+        BUTTON_IN_2Q &lt;= <span class="bn">1&#39;b1</span>;
+        BUTTON_IN_3Q &lt;= <span class="bn">1&#39;b1</span>;
+    <span class="kw">end</span>
+    <span class="kw">else</span>
+    <span class="kw">begin</span>
         BUTTON_IN_Q &lt;= BUTTON_IN;
         BUTTON_IN_2Q &lt;= BUTTON_IN_Q;
         BUTTON_IN_3Q &lt;= BUTTON_IN_2Q;
-    end
-end
+    <span class="kw">end</span>
+<span class="kw">end</span>
 
-wire BUTTON_OUT = BUTTON_IN_2Q | BUTTON_IN_3Q;
+<span class="dt">wire</span> BUTTON_OUT = BUTTON_IN_2Q | BUTTON_IN_3Q;
 
-endmodule</span></code></pre>
+<span class="kw">endmodule</span></code></pre>
 <p>除了上面简单的复位电路，还可使用CAT811/TPS3823-33等专门的复位芯片，可以免去按键按键消抖的操作。</p>
-</font></font></body></html>
+</body>
+</html>

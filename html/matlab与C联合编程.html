@@ -1,156 +1,178 @@
-<html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"><link rel="stylesheet" id="theme" href="../stylesheets/Github.css"></head><body><p><a href="../README.html"><font size="4">←返回主目录<font></font></font></a><font size="4"><font>
-<br><br><br></font></font></p><font size="4"><font>
-<h2>在MATLAB中配置C语言编译器</h2>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
+  </style>
+  <link rel="stylesheet" href="../stylesheets/Github.css" type="text/css" />
+</head>
+<body>
+<p><a href="../README.md"><font size=4>←返回主目录<font></a> </br></br></br></p>
+<h2 id="在matlab中配置c语言编译器">在MATLAB中配置C语言编译器</h2>
 <p>在这之前必须安装好编译器，可以是VC完整版，绿色版貌似不行啊，</p>
-<p>1.    <code>mex –setup</code>设置编译器选项，将入口函数为mexFunction的C/C++文件编译成mex(DLL)文件</p>
-<pre><code class="sql">&gt;&gt; mex -setup
+<p>1. <code>mex –setup</code>设置编译器选项，将入口函数为mexFunction的C/C++文件编译成mex(DLL)文件</p>
+<pre><code>&gt;&gt; mex -setup
 Please choose your compiler for building external interface (MEX) files: 
-
+ 
 Would you like mex to locate installed compilers [y]/n? y
-
-<span class="operator"><span class="keyword">Select</span> a compiler: 
-[<span class="number">1</span>] Microsoft Visual C++ <span class="number">2008</span> SP1 <span class="keyword">in</span> D:\Program Files\VS2008 
-
-[<span class="number">0</span>] None 
-
-Compiler: <span class="number">1</span>
-
+ 
+Select a compiler: 
+[1] Microsoft Visual C++ 2008 SP1 in D:\Program Files\VS2008 
+ 
+[0] None 
+ 
+Compiler: 1
+ 
 Please verify your choices: 
-
-Compiler: Microsoft Visual C++ <span class="number">2008</span> SP1  
+ 
+Compiler: Microsoft Visual C++ 2008 SP1  
 Location: D:\Program Files\VS2008 
-
-<span class="keyword">Are</span> these correct [y]/n? y
-
+ 
+Are these correct [y]/n? y
+ 
 *************************************************************************** 
-  Warning: MEX-files generated <span class="keyword">using</span> Microsoft Visual C++ <span class="number">2008</span> require 
-           that Microsoft Visual Studio <span class="number">2008</span> run-<span class="keyword">time</span> libraries be  
-           available <span class="keyword">on</span> the computer they <span class="keyword">are</span> run <span class="keyword">on</span>. 
-           If you plan <span class="keyword">to</span> redistribute your MEX-files <span class="keyword">to</span> other MATLAB 
-           users, be sure that they have the run-<span class="keyword">time</span> libraries. 
+  Warning: MEX-files generated using Microsoft Visual C++ 2008 require 
+           that Microsoft Visual Studio 2008 run-time libraries be  
+           available on the computer they are run on. 
+           If you plan to redistribute your MEX-files to other MATLAB 
+           users, be sure that they have the run-time libraries. 
 *************************************************************************** 
-
-Trying <span class="keyword">to</span> <span class="keyword">update</span> options file: C:\Users\Administrator\AppData\Roaming\MathWorks\MATLAB\R2010b\mexopts.bat 
-<span class="keyword">From</span> template:              D:\PROGRA~<span class="number">1</span>\MATLAB\R2010b\bin\win64\mexopts\msvc90opts.bat 
-
-Done . . .</span></code></pre>
+ 
+Trying to update options file: C:\Users\Administrator\AppData\Roaming\MathWorks\MATLAB\R2010b\mexopts.bat 
+From template:              D:\PROGRA~1\MATLAB\R2010b\bin\win64\mexopts\msvc90opts.bat 
+ 
+Done . . . </code></pre>
 <p>2. <code>mbuild -setup</code>设置编译器选项，将入口函数为main的C/C++文件生成可以独立运行的C应用程序</p>
-<pre><code class="sql">&gt;&gt; mbuild -setup
+<pre><code>&gt;&gt; mbuild -setup
 Please choose your compiler for building standalone MATLAB applications: 
-
+ 
 Would you like mbuild to locate installed compilers [y]/n? y
-
-<span class="operator"><span class="keyword">Select</span> a compiler: 
-[<span class="number">1</span>] Microsoft Visual C++ <span class="number">2008</span> SP1 <span class="keyword">in</span> D:\Program Files\VS2008 
-
-[<span class="number">0</span>] None 
-
-Compiler: <span class="number">1</span>
-
+ 
+Select a compiler: 
+[1] Microsoft Visual C++ 2008 SP1 in D:\Program Files\VS2008 
+ 
+[0] None 
+ 
+Compiler: 1
+ 
 Please verify your choices: 
-
-Compiler: Microsoft Visual C++ <span class="number">2008</span> SP1  
+ 
+Compiler: Microsoft Visual C++ 2008 SP1  
 Location: D:\Program Files\VS2008 
-
-<span class="keyword">Are</span> these correct [y]/n? y
-
+ 
+Are these correct [y]/n? y
+ 
 **************************************************************************** 
-  Warning: Applications/components generated <span class="keyword">using</span> Microsoft Visual Studio   
-           <span class="number">2008</span> require that the Microsoft Visual Studio <span class="number">2008</span> run-<span class="keyword">time</span>       
-           libraries be available <span class="keyword">on</span> the computer used <span class="keyword">for</span> deployment.       
-           <span class="keyword">To</span> redistribute your applications/components, be sure that the    
-           deployment machine has these run-<span class="keyword">time</span> libraries.                  
+  Warning: Applications/components generated using Microsoft Visual Studio   
+           2008 require that the Microsoft Visual Studio 2008 run-time       
+           libraries be available on the computer used for deployment.       
+           To redistribute your applications/components, be sure that the    
+           deployment machine has these run-time libraries.                  
 **************************************************************************** 
-
-Trying <span class="keyword">to</span> <span class="keyword">update</span> options file: C:\Users\Administrator\AppData\Roaming\MathWorks\MATLAB\R2010b\compopts.bat 
-<span class="keyword">From</span> template:              D:\PROGRA~<span class="number">1</span>\MATLAB\R2010b\bin\win64\mbuildopts\msvc90compp.bat 
-
-Done . . .</span></code></pre>
-<h2>MATLAB调用C程序测试</h2>
-<ol>
+ 
+Trying to update options file: C:\Users\Administrator\AppData\Roaming\MathWorks\MATLAB\R2010b\compopts.bat 
+From template:              D:\PROGRA~1\MATLAB\R2010b\bin\win64\mbuildopts\msvc90compp.bat 
+ 
+Done . . . </code></pre>
+<h2 id="matlab调用c程序测试">MATLAB调用C程序测试</h2>
+<ol style="list-style-type: decimal">
 <li><p>C代码如下，文件名为test.c，假设保存在E:/test下，</p>
-<pre><code class="language-c cpp"><span class="preprocessor">#include "mex.h"</span>
-<span class="preprocessor">#include &lt;stdio.h&gt;</span>
-<span class="keyword">void</span> mexFunction(<span class="keyword">int</span> nlhs, mxArray *plhs[], 
-               <span class="keyword">int</span> nrhs, <span class="keyword">const</span> mxArray *prhs[]) 
+<pre class="sourceCode c"><code class="sourceCode c"><span class="ot">#include &quot;mex.h&quot;</span>
+<span class="ot">#include &lt;stdio.h&gt;</span>
+<span class="dt">void</span> mexFunction(<span class="dt">int</span> nlhs, mxArray *plhs[], 
+                 <span class="dt">int</span> nrhs, <span class="dt">const</span> mxArray *prhs[]) 
 {
-  printf(<span class="string">"Hello, %d\n"</span>, add(<span class="number">2</span>,<span class="number">3</span>));
+    printf(<span class="st">&quot;Hello, %d</span><span class="ch">\n</span><span class="st">&quot;</span>, add(<span class="dv">2</span>,<span class="dv">3</span>));
 }
 
-<span class="keyword">int</span> add(<span class="keyword">int</span> a, <span class="keyword">int</span> b)
+<span class="dt">int</span> add(<span class="dt">int</span> a, <span class="dt">int</span> b)
 {
-  <span class="keyword">return</span> (a+b);
-}</code></pre>
-</li>
-<li><p>在MATLAB中运行<code>cd E:/test</code>转到存放C文件路径，使用<code>mex test.c</code>编译，然后运行test，则在Commond windows下输出Hello World, 5!</p>
-</li>
+    <span class="kw">return</span> (a+b);
+}</code></pre></li>
+<li><p>在MATLAB中运行<code>cd E:/test</code>转到存放C文件路径，使用<code>mex test.c</code>编译，然后运行test，则在Commond windows下输出Hello World, 5!</p></li>
 <li><p>在C/C++中引用常用头文件</p>
-<pre><code class="ruby"><span class="comment">#include "mex.h"</span>
-<span class="comment">#include "matrix.h"</span></code></pre>
-</li>
+<pre><code>#include &quot;mex.h&quot;
+#include &quot;matrix.h&quot;</code></pre></li>
 <li><p>在C/C++中常用与matlab操作相关的函数</p>
 <p>mexErrMsgTxt : 打印错误信息，会中断程序执行</p>
 <p>mxGetM/mxGetN：获取matlab中矩阵的行列</p>
 <p>mxGetPr : 获取输入矩阵的指针</p>
 <p>mxGetScale:如果传入的为单个值，则获取传入的值</p>
 <p>mxCreateNumericMatrix/mxCreateDoubleMatrix:创建输出矩阵</p>
-<pre><code class="javascript"><span class="keyword">void</span>
+<pre><code>void
 mexFunction(int nout, mxArray *out[],
-          int nin, <span class="keyword">const</span> mxArray *<span class="keyword">in</span>[])
+            int nin, const mxArray *in[])
 {
-  uint32 n_center;
-  uint32 n_data;
-  uint32 dims;
-  uint32 *ids;
-  datatype *data;
-  datatype *center;
-  optstype opts;
+    uint32 n_center;
+    uint32 n_data;
+    uint32 dims;
+    uint32 *ids;
+    datatype *data;
+    datatype *center;
+    optstype opts;
 
-  enum {IN_CENTER=<span class="number">0</span>, IN_DATA, IN_OPTS};
-  enum {OUT_ASSIGN=<span class="number">0</span>};
+    enum {IN_CENTER=0, IN_DATA, IN_OPTS};
+    enum {OUT_ASSIGN=0};
 
-  <span class="comment">/* check arguments and load data */</span>
-  <span class="keyword">if</span> (nin &lt; <span class="number">2</span>) {
-      mexErrMsgTxt(<span class="string">"At least two aguments required."</span>);
-  } <span class="keyword">else</span> <span class="keyword">if</span> (nin &lt; <span class="number">3</span>) {
-      opts = <span class="number">1</span>;
-  } <span class="keyword">else</span> {
-      opts = mxGetScalar(<span class="keyword">in</span>[IN_OPTS]);
-      <span class="keyword">if</span> (opts &gt; <span class="number">1</span>) {
-          mexErrMsgTxt(<span class="string">"options must between [0:'l1' 1:'l2']."</span>);
-      }
-  }
-  <span class="keyword">if</span> (nout &gt; <span class="number">1</span>)
-      mexErrMsgTxt(<span class="string">"Too many output arguments."</span>);
+    /* check arguments and load data */
+    if (nin &lt; 2) {
+        mexErrMsgTxt(&quot;At least two aguments required.&quot;);
+    } else if (nin &lt; 3) {
+        opts = 1;
+    } else {
+        opts = mxGetScalar(in[IN_OPTS]);
+        if (opts &gt; 1) {
+            mexErrMsgTxt(&quot;options must between [0:&#39;l1&#39; 1:&#39;l2&#39;].&quot;);
+        }
+    }
+    if (nout &gt; 1)
+        mexErrMsgTxt(&quot;Too many output arguments.&quot;);
 
-  <span class="comment">/* load data */</span>
-  n_center = mxGetN(<span class="keyword">in</span>[IN_CENTER]);
-  dims = mxGetM(<span class="keyword">in</span>[IN_CENTER]);
-  <span class="keyword">if</span> (dims != mxGetM(<span class="keyword">in</span>[IN_DATA])) {
-      mexErrMsgTxt(<span class="string">"dimension of CENTER dismatch DATA."</span>);
-  }
-  center = mxGetPr(<span class="keyword">in</span>[IN_CENTER]);
-  n_data = mxGetN(<span class="keyword">in</span>[IN_DATA]);    
-  data = mxGetPr(<span class="keyword">in</span>[IN_DATA]);
+    /* load data */
+    n_center = mxGetN(in[IN_CENTER]);
+    dims = mxGetM(in[IN_CENTER]);
+    if (dims != mxGetM(in[IN_DATA])) {
+        mexErrMsgTxt(&quot;dimension of CENTER dismatch DATA.&quot;);
+    }
+    center = mxGetPr(in[IN_CENTER]);
+    n_data = mxGetN(in[IN_DATA]);   
+    data = mxGetPr(in[IN_DATA]);
 
-  <span class="comment">/* output */</span>
-  out[OUT_ASSIGN] = mxCreateNumericMatrix(<span class="number">1</span>, n_data, mxUINT32_CLASS, mxREAL);
-  ids = (uint32 *)mxGetPr(out[OUT_ASSIGN]);
+    /* output */
+    out[OUT_ASSIGN] = mxCreateNumericMatrix(1, n_data, mxUINT32_CLASS, mxREAL);
+    ids = (uint32 *)mxGetPr(out[OUT_ASSIGN]);
 
-  kmeanspush(center, n_center, data, ids, n_data, dims, opts);
-}</code></pre>
-</li>
+    kmeanspush(center, n_center, data, ids, n_data, dims, opts);
+}</code></pre></li>
 <li><p>MATLAB矩阵与C/C++数组之间的转换</p>
 <p>matlab中的元素索引从1开始，而C/C++则是从0开始。</p>
-<p>matlab中的矩阵索引顺序是从列开始的，因此matlab中的a(i,j)将转化为C/C++中的a[j'][i'] (其中j'=j-1, i'=i-1)</p>
-</li>
+<p>matlab中的矩阵索引顺序是从列开始的，因此matlab中的a(i,j)将转化为C/C++中的a[j'][i'] (其中j'=j-1, i'=i-1)</p></li>
 </ol>
-<h2>C程序调用MATLAB测试</h2>
-<ol>
-<li><p>编写C程序后后使用下面的编译选项
-mcc -B csharedlib:MyFunc MyFunc.m</p>
-</li>
-<li><p>在C编译器中使用共享库来调用matlab程序</p>
-</li>
+<h2 id="c程序调用matlab测试">C程序调用MATLAB测试</h2>
+<ol style="list-style-type: decimal">
+<li><p>编写C程序后后使用下面的编译选项 mcc -B csharedlib:MyFunc MyFunc.m</p></li>
+<li><p>在C编译器中使用共享库来调用matlab程序</p></li>
 </ol>
-</font></font></body></html>
+</body>
+</html>

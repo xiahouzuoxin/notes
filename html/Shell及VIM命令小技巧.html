@@ -1,31 +1,41 @@
-<html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"><link rel="stylesheet" id="theme" href="../stylesheets/Github.css"></head><body><p><a href="../README.html"><font size="4">←返回主目录<font></font></font></a><font size="4"><font>
-<br><br><br></font></font></p><font size="4"><font>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="../stylesheets/Github.css" type="text/css" />
+</head>
+<body>
+<p><a href="../README.md"><font size=4>←返回主目录<font></a> </br></br></br></p>
 <p>说明：</p>
-<ol>
+<ol style="list-style-type: decimal">
 <li>命令中的大写字母一般要求是Shift的组合，如J表示按下Shift+J</li>
 </ol>
-<h2>Shell命令小技巧</h2>
-<h3>统计代码行数</h3>
+<h2 id="shell命令小技巧">Shell命令小技巧</h2>
+<h3 id="统计代码行数">统计代码行数</h3>
 <p>统计单个文件直接使用<code>wc -l file</code>命令即可，统计某个目录下所有某类型文件的行数：</p>
-<pre><code class="nginx"><span class="title">find</span> . -name *.[ch] | xargs wc -l | sort -n</code></pre>
+<pre><code>find . -name *.[ch] | xargs wc -l | sort -n</code></pre>
 <p>表示统计当前目录下.c与.h文件的行数，并按行数大小排序.</p>
-<h3>grep命令</h3>
+<h3 id="grep命令">grep命令</h3>
 <p>使用格式为grep [-acinvr] [--color=auto] '搜寻字符串' filename</p>
-<pre><code class="diff">选项与参数：
+<pre><code>选项与参数：
 
-<span class="deletion">-a ：将 binary 文件以 text 文件的方式搜寻数据</span>
-<span class="deletion">-c ：计算找到 '搜寻字符串' 的次数</span>
-<span class="deletion">-i ：忽略大小写的不同，所以大小写视为相同</span>
-<span class="deletion">-n ：顺便输出行号</span>
-<span class="deletion">-v ：反向选择，亦即显示出没有 '搜寻字符串' 内容的那一行！</span>
-<span class="deletion">-r : 递归目录，这个在一个源码工程中查找某个tag出现的位置很有用</span>
-<span class="deletion">--color=auto ：可以将找到的关键词部分加上颜色的显示喔！</span></code></pre>
+-a ：将 binary 文件以 text 文件的方式搜寻数据
+-c ：计算找到 &#39;搜寻字符串&#39; 的次数
+-i ：忽略大小写的不同，所以大小写视为相同
+-n ：顺便输出行号
+-v ：反向选择，亦即显示出没有 &#39;搜寻字符串&#39; 内容的那一行！
+-r : 递归目录，这个在一个源码工程中查找某个tag出现的位置很有用
+--color=auto ：可以将找到的关键词部分加上颜色的显示喔！</code></pre>
 <p>grep结合正则表达式以及管道（如统计代码行数）会很实用！</p>
 <p>如在驱动开发中，常会使用<code>dmesg</code>命令查看系统核心产生的信息，然后使用<code>dmesg | grep 'eth'</code>就可从信息中过滤出网卡那一行了.</p>
-<h2>VIM命令小技巧</h2>
-<h3>关键词补全</h3>
+<h2 id="vim命令小技巧">VIM命令小技巧</h2>
+<h3 id="关键词补全">关键词补全</h3>
 <p>首选是<code>Ctrl + P</code>，当然还有其它Ctrl+X的组合：</p>
-<ol>
+<ol style="list-style-type: decimal">
 <li><code>Ctrl + X</code> 和 <code>Ctrl + D</code> 宏定义补齐</li>
 <li><code>Ctrl + X</code> 和 <code>Ctrl + ]</code> 是Tag 补齐</li>
 <li><code>Ctrl + X</code> 和 <code>Ctrl + F</code> 是文件名补齐</li>
@@ -33,21 +43,22 @@
 <li><code>Ctrl + X</code> 和 <code>Ctrl +V</code> 是表达式补齐</li>
 <li><code>Ctrl + X</code> 和 <code>Ctrl +L</code> 这可以对整个行补齐</li>
 </ol>
-<h3>多行并成一行</h3>
+<h3 id="多行并成一行">多行并成一行</h3>
 <p>好吧，使用<code>v</code>进入Visual模式，选择多行，直接<code>J</code>就可以了</p>
-<h3>字符相关</h3>
-<ol>
+<h3 id="字符相关">字符相关</h3>
+<ol style="list-style-type: decimal">
 <li>使用<code>v</code>进入Visual模式，选择要转换的字符串，<code>u</code>转小写，<code>U</code>转大写</li>
 <li><code>ga</code>查看光标处字符的ascii码，很好用</li>
 <li><code>g8</code>查看光标处字符的utf-8编码</li>
 <li><code>gf</code>打开光标处的文件，我常用来打开C中包含的头文件</li>
 <li><code>*</code>或<code>#</code>在当前文件中搜索当前光标所在字符</li>
 </ol>
-<h3>软链接</h3>
+<h3 id="软链接">软链接</h3>
 <p><code>ln -s [Src] [Dst]</code></p>
 <p>在多版本gcc共存的时候<code>ln -s</code>命令很有用，</p>
-<pre><code class="sql">su<span class="operator"><span class="keyword">do</span> ln -s /usr/bin/gcc-<span class="number">4.1</span> /usr/bin/gcc    <span class="string">" 建立GCC到gcc-4.1的软链接</span></span></code></pre>
-<h2>参考</h2>
-<p>[1] <a href="http://coolshell.cn/articles/5426.html">酷壳：简明Vim练级攻略</a></p>
-<p>[2] <a href="http://vbird.dic.ksu.edu.tw/linux_basic/linux_basic.php">鸟哥：Linux私房菜基础篇</a></p>
-</font></font></body></html>
+<pre><code>sudo ln -s /usr/bin/gcc-4.1 /usr/bin/gcc    &quot; 建立GCC到gcc-4.1的软链接</code></pre>
+<h2 id="参考">参考</h2>
+<p>[1] [酷壳：简明Vim练级攻略](http://coolshell.cn/articles/5426.html)</p>
+<p>[2] [鸟哥：Linux私房菜基础篇](http://vbird.dic.ksu.edu.tw/linux_basic/linux_basic.php)</p>
+</body>
+</html>

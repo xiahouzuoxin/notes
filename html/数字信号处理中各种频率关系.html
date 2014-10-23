@@ -1,37 +1,52 @@
-<html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"><link rel="stylesheet" id="theme" href="../stylesheets/Github.css"></head><body><p><a href="../README.html"><font size="4">←返回主目录<font></font></font></a><font size="4"><font>
-<br><br><br></font></font></p><font size="4"><font>
-<h3><font color="blue">4种频率及其数量关系</font></h3>
-<p><img src="../images/数字信号处理中各种频率关系/1.png" alt="imag1"></p>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="../stylesheets/Github.css" type="text/css" />
+</head>
+<body>
+<p><a href="../README.md"><font size=4>←返回主目录<font></a> </br></br></br></p>
+<h3 id="种频率及其数量关系"><font color="blue">4种频率及其数量关系</font></h3>
+<div class="figure">
+<img src="../images/数字信号处理中各种频率关系/1.png" alt="imag1" /><p class="caption">imag1</p>
+</div>
 <p>实际物理频率表示AD采集物理信号的频率，fs为采样频率，由奈奎斯特采样定理可以知道，fs必须≥信号最高频率的2倍才不会发生信号混叠，因此fs能采样到的信号最高频率为fs/2。</p>
 <p>角频率是物理频率的2*pi倍，这个也称模拟频率。</p>
 <p>归一化频率是将物理频率按fs归一化之后的结果，最高的信号频率为fs/2对应归一化频率0.5，这也就是为什么在matlab的fdtool工具中归一化频率为什么最大只到0.5的原因。</p>
 <p>圆周频率是归一化频率的2*pi倍，这个也称数字频率。</p>
-<h3><font color="blue">有关FFT频率与实际物理频率的分析</font></h3>
+<h3 id="有关fft频率与实际物理频率的分析"><font color="blue">有关FFT频率与实际物理频率的分析</font></h3>
 <p>做n个点的FFT，表示在时域上对原来的信号取了n个点来做频谱分析，n点FFT变换的结果仍为n个点。</p>
-<p>换句话说，就是将2pi数字频率w分成n份，而整个数字频率w的范围覆盖了从0-2pi*fs的模拟频率范围。这里的fs是<strong>采样频率</strong>。而我们通常只关心0-pi中的频谱，因为根据奈科斯特定律，只有f=fs/2范围内的信号才是被采样到的有效信号。那么，在w的范围内，得到的频谱肯定是关于n/2对称的。</p>
-<p>举例说，如果做了16个点的FFT分析，你原来的模拟信号的最高频率f=32kHz，采样频率是64kHz，n的范围是0,1,2...15。这时，64kHz的模拟频率被分成了16分，每一份是4kHz，这个叫<strong>频率分辨率</strong>。那么在横坐标中，n=1时对应的f是4kHz, n=2对应的是8kHz, n=15时对应的是60kHz，你的频谱是关于n=8对称的。你只需要关心n=0到7以内的频谱就足够了，因为，原来信号的最高模拟频率是32kHz。</p>
+<p>换句话说，就是将2pi数字频率w分成n份，而整个数字频率w的范围覆盖了从0-2pi*fs的模拟频率范围。这里的fs是__采样频率__。而我们通常只关心0-pi中的频谱，因为根据奈科斯特定律，只有f=fs/2范围内的信号才是被采样到的有效信号。那么，在w的范围内，得到的频谱肯定是关于n/2对称的。</p>
+<p>举例说，如果做了16个点的FFT分析，你原来的模拟信号的最高频率f=32kHz，采样频率是64kHz，n的范围是0,1,2...15。这时，64kHz的模拟频率被分成了16分，每一份是4kHz，这个叫__频率分辨率__。那么在横坐标中，n=1时对应的f是4kHz, n=2对应的是8kHz, n=15时对应的是60kHz，你的频谱是关于n=8对称的。你只需要关心n=0到7以内的频谱就足够了，因为，原来信号的最高模拟频率是32kHz。</p>
 <p>这里可以有两个结论。</p>
 <ul>
-<li>第一，必须知道原来信号的采样频率fs是多少，才可以知道每个n对应的实际频率是多少，<strong>第k个点的实际频率的计算为f(k)=k*(fs/n)</strong></li>
-<li>第二，你64kHz做了16个点FFT之后，因为频率分辨率是4kHz，如果原来的信号在5kHz或者63kHz有分量，你在频谱上是看不见的，这就表示你越想频谱画得逼真，就必须取越多的点数来做FFT，n就越大，你在时域上就必须取更长的信号样本来做分析。但是无论如何，由于离散采样的原理，你不可能完全准确地画出原来连续时间信号的真实频谱，只能无限接近（就是n无限大的时候），这个就叫做<strong>频率泄露</strong>。在采样频率fs不变得情况下，频率泄漏可以通过取更多的点来改善，也可以通过做FFT前加窗来改善，这就是另外一个话题了。</li>
+<li>第一，必须知道原来信号的采样频率fs是多少，才可以知道每个n对应的实际频率是多少，__第k个点的实际频率的计算为f(k)=k*(fs/n)__</li>
+<li>第二，你64kHz做了16个点FFT之后，因为频率分辨率是4kHz，如果原来的信号在5kHz或者63kHz有分量，你在频谱上是看不见的，这就表示你越想频谱画得逼真，就必须取越多的点数来做FFT，n就越大，你在时域上就必须取更长的信号样本来做分析。但是无论如何，由于离散采样的原理，你不可能完全准确地画出原来连续时间信号的真实频谱，只能无限接近（就是n无限大的时候），这个就叫做__频率泄露__。在采样频率fs不变得情况下，频率泄漏可以通过取更多的点来改善，也可以通过做FFT前加窗来改善，这就是另外一个话题了。</li>
 </ul>
-<h3><font color="blue">离散信号傅里叶变换的周期性讨论</font></h3>
+<h3 id="离散信号傅里叶变换的周期性讨论"><font color="blue">离散信号傅里叶变换的周期性讨论</font></h3>
 <p>要分析这个，我们先从Laplace变换与Z变换之间的关系谈起。</p>
-<p>由<img src="../images/数字信号处理中各种频率关系/1.gif" alt="imag1">，得z平面与s平面的关系图</p>
-<p><img src="../images/数字信号处理中各种频率关系/2.png" alt="imag1"></p>
+<p>由<img src="../images/数字信号处理中各种频率关系/1.gif" alt="imag1" />，得z平面与s平面的关系图</p>
+<div class="figure">
+<img src="../images/数字信号处理中各种频率关系/2.png" alt="imag1" /><p class="caption">imag1</p>
+</div>
 <p>图中的关系有以下几点：</p>
 <ul>
 <li>s平面的虚轴映射到z平面的单位圆上</li>
 <li>s平面的负半轴映射到z平面的单位圆内</li>
 <li>s平面的正半轴映射到z平面的单位圆外</li>
 </ul>
-<p>Laplace变换是用于连续信号的变换，相对应的z变换是应用到z平面的变换。因此从另一个角度，上面谈到的<strong>角频率<img src="../images/数字信号处理中各种频率关系/2.gif" alt="imag1">（模拟频率）对应的是s平面，圆周频率<img src="../images/数字信号处理中各种频率关系/3.gif" alt="imag1">对应的是z平面</strong>（也是为什么称为圆周频率的原因）。</p>
+<p>Laplace变换是用于连续信号的变换，相对应的z变换是应用到z平面的变换。因此从另一个角度，上面谈到的__角频率<img src="../images/数字信号处理中各种频率关系/2.gif" alt="imag1" />（模拟频率）对应的是s平面，圆周频率<img src="../images/数字信号处理中各种频率关系/3.gif" alt="imag1" />对应的是z平面__（也是为什么称为圆周频率的原因）。</p>
 <p>现在我们来看一下s平面虚轴上模拟频率的变换将会导致z平面单位圆上如何变化：</p>
 <ul>
 <li>当模拟频率在s平面的虚轴上从0变到fs 时，数字频率在z平面单位圆上从0变到2 pi。</li>
 <li>当模拟频率在s平面的虚轴上从2fs变到4fs时，数字频率在z平面单位圆上仍然从0变到2 pi。</li>
 <li>。。。。。。z平面如此循环重复</li>
 </ul>
-<p>我们知道<strong>离散信号的傅里叶变换对应到单位圆上的z变换</strong>，因此上面的结论就验证了为什么离散信号的傅里叶变换是周期性：根本原因所是单位圆上的周期性。</p>
+<p>我们知道__离散信号的傅里叶变换对应到单位圆上的z变换__，因此上面的结论就验证了为什么离散信号的傅里叶变换是周期性：根本原因所是单位圆上的周期性。</p>
 <p>考虑到我们实际应用中可选择一个周期，这也能够解释：因为实际信号的频率总是在fs/2以下，这就对应到z平面单位圆上的0~pi，在一个周期范围内就可以进行信号分析了。</p>
-</font></font></body></html>
+</body>
+</html>

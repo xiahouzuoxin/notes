@@ -1,69 +1,101 @@
-<html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"><link rel="stylesheet" id="theme" href="../stylesheets/Github.css"></head><body><p><a href="../README.html"><font size="4">←返回主目录<font></font></font></a><font size="4"><font>
-<br><br><br></font></font></p><font size="4"><font>
-<h2>程序及分析</h2>
-<pre><code class="language-c cpp"><span class="comment">/*
- * FileName : blend.cpp
- * Author   : xiahouzuoxin @163.com
- * Version  : v1.0
- * Date     : Mon 28 Jul 2014 08:47:59 PM CST
- * Brief    : 
- * 
- * Copyright (C) MICL,USTB
- */</span>
-<span class="preprocessor">#include &lt;cv.h&gt;</span>
-<span class="preprocessor">#include &lt;highgui.h&gt;</span>
-<span class="preprocessor">#include &lt;stdio.h&gt;</span>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
+  </style>
+  <link rel="stylesheet" href="../stylesheets/Github.css" type="text/css" />
+</head>
+<body>
+<p><a href="../README.md"><font size=4>←返回主目录<font></a> </br></br></br></p>
+<h2 id="程序及分析">程序及分析</h2>
+<pre class="sourceCode c"><code class="sourceCode c"><span class="co">/*</span>
+<span class="co"> * FileName : blend.cpp</span>
+<span class="co"> * Author   : xiahouzuoxin @163.com</span>
+<span class="co"> * Version  : v1.0</span>
+<span class="co"> * Date     : Mon 28 Jul 2014 08:47:59 PM CST</span>
+<span class="co"> * Brief    : </span>
+<span class="co"> * </span>
+<span class="co"> * Copyright (C) MICL,USTB</span>
+<span class="co"> */</span>
+<span class="ot">#include &lt;cv.h&gt;</span>
+<span class="ot">#include &lt;highgui.h&gt;</span>
+<span class="ot">#include &lt;stdio.h&gt;</span>
 
-<span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;
-<span class="keyword">using</span> <span class="keyword">namespace</span> cv;
+using namespace std;
+using namespace cv;
 
-<span class="keyword">int</span> main(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])
+<span class="dt">int</span> main(<span class="dt">int</span> argc, <span class="dt">char</span> *argv[])
 {
-    <span class="keyword">double</span> alpha = <span class="number">0.5</span>;
-    <span class="keyword">double</span> beta;
-    <span class="keyword">double</span> input;
+    <span class="dt">double</span> alpha = <span class="fl">0.5</span>;
+    <span class="dt">double</span> beta;
+    <span class="dt">double</span> input;
 
     Mat src1, src2, dst;
 
-    <span class="comment">// User input alpha</span>
-    <span class="built_in">cout</span>&lt;&lt;<span class="string">"Simple Linear Blender"</span> &lt;&lt; endl;
-    <span class="built_in">cout</span>&lt;&lt;<span class="string">"---------------------"</span> &lt;&lt; endl;
-    <span class="built_in">cout</span>&lt;&lt;<span class="string">"Enter alpha [0-1]: "</span>;
-    <span class="built_in">cin</span>&gt;&gt;input;
+    <span class="co">// User input alpha</span>
+    cout&lt;&lt;<span class="st">&quot;Simple Linear Blender&quot;</span> &lt;&lt; endl;
+    cout&lt;&lt;<span class="st">&quot;---------------------&quot;</span> &lt;&lt; endl;
+    cout&lt;&lt;<span class="st">&quot;Enter alpha [0-1]: &quot;</span>;
+    cin&gt;&gt;input;
 
-    <span class="keyword">if</span> (alpha &gt;=<span class="number">0</span> &amp;&amp; alpha &lt;=<span class="number">1</span>) {
+    <span class="kw">if</span> (alpha &gt;=<span class="dv">0</span> &amp;&amp; alpha &lt;=<span class="dv">1</span>) {
         alpha = input;
     }
 
-    <span class="comment">// Read images</span>
-    src1 = imread(<span class="string">"../test_imgs/KeNan.jpg"</span>);
-    src2 = imread(<span class="string">"../test_imgs/Background.jpg"</span>);
+    <span class="co">// Read images</span>
+    src1 = imread(<span class="st">&quot;../test_imgs/KeNan.jpg&quot;</span>);
+    src2 = imread(<span class="st">&quot;../test_imgs/Background.jpg&quot;</span>);
 
-    <span class="keyword">if</span> (!src1.data) {
-        <span class="built_in">cout</span>&lt;&lt;<span class="string">"Error loading src1\n"</span>&lt;&lt;endl;
-        <span class="keyword">return</span> -<span class="number">1</span>;
+    <span class="kw">if</span> (!src1.data) {
+        cout&lt;&lt;<span class="st">&quot;Error loading src1</span><span class="ch">\n</span><span class="st">&quot;</span>&lt;&lt;endl;
+        <span class="kw">return</span> -<span class="dv">1</span>;
     }
-    <span class="keyword">if</span> (!src2.data) {
-        <span class="built_in">cout</span>&lt;&lt;<span class="string">"Error loading src2\n"</span>&lt;&lt;endl;
-        <span class="keyword">return</span> -<span class="number">1</span>;
+    <span class="kw">if</span> (!src2.data) {
+        cout&lt;&lt;<span class="st">&quot;Error loading src2</span><span class="ch">\n</span><span class="st">&quot;</span>&lt;&lt;endl;
+        <span class="kw">return</span> -<span class="dv">1</span>;
     }
 
-    <span class="comment">// Create WIndows</span>
-    namedWindow(<span class="string">"Linear Blend"</span>, <span class="number">1</span>);
+    <span class="co">// Create WIndows</span>
+    namedWindow(<span class="st">&quot;Linear Blend&quot;</span>, <span class="dv">1</span>);
 
-    beta = (<span class="number">1.0</span> - alpha);
-    addWeighted(src1, alpha, src2, beta, <span class="number">0.0</span>, dst);
+    beta = (<span class="fl">1.0</span> - alpha);
+    addWeighted(src1, alpha, src2, beta, <span class="fl">0.0</span>, dst);
 
-    imshow(<span class="string">"Linear Blend"</span>, dst);
-    waitKey(<span class="number">0</span>);
+    imshow(<span class="st">&quot;Linear Blend&quot;</span>, dst);
+    waitKey(<span class="dv">0</span>);
 
-    <span class="keyword">return</span> <span class="number">0</span>;
+    <span class="kw">return</span> <span class="dv">0</span>;
 }</code></pre>
 <p>这里的图像叠加指线性叠加，设图像A的像素为fA(x)，图像B的像素为fB(x)，叠加系数为α，则线性叠加操作为：</p>
 <p><img src="http://www.forkosh.com/mathtex.cgi? \Large g(x)=\alpha f_A(x)+(1-\alpha)f_B(x)"></p>
 <p>α为0-1之间的值，从上面也可以看出，叠加必需保证两幅输入图像的尺寸大小相同。程序中的</p>
-<pre><code class="undefined">addWeighted(src1, alpha, src2, beta, 0.0, dst);</code></pre>
+<pre><code>addWeighted(src1, alpha, src2, beta, 0.0, dst);</code></pre>
 <p>完成叠加操作。</p>
-<h2>效果</h2>
-<p><img src="../images/OpenCV基础篇之图片叠加/result.png" alt="result"></p>
-</font></font></body></html>
+<h2 id="效果">效果</h2>
+<div class="figure">
+<img src="../images/OpenCV基础篇之图片叠加/result.png" alt="result" /><p class="caption">result</p>
+</div>
+</body>
+</html>

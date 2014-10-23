@@ -1,25 +1,62 @@
-<html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"><link rel="stylesheet" id="theme" href="../stylesheets/Github.css"></head><body><p><a href="../README.html"><font size="4">←返回主目录<font></font></font></a><font size="4"><font>
-<br><br><br></font></font></p><font size="4"><font>
-<h2>1 你必须知道的TMS320C6000启动过程</h2>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
+  </style>
+  <link rel="stylesheet" href="../stylesheets/Github.css" type="text/css" />
+</head>
+<body>
+<p><a href="../README.md"><font size=4>←返回主目录<font></a> </br></br></br></p>
+<h2 id="你必须知道的tms320c6000启动过程">1 你必须知道的TMS320C6000启动过程</h2>
 <p>这部分内容在我的另一篇博客</p>
 <p><a href="http://blog.csdn.net/xiahouzuoxin/article/details/9713461">DSP TMS320C6000基础学习（7）—— Bootloader与VectorTable</a></p>
 <p>有提到过，这里重新摘录一遍。</p>
-<p><img src="../images/TMS320C6713烧写Flash的通用方法/reset.jpg" alt=""></p>
+<div class="figure">
+<img src="../images/TMS320C6713烧写Flash的通用方法/reset.jpg" />
+</div>
 <p>如上图</p>
 <ul>
 <li>在Device Reset阶段：设备初始化为默认状态，大部分三态输出都配置为高阻态。</li>
 <li>在CPU Reset阶段：从RS上升沿处开始（这个时候，HD[4:3]配置启动模式，HD8配置大小端模式，CLKMODE配置输入时钟源，根据HPI_EN配置外设功能），处理器检查启动模式HD[4:3]，启动bootloader程序。</li>
 </ul>
-<p><img src="../images/TMS320C6713烧写Flash的通用方法/HD43.png" alt="HD43"></p>
+<div class="figure">
+<img src="../images/TMS320C6713烧写Flash的通用方法/HD43.png" alt="HD43" /><p class="caption">HD43</p>
+</div>
 <p>从上图可以看出，CE1地址空间必需连接Flash芯片才能使用外部Flash引导模式，在电路设计时要注意。</p>
-<p>若HD[4:3]=10（本文的操作环境基于此），EDMA自动将CE1起始位置的1KB代码拷贝到内部程序存储器的0地址，这部分功能是由硬件完成的，称<strong>一级引导Bootloader</strong>。</p>
-<p><img src="../images/TMS320C6713烧写Flash的通用方法/copy_1KB.jpg" alt=""></p>
+<p>若HD[4:3]=10（本文的操作环境基于此），EDMA自动将CE1起始位置的1KB代码拷贝到内部程序存储器的0地址，这部分功能是由硬件完成的，称__一级引导Bootloader__。</p>
+<div class="figure">
+<img src="../images/TMS320C6713烧写Flash的通用方法/copy_1KB.jpg" />
+</div>
 <p>因此，外部Flash启动的最简单的想法就是：把要运行的程序放到CE1的起始1KB地址空间。这样只要设置HD[4:3]=10就能自启动了。那这么简单，还有讨论本文的必要吗？</p>
 <p>呃，如果你的思维还停留在小孩子过家家的程度，唉。。。1KB？1KB才能存多少代码？要是代码量超过1KB呢？这正是本文要探讨的问题的初衷：<strong>程序代码&gt;1KB，如何让C6713的程序从外部Flash自启动？</strong></p>
-<p>这就涉及另一个Bootloader了，我们称之为<strong>二级引导Bootloader</strong>（说白了就是一段小程序）。二级Bootloader作用有：（1）在上电复位后将用户的应用程序从Flash拷贝到RAM中执行；（2）跳转到应用程序的入口函数处。</p>
+<p>这就涉及另一个Bootloader了，我们称之为__二级引导Bootloader__（说白了就是一段小程序）。二级Bootloader作用有：（1）在上电复位后将用户的应用程序从Flash拷贝到RAM中执行；（2）跳转到应用程序的入口函数处。</p>
 <p>二级Bootloader的执行要由一级Bootloader拷贝到RAM中执行，这就明白了，二级Bootloader必须放在外部Flash的起始的1KB位置处。</p>
 <p>我们简要的用个图描述下所谓的二级Bootloader的自启动过程及主要思路。</p>
-<p><img src="../images/TMS320C6713烧写Flash的通用方法/2levelboot.png" alt=""></p>
+<div class="figure">
+<img src="../images/TMS320C6713烧写Flash的通用方法/2levelboot.png" />
+</div>
 <p>要完成这个过程，</p>
 <ul>
 <li>首先要编写一段称为2 Level Bootloader的启动代码并烧写到Flash的初始1KB地址处（DSP6713的CE1起始地址为0x90000000），1 Level Bootloader将该代码拷贝到RAM的起始0地址，开始执行。</li>
@@ -27,71 +64,72 @@
 <li>2 Level Bootloader将0x90000400开始的用户代码拷贝到RAM的0x400地址处</li>
 <li>2 Level Bootloader调用_c_int00用户入口程序，然后调用main函数开始执行用户代码</li>
 </ul>
-<p>关于_c_int00的介绍也请参考<a href="http://blog.csdn.net/xiahouzuoxin/article/details/9713461">DSP TMS320C6000基础学习（7）——  Bootloader与VectorTable</a>本文所有操作的前提是您已经配置好了中断向量表（这样在调用_c_int00时才能正确的进入到用户程序）。</p>
-<h2>2 编写二级Bootloader</h2>
+<p>关于_c_int00的介绍也请参考<a href="http://blog.csdn.net/xiahouzuoxin/article/details/9713461">DSP TMS320C6000基础学习（7）—— Bootloader与VectorTable</a>本文所有操作的前提是您已经配置好了中断向量表（这样在调用_c_int00时才能正确的进入到用户程序）。</p>
+<h2 id="编写二级bootloader">2 编写二级Bootloader</h2>
 <p>先宏定义一下EMIF相关的寄存器，因为我们要读Flash，所以在二级引导程序运行前要配置EMIF寄存器，</p>
-<pre><code class="language-asm ruby">;
+<pre class="asm"><code>;
 ;  ======== c6713_emif.s62 ========
 ;
-            .title  <span class="string">"Flash bootup utility"</span>
+            .title  &quot;Flash bootup utility&quot;
 
-; global <span class="constant">EMIF</span> symbols <span class="keyword">defined</span> <span class="keyword">for</span> the c671x family
-            .<span class="keyword">include</span>        boot_c671x.h62
+; global EMIF symbols defined for the c671x family
+            .include        boot_c671x.h62
 
-;<span class="constant">EMIF</span> <span class="constant">Register</span> <span class="constant">Addresses</span> <span class="keyword">for</span> c671x family  
-<span class="constant">EMIF_GCTL</span>       .equ  <span class="number">0x01800000</span>  ;<span class="constant">EMIF</span> global control
-<span class="constant">EMIF_CE1</span>        .equ  <span class="number">0x01800004</span>  ;address of <span class="constant">EMIF</span> <span class="constant">CE1</span> control reg.
-<span class="constant">EMIF_CE0</span>        .equ  <span class="number">0x01800008</span>  ;<span class="constant">EMIF</span> <span class="constant">CE0control</span>
-<span class="constant">EMIF_CE2</span>        .equ  <span class="number">0x01800010</span>  ;<span class="constant">EMIF</span> <span class="constant">CE2control</span>
-<span class="constant">EMIF_CE3</span>        .equ  <span class="number">0x01800014</span>  ;<span class="constant">EMIF</span> <span class="constant">CE3control</span>
-<span class="constant">EMIF_SDRAMCTL</span>   .equ  <span class="number">0x01800018</span>  ;<span class="constant">EMIF</span> <span class="constant">SDRAM</span> control
-<span class="constant">EMIF_SDRAMTIM</span>   .equ  <span class="number">0x0180001c</span>  ;<span class="constant">EMIF</span> <span class="constant">SDRAM</span> timer
-<span class="constant">EMIF_SDRAMEXT</span>   .equ  <span class="number">0x01800020</span>  ;<span class="constant">EMIF</span> <span class="constant">SDRAM</span> extension
+;EMIF Register Addresses for c671x family  
+EMIF_GCTL       .equ  0x01800000  ;EMIF global control
+EMIF_CE1        .equ  0x01800004  ;address of EMIF CE1 control reg.
+EMIF_CE0        .equ  0x01800008  ;EMIF CE0control
+EMIF_CE2        .equ  0x01800010  ;EMIF CE2control
+EMIF_CE3        .equ  0x01800014  ;EMIF CE3control
+EMIF_SDRAMCTL   .equ  0x01800018  ;EMIF SDRAM control
+EMIF_SDRAMTIM   .equ  0x0180001c  ;EMIF SDRAM timer
+EMIF_SDRAMEXT   .equ  0x01800020  ;EMIF SDRAM extension
 
-; <span class="constant">EMIF</span> <span class="constant">Register</span> <span class="constant">Values</span> specifically <span class="keyword">for</span> <span class="number">6713</span> <span class="constant">DSK</span>
-<span class="constant">EMIF_GCTL_V</span>     .equ  <span class="number">0x00000078</span>  ;
-<span class="constant">EMIF_CE0_V</span>      .equ  <span class="number">0xffffff23</span>  ;<span class="constant">EMIF</span> <span class="constant">CE0</span> <span class="constant">SDRAM</span>
-<span class="constant">EMIF_CE1_V</span>      .equ  <span class="number">0xffffff13</span>  ;<span class="constant">EMIF</span> <span class="constant">CE1</span> <span class="constant">Flash</span> <span class="number">8</span>-bit
-<span class="constant">EMIF_CE2_V</span>      .equ  <span class="number">0xffffbf93</span> ;<span class="constant">EMIF</span> <span class="constant">CE2</span> <span class="constant">Daughtercard</span> <span class="number">32</span>-bit async
-<span class="constant">EMIF_CE3_V</span>      .equ  <span class="number">0xffffff13</span>  ;<span class="constant">EMIF</span> <span class="constant">CE3</span> <span class="constant">Daughtercard</span> <span class="number">32</span>-bit async
-<span class="constant">EMIF_SDRAMCTL_V</span> .equ  <span class="number">0x53115000</span>  ;<span class="constant">EMIF</span> <span class="constant">SDRAM</span> control
-<span class="constant">EMIF_SDRAMTIM_V</span> .equ  <span class="number">0x00000578</span>  ;<span class="constant">SDRAM</span> timing (refresh)
-<span class="constant">EMIF_SDRAMEXT_V</span> .equ  <span class="number">0x000a8529</span>  ;<span class="constant">SDRAM</span> extended control</code></pre>
+; EMIF Register Values specifically for 6713 DSK
+EMIF_GCTL_V     .equ  0x00000078  ;
+EMIF_CE0_V      .equ  0xffffff23  ;EMIF CE0 SDRAM
+EMIF_CE1_V      .equ  0xffffff13  ;EMIF CE1 Flash 8-bit
+EMIF_CE2_V      .equ  0xffffbf93 ;EMIF CE2 Daughtercard 32-bit async
+EMIF_CE3_V      .equ  0xffffff13  ;EMIF CE3 Daughtercard 32-bit async
+EMIF_SDRAMCTL_V .equ  0x53115000  ;EMIF SDRAM control
+EMIF_SDRAMTIM_V .equ  0x00000578  ;SDRAM timing (refresh)
+EMIF_SDRAMEXT_V .equ  0x000a8529  ;SDRAM extended control</code></pre>
 <p>宏定义的EMIF寄存器声明为全局符号，.global与C语言中的extern效果一致，声明为外部符号。</p>
-<pre><code class="language-asm python">;
+<pre class="asm"><code>;
 ;  ======== boot_c671x.h62 ========
 ;
 
-    .<span class="keyword">if</span> ($isdefed(<span class="string">"BOOT_C671X_"</span>) = <span class="number">0</span>)  ; prevent multiple includes of this file
-BOOT_C671X_    .set    <span class="number">1</span>
+    .if ($isdefed(&quot;BOOT_C671X_&quot;) = 0)  ; prevent multiple includes of this file
+BOOT_C671X_ .set    1
 
-; EMIF Register Addresses <span class="keyword">for</span> c671x family         
-        .<span class="keyword">global</span> EMIF_GCTL         ;EMIF <span class="keyword">global</span> control
-        .<span class="keyword">global</span> EMIF_CE1          ;address of EMIF CE1 control reg.
-        .<span class="keyword">global</span> EMIF_CE0          ;EMIF CE0control
-        .<span class="keyword">global</span> EMIF_CE2          ;EMIF CE2control
-        .<span class="keyword">global</span> EMIF_CE3          ;EMIF CE3control
-        .<span class="keyword">global</span> EMIF_SDRAMCTL     ;EMIF SDRAM control
-        .<span class="keyword">global</span> EMIF_SDRAMTIM     ;EMIF SDRAM timer
-        .<span class="keyword">global</span> EMIF_SDRAMEXT     ;EMIF SDRAM extension
+; EMIF Register Addresses for c671x family         
+        .global EMIF_GCTL         ;EMIF global control
+        .global EMIF_CE1          ;address of EMIF CE1 control reg.
+        .global EMIF_CE0          ;EMIF CE0control
+        .global EMIF_CE2          ;EMIF CE2control
+        .global EMIF_CE3          ;EMIF CE3control
+        .global EMIF_SDRAMCTL     ;EMIF SDRAM control
+        .global EMIF_SDRAMTIM     ;EMIF SDRAM timer
+        .global EMIF_SDRAMEXT     ;EMIF SDRAM extension
 
-; EMIF Register Values <span class="keyword">for</span> c671x family
-        .<span class="keyword">global</span> EMIF_GCTL_V       ;
-        .<span class="keyword">global</span> EMIF_CE0_V        ;EMIF CE0 SDRAM
-        .<span class="keyword">global</span> EMIF_CE1_V        ;EMIF CE1 Flash <span class="number">8</span>-bit
-        .<span class="keyword">global</span> EMIF_CE2_V        ;EMIF CE2 Daughtercard <span class="number">32</span>-bit async
-        .<span class="keyword">global</span> EMIF_CE3_V        ;EMIF CE3 Daughtercard <span class="number">32</span>-bit async
-        .<span class="keyword">global</span> EMIF_SDRAMCTL_V   ;EMIF SDRAM control
-        .<span class="keyword">global</span> EMIF_SDRAMTIM_V   ;SDRAM timing (refresh)
-        .<span class="keyword">global</span> EMIF_SDRAMEXT_V   ;SDRAM extended control
+; EMIF Register Values for c671x family
+        .global EMIF_GCTL_V       ;
+        .global EMIF_CE0_V        ;EMIF CE0 SDRAM
+        .global EMIF_CE1_V        ;EMIF CE1 Flash 8-bit
+        .global EMIF_CE2_V        ;EMIF CE2 Daughtercard 32-bit async
+        .global EMIF_CE3_V        ;EMIF CE3 Daughtercard 32-bit async
+        .global EMIF_SDRAMCTL_V   ;EMIF SDRAM control
+        .global EMIF_SDRAMTIM_V   ;SDRAM timing (refresh)
+        .global EMIF_SDRAMEXT_V   ;SDRAM extended control
 
-    .endif        ; <span class="keyword">if</span> BOOT_C671X_ <span class="keyword">is</span> <span class="keyword">not</span> defined</code></pre>
+    .endif      ; if BOOT_C671X_ is not defined
+</code></pre>
 <p>下面的代码段名.boot_load，你将在之后的cmd文件中看到它。</p>
 <p>代码首先对EMIF进行初始化，然后在copy_section_top中读取用户程序的段信息（段的Flash加载地址，段的RAM运行地址以及段的长度），在copy_loop中执行循环拷贝操作。</p>
-<pre><code class="language-asm diff">;A;
-;  <span class="header">======== File: boot_c671x.s62 ========</span>
+<pre class="asm"><code>;A;
+;  ======== File: boot_c671x.s62 ========
 ;
-            .title  "Flash bootup utility"
+            .title  &quot;Flash bootup utility&quot;
 
 ; global EMIF symbols defined for the c671x family
             .include        boot_c671x.h62
@@ -101,28 +139,28 @@ user_size      .equ  0x00001798
 user_ld_start  .equ  0x90000400
 user_rn_start  .equ  0x00000400
 
-            .sect ".boot_load"
+            .sect &quot;.boot_load&quot;
             .global _boot
 
             .ref _c_int00
-
+            
 _boot:      
-;<span class="header">************************************************************************</span>
+;************************************************************************
 ;* DEBUG LOOP -  COMMENT OUT B FOR NORMAL OPERATION
-;<span class="header">************************************************************************</span>
+;************************************************************************
 
             zero B1
 _myloop:  ; [!B1] B _myloop  
             nop  5
 _myloopend: nop
 
-;<span class="header">************************************************************************</span>
+;************************************************************************
 ;* CONFIGURE EMIF
-;<span class="header">************************************************************************</span>
+;************************************************************************
 
-        ;<span class="header">****************************************************************</span>
+        ;****************************************************************
         ; *EMIF_GCTL = EMIF_GCTL_V;
-        ;<span class="header">****************************************************************</span>
+        ;****************************************************************
 
             mvkl  EMIF_GCTL,A4    
       ||    mvkl  EMIF_GCTL_V,B4
@@ -132,9 +170,9 @@ _myloopend: nop
 
             stw   B4,*A4
 
-        ;<span class="header">****************************************************************</span>
+        ;****************************************************************
         ; *EMIF_CE0 = EMIF_CE0_V
-        ;<span class="header">****************************************************************</span>
+        ;****************************************************************
 
             mvkl  EMIF_CE0,A4       
       ||    mvkl  EMIF_CE0_V,B4     
@@ -144,9 +182,9 @@ _myloopend: nop
 
             stw   B4,*A4
 
-        ;<span class="header">****************************************************************</span>
+        ;****************************************************************
         ; *EMIF_CE1 = EMIF_CE1_V (setup for 8-bit async)
-        ;<span class="header">****************************************************************</span>
+        ;****************************************************************
 
             mvkl  EMIF_CE1,A4       
       ||    mvkl  EMIF_CE1_V,B4
@@ -155,10 +193,10 @@ _myloopend: nop
       ||    mvkh  EMIF_CE1_V,B4
 
             stw   B4,*A4
-
-        ;<span class="header">****************************************************************</span>
+        
+        ;****************************************************************
         ; *EMIF_CE2 = EMIF_CE2_V (setup for 32-bit async)
-        ;<span class="header">****************************************************************</span>
+        ;****************************************************************
 
             mvkl  EMIF_CE2,A4       
       ||    mvkl  EMIF_CE2_V,B4
@@ -168,9 +206,9 @@ _myloopend: nop
 
             stw   B4,*A4
 
-        ;<span class="header">****************************************************************</span>
+        ;****************************************************************
         ; *EMIF_CE3 = EMIF_CE3_V (setup for 32-bit async)
-        ;<span class="header">****************************************************************</span>
+        ;****************************************************************
 
       ||    mvkl  EMIF_CE3,A4    
       ||    mvkl  EMIF_CE3_V,B4     ;
@@ -180,9 +218,9 @@ _myloopend: nop
 
             stw   B4,*A4
 
-        ;<span class="header">****************************************************************</span>
+        ;****************************************************************
         ; *EMIF_SDRAMCTL = EMIF_SDRAMCTL_V
-        ;<span class="header">****************************************************************</span>
+        ;****************************************************************
       ||    mvkl  EMIF_SDRAMCTL,A4      
       ||    mvkl  EMIF_SDRAMCTL_V,B4    ;
 
@@ -191,9 +229,9 @@ _myloopend: nop
 
             stw   B4,*A4
 
-        ;<span class="header">****************************************************************</span>
+        ;****************************************************************
         ; *EMIF_SDRAMTIM = EMIF_SDRAMTIM_V
-        ;<span class="header">****************************************************************</span>
+        ;****************************************************************
       ||    mvkl  EMIF_SDRAMTIM,A4      
       ||    mvkl  EMIF_SDRAMTIM_V,B4    ;
 
@@ -202,9 +240,9 @@ _myloopend: nop
 
             stw   B4,*A4
 
-        ;<span class="header">****************************************************************</span>
+        ;****************************************************************
         ; *EMIF_SDRAMEXT = EMIF_SDRAMEXT_V
-        ;<span class="header">****************************************************************</span>
+        ;****************************************************************
       ||    mvkl  EMIF_SDRAMEXT,A4      
       ||    mvkl  EMIF_SDRAMEXT_V,B4    ;
 
@@ -213,9 +251,9 @@ _myloopend: nop
 
             stw   B4,*A4
 
-;<span class="header">****************************************************************************</span>
+;****************************************************************************
 ; copy sections
-;<span class="header">****************************************************************************</span>
+;****************************************************************************
         mvkl  copyTable, a3 ; load table pointer
         mvkh  copyTable, a3
 
@@ -241,9 +279,9 @@ copy_loop:
  [!b0]  and   -4,a3,a5
  [a1]   and   4, a5,a3
 
-;<span class="header">****************************************************************************</span>
+;****************************************************************************
 ; jump to entry point
-;<span class="header">****************************************************************************</span>
+;****************************************************************************
 copy_done:
         mvkl .S2 _c_int00,b0
         mvkh .S2 _c_int00,b0
@@ -251,61 +289,63 @@ copy_done:
         nop   5
 
 copyTable: 
-
+    
             ; count
             ; flash start (load) address 
             ; ram start (run) address
-
+     
             ;; .text
             .word user_size
             .word user_ld_start
             .word user_rn_start    
-
+                    
             ;; end of table
             .word 0
             .word 0
             .word 0</code></pre>
 <p>在使用时，我们要对上面程序中的</p>
-<pre><code class="language-asm sql">user_size      .equ  0x00001798
-user_ld_<span class="operator"><span class="keyword">start</span>  .equ  <span class="number">0x90000400</span>
-user_rn_start  .equ  <span class="number">0x00000400</span></span></code></pre>
+<pre class="asm"><code>user_size      .equ  0x00001798
+user_ld_start  .equ  0x90000400
+user_rn_start  .equ  0x00000400</code></pre>
 <p>进行修改，user_size表示用户程序段的字节大小，我们将在下一节看到可以通过查看*.map文件进行修改；user_ld_start表示用户代码的Flash起始地址（我默认使用0x90000400，一般不改），user_rn_start表示用户代码要存放到RAM的起始地址（从之前的图看，这个我也一般不改）。小程序我一般只修改用户程序段的字节大小。大程序可能要对copyTable（复制表）进行调整。</p>
 <p>要满足上面的地址的分布，修改用户应用程序的cmd文件如下：</p>
-<pre><code class="css">-<span class="tag">c</span>
--<span class="tag">x</span>
--<span class="tag">l</span> <span class="tag">rts6700</span><span class="class">.lib</span>
--<span class="tag">heap</span>  100<span class="tag">h</span>
--<span class="tag">stack</span> 200<span class="tag">h</span>
-<span class="tag">MEMORY</span>
-<span class="rules">{
-    <span class="rule"><span class="attribute">BOOT_RAM   </span>:<span class="value"> o=<span class="number">00000000</span>h,l=<span class="number">00000400</span>h
-    IRAM       : o=<span class="number">00000400</span>h,l=<span class="number">00040000</span>h
-    FLASH_BOOT : o=<span class="number">90000000</span>h,l=<span class="number">00000400</span>h
-    FLASH_REST : o=<span class="number">90000400</span>h,l=<span class="number">000</span>FFB00h
-}</span></span></span>
-<span class="tag">SECTIONS</span>
-<span class="rules">{
-      <span class="rule"><span class="attribute">.boot_load</span>:<span class="value">&gt; BOOT_RAM
+<pre><code>-c
+-x
+-l rts6700.lib
+-heap  100h
+-stack 200h
+MEMORY
+{
+    BOOT_RAM   : o=00000000h,l=00000400h
+    IRAM       : o=00000400h,l=00040000h
+    FLASH_BOOT : o=90000000h,l=00000400h
+    FLASH_REST : o=90000400h,l=000FFB00h
+}
+SECTIONS
+{
+      .boot_load:&gt; BOOT_RAM
 
-      <span class="comment">/* Initialized User code section */</span>
+      /* Initialized User code section */
       .text     :&gt; IRAM
       .cinit    :&gt; IRAM
 
       .vectors  :&gt; IRAM
-      .bss        :&gt; IRAM
-      .far        :&gt; IRAM
-      .stack      :&gt; IRAM
+      .bss      :&gt; IRAM
+      .far      :&gt; IRAM
+      .stack    :&gt; IRAM
       .const    :&gt; IRAM
       .switch   :&gt; IRAM
       .sysmem   :&gt; IRAM
       .cio      :&gt; IRAM   
-}</span></span></span></code></pre>
-<p>注意其中的.boot_load段，与二级引导程序的.sect ".boot_load"对应。如果用户应用程序定义了其它的段，可对cmd文件做相应修改，但.boot_load:&gt; BOOT_RAM不能改，且不要把其它段放在BOOT_RAM存储区中。</p>
+}</code></pre>
+<p>注意其中的.boot_load段，与二级引导程序的.sect &quot;.boot_load&quot;对应。如果用户应用程序定义了其它的段，可对cmd文件做相应修改，但.boot_load:&gt; BOOT_RAM不能改，且不要把其它段放在BOOT_RAM存储区中。</p>
 <p>将以上3个汇编文件盒一个cmd文件加到用户程序的工程中重新编译工程。</p>
-<h2>3 提取要烧写的二进制数据</h2>
+<h2 id="提取要烧写的二进制数据">3 提取要烧写的二进制数据</h2>
 <p>这部分是纯手工活，如果你会使用VIM，那数据处理起来就简单多了。</p>
 <p>首先，将Jtag连接上TMS320C6713开发板，下载用户应用程序，使用CCS V3.3的File-&gt;Data-&gt;Save...功能，将内存中的二进制的代码数据保存到.dat文件。</p>
-<p><img src="../images/TMS320C6713烧写Flash的通用方法/store_dat.png" alt=""></p>
+<div class="figure">
+<img src="../images/TMS320C6713烧写Flash的通用方法/store_dat.png" />
+</div>
 <p>Address都是上面的cmd文件设定好的。</p>
 <p>要保存的*.dat包括两个文件：一个存放二级Bootloader的机器二进制码（boot.dat），一个存放用户应用程序的二进制码（text.dat）</p>
 <ul>
@@ -314,15 +354,19 @@ user_rn_start  .equ  <span class="number">0x00000400</span></span></code></pre>
 </ul>
 <p>喔？用户代码的长度怎么知道？还有，不是说一级Bootloader会拷贝1KB长度吗，上面怎么是Length=0x000001000</p>
 <p>请到CCS工程的Debug目录下打开.map文件（如下图），详细的解答在下图的注释中。</p>
-<p><img src="../images/TMS320C6713烧写Flash的通用方法/map.png" alt=""></p>
+<div class="figure">
+<img src="../images/TMS320C6713烧写Flash的通用方法/map.png" />
+</div>
 <p>上面图中计算烧写长度时/4就是因为CCS中保存*.dat长度的单位为4字节，但要注意，程序的大小可能并不一定是4字节的整数倍，因此在除以4时，“宁可多烧，也不少一个字节”，使用向上取整的运算。</p>
-<pre><code class="nginx"><span class="title">Length</span> = ceil( Length(Used in <span class="regexp">*.map</span>) / <span class="number">4</span>) );</code></pre>
+<pre><code>Length = ceil( Length(Used in *.map) / 4) );</code></pre>
 <p>好了？No，别忘了，前一节中我们没办法设定User Code的长度，回头去改，</p>
-<pre><code class="language-asm sql">user_size      .equ  0x00001798 (这里改为上图中的0x00001798)
-user_ld_<span class="operator"><span class="keyword">start</span>  .equ  <span class="number">0x90000400</span>
-user_rn_start  .equ  <span class="number">0x00000400</span></span></code></pre>
+<pre class="asm"><code>user_size      .equ  0x00001798 (这里改为上图中的0x00001798)
+user_ld_start  .equ  0x90000400
+user_rn_start  .equ  0x00000400</code></pre>
 <p>改完后重新编译应用程序的工程，这就好了。给大家看看保存后的boot.dat文件，</p>
-<p><img src="../images/TMS320C6713烧写Flash的通用方法/boot_dat.png" alt=""></p>
+<div class="figure">
+<img src="../images/TMS320C6713烧写Flash的通用方法/boot_dat.png" />
+</div>
 <p>除了第一行，每行都是一个4字节长度的数。下面要做得是，分别把boot.dat中这些数和text.dat中的这些数放到boot[]和text[]的数组中，并将数组保存在头文件中。</p>
 <p>好了，不用讲了，大家各显本事做数据的格式化处理吧，我用我的VIM编辑器，轻松搞定：</p>
 <ul>
@@ -331,243 +375,247 @@ user_rn_start  .equ  <span class="number">0x00000400</span></span></code></pre>
 <li>添加数组名</li>
 </ul>
 <p>搞定后的结果，如boot.h文件和text.h文件如下：</p>
-<p><img src="../images/TMS320C6713烧写Flash的通用方法/booth.png" alt=""> <img src="../images/TMS320C6713烧写Flash的通用方法/texth.png" alt=""></p>
+<p><img src="../images/TMS320C6713烧写Flash的通用方法/booth.png" /> <img src="../images/TMS320C6713烧写Flash的通用方法/texth.png" /></p>
 <p>好了，到这就差不多了，表示机器码的二进制如今保存在我们的C语言头文件中了，下面就是要把头文件数组中的机器码烧写到Flash的对应的地址空间。</p>
-<h2>4 烧写Flash</h2>
+<h2 id="烧写flash">4 烧写Flash</h2>
 <p>本文操作环境下使用的Flash型号是AM29LV800BT。</p>
 <p>为了烧写，首先你要做的是重新新建一个用于Flash烧写的工程。</p>
 <p>烧写Flash的程序网上也有很多讲解，今天把烧写Flash调了出来，就当给大家福利，把我的Flash驱动程序给出来，</p>
-<pre><code class="language-c cpp"><span class="comment">/*
- * FileName : FLASH.h
- * Author   : xiahouzuoxin
- * Date     : 2013.09.28
- * Version  : v1.0
- * Brief    :  
- */</span>
-<span class="preprocessor">#ifndef _FLASH_H</span>
-<span class="preprocessor">#define _FLASH_H</span>
+<pre class="sourceCode c"><code class="sourceCode c"><span class="co">/*</span>
+<span class="co"> * FileName : FLASH.h</span>
+<span class="co"> * Author   : xiahouzuoxin</span>
+<span class="co"> * Date     : 2013.09.28</span>
+<span class="co"> * Version  : v1.0</span>
+<span class="co"> * Brief    :  </span>
+<span class="co"> */</span>
+<span class="ot">#ifndef _FLASH_H</span>
+<span class="ot">#define _FLASH_H</span>
 
-<span class="preprocessor">#include "Config.h"</span>
+<span class="ot">#include &quot;Config.h&quot;</span>
 
-<span class="preprocessor">#define        FLASH_UL1           0xAA</span>
-<span class="preprocessor">#define        FLASH_UL2           0x55</span>
-<span class="preprocessor">#define        FLASH_UL3           0x80</span>
-<span class="preprocessor">#define        FLASH_UL4           0xAA</span>
-<span class="preprocessor">#define        FLASH_UL5           0x55</span>
-<span class="preprocessor">#define        FLASH_SECTOR_UL6    0x30</span>
-<span class="preprocessor">#define        FLASH_CHIP_UL6        0x10</span>
-<span class="preprocessor">#define        FLASH_PROGRAM       0xA0</span>
-<span class="preprocessor">#define        SECTOR_SIZE         0x0800</span>
-<span class="preprocessor">#define        BLOCK_SIZE          0x8000</span>
-<span class="preprocessor">#define        CHIP_SIZE           0x40000</span>
+<span class="ot">#define     FLASH_UL1           0xAA</span>
+<span class="ot">#define     FLASH_UL2           0x55</span>
+<span class="ot">#define     FLASH_UL3           0x80</span>
+<span class="ot">#define     FLASH_UL4           0xAA</span>
+<span class="ot">#define     FLASH_UL5           0x55</span>
+<span class="ot">#define     FLASH_SECTOR_UL6    0x30</span>
+<span class="ot">#define     FLASH_CHIP_UL6      0x10</span>
+<span class="ot">#define     FLASH_PROGRAM       0xA0</span>
+<span class="ot">#define     SECTOR_SIZE         0x0800</span>
+<span class="ot">#define     BLOCK_SIZE          0x8000</span>
+<span class="ot">#define     CHIP_SIZE           0x40000</span>
 
-<span class="preprocessor">#define     FLASH_FIRST_ADDR    0x90000000</span>
-<span class="preprocessor">#define     FLASH_OFFSET(addr)  (FLASH_FIRST_ADDR+(addr)&lt;&lt;1)  // 16 bit boot mode</span>
+<span class="ot">#define     FLASH_FIRST_ADDR    0x90000000</span>
+<span class="ot">#define     FLASH_OFFSET(addr)  (FLASH_FIRST_ADDR+(addr)&lt;&lt;1)  </span><span class="co">// 16 bit boot mode</span>
+            
 
+<span class="co">/* External functions propotype */</span>
+<span class="kw">extern</span> <span class="dt">uint32_t</span> Flash_Erase(<span class="dt">uint32_t</span> addr,<span class="dt">uint16_t</span> type);
+<span class="kw">extern</span> <span class="dt">void</span> Flash_Readm(<span class="dt">uint32_t</span> addr,<span class="dt">uint16_t</span> *ptr,<span class="dt">uint32_t</span> length);
+<span class="kw">extern</span> <span class="dt">uint32_t</span> Flash_Reads(<span class="dt">uint32_t</span> addr);
+<span class="kw">extern</span> <span class="dt">void</span> Flash_Writem(<span class="dt">uint32_t</span> addr,<span class="dt">uint16_t</span> *ptr,<span class="dt">uint32_t</span> length);
+<span class="kw">extern</span> <span class="dt">void</span> Flash_Writes(<span class="dt">uint32_t</span> addr,<span class="dt">uint16_t</span> data);
 
-<span class="comment">/* External functions propotype */</span>
-<span class="keyword">extern</span> uint32_t Flash_Erase(uint32_t addr,uint16_t type);
-<span class="keyword">extern</span> <span class="keyword">void</span> Flash_Readm(uint32_t addr,uint16_t *ptr,uint32_t length);
-<span class="keyword">extern</span> uint32_t Flash_Reads(uint32_t addr);
-<span class="keyword">extern</span> <span class="keyword">void</span> Flash_Writem(uint32_t addr,uint16_t *ptr,uint32_t length);
-<span class="keyword">extern</span> <span class="keyword">void</span> Flash_Writes(uint32_t addr,uint16_t data);
+<span class="ot">#endif</span></code></pre>
+<pre class="sourceCode c"><code class="sourceCode c"><span class="co">/*</span>
+<span class="co"> * FileName : FLASH.c</span>
+<span class="co"> * Author   : xiahouzuoxin</span>
+<span class="co"> * Date     : 2013.09.28</span>
+<span class="co"> * Version  : v1.0</span>
+<span class="co"> * Brief    :  </span>
+<span class="co"> */</span>
+<span class="ot">#include &quot;FLASH.h&quot;</span>
+<span class="ot">#include &quot;stdio.h&quot;</span>
 
-<span class="preprocessor">#endif</span></code></pre>
-<pre><code class="language-c cpp"><span class="comment">/*
- * FileName : FLASH.c
- * Author   : xiahouzuoxin
- * Date     : 2013.09.28
- * Version  : v1.0
- * Brief    :  
- */</span>
-<span class="preprocessor">#include "FLASH.h"</span>
-<span class="preprocessor">#include "stdio.h"</span>
+<span class="co">/* Global vaiables */</span>
+<span class="dt">volatile</span> <span class="dt">uint16_t</span> *FLASH_5555 = (<span class="dt">volatile</span> <span class="dt">uint16_t</span> *) (<span class="bn">0x90000000</span>+(<span class="bn">0x5555</span>&lt;&lt;<span class="dv">1</span>));
+<span class="dt">volatile</span> <span class="dt">uint16_t</span> *FLASH_2AAA = (<span class="dt">volatile</span> <span class="dt">uint16_t</span> *) (<span class="bn">0x90000000</span>+(<span class="bn">0x2AAA</span>&lt;&lt;<span class="dv">1</span>));
 
-<span class="comment">/* Global vaiables */</span>
-<span class="keyword">volatile</span> uint16_t *FLASH_5555 = (<span class="keyword">volatile</span> uint16_t *) (<span class="number">0x90000000</span>+(<span class="number">0x5555</span>&lt;&lt;<span class="number">1</span>));
-<span class="keyword">volatile</span> uint16_t *FLASH_2AAA = (<span class="keyword">volatile</span> uint16_t *) (<span class="number">0x90000000</span>+(<span class="number">0x2AAA</span>&lt;&lt;<span class="number">1</span>));
-
-<span class="comment">/* 
- * @brief  Flash erase function.
- * @param  addr: 
- *         type:
- * @retval 
- */</span>   
-uint32_t Flash_Erase(uint32_t addr, uint16_t type)
+<span class="co">/* </span>
+<span class="co"> * @brief  Flash erase function.</span>
+<span class="co"> * @param  addr: </span>
+<span class="co"> *         type:</span>
+<span class="co"> * @retval </span>
+<span class="co"> */</span>   
+<span class="dt">uint32_t</span> Flash_Erase(<span class="dt">uint32_t</span> addr, <span class="dt">uint16_t</span> type)
 {
-    uint32_t i,j;
+    <span class="dt">uint32_t</span> i,j;
 
-    *FLASH_5555 = FLASH_UL1;    <span class="comment">//first</span>
-    *FLASH_2AAA = FLASH_UL2;    <span class="comment">//second</span>
-    *FLASH_5555 = FLASH_UL3;    <span class="comment">//third</span>
+    *FLASH_5555 = FLASH_UL1;    <span class="co">//first</span>
+    *FLASH_2AAA = FLASH_UL2;    <span class="co">//second</span>
+    *FLASH_5555 = FLASH_UL3;    <span class="co">//third</span>
     *FLASH_5555 = FLASH_UL4;
     *FLASH_2AAA = FLASH_UL5;
 
-    <span class="keyword">switch</span>(type)
+    <span class="kw">switch</span>(type)
     {
-        <span class="keyword">case</span> <span class="number">0x50</span>:        <span class="comment">//block erase</span>
-            *(uint16_t *)addr = type;
-            <span class="keyword">while</span>((*(uint16_t *)addr &amp; <span class="number">0x80</span>) != <span class="number">0x80</span>);
-            <span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; BLOCK_SIZE; i++)
+        <span class="kw">case</span> <span class="bn">0x50</span>:      <span class="co">//block erase</span>
+            *(<span class="dt">uint16_t</span> *)addr = type;
+            <span class="kw">while</span>((*(<span class="dt">uint16_t</span> *)addr &amp; <span class="bn">0x80</span>) != <span class="bn">0x80</span>);
+            <span class="kw">for</span>(i = <span class="dv">0</span>; i &lt; BLOCK_SIZE; i++)
             {
-                <span class="keyword">if</span>(*(uint16_t *)(addr + i) != <span class="number">0xffff</span>)
+                <span class="kw">if</span>(*(<span class="dt">uint16_t</span> *)(addr + i) != <span class="bn">0xffff</span>)
                 {
-                    j = <span class="number">0</span>;
-                    <span class="keyword">break</span>;
+                    j = <span class="dv">0</span>;
+                    <span class="kw">break</span>;
                 }
             }
-            j = <span class="number">1</span>;
-            <span class="keyword">break</span>;
-
-        <span class="keyword">case</span> <span class="number">0x30</span>:        <span class="comment">//sector erase</span>
-            *(uint16_t *)addr = type;
-            <span class="keyword">while</span>((*(uint16_t *)addr &amp; <span class="number">0x80</span>) != <span class="number">0x80</span>);
-            <span class="keyword">break</span>;
-
-        <span class="keyword">case</span> <span class="number">0x10</span>:        <span class="comment">//chip erase</span>
+            j = <span class="dv">1</span>;
+            <span class="kw">break</span>;
+        
+        <span class="kw">case</span> <span class="bn">0x30</span>:      <span class="co">//sector erase</span>
+            *(<span class="dt">uint16_t</span> *)addr = type;
+            <span class="kw">while</span>((*(<span class="dt">uint16_t</span> *)addr &amp; <span class="bn">0x80</span>) != <span class="bn">0x80</span>);
+            <span class="kw">break</span>;
+            
+        <span class="kw">case</span> <span class="bn">0x10</span>:      <span class="co">//chip erase</span>
             *FLASH_5555 = type;
-            <span class="keyword">while</span>((*FLASH_5555 &amp; <span class="number">0x80</span>) != <span class="number">0x80</span>);
-            <span class="keyword">break</span>;
-
-        <span class="keyword">default</span>:
-            <span class="keyword">break</span>;
+            <span class="kw">while</span>((*FLASH_5555 &amp; <span class="bn">0x80</span>) != <span class="bn">0x80</span>);
+            <span class="kw">break</span>;
+        
+        <span class="kw">default</span>:
+            <span class="kw">break</span>;
     }
-    <span class="keyword">return</span> (j);
+    <span class="kw">return</span> (j);
 }
 
-<span class="comment">/* 
- * @brief  Write a single data.
- * @param  addr: 
- *         data:
- * @retval 
- */</span>   
-<span class="keyword">void</span> Flash_Writes(uint32_t addr,uint16_t data)
+<span class="co">/* </span>
+<span class="co"> * @brief  Write a single data.</span>
+<span class="co"> * @param  addr: </span>
+<span class="co"> *         data:</span>
+<span class="co"> * @retval </span>
+<span class="co"> */</span>   
+<span class="dt">void</span> Flash_Writes(<span class="dt">uint32_t</span> addr,<span class="dt">uint16_t</span> data)
 {
-    uint32_t j = <span class="number">0</span>;
+    <span class="dt">uint32_t</span> j = <span class="dv">0</span>;
 
     *FLASH_5555 = FLASH_UL1;
     *FLASH_2AAA = FLASH_UL2;
     *FLASH_5555 = FLASH_PROGRAM;
 
-    *(uint16_t *)addr = data;
+    *(<span class="dt">uint16_t</span> *)addr = data;
 
-    j = <span class="number">0</span>;
-    <span class="keyword">while</span> (j&lt;<span class="number">255</span>) j++;  <span class="comment">// with delay</span>
+    j = <span class="dv">0</span>;
+    <span class="kw">while</span> (j&lt;<span class="dv">255</span>) j++;  <span class="co">// with delay</span>
 
-    <span class="keyword">while</span>(*(uint16_t *)addr != data);  <span class="comment">// 校验</span>
+    <span class="kw">while</span>(*(<span class="dt">uint16_t</span> *)addr != data);  <span class="co">// 校验</span>
 }
 
-<span class="comment">/* 
- * @brief  Write the certain length data.
- * @param  addr: 
- *         ptr:
- *         length:
- * @retval 
- */</span> 
-<span class="keyword">void</span> Flash_Writem(uint32_t addr,uint16_t *ptr,uint32_t length)
+<span class="co">/* </span>
+<span class="co"> * @brief  Write the certain length data.</span>
+<span class="co"> * @param  addr: </span>
+<span class="co"> *         ptr:</span>
+<span class="co"> *         length:</span>
+<span class="co"> * @retval </span>
+<span class="co"> */</span> 
+<span class="dt">void</span> Flash_Writem(<span class="dt">uint32_t</span> addr,<span class="dt">uint16_t</span> *ptr,<span class="dt">uint32_t</span> length)
 {
-    uint32_t i;
+    <span class="dt">uint32_t</span> i;
 
-    <span class="keyword">for</span>(i  = <span class="number">0</span>; i &lt; length; i++)
+    <span class="kw">for</span>(i  = <span class="dv">0</span>; i &lt; length; i++)
     {
-        Flash_Writes(addr+(i&lt;&lt;<span class="number">1</span>),*(ptr+i));
+        Flash_Writes(addr+(i&lt;&lt;<span class="dv">1</span>),*(ptr+i));
 
-        <span class="keyword">if</span> (i % <span class="number">0xFF</span> == <span class="number">0</span>) {  
-            printf(<span class="string">"\nWrite %d bytes..."</span>, i&lt;&lt;<span class="number">1</span>);
+        <span class="kw">if</span> (i % <span class="bn">0xFF</span> == <span class="dv">0</span>) {  
+            printf(<span class="st">&quot;</span><span class="ch">\n</span><span class="st">Write %d bytes...&quot;</span>, i&lt;&lt;<span class="dv">1</span>);
         }
     }
 }
 
-<span class="comment">/* 
- * @brief  Read a single data.
- * @param  addr: 
- * @retval 
- */</span>
-uint32_t Flash_Reads(uint32_t addr)
+<span class="co">/* </span>
+<span class="co"> * @brief  Read a single data.</span>
+<span class="co"> * @param  addr: </span>
+<span class="co"> * @retval </span>
+<span class="co"> */</span>
+<span class="dt">uint32_t</span> Flash_Reads(<span class="dt">uint32_t</span> addr)
 {
-    <span class="keyword">return</span> (*(uint16_t *)addr);
+    <span class="kw">return</span> (*(<span class="dt">uint16_t</span> *)addr);
 }
 
-<span class="comment">/* 
- * @brief  Read the certain length data.
- * @param  addr: 
- *         ptr:
- *         length:
- * @retval 
- */</span>
-<span class="keyword">void</span> Flash_Readm(uint32_t addr,uint16_t *ptr,uint32_t length)
+<span class="co">/* </span>
+<span class="co"> * @brief  Read the certain length data.</span>
+<span class="co"> * @param  addr: </span>
+<span class="co"> *         ptr:</span>
+<span class="co"> *         length:</span>
+<span class="co"> * @retval </span>
+<span class="co"> */</span>
+<span class="dt">void</span> Flash_Readm(<span class="dt">uint32_t</span> addr,<span class="dt">uint16_t</span> *ptr,<span class="dt">uint32_t</span> length)
 {
-    uint32_t i;
-    <span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; length; i++)
+    <span class="dt">uint32_t</span> i;
+    <span class="kw">for</span>(i = <span class="dv">0</span>; i &lt; length; i++)
     {
-        *(ptr + i) = Flash_Reads(addr+<span class="number">2</span>*i);
+        *(ptr + i) = Flash_Reads(addr<span class="dv">+2</span>*i);
     }
 }</code></pre>
 <p>我使用的Flash_Writem函数按每次16位（2字节）烧写，主程序main中的烧写代码是</p>
-<pre><code class="language-c xml">#include <span class="tag">&lt;<span class="title">c6x.h</span>&gt;</span>
-#include <span class="tag">&lt;<span class="title">csl.h</span>&gt;</span>
-#include <span class="tag">&lt;<span class="title">stdio.h</span>&gt;</span>
-#include <span class="tag">&lt;<span class="title">stdlib.h</span>&gt;</span>
-#include "Flash.h"
-#include "BSP.h"
-#include "boot.h"
-#include "text.h"
+<pre class="sourceCode c"><code class="sourceCode c"><span class="ot">#include &lt;c6x.h&gt;</span>
+<span class="ot">#include &lt;csl.h&gt;</span>
+<span class="ot">#include &lt;stdio.h&gt;</span>
+<span class="ot">#include &lt;stdlib.h&gt;</span>
+<span class="ot">#include &quot;Flash.h&quot;</span>
+<span class="ot">#include &quot;BSP.h&quot;</span>
+<span class="ot">#include &quot;boot.h&quot;</span>
+<span class="ot">#include &quot;text.h&quot;</span>
 
 main()
 {
-    /* Init PLL EMIF ... */
+    <span class="co">/* Init PLL EMIF ... */</span>
     BSP_init();
 
-    /* Fetch data from file */
+    <span class="co">/* Fetch data from file */</span>
 
-    /* Erase flash memory. */
-    Flash_Erase(0x90000000,0x10);
-    printf("\nErase Flash ok.");
+    <span class="co">/* Erase flash memory. */</span>
+    Flash_Erase(<span class="bn">0x90000000</span>,<span class="bn">0x10</span>);
+    printf(<span class="st">&quot;</span><span class="ch">\n</span><span class="st">Erase Flash ok.&quot;</span>);
+    
+    <span class="co">/* Write flash memory. */</span>
+    Flash_Writem(<span class="bn">0x90000000</span>, (<span class="dt">uint16_t</span> *)boot, <span class="kw">sizeof</span>(boot)&lt;&lt;<span class="dv">1</span>);   
+    printf(<span class="st">&quot;</span><span class="ch">\n</span><span class="st">Write .boot ok.&quot;</span>);
 
-    /* Write flash memory. */
-    Flash_Writem(0x90000000, (uint16_t *)boot, sizeof(boot)<span class="tag">&lt;<span class="title">&lt;1);</span>   
-    <span class="attribute">printf</span>("\<span class="attribute">nWrite</span> <span class="attribute">.boot</span> <span class="attribute">ok.</span>");
+    Flash_Writem(<span class="bn">0x90000000</span>+(<span class="bn">0x200</span>&lt;&lt;<span class="dv">1</span>), (<span class="dt">uint16_t</span> *)text, <span class="kw">sizeof</span>(text)&lt;&lt;<span class="dv">1</span>);
+    printf(<span class="st">&quot;</span><span class="ch">\n</span><span class="st">Write .text ok.&quot;</span>);
 
-       <span class="attribute">Flash_Writem</span>(<span class="attribute">0x90000000</span>+(<span class="attribute">0x200</span>&lt;&lt;<span class="attribute">1</span>), (<span class="attribute">uint16_t</span> *)<span class="attribute">text</span>, <span class="attribute">sizeof</span>(<span class="attribute">text</span>)&lt;&lt;<span class="attribute">1</span>);
-    <span class="attribute">printf</span>("\<span class="attribute">nWrite</span> <span class="attribute">.text</span> <span class="attribute">ok.</span>");
-
-    <span class="attribute">printf</span>("\<span class="attribute">nBurn</span> <span class="attribute">to</span> <span class="attribute">flash</span> <span class="attribute">ok.</span>");
-}</span></code></pre>
+    printf(<span class="st">&quot;</span><span class="ch">\n</span><span class="st">Burn to flash ok.&quot;</span>);
+}</code></pre>
 <p>注意上面的Flash_Writem调用格式，二级boot_loader被烧写到Flash起始地址为0x90000000的地址空间，用户应用程序被烧写到Flash起始地址为0x90000400的地址空间。</p>
 <p>烧写成功，请看下文，</p>
-<p><img src="../images/TMS320C6713烧写Flash的通用方法/Burn.png" alt=""></p>
+<div class="figure">
+<img src="../images/TMS320C6713烧写Flash的通用方法/Burn.png" />
+</div>
 <p>更多烧写内容请参考[2]，里面是我烧写程序用的CCS工程，烧写不同的应用程序只需要替换里面的text.h和boot.h即可。</p>
 <p>昨天烧写小段代码测试成功，今天尝试用该方法烧写大段代码，除了改变在2 Level Bootloader的程序中改变use_code_Size外，无任何其它改变，成功烧写300KB以上的代码（在SST39VF1601型号的Flash上做得测试），如下：</p>
-<p><img src="../images/TMS320C6713烧写Flash的通用方法/test2.png" alt=""></p>
+<div class="figure">
+<img src="../images/TMS320C6713烧写Flash的通用方法/test2.png" />
+</div>
 <ul>
 <li>后注：烧写Flash要注意以上的任何一个细节，某个细节出错都可能造成烧写不成功！在应用程序中切忌对Flash进行擦写操作，莫要覆盖了原保存了烧写程序的Flash区域。</li>
 </ul>
-<h2>5 烧写过程中的中断向量表</h2>
+<h2 id="烧写过程中的中断向量表">5 烧写过程中的中断向量表</h2>
 <p>就前面的烧写方法中，请思考一个问题，程序是从何时何处跳转到main函数执行的？</p>
 <p>如果不烧写Flash，我们都应该知道是在vecs.asm中</p>
-<pre><code class="sql">********************************************************************************
+<pre><code>********************************************************************************
 *           Copyright (C) 2003 Texas Instruments Incorporated.
 *                           All Rights Reserved
-*<span class="comment">------------------------------------------------------------------------------</span>
+*------------------------------------------------------------------------------
 * FILENAME...... vecs.asm
 * DATE CREATED.. 12/06/2000
 * LAST MODIFIED. 03/05/2003
 ********************************************************************************
 
-*<span class="comment">------------------------------------------------------------------------------</span>
+*------------------------------------------------------------------------------
 * Global symbols defined here and exported out of this file
-*<span class="comment">------------------------------------------------------------------------------</span>
+*------------------------------------------------------------------------------
    .global _vectors
    .global _c_int00
    .global _vector1
    .global _vector2
    .global _vector3
-   .global _vector4    
+   .global _vector4 
    .global _vector5 
    .global _vector6
    .global _vector7
    .global _vector8
-   .global _vector9      
+   .global _vector9   
    .global _vector10 
    .global _vector11   
    .global _vector12  
@@ -575,17 +623,17 @@ main()
    .global _vector14   
    .global _vector15   
 
-*<span class="comment">------------------------------------------------------------------------------</span>
+*------------------------------------------------------------------------------
 * Global symbols referenced in this file but defined somewhere else. 
 * Remember that your interrupt service routines need to be referenced here.
-*<span class="comment">------------------------------------------------------------------------------</span>
+*------------------------------------------------------------------------------
    .ref _c_int00
 
-*<span class="comment">------------------------------------------------------------------------------</span>
+*------------------------------------------------------------------------------
 * This is a macro that instantiates one entry in the interrupt service table.
-*<span class="comment">------------------------------------------------------------------------------</span>
+*------------------------------------------------------------------------------
 VEC_ENTRY .macro addr
-    STW   B0,*<span class="comment">--B15</span>
+    STW   B0,*--B15
     MVKL  addr,B0
     MVKH  addr,B0
     B     B0
@@ -596,27 +644,27 @@ VEC_ENTRY .macro addr
    .endm
 
 
-*<span class="comment">------------------------------------------------------------------------------</span>
+*------------------------------------------------------------------------------
 * This is a dummy interrupt service routine used to initialize the IST.
-*<span class="comment">------------------------------------------------------------------------------</span>
+*------------------------------------------------------------------------------
 _vec_dummy:
   B    B3
   NOP  5
 
-*<span class="comment">------------------------------------------------------------------------------</span>
-* This is the actual interrupt service table (IST). It is properly aligned and
-* is located in the subsection .text:vecs. This means if you don't explicitly
-* specify this section in your linker command file, it will default and link
-* into the .text section. Remember to <span class="operator"><span class="keyword">set</span> the ISTP register <span class="keyword">to</span> point <span class="keyword">to</span> this
-* <span class="keyword">table</span>.
 *------------------------------------------------------------------------------
- ;</span>.sect ".text:vecs"
- .sect ".vectors"    ;
+* This is the actual interrupt service table (IST). It is properly aligned and
+* is located in the subsection .text:vecs. This means if you don&#39;t explicitly
+* specify this section in your linker command file, it will default and link
+* into the .text section. Remember to set the ISTP register to point to this
+* table.
+*------------------------------------------------------------------------------
+ ;.sect &quot;.text:vecs&quot;
+ .sect &quot;.vectors&quot;   ;
  .align 1024
 
 _vectors:
-_vector0:   VEC_ENTRY _c_int00    ;RE<span class="operator"><span class="keyword">SET</span>
-_vector1:   VEC_ENTRY _vec_dummy  ;</span>NMI
+_vector0:   VEC_ENTRY _c_int00    ;RESET
+_vector1:   VEC_ENTRY _vec_dummy  ;NMI
 _vector2:   VEC_ENTRY _vec_dummy  ;RSVD
 _vector3:   VEC_ENTRY _vec_dummy
 _vector4:   VEC_ENTRY _vec_dummy
@@ -632,7 +680,7 @@ _vector13:  VEC_ENTRY _vec_dummy
 _vector14:  VEC_ENTRY _vec_dummy
 _vector15:  VEC_ENTRY _vec_dummy
 
-*<span class="comment">------------------------------------------------------------------------------</span>
+*------------------------------------------------------------------------------
 
 
 ********************************************************************************
@@ -645,63 +693,63 @@ _vector15:  VEC_ENTRY _vec_dummy
 <p>前面烧写Flash的时候，其实有一点没有提到：当系统调用（比如定时器中断），如何才能找到（定时器）中断向量的入口函数？</p>
 <p>因此，前面烧写Flash的方法在不做修改的情况下是无法执行中断服务程序的。</p>
 <p>修改方法有2，且听一一分解。</p>
-<h4>方法一</h4>
+<h4 id="方法一">方法一</h4>
 <p>在进入main函数之后，重定位中断向量表的位置（关于向量表的重定位参考<a href="http://blog.csdn.net/xiahouzuoxin/article/details/9713461">DSP TMS320C6000基础学习（7）—— Bootloader与VectorTable</a>）</p>
 <p>中断向量表的重定位必须在使用中断之前。</p>
-<pre><code class="cpp"><span class="keyword">extern</span> far <span class="keyword">void</span> vectors();   <span class="comment">/* 声明vectors，因为_vectors定义在汇编文件vecs.asm中 */</span>
+<pre><code>extern far void vectors();   /* 声明vectors，因为_vectors定义在汇编文件vecs.asm中 */
 
-IRQ_setVecs(vectors);   <span class="comment">/* 重定位中断向量表 */</span></code></pre>
-<h4>方法二</h4>
+IRQ_setVecs(vectors);   /* 重定位中断向量表 */       </code></pre>
+<h4 id="方法二">方法二</h4>
 <p>修改汇编文件和cmd文件。基本思路是：把中断向量表保存在0地址处，在向量表之后存储二级Bootloader，通过复位中断跳转到二级Bootloader。</p>
 <ul>
 <li>先修改cmd文件</li>
 </ul>
-<pre><code class="css">-<span class="tag">c</span>
--<span class="tag">x</span>
--<span class="tag">l</span> <span class="tag">rts6700</span><span class="class">.lib</span>
--<span class="tag">heap</span>  100<span class="tag">h</span>
--<span class="tag">stack</span> 200<span class="tag">h</span>
-<span class="tag">MEMORY</span>
-<span class="rules">{
-    <span class="rule"><span class="attribute">BOOT_RAM   </span>:<span class="value"> o=<span class="number">00000000</span>h,l=<span class="number">00000400</span>h
-    IRAM       : o=<span class="number">00000400</span>h,l=<span class="number">00040000</span>h
-    FLASH_BOOT : o=<span class="number">90000000</span>h,l=<span class="number">00000400</span>h
-    FLASH_REST : o=<span class="number">90000400</span>h,l=<span class="number">000</span>FFB00h
-}</span></span></span>
-<span class="tag">SECTIONS</span>
-<span class="rules">{
-      <span class="rule"><span class="attribute">.vectors  </span>:<span class="value">&gt; BOOT_RAM    <span class="comment">/* 修改在这里，vectors段定义在vecs.asm中，中断向量表放在RAM 0地址处 */</span>
+<pre><code>-c
+-x
+-l rts6700.lib
+-heap  100h
+-stack 200h
+MEMORY
+{
+    BOOT_RAM   : o=00000000h,l=00000400h
+    IRAM       : o=00000400h,l=00040000h
+    FLASH_BOOT : o=90000000h,l=00000400h
+    FLASH_REST : o=90000400h,l=000FFB00h
+}
+SECTIONS
+{
+      .vectors  :&gt; BOOT_RAM    /* 修改在这里，vectors段定义在vecs.asm中，中断向量表放在RAM 0地址处 */
       .boot_load:&gt; BOOT_RAM
 
-      <span class="comment">/* Initialized User code section */</span>
+      /* Initialized User code section */
       .text     :&gt; IRAM
       .cinit    :&gt; IRAM
 
       .vectors  :&gt; IRAM
-      .bss        :&gt; IRAM
-      .far        :&gt; IRAM
-      .stack      :&gt; IRAM
+      .bss      :&gt; IRAM
+      .far      :&gt; IRAM
+      .stack    :&gt; IRAM
       .const    :&gt; IRAM
       .switch   :&gt; IRAM
       .sysmem   :&gt; IRAM
       .cio      :&gt; IRAM   
-}</span></span></span></code></pre>
+}</code></pre>
 <ul>
 <li>修改vecs.asm（只给出了修改部分）</li>
 </ul>
-<pre><code class="sql">...
+<pre><code>...
 
    .ref _c_int00
    .ref _boot   ; 修改在这里，_boot段为二次引导程序入口，定义在boot_c671x.s62中
 
 ...
 
- .sect ".vectors"    ;
+ .sect &quot;.vectors&quot;   ;
  .align 1024
 
 _vectors:
-_vector0:   VEC_ENTRY _boot       ;RE<span class="operator"><span class="keyword">SET</span>   修改在这里(将_c_init改成了_boot)，复位后跳转到_boot执行二次引导程序
-_vector1:   VEC_ENTRY _vec_dummy  ;</span>NMI
+_vector0:   VEC_ENTRY _boot       ;RESET   修改在这里(将_c_init改成了_boot)，复位后跳转到_boot执行二次引导程序
+_vector1:   VEC_ENTRY _vec_dummy  ;NMI
 _vector2:   VEC_ENTRY _vec_dummy  ;RSVD
 _vector3:   VEC_ENTRY _vec_dummy
 _vector4:   VEC_ENTRY _vec_dummy
@@ -717,106 +765,82 @@ _vector13:  VEC_ENTRY _vec_dummy
 _vector14:  VEC_ENTRY _vec_dummy
 _vector15:  VEC_ENTRY _vec_dummy</code></pre>
 <p>两种方法都做过测试，都是可行的！</p>
-<h2>6 进阶——单一工程的自烧写</h2>
+<h2 id="进阶单一工程的自烧写">6 进阶——单一工程的自烧写</h2>
 <p>虽然上述方法在之前用起来一直很好，但烧写步骤多少还是有些麻烦，上述的步骤大概是：</p>
-<ol>
+<ol style="list-style-type: decimal">
 <li>修改user_size，编译装载要烧写的工程</li>
 <li>从内存中导出要烧写的内容</li>
 <li>编译装载Flash烧写工程，使用该工程将2中导出的内容烧写到Flash</li>
 </ol>
 <p>里面最麻烦的是，每次都要从内存中先导出烧写内容，转化为.h头文件再烧写，导出过程还不能有半点失误。这无疑是一件很麻烦的是，本来如果DSP板上有个拨码开关控制的话，就可以轻松完成自烧写了（在烧写的时候拨到一边，烧写完后拨到另一边运行）。</p>
 <p>但是，现在没有，人是喜欢偷懒的，于是我又在user_size上下了点功夫——何不用user_size作判别量，如果Flash中的user_size与现在挂着仿真器的运行着的程序的user_size不一致，就进行烧写不就可以吗？于是我的main函数就变成了下面那样：</p>
-<pre><code class="language-c cpp"><span class="keyword">int</span> main(<span class="keyword">void</span>) {
+<pre class="sourceCode c"><code class="sourceCode c"><span class="dt">int</span> main(<span class="dt">void</span>) {
 
-    <span class="comment">/* Init BSP, include CSL_init() */</span>
+    <span class="co">/* Init BSP, include CSL_init() */</span>
     BSP_Init();
 
-    <span class="comment">// Flash_Erase(0x90000000,0x10);</span>
-    <span class="comment">// Check size of text and burn Flash</span>
-    <span class="preprocessor">#define USER_SIZE (0x23d68)</span>
-    <span class="keyword">if</span> (USER_SIZE !=  *(uint32_t *)(<span class="number">0x9000030C</span>)) {
-        <span class="comment">/* Erase flash memory. */</span>
-        Flash_Erase(<span class="number">0x90000000</span>,<span class="number">0x10</span>);
-        printf(<span class="string">"\nErase Flash ok."</span>);
+    <span class="co">// Flash_Erase(0x90000000,0x10);</span>
+    <span class="co">// Check size of text and burn Flash</span>
+    <span class="ot">#define USER_SIZE (0x23d68)</span>
+    <span class="kw">if</span> (USER_SIZE !=  *(<span class="dt">uint32_t</span> *)(<span class="bn">0x9000030C</span>)) {
+        <span class="co">/* Erase flash memory. */</span>
+        Flash_Erase(<span class="bn">0x90000000</span>,<span class="bn">0x10</span>);
+        printf(<span class="st">&quot;</span><span class="ch">\n</span><span class="st">Erase Flash ok.&quot;</span>);
+        
+        <span class="co">/* Write flash memory. */</span>
+        Flash_Writem(<span class="bn">0x90000000</span>, (<span class="dt">uint16_t</span> *)(<span class="bn">0x0</span>), <span class="bn">0x400</span>&gt;&gt;<span class="dv">1</span>);   
+        printf(<span class="st">&quot;</span><span class="ch">\n</span><span class="st">Write .boot ok.&quot;</span>);
 
-        <span class="comment">/* Write flash memory. */</span>
-        Flash_Writem(<span class="number">0x90000000</span>, (uint16_t *)(<span class="number">0x0</span>), <span class="number">0x400</span>&gt;&gt;<span class="number">1</span>);   
-        printf(<span class="string">"\nWrite .boot ok."</span>);
+        Flash_Writem(<span class="bn">0x90000400</span>, (<span class="dt">uint16_t</span> *)(<span class="bn">0x400</span>), USER_SIZE&gt;&gt;<span class="dv">1</span>);
+        printf(<span class="st">&quot;</span><span class="ch">\n</span><span class="st">Write .text ok.&quot;</span>);
 
-           Flash_Writem(<span class="number">0x90000400</span>, (uint16_t *)(<span class="number">0x400</span>), USER_SIZE&gt;&gt;<span class="number">1</span>);
-        printf(<span class="string">"\nWrite .text ok."</span>);
-
-        printf(<span class="string">"\nBurn to flash ok."</span>);
+        printf(<span class="st">&quot;</span><span class="ch">\n</span><span class="st">Burn to flash ok.&quot;</span>);
 
         LED_Control(SIG_LED_ON);
-        Delay_ticks(<span class="number">3000</span>, NULL);
+        Delay_ticks(<span class="dv">3000</span>, NULL);
         LED_Control(SIG_LED_OFF);
 
-        <span class="keyword">return</span> <span class="number">0</span>;
+        <span class="kw">return</span> <span class="dv">0</span>;
     }
 
-    <span class="comment">// below is user code</span>
+    <span class="co">// below is user code</span>
 
-    <span class="keyword">while</span>(<span class="number">1</span>) {
-
+    <span class="kw">while</span>(<span class="dv">1</span>) {
+        
     }
-
+    
 }</code></pre>
 <p>里面一定注意几个关键的量：</p>
-<ol>
-<li><p>代码中的0x23d68是我的user_size大小，这个时候，每当要烧写的时候，user_size不仅要在boot_c671x.s62文件中修改，main函数中的USER_SIZE宏定义也要修改</p>
-</li>
+<ol style="list-style-type: decimal">
+<li><p>代码中的0x23d68是我的user_size大小，这个时候，每当要烧写的时候，user_size不仅要在boot_c671x.s62文件中修改，main函数中的USER_SIZE宏定义也要修改</p></li>
 <li><p>请注意下面代码中的0x9000030C</p>
-<pre><code class="language-c nginx"><span class="title">if</span> (0x23d68 !=  *(uint32_t *)(0x9000030C))</code></pre>
+<pre class="sourceCode c"><code class="sourceCode c"><span class="kw">if</span> (<span class="bn">0x23d68</span> !=  *(<span class="dt">uint32_t</span> *)(<span class="bn">0x9000030C</span>))</code></pre>
 <p>0x9000030C表示的是在现在的Flash中，user_size存放的地址。这个地址可以通过下面的方法确定：配置好的启动文件后将工程通过仿真器下载到DSP上，从boot_c671x.s62代码中</p>
-<pre><code class="http"><span class="attribute">_copyTable</span>: <span class="string"></span>
+<pre><code>_copyTable: 
 
-<span class="sql">          ; count
-          ; flash <span class="operator"><span class="keyword">start</span> (<span class="keyword">load</span>) address 
-          ;</span> ram <span class="operator"><span class="keyword">start</span> (run) address
+            ; count
+            ; flash start (load) address 
+            ; ram start (run) address
 
-          ;</span>; .text
-          .word user_size
-          .word user_ld_<span class="operator"><span class="keyword">start</span>
-          .word user_rn_start    
+            ;; .text
+            .word user_size
+            .word user_ld_start
+            .word user_rn_start    
 
-          ;</span>; end of table
-          .word 0
-          .word 0
-          .word 0</span></code></pre>
+            ;; end of table
+            .word 0
+            .word 0
+            .word 0</code></pre>
 <p>可以看到，我的user_size是存放在_copyTable位置（请注意，1~5小节为之前的版本，因为没有考虑和C语言交互，所以汇编中只使用copyTable，这里考虑到和C交互，将汇编中copyTable都加前下划线改成了_copyTable，不过不改也没关系，因为最后还是发现没用上）。在Memory窗口中搜索copyTable，</p>
-<p><img src="../images/TMS320C6713烧写Flash的通用方法/copyTable.png" alt="copyTable"></p>
+<div class="figure">
+<img src="../images/TMS320C6713烧写Flash的通用方法/copyTable.png" alt="copyTable" /><p class="caption">copyTable</p>
+</div>
 <p>因为挂上仿真器后的copyTable=0x0000030C是指内存中的copyTable，对应烧写到Flash中的copyTable就是0x90000000+0x0000030C=0x9000030C，这就是上面if条件语句中看到的值了。</p>
-<p>if里面就是Flash烧写的代码，和之前使用Flash工程烧写几乎一致，只不过烧写的起始地址和长度要改变改变而已，所谓学而不思则罔，留给读者慢慢体会吧。</p>
-</li>
+<p>if里面就是Flash烧写的代码，和之前使用Flash工程烧写几乎一致，只不过烧写的起始地址和长度要改变改变而已，所谓学而不思则罔，留给读者慢慢体会吧。</p></li>
 </ol>
 <p>这样，每次修改user_size和USER_SIZE后，挂着仿真器运行程序，此时Flash中的user_size还是上一次的，因此执行if条件中的烧写代码。烧写完成后，重新上电，因为Flash中的user_size在刚才使用仿真器烧写时已经更新，所以if条件中的烧写代码不执行，直接跳过if执行用户程序，这就为什么DSP能在单一工程中自烧写！</p>
-
-<div align=right><a href="#top" target="_self"><img src="../images/top.png"></a></div>
-
-<h2>7 参考</h2>
+<h2 id="参考">7 参考</h2>
 <p>[1] Creating a Second-Level Bootloader for FLASH Bootloading on TMS320C6000 Platform With Code Composer Studio</p>
-<p>[2] <a href="https://github.com/xiahouzuoxin/notes/tree/master/codes/TMS320C6713烧写Flash的通用方法/burn_flash">My Flash burn CCS project</a></p>
-</font></font>
-
-<div class="bdsharebuttonbox"><a href="#" class="bds_more" data-cmd="more"></a><a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a><a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a><a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博"></a><a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网"></a><a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a></div>
-<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{},"image":{"viewList":["qzone","tsina","tqq","renren","weixin"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["qzone","tsina","tqq","renren","weixin"]}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
-
-<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="TMS320C6713烧写Flash的通用方法" data-title="TMS320C6713烧写Flash的通用方法" data-url="xiahouzuoxin.github.io/notes/html/TMS320C6713烧写Flash的通用方法.html"></div>
-<!-- 多说评论框 end -->
-<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
-<script type="text/javascript">
-var duoshuoQuery = {short_name:"xiahouzuoxin"};
-	(function() {
-		var ds = document.createElement('script');
-		ds.type = 'text/javascript';ds.async = true;
-		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-		ds.charset = 'UTF-8';
-		(document.getElementsByTagName('head')[0] 
-		 || document.getElementsByTagName('body')[0]).appendChild(ds);
-	})();
-	</script>
-<!-- 多说公共JS代码 end -->
-
-</body></html>
+<p>[2] [My Flash burn CCS project]<a href="../codes/TMS320C6713烧写Flash的通用方法/burn_flash">burnflash</a></p>
+</body>
+</html>

@@ -1,63 +1,99 @@
-<html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"><link rel="stylesheet" id="theme" href="../stylesheets/Github.css"></head><body><p><a href="../README.html"><font size="4">←返回主目录<font></font></font></a><font size="4"><font>
-<br><br><br></font></font></p><font size="4"><font>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
+  </style>
+  <link rel="stylesheet" href="../stylesheets/Github.css" type="text/css" />
+</head>
+<body>
+<p><a href="../README.md"><font size=4>←返回主目录<font></a> </br></br></br></p>
 <p>以前我曾一度傻乎乎的使用</p>
-<pre><code class="language-Verilog nginx"><span class="title">always</span> @ (posedge signal)</code></pre>
+<pre class="sourceCode verilog"><code class="sourceCode verilog"><span class="kw">always</span> @ (<span class="kw">posedge</span> signal)</code></pre>
 <p>这样的代码去检测signal的上升沿，闹出了很多问题。</p>
 <p>当受实验室的一同学指教后，再也不会傻乎乎的这样干了。当然，你看完下文也不会这样干了。</p>
 <p>检测上升沿的原理：使用高频的时钟对信号进行采样，因此要实现上升沿检测，时钟频率至少要在信号最高频率的2倍以上，否则就可能出现漏检测。具体请参见下面代码。</p>
-<pre><code class="language-Verilog ruby"><span class="class"><span class="keyword">module</span> <span class="title">edge_check</span>(<span class="title">clk</span>, <span class="title">rst_n</span>, <span class="title">signal</span>, <span class="title">pos_edge</span>, <span class="title">neg_edge</span>, <span class="title">both_edge</span>);</span>
+<pre class="sourceCode verilog"><code class="sourceCode verilog"><span class="kw">module</span> edge_check(clk, rst_n, signal, pos_edge, neg_edge, both_edge);
 
-input clk;
-input rst_n;
-input signal;
-output pos_edge;
-output neg_edge;
-output both_edge;
+<span class="dt">input</span> clk;
+<span class="dt">input</span> rst_n;
+<span class="dt">input</span> signal;
+<span class="dt">output</span> pos_edge;
+<span class="dt">output</span> neg_edge;
+<span class="dt">output</span> both_edge;
 
 
-reg sig_r<span class="number">0</span>, sig_r1;  <span class="regexp">//</span> 状态寄存器
-always @ (posedge clk <span class="keyword">or</span> negedge rst_n)
-    <span class="keyword">if</span> (!rst_n) <span class="keyword">begin</span> 
-        sig_r<span class="number">0</span> &lt;= <span class="number">1</span><span class="string">'b0;
-        sig_r1 &lt;= 1'</span>b<span class="number">0</span>;
-    <span class="keyword">end</span> <span class="keyword">else</span> <span class="keyword">begin</span> 
-        sig_r<span class="number">0</span> &lt;= signal;
-        sig_r1 &lt;= sig_r<span class="number">0</span>;
-    <span class="keyword">end</span> 
+<span class="dt">reg</span> sig_r0, sig_r1;  <span class="co">// 状态寄存器</span>
+<span class="kw">always</span> @ (<span class="kw">posedge</span> clk <span class="dt">or</span> <span class="kw">negedge</span> rst_n)
+    <span class="kw">if</span> (!rst_n) <span class="kw">begin</span> 
+        sig_r0 &lt;= <span class="bn">1&#39;b0</span>;
+        sig_r1 &lt;= <span class="bn">1&#39;b0</span>;
+    <span class="kw">end</span> <span class="kw">else</span> <span class="kw">begin</span> 
+        sig_r0 &lt;= signal;
+        sig_r1 &lt;= sig_r0;
+    <span class="kw">end</span> 
 
-assign pos_edge = (~sig_r1) &amp; (sig_r<span class="number">0</span>);
-assign neg_edge = sig_r1 &amp; (~sig_r<span class="number">0</span>);    
-assign both_edge = sig_r1 ^ sig_r<span class="number">0</span>;  <span class="regexp">//</span> 双边沿检测，或pos_edge|neg_edge
-
-endmodule</code></pre>
+<span class="kw">assign</span> pos_edge = (~sig_r1) &amp; (sig_r0);
+<span class="kw">assign</span> neg_edge = sig_r1 &amp; (~sig_r0);   
+<span class="kw">assign</span> both_edge = sig_r1 ^ sig_r0;  <span class="co">// 双边沿检测，或pos_edge|neg_edge</span>
+    
+<span class="kw">endmodule</span> </code></pre>
 <p>使用Quartus II综合布线之后的RTL视图如下：</p>
-<p><img src="../images/FPGA的边沿检测/check_regs.png" alt="check_regs"></p>
+<div class="figure">
+<img src="../images/FPGA的边沿检测/check_regs.png" alt="check_regs" /><p class="caption">check_regs</p>
+</div>
 <p>从RTL视图中可以看出，电路是通过一个异步复位的D触发器实现的。</p>
 <p>ModelSim的仿真视图如下，从中可看出已检测出上升和下降沿，但存在一个延时，这是因为使用了时钟同步的检测。</p>
-<p><img src="../images/FPGA的边沿检测/modelsim1.png" alt="modelsim1"></p>
+<div class="figure">
+<img src="../images/FPGA的边沿检测/modelsim1.png" alt="modelsim1" /><p class="caption">modelsim1</p>
+</div>
 <p>或者上面的Verilog代码还可以换一种写法，效率上差不了太多；</p>
-<pre><code class="language-Verilog nginx"><span class="title">module</span> edge_check(clk, rst_n, signal, pos_edge, neg_edge, both_edge);
+<pre class="sourceCode verilog"><code class="sourceCode verilog"><span class="kw">module</span> edge_check(clk, rst_n, signal, pos_edge, neg_edge, both_edge);
 
-<span class="title">input</span> clk;
-<span class="title">input</span> rst_n;
-<span class="title">input</span> signal;
-<span class="title">output</span> pos_edge;
-<span class="title">output</span> neg_edge;
-<span class="title">output</span> both_edge;
+<span class="dt">input</span> clk;
+<span class="dt">input</span> rst_n;
+<span class="dt">input</span> signal;
+<span class="dt">output</span> pos_edge;
+<span class="dt">output</span> neg_edge;
+<span class="dt">output</span> both_edge;
 
-<span class="title">reg</span> [<span class="number">1</span>:<span class="number">0</span>]sig_fifo;
-<span class="title">always</span> @ (posedge clk or negedge rst_n)
-    if (!rst_n) begin 
-        sig_fifo &lt;= <span class="number">2</span><span class="string">'b0;
-    end else begin 
-        sig_fifo &lt;= {sig_fifo[0], signal};
-    end 
+<span class="dt">reg</span> [<span class="dv">1</span>:<span class="dv">0</span>]sig_fifo;
+<span class="kw">always</span> @ (<span class="kw">posedge</span> clk <span class="dt">or</span> <span class="kw">negedge</span> rst_n)
+    <span class="kw">if</span> (!rst_n) <span class="kw">begin</span> 
+        sig_fifo &lt;= <span class="bn">2&#39;b0</span>;
+    <span class="kw">end</span> <span class="kw">else</span> <span class="kw">begin</span> 
+        sig_fifo &lt;= {sig_fifo[<span class="dv">0</span>], signal};
+    <span class="kw">end</span> 
 
-assign pos_edge = (sig_fifo == 2'</span>b01);
-<span class="title">assign</span> neg_edge = (sig_fifo == <span class="number">2</span><span class="string">'b10);    
-assign both_edge = sig_fifo[0] ^ sig_fifo[1];  // 双边沿检测，或pos_edge|neg_edge
-
-endmodule</span></code></pre>
+<span class="kw">assign</span> pos_edge = (sig_fifo == <span class="bn">2&#39;b01</span>);
+<span class="kw">assign</span> neg_edge = (sig_fifo == <span class="bn">2&#39;b10</span>);  
+<span class="kw">assign</span> both_edge = sig_fifo[<span class="dv">0</span>] ^ sig_fifo[<span class="dv">1</span>];  <span class="co">// 双边沿检测，或pos_edge|neg_edge</span>
+    
+<span class="kw">endmodule</span> </code></pre>
 <p>生成的RTL视图为</p>
-<p><img src="../images/FPGA的边沿检测/check_fifo.png" alt="check_fifo"></p>
-</font></font></body></html>
+<div class="figure">
+<img src="../images/FPGA的边沿检测/check_fifo.png" alt="check_fifo" /><p class="caption">check_fifo</p>
+</div>
+</body>
+</html>

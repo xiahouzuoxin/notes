@@ -1,46 +1,57 @@
-<html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"><link rel="stylesheet" id="theme" href="../stylesheets/Github.css"></head><body><p><a href="../README.html"><font size="4">←返回主目录<font></font></font></a><font size="4"><font>
-<br><br><br></font></font></p><font size="4"><font>
-<h2>基于plot的笛卡尔坐标</h2>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="../stylesheets/Github.css" type="text/css" />
+</head>
+<body>
+<p><a href="../README.md"><font size=4>←返回主目录<font></a> </br></br></br></p>
+<h2 id="基于plot的笛卡尔坐标">基于plot的笛卡尔坐标</h2>
 <ul>
 <li>绘制笛卡尔坐标</li>
 </ul>
-<pre><code class="ruby">x = -<span class="symbol">pi:</span>pi/<span class="number">10</span><span class="symbol">:pi</span>;
+<pre><code>x = -pi:pi/10:pi;
 y = tan(sin(x)) - sin(tan(x));
-plot(x,y,<span class="string">'--rs'</span>,<span class="string">'LineWidth'</span>,<span class="number">2</span>,...
-                <span class="string">'MarkerEdgeColor'</span>,<span class="string">'k'</span>,...
-                <span class="string">'MarkerFaceColor'</span>,<span class="string">'g'</span>,...
-                <span class="string">'MarkerSize'</span>,<span class="number">10</span>)</code></pre>
+plot(x,y,&#39;--rs&#39;,&#39;LineWidth&#39;,2,...
+                &#39;MarkerEdgeColor&#39;,&#39;k&#39;,...
+                &#39;MarkerFaceColor&#39;,&#39;g&#39;,...
+                &#39;MarkerSize&#39;,10)</code></pre>
 <ul>
 <li>图片背景透明</li>
 </ul>
-<pre><code class="sql"><span class="operator"><span class="keyword">set</span>(gcf,<span class="string">'color'</span>,<span class="string">'none'</span>);</span>  %图形背景设为无色
-<span class="operator"><span class="keyword">set</span>(gca,<span class="string">'color'</span>,<span class="string">'none'</span>);</span>  %坐标轴背景设为无色，这条更重要，通常图形背景的白色实际为坐标轴背景色</code></pre>
+<pre><code>set(gcf,&#39;color&#39;,&#39;none&#39;);  %图形背景设为无色
+set(gca,&#39;color&#39;,&#39;none&#39;);  %坐标轴背景设为无色，这条更重要，通常图形背景的白色实际为坐标轴背景色</code></pre>
 <p>plot后默认的背景是白色的，若在写文章时要使图片背景透明，则很有用。</p>
 <ul>
 <li>修改坐标轴</li>
 </ul>
-<pre><code class="apache">xlabel('\fontname{Arial}time/s', 'fontsize', 11);   % 设置横坐标为time，11号Arial字体
-ylabel('\fontname{Arial}cost(uJ)', 'fontsize', 11); % 设置纵坐标为cost，11号Arial字体
+<pre><code>xlabel(&#39;\fontname{Arial}time/s&#39;, &#39;fontsize&#39;, 11);   % 设置横坐标为time，11号Arial字体
+ylabel(&#39;\fontname{Arial}cost(uJ)&#39;, &#39;fontsize&#39;, 11); % 设置纵坐标为cost，11号Arial字体
 xlim([xmin xmax]);  % 设置x轴范围为[xmin xmax]
 ylim([ymin ymax]);  % 设置y轴范围为[ymin ymax]
 axis([xmin xmax ymin ymax]);  % 同时设置xy的坐标范围
-axis <span class="literal">on</span>;    % 显示坐标轴
-axis <span class="literal">off</span>;   % 不显示坐标轴</code></pre>
+axis on;    % 显示坐标轴
+axis off;   % 不显示坐标轴</code></pre>
 <ul>
 <li>标题和图注</li>
 </ul>
-<pre><code class="delphi">title(<span class="string">'string'</span>);   % 标题为<span class="keyword">string</span>
-legend(<span class="string">'string1'</span>,<span class="string">'string2'</span>,...);  % 图例标注</code></pre>
-<h2>基于polar的极坐标</h2>
+<pre><code>title(&#39;string&#39;);   % 标题为string
+legend(&#39;string1&#39;,&#39;string2&#39;,...);  % 图例标注</code></pre>
+<h2 id="基于polar的极坐标">基于polar的极坐标</h2>
 <ul>
 <li>绘制极坐标</li>
 </ul>
-<pre><code class="sql">t = 0:0.01:2*pi;
-polar(t, sin(2*t) .* cos(2*t), '<span class="comment">--r');</span></code></pre>
+<pre><code>t = 0:0.01:2*pi;
+polar(t, sin(2*t) .* cos(2*t), &#39;--r&#39;);</code></pre>
 <p>其中t为弧角，sin(2<em>t).</em>cos(2*t)为弧长。</p>
 <ul>
 <li>修改弧角的间隔</li>
 </ul>
 <p>打开polar.m文件，修改下面一行，默认间隔为pi/6。</p>
-<pre><code class="ini"><span class="setting">th = <span class="value">(<span class="number">1</span> : <span class="number">6</span>) * <span class="number">2</span> * pi / <span class="number">12</span>;</span></span></code></pre>
-</font></font></body></html>
+<pre><code>th = (1 : 6) * 2 * pi / 12;</code></pre>
+</body>
+</html>

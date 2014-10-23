@@ -1,14 +1,26 @@
-<html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"><link rel="stylesheet" id="theme" href="../stylesheets/Github.css"></head><body><p><a href="../README.html"><font size="4">←返回主目录<font></font></font></a><font size="4"><font>
-<br><br><br></font></font></p><font size="4"><font>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="../stylesheets/Github.css" type="text/css" />
+</head>
+<body>
+<p><a href="../README.md"><font size=4>←返回主目录<font></a> </br></br></br></p>
 <p>注：以下资料来自网络摘录，由于水平有限，自己尚未测试过，请去粗取精！</p>
-<h2>早期功耗估算</h2>
-<p>从Altera的官方网站<a href="http://www.altera.com.cn/support/devices/estimator/pow-powerplay.jsp">http://www.altera.com.cn/support/devices/estimator/pow-powerplay.jsp</a>可以下载到Altera的早期功耗估算工具，该工具是使用Excel制作。“早期”指的是在设计电路之前，通过系统需要完成的功能、需要使用的FPGA资源估算FPGA的功耗，从而确定电源及外围模块的设计。</p>
-<p><img src="../images/AlteraFPGA功耗估计工具/PowerPlay.png" alt="PowerPlay"></p>
+<h2 id="早期功耗估算">早期功耗估算</h2>
+<p>从Altera的官方网站<http://www.altera.com.cn/support/devices/estimator/pow-powerplay.jsp>可以下载到Altera的早期功耗估算工具，该工具是使用Excel制作。“早期”指的是在设计电路之前，通过系统需要完成的功能、需要使用的FPGA资源估算FPGA的功耗，从而确定电源及外围模块的设计。</p>
+<div class="figure">
+<img src="../images/AlteraFPGA功耗估计工具/PowerPlay.png" alt="PowerPlay" /><p class="caption">PowerPlay</p>
+</div>
 <p>在Input Parameter中设置FPGA型号、封装、温度等信息。</p>
 <p>重点在Thermal Power中的参数，这需要开发者提前对系统需要用到的FPGA功能进行划分、对资源进行预估：</p>
-<ol>
+<ol style="list-style-type: decimal">
 <li><p>按功能进行系统模块划分，依次估计每个模块所需的Logic、RAM、Multiplier、I/O、PLL等，如：</p>
-<pre><code class="nginx">          <span class="title">Usart</span>   SPI     ADC      Flash
+<pre><code>            Usart   SPI     ADC      Flash
 
 LUT         xx      xx
 
@@ -21,18 +33,19 @@ Multiplier  xx
 I/O
 
 PLL</code></pre>
-<p>既然是预估，就不要求那么精确，具体每个模块的资源使用需要有一定的FPGA开发经验，Quartus ii编译后都会有一个资源使用表，看得多了，也就有写个概念了。</p>
-</li>
-<li><p>Logic子界面，Logic所需的LUT和FF总数量参考Datasheet中的最大值，各模块的使用之和为FPGA的最大值，“宁可高估不可低估”。</p>
-</li>
+<p>既然是预估，就不要求那么精确，具体每个模块的资源使用需要有一定的FPGA开发经验，Quartus ii编译后都会有一个资源使用表，看得多了，也就有写个概念了。</p></li>
+<li><p>Logic子界面，Logic所需的LUT和FF总数量参考Datasheet中的最大值，各模块的使用之和为FPGA的最大值，“宁可高估不可低估”。</p></li>
 </ol>
-<h2>后期功耗估算</h2>
+<h2 id="后期功耗估算">后期功耗估算</h2>
 <p>在完成大部分甚至全部的Verilog代码设计后，此时功能甚至门电路逻辑都已经很清晰，因此肯定会有一个更加精确的功耗估算工具。</p>
 <p>Quartus ii中执行菜单<code>Processing-&gt;PowerPlay Power Analyzer</code>就可以启动基于门电路级别的功耗估算，或者也可以从Quartus ii软件的左侧Task栏进行操作。</p>
-<p><img src="../images/AlteraFPGA功耗估计工具/PowerPlayAnalyzer.png" alt="PowerPlayAnalyzer"></p>
+<div class="figure">
+<img src="../images/AlteraFPGA功耗估计工具/PowerPlayAnalyzer.png" alt="PowerPlayAnalyzer" /><p class="caption">PowerPlayAnalyzer</p>
+</div>
 <p>PowerPlayAnalyzer需要提供一个输入Input（如上图），这个输入是由Modelsim的门级仿真产生的：</p>
-<ol>
+<ol style="list-style-type: decimal">
 <li>执行Quartus ii左侧Task栏的<code>EDA Netlist Writer</code></li>
 <li>执行门级仿真，<code>Tools-&gt;Run EDA Simulation Tool-&gt;EDA Gate Level Simulation</code>.</li>
 </ol>
-</font></font></body></html>
+</body>
+</html>

@@ -1,20 +1,37 @@
-<html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"><link rel="stylesheet" id="theme" href="../stylesheets/Github.css"></head><body><p><a href="../README.html"><font size="4">←返回主目录<font></font></font></a><font size="4"><font>
-<br><br><br></font></font></p><font size="4"><font>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="../stylesheets/Github.css" type="text/css" />
+</head>
+<body>
+<p><a href="../README.md"><font size=4>←返回主目录<font></a> </br></br></br></p>
 <p>在高速电路中，工程师常常建议在高速总线上加33Ω串联电阻，理由有三：</p>
 <ul>
 <li>用于阻抗匹配</li>
 <li>可以降低电压波动与振铃效应，减小信号边沿陡峭程度，减少高频噪声及过冲</li>
 <li>也方便调试</li>
 </ul>
-<p><img src="../images/高频总线上的串阻问题/33R.png" alt=""></p>
+<div class="figure">
+<img src="../images/高频总线上的串阻问题/33R.png" />
+</div>
 <p>我在调试DSP6713访问SDRAM总线时，使用时钟频率50MHz。</p>
 <p>第一个PCB版本使用0Ω串联电阻，测试SDRAM没有问题，但第二版PCB使用0Ω发现EMIF的时钟波形出现异常，读取SDRAM数据也出错。出错波形如下：</p>
-<p><img src="../images/高频总线上的串阻问题/tek0001.png" alt=""></p>
+<div class="figure">
+<img src="../images/高频总线上的串阻问题/tek0001.png" />
+</div>
 <p>时钟波形呈现如上图所示的结果是：原本一个时钟上升沿，由于电压的波动，时钟存在多个上升沿（如上图），因此会造成原本一次采样的地方变成多次采样，时序就错了。</p>
 <p>加上33Ω的串联电阻后，时钟波形变得平滑，如下图。</p>
-<p><img src="../images/高频总线上的串阻问题/tek0002.png" alt=""></p>
+<div class="figure">
+<img src="../images/高频总线上的串阻问题/tek0002.png" />
+</div>
 <p>由此可见，加与不加串阻对信号还是有影响的！推荐在高速时钟总线上都加上串阻。</p>
 <p><strong>串联电阻能平滑信号的原理是RC高频滤波电路</strong>。</p>
 <p>因为如果一个信号的边沿非常陡峭，含有大量的高频成分，将会辐射干扰，另外，也容易产生过冲。而串联的电阻，跟信号线的分布电容以及负载的输入电容等形成一个RC电路，这样就会降低信号边沿的陡峭程度。</p>
 <p>我们知道RC电路的截止频率为f = 1/(2π*(RC)^(1/2))，所以R和C的值都不能太大，根据经验，通常选择33Ω或22Ω为最佳。</p>
-</font></font></body></html>
+</body>
+</html>

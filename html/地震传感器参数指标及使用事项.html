@@ -1,65 +1,78 @@
-<html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"><link rel="stylesheet" id="theme" href="../stylesheets/Github.css"></head><body><p><a href="../README.html"><font size="4">←返回主目录<font></font></font></a><font size="4"><font><br></font></font></p><font size="4"><font>
-<div align="right"><a href="../index.html" target="_self" title="返回主页"><img src="../images/Home.png"></a> <a href="#bottom" target="_self" title="跳转底部"><img src="../images/bottom.png"></a></div>
-
-<p><strong>文题</strong>：地震传感器参数指标及使用事项<br></p>
-<p><strong>作者</strong>：xiahouzuoxin<br></p>
-<p><strong>日期</strong>：2014-09-10<br></p>
-<hr>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="../stylesheets/Github.css" type="text/css" />
+</head>
+<body>
+<p><a href="../README.md"><font size=4>←返回主目录<font></a></br></p>
+<div align="right">
+<a href="../index.html" target="_self" title="返回主页"><img src="../images/Home.png"></a> <a href="#bottom" target="_self" title="跳转底部"><img src="../images/bottom.png"></a>
+</div>
+<p><strong>文题</strong>：地震传感器参数指标及使用事项</br></p>
+<p><strong>作者</strong>：xiahouzuoxin</br></p>
+<p><strong>日期</strong>：2014-09-10</br></p>
+<hr />
 <p>震动传感器的工作原理是通过内部的压电陶瓷片，将机械运动的速度、频率、加速度或位移转换成电信号输出，并由LM358等运放放大。根据转化为电能的方式分：</p>
-<ol>
-<li><p>压电式：压电式传感器是利用弹簧质量系统原理。敏感芯体质量受振动加速度作用后产生一个与加速度成正比的力，压电材料受此力作用后沿其表面形成与这一力成正比的电荷信号。压电式加速度传感器具有动态范围大、频率范围宽、坚固耐用、受外界干扰小以及压电材料受力自产生电荷信号不需要任何外界电源等特点，是被最为广泛使用的振动测量传感器。虽然压电式加速度传感器的结构简单，商业化使用历史也很长，但因其性能指标与材料特性、设计和加工工艺密切相关，因此在市场上销售的同类传感器性能的实际参数以及其稳定性和一致性差别非常大。与压阻和电容式相比，其最大的缺点是压电式加速度传感器不能测量零频率的信号。</p>
-</li>
-<li><p>压阻式：应变压阻式加速度传感器的敏感芯体为半导体材料制成电阻测量电桥，其结构动态模型仍然是弹簧质量系统。现代微加工制造技术的发展使压阻形式敏感芯体的设计具有很大的灵活性以适合各种不同的测量要求。在灵敏度和量程方面，从低灵敏度高量程的冲击测量，到直流高灵敏度的低频测量都有压阻形式的加速度传感器。同时压阻式加速度传感器测量频率范围也可从直流信号到具有刚度高，测量频率范围到几十千赫兹的高频测量。超小型化的设计也是压阻式传感器的一个亮点。需要指出的是尽管压阻敏感芯体的设计和应用具有很大灵活性，但对某个特定设计的压阻式芯体而言其使用范围一般要小于压电型传感器。压阻式加速度传感器的另一缺点是受温度的影响较大，实用的传感器一般都需要进行温度补偿。在价格方面，大批量使用的压阻式传感器成本价具有很大的市场竞争力，但对特殊使用的敏感芯体制造成本将远高于压电型加速度传感器。</p>
-</li>
-<li><p>电容式：电容型加速度传感器的结构形式一般也采用弹簧质量系统。当质量受加速度作用运动而改变质量块与固定电极之间的间隙进而使电容值变化。电容式加速度计与其它类型的加速度传感器相比具有灵敏度高、零频响应、环境适应性好等特点，尤其是受温度的影响比较小；但不足之处表现在信号的输入与输出为非线性，量程有限，受电缆的电容影响，以及电容传感器本身是高阻抗信号源，因此电容传感器的输出信号往往需通过后继电路改善。在实际应用中电容式加速度传感器较多地用于低频测量，其通用性不如压电式加速度传感器，且成本也比压电式加速度传感器高。</p>
-</li>
+<ol style="list-style-type: decimal">
+<li><p>压电式：压电式传感器是利用弹簧质量系统原理。敏感芯体质量受振动加速度作用后产生一个与加速度成正比的力，压电材料受此力作用后沿其表面形成与这一力成正比的电荷信号。压电式加速度传感器具有动态范围大、频率范围宽、坚固耐用、受外界干扰小以及压电材料受力自产生电荷信号不需要任何外界电源等特点，是被最为广泛使用的振动测量传感器。虽然压电式加速度传感器的结构简单，商业化使用历史也很长，但因其性能指标与材料特性、设计和加工工艺密切相关，因此在市场上销售的同类传感器性能的实际参数以及其稳定性和一致性差别非常大。与压阻和电容式相比，其最大的缺点是压电式加速度传感器不能测量零频率的信号。</p></li>
+<li><p>压阻式：应变压阻式加速度传感器的敏感芯体为半导体材料制成电阻测量电桥，其结构动态模型仍然是弹簧质量系统。现代微加工制造技术的发展使压阻形式敏感芯体的设计具有很大的灵活性以适合各种不同的测量要求。在灵敏度和量程方面，从低灵敏度高量程的冲击测量，到直流高灵敏度的低频测量都有压阻形式的加速度传感器。同时压阻式加速度传感器测量频率范围也可从直流信号到具有刚度高，测量频率范围到几十千赫兹的高频测量。超小型化的设计也是压阻式传感器的一个亮点。需要指出的是尽管压阻敏感芯体的设计和应用具有很大灵活性，但对某个特定设计的压阻式芯体而言其使用范围一般要小于压电型传感器。压阻式加速度传感器的另一缺点是受温度的影响较大，实用的传感器一般都需要进行温度补偿。在价格方面，大批量使用的压阻式传感器成本价具有很大的市场竞争力，但对特殊使用的敏感芯体制造成本将远高于压电型加速度传感器。</p></li>
+<li><p>电容式：电容型加速度传感器的结构形式一般也采用弹簧质量系统。当质量受加速度作用运动而改变质量块与固定电极之间的间隙进而使电容值变化。电容式加速度计与其它类型的加速度传感器相比具有灵敏度高、零频响应、环境适应性好等特点，尤其是受温度的影响比较小；但不足之处表现在信号的输入与输出为非线性，量程有限，受电缆的电容影响，以及电容传感器本身是高阻抗信号源，因此电容传感器的输出信号往往需通过后继电路改善。在实际应用中电容式加速度传感器较多地用于低频测量，其通用性不如压电式加速度传感器，且成本也比压电式加速度传感器高。</p></li>
 </ol>
-<h2>主要技术指标</h2>
+<h2 id="主要技术指标">主要技术指标</h2>
 <ul>
 <li>工作电源：一般正负电源（±12V）配电</li>
 <li>频响范围：工作频率范围（以3dB衰减通带）。磁电式一般在0-2KHz(-3dB)，压电式一般0-30KHz(-3dB)</li>
 <li>谐振频率：传感器内部零件机械安装引起的一个内部机械零件共振的频率，对应频率响应曲线的峰值点。传感器频率使用范围要在频响曲线的3dB衰减范围内，也就是说在谐振频率处地震传感器工作最灵敏</li>
-<li>灵敏度：物理量与电量的线性表示关系，根据电压反推震动强度<ul>
+<li>灵敏度：物理量与电量的线性表示关系，根据电压反推震动强度
+<ul>
 <li>加速度输出型：100mV/g（最大能达到10V/g）</li>
 <li>速度输出型：20nV/mm/s±5%</li>
 <li>位移输出型：8V/mm±5%</li>
-</ul>
-</li>
+</ul></li>
 <li>非线性度：物理量与电量的最大非线性程度，越小越好</li>
-<li>分辨率：能检测的最小物理变化<ul>
+<li>分辨率：能检测的最小物理变化
+<ul>
 <li>加速度输出型：50ug~1200ug</li>
 <li>速度输出型：11.4μm/s</li>
 <li>位移输出型：</li>
-</ul>
-</li>
+</ul></li>
 <li>电噪声指标：与分辨率有类似指明意义，为了表明传感器所能测量的最小信号。国内绝大部分传感器的宽带电噪声指标一般都标为20uV，而BW-sensor的宽带电噪声指标已降低到10uV。</li>
 <li>电噪声的功率谱密度（低频测量的分辨率指标）：此指标的实用意义是传感器在特定频率下的噪声大小，其单位是一般用μV/√Hz或μg/√Hz来表示。BW-sensor内置电路电噪声功率谱密度的典型值为3μV/√Hz@10Hz。</li>
-<li>量程：有的传感器与灵敏度和外部供电电压相关联（电压/灵敏度），灵敏度越大，量程越小。 灵敏度越小，量程越大。<ul>
+<li>量程：有的传感器与灵敏度和外部供电电压相关联（电压/灵敏度），灵敏度越大，量程越小。 灵敏度越小，量程越大。
+<ul>
 <li>加速度输出型：±0.5g~±500g</li>
 <li>速度输出型：±1.27m/s</li>
 <li>最大机械振幅位移：±3mm</li>
-</ul>
-</li>
+</ul></li>
 <li>温度范围：</li>
 <li>重量：根据牛顿第二定律，有F=ma，知道质量和加速度就可以推断受力大小了</li>
 <li>检测方向：全向、纵向、横向</li>
 </ul>
-<h2>选型注意事项</h2>
-<ol>
+<h2 id="选型注意事项">选型注意事项</h2>
+<ol style="list-style-type: decimal">
 <li>电噪声指标和电噪声功率谱密度都是作为分辨率指标提供的，在低频选型中很有用</li>
 <li>灵敏度的选择：土木工程原型和超大型机械结构的振动在0.1g～10g左右，可选3000pC/g～300pC/g的加速度计，机械设备的振动在10g～100g左右，可选择20pC/g～200pC/g的加速度计，冲击可选0.1pC/g～20pC/g左右的加速度计。若与量程相关，则要综合考虑量程，在满足要求的情况下，尽可能选择高一些的，提升SNR。</li>
 <li>频率选择：选择加速度计的频率应高于被测物的振动频率，有倍频分析要求的加速度计频响应更高。土木工程是低频，加速度计可选择0.2Hz～1kHz左右，机械设备一般是中频段，可根据设备转速、设备刚度等因素综合估计频率，选择0.5Hz～5kHz的加速度计。冲击测量高频居多</li>
 <li>用于人脚步声检测的传感器：低频，为能检测同时避免误检测，要求中（高）分辨率、低的电噪声功率谱密度</li>
 <li><p>传感器的安装方式、环境温度严重影响传感器的标称参数。下图分别为传感器横放和竖放时采集到的信号（256ms）</p>
-<p><img src="../images/地震传感器参数指标及使用事项/row.png" alt="row"></p>
+<div class="figure">
+<img src="../images/地震传感器参数指标及使用事项/row.png" alt="row" /><p class="caption">row</p>
+</div>
 <p>图1 横放</p>
-<p><img src="../images/地震传感器参数指标及使用事项/colum.png" alt="colum"></p>
-<p>图2 竖放</p>
-</li>
+<div class="figure">
+<img src="../images/地震传感器参数指标及使用事项/colum.png" alt="colum" /><p class="caption">colum</p>
+</div>
+<p>图2 竖放</p></li>
 </ol>
-<p></p><div align="right"><a href="../index.html" target="_self" title="返回主页"><img src="../images/Home.png"></a> <a href="#top" target="_self" title="返回顶部"><img src="../images/top.png"></a></div>
-<a name="bottom"></a>
-<a href="../README.html"><font size="4">←返回主目录<font></font></font></a><font size="4"><font><br><p></p>
+<div align="right">
+<a href="../index.html" target="_self" title="返回主页"><img src="../images/Home.png"></a> <a href="#top" target="_self" title="返回顶部"><img src="../images/top.png"></a>
+</div>
+<p><a name="bottom"></a> <a href="../README.md"><font size=4>←返回主目录<font></a></br></p>
 <!-- 
 
 本模板为转成Html后需要修改的地方:
@@ -70,28 +83,5 @@
 5. 修正其它可能不正确的链接 
 
 -->
-
-
-
-</font></font></font></font>
-
-<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"slide":{"type":"slide","bdImg":"5","bdPos":"right","bdTop":"200"},"image":{"viewList":["qzone","tsina","tqq","renren","weixin"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["qzone","tsina","tqq","renren","weixin"]}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
-
-<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="地震传感器参数指标及使用事项" data-title="地震传感器参数指标及使用事项" data-url="xiahouzuoxin.github.io/notes/html/地震传感器参数指标及使用事项.html"></div>
-<!-- 多说评论框 end -->
-<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
-<script type="text/javascript">
-var duoshuoQuery = {short_name:"xiahouzuoxin"};
-	(function() {
-		var ds = document.createElement('script');
-		ds.type = 'text/javascript';ds.async = true;
-		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-		ds.charset = 'UTF-8';
-		(document.getElementsByTagName('head')[0] 
-		 || document.getElementsByTagName('body')[0]).appendChild(ds);
-	})();
-	</script>
-<!-- 多说公共JS代码 end -->
-
-</body></html>
+</body>
+</html>

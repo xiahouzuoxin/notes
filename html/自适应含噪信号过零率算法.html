@@ -1,173 +1,210 @@
-<html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"><link rel="stylesheet" id="theme" href="../stylesheets/Github.css"></head><body><p><a href="../README.html"><font size="4">←返回主目录<font></font></font></a><font size="4"><font><br></font></font></p><font size="4"><font>
-<div align="right"><a href="../index.html" target="_self" title="返回主页"><img src="../images/Home.png"></a> <a href="#bottom" target="_self" title="跳转底部"><img src="../images/bottom.png"></a></div>
-
-<p><strong>文题</strong>：自适应含噪信号过零率算法<br></p>
-<p><strong>作者</strong>：xiahouzuoxin<br></p>
-<p><strong>日期</strong>：2014-09-11<br></p>
-<hr>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
+  </style>
+  <link rel="stylesheet" href="../stylesheets/Github.css" type="text/css" />
+</head>
+<body>
+<p><a href="../README.md"><font size=4>←返回主目录<font></a></br></p>
+<div align="right">
+<a href="../index.html" target="_self" title="返回主页"><img src="../images/Home.png"></a> <a href="#bottom" target="_self" title="跳转底部"><img src="../images/bottom.png"></a>
+</div>
+<p><strong>文题</strong>：自适应含噪信号过零率算法</br></p>
+<p><strong>作者</strong>：xiahouzuoxin</br></p>
+<p><strong>日期</strong>：2014-09-11</br></p>
+<hr />
 <p>本文讨论的是实际使用过程中计算过零率的一种自适应方法。过零率常用于语音检测识别中，一般叫短时过零率更贴切些（指一段短时平稳信号才能计算过零率），简单有效，近期亦打算将这个简单的概念用于识别脚步声和卡车声（近似短时平稳）。过零率的定义计算一般通过下面的表达式描述：</p>
 <p><img src="http://www.forkosh.com/mathtex.cgi? \Large Z_n=\frac{1}{N}\sum_{m=0}^{N-1}\|{sgn[x_n(m+1)]-sgn[x_n(m)]}\|"></p>
 <p>过零率是对频率从时域进行的一种简单的度量，一般情况下，过零率越大频率近似越高，反正亦然，相关推倒可参考相关文献。</p>
-<h2>自适应噪声阈值</h2>
+<h2 id="自适应噪声阈值">自适应噪声阈值</h2>
 <p>自然信号由于电路、环境引入的噪声会在0水平位置波动，直接按上式计算过零率，严重影响识别效果。因此，本文在计算过零率时，对信号的幅值进行阈值限定，阈值的计算方法是：</p>
 <p><img src="http://www.forkosh.com/mathtex.cgi? \Large THR(t)=\frac{1}{2}\{THR(t-1)+F*V_{pp}(t)\}, F=[0.1\ 0.2]"></p>
 <p>其中F为阈值与峰峰值的系数因子，一般F在0.1~0.2之间，Vpp表示当前短时信号的峰峰值，THR(t)表示t时段的阈值。</p>
 <p>因此增加阈值判别后计算过零率的流程图为：</p>
-<center><img src="../images/自适应含噪信号过零率算法/过零率流程图.png" alt="过零率流程图"></center>
-
+<center>
+<img src="../images/自适应含噪信号过零率算法/过零率流程图.png" alt="过零率流程图" />
+</center>
 <p>对应的C程序为：</p>
-<pre><code class="language-c python">
-/* signal thresh adaptive structure */
-struct st_zerorate_thr{
-    uint32_t pre;
-    uint32_t cur;
+<pre class="sourceCode c"><code class="sourceCode c">
+<span class="co">/* signal thresh adaptive structure */</span>
+<span class="kw">struct</span> st_zerorate_thr{
+    <span class="dt">uint32_t</span> pre;
+    <span class="dt">uint32_t</span> cur;
 };
 
-/*
- * <span class="decorator">@brief   </span>
- *   Calculate short time zero cross rate. Short time means n, n often choose to
- *   be a frame(<span class="number">256</span>,<span class="number">512</span> <span class="keyword">and</span> so on)
- *
- *   The diffrence <span class="keyword">with</span> upstairs <span class="keyword">is</span> that this one consider the adaptive thresh 
- *   when checking the signal, which removes the influence of noise.
- * <span class="decorator">@inputs  </span>
- *   x[] - input sound signal
- *   n   - size of a frame
- * <span class="decorator">@outputs </span>
- * <span class="decorator">@retval  </span>
- *   zero cross rate <span class="keyword">in</span> a frame length
- */
-uint16_t zero_rate(int16_t x[], int n, struct st_zerorate_thr thr)
+<span class="co">/*</span>
+<span class="co"> * @brief   </span>
+<span class="co"> *   Calculate short time zero cross rate. Short time means n, n often choose to</span>
+<span class="co"> *   be a frame(256,512 and so on)</span>
+<span class="co"> *</span>
+<span class="co"> *   The diffrence with upstairs is that this one consider the adaptive thresh </span>
+<span class="co"> *   when checking the signal, which removes the influence of noise.</span>
+<span class="co"> * @inputs  </span>
+<span class="co"> *   x[] - input sound signal</span>
+<span class="co"> *   n   - size of a frame</span>
+<span class="co"> * @outputs </span>
+<span class="co"> * @retval  </span>
+<span class="co"> *   zero cross rate in a frame length</span>
+<span class="co"> */</span>
+<span class="dt">uint16_t</span> zero_rate(<span class="dt">int16_t</span> x[], <span class="dt">int</span> n, <span class="kw">struct</span> st_zerorate_thr thr)
 {
-    int      i        = <span class="number">1</span>;   /* Init to <span class="number">1</span> */
-    uint16_t zero_cnt = <span class="number">0</span>;
-    float    tmp      = <span class="number">0</span>;
-    uint8_t  x_pre    = <span class="number">0</span>;
+    <span class="dt">int</span>      i        = <span class="dv">1</span>;   <span class="co">/* Init to 1 */</span>
+    <span class="dt">uint16_t</span> zero_cnt = <span class="dv">0</span>;
+    <span class="dt">float</span>    tmp      = <span class="dv">0</span>;
+    <span class="dt">uint8_t</span>  x_pre    = <span class="dv">0</span>;
 
-    <span class="keyword">while</span> ( (x[i] &lt; thr.cur) &amp;&amp; (x[i] &gt; -thr.cur) &amp;&amp; (i&lt;n) ) {
+    <span class="kw">while</span> ( (x[i] &lt; thr.cur) &amp;&amp; (x[i] &gt; -thr.cur) &amp;&amp; (i&lt;n) ) {
         i++;
     }
     x_pre = x[i++];
-    <span class="keyword">while</span> ((i &lt; n) &amp;&amp; ((x[i] &gt; thr.cur) || (x[i] &lt; -thr.cur)) ) {
+    <span class="kw">while</span> ((i &lt; n) &amp;&amp; ((x[i] &gt; thr.cur) || (x[i] &lt; -thr.cur)) ) {
         tmp   = x[i] * x_pre;
-        <span class="keyword">if</span> (tmp &lt; <span class="number">0</span>) {
-            zero_cnt = zero_cnt + <span class="number">1</span>;
+        <span class="kw">if</span> (tmp &lt; <span class="dv">0</span>) {
+            zero_cnt = zero_cnt + <span class="dv">1</span>;
         }
         x_pre = x[i];
         i++;
     }
 
-    <span class="keyword">return</span> zero_cnt;
+    <span class="kw">return</span> zero_cnt;
 }</code></pre>
 <p>上面代码定义了阈值结构体<code>st_zerorate_thr</code>，更新阈值的方法按(2)式执行，</p>
-<pre><code class="sql">#define TH_FACTOR        (0.2f)   <span class="comment">/* 0.1~0.2 */</span>
+<pre><code>#define TH_FACTOR        (0.2f)   /* 0.1~0.2 */
 
-void zerorate_thr_<span class="operator"><span class="keyword">update</span>(struct st_zerorate_thr thr, uint32_t peak_value)
+void zerorate_thr_update(struct st_zerorate_thr thr, uint32_t peak_value)
 { 
-    thr.pre = thr.cur;</span>
+    thr.pre = thr.cur;
     thr.cur = (uint32_t)(((thr.pre + TH_FACTOR * peak_value) / 2) );
 }</code></pre>
 <p>关于初始阈值的选择：</p>
 <p><img src="http://www.forkosh.com/mathtex.cgi? \Large THR(0)=F*V_{pp}(0), F=[0.1\ 0.2]"></p>
-<h2>改进：增加能量阈值的策略</h2>
+<h2 id="改进增加能量阈值的策略">改进：增加能量阈值的策略</h2>
 <p>这时要考虑的情况有些复杂，除了噪声阈值外，还要考虑能量阈值（确定是否是信号段），如下图：</p>
-<p><img src="../images/自适应含噪信号过零率算法/signal.png" alt="signal"></p>
+<div class="figure">
+<img src="../images/自适应含噪信号过零率算法/signal.png" alt="signal" /><p class="caption">signal</p>
+</div>
 <p>上图为采集的地震信号（比如脚步声信号），只有有些数据才是我们想要分析的，因此可以通过能量对数据进行划分。为简单起见，直接通过信号的幅值对确定有效信号区域也是可以的。</p>
 <blockquote>
 <p>当大于某个固定的阈值energy_thr时，并持续一段时间时，认为信号进入有效区域，开始按“自适应噪声阈值”的方案进行计算过零率</p>
 </blockquote>
 <p>能量阈值一般都大于自适应噪声阈值，可以通过实验获得：</p>
-<ol>
-<li><p>采集无信号时的背景噪声，计算峰峰值； </p>
-</li>
-<li><p>采集有目标时的信号，计算峰峰值</p>
-</li>
+<ol style="list-style-type: decimal">
+<li><p>采集无信号时的背景噪声，计算峰峰值；</p></li>
+<li><p>采集有目标时的信号，计算峰峰值</p></li>
 </ol>
 <p>在两者之间找到一条错误率最低的水平分界值，作为能量阈值。</p>
 <p>为简化程序的设计，本程序使用状态机的设计思想，2个状态：安静（无目标）状态、有目标状态。C程序上直接使用switch...case语句就可以了，对应的C程序如下：</p>
-<pre><code class="python">/*
- * <span class="decorator">@brief   </span>
+<pre><code>/*
+ * @brief   
  *   Calculate short time zero cross rate. Short time means n, n often choose to
- *   be a frame(<span class="number">256</span>,<span class="number">512</span> <span class="keyword">and</span> so on)
+ *   be a frame(256,512 and so on)
  *
- *   The diffrence <span class="keyword">with</span> upstairs <span class="keyword">is</span> that this one consider the adaptive thresh 
+ *   The diffrence with upstairs is that this one consider the adaptive thresh 
  *   when checking the signal, which removes the influence of noise.
- * <span class="decorator">@inputs  </span>
+ * @inputs  
  *   x[] - input sound signal
  *   n   - size of a frame
- *   thr - threshold(Vp) <span class="keyword">for</span> removing noise ripple
- *   energy_thr - threshold(Vp) <span class="keyword">for</span> ensure wether <span class="keyword">is</span> signal start <span class="keyword">or</span> stop
- * <span class="decorator">@outputs </span>
- * <span class="decorator">@retval  </span>
- *   zero cross rate <span class="keyword">in</span> a frame length
+ *   thr - threshold(Vp) for removing noise ripple
+ *   energy_thr - threshold(Vp) for ensure wether is signal start or stop
+ * @outputs 
+ * @retval  
+ *   zero cross rate in a frame length
  */
 uint16_t zero_rate(int16_t x[], uint32_t n, struct st_zerorate_thr thr, uint16_t energy_thr)
 {
-    uint32_t i          = <span class="number">0</span>; 
-    uint16_t zero_cnt   = <span class="number">0</span>;
-    int16_t  x_pre      = <span class="number">0</span>;
-    uint8_t  status     = <span class="number">0</span>;
-    uint8_t  energy_cnt = <span class="number">0</span>;
+    uint32_t i          = 0; 
+    uint16_t zero_cnt   = 0;
+    int16_t  x_pre      = 0;
+    uint8_t  status     = 0;
+    uint8_t  energy_cnt = 0;
 
-<span class="comment">#define CONTINUOUS_BEGIN    (2)  // 持续大于能量阈值的点数，用于检测信号开始</span>
-<span class="comment">#define CONTINUOUS_END      (5)  // 持续小于能量阈值的点数，用于检测信号结尾</span>
+#define CONTINUOUS_BEGIN    (2)  // 持续大于能量阈值的点数，用于检测信号开始
+#define CONTINUOUS_END      (5)  // 持续小于能量阈值的点数，用于检测信号结尾
 
-    <span class="keyword">for</span> (i=<span class="number">0</span>; i&lt;n; i++) {
+    for (i=0; i&lt;n; i++) {
         switch(status) {
-        case <span class="number">0</span>: // Slience <span class="keyword">or</span> maybe signal
-            <span class="keyword">if</span> (abs(x[i]) &gt; energy_thr) {
-                <span class="keyword">if</span> (++energy_cnt &gt;= CONTINUOUS_BEGIN) {
-                    status = <span class="number">1</span>;
-                    energy_cnt = <span class="number">0</span>;
+        case 0: // Slience or maybe signal
+            if (abs(x[i]) &gt; energy_thr) {
+                if (++energy_cnt &gt;= CONTINUOUS_BEGIN) {
+                    status = 1;
+                    energy_cnt = 0;
                     x_pre = x[i];
-                } <span class="keyword">else</span> {
+                } else {
                     // do nothing
                 }
             }
-            <span class="keyword">break</span>;
-        case <span class="number">1</span>: // Signal
-            <span class="keyword">if</span> (abs(x[i]) &gt; thr.cur) {
-                <span class="keyword">if</span> ( (x[i] * x_pre) &lt; <span class="number">0</span>) {
-                    zero_cnt = zero_cnt + <span class="number">1</span>;
+            break;
+        case 1: // Signal
+            if (abs(x[i]) &gt; thr.cur) {
+                if ( (x[i] * x_pre) &lt; 0) {
+                    zero_cnt = zero_cnt + 1;
                 }
                 x_pre = x[i];
-                energy_cnt = <span class="number">0</span>;
-            } <span class="keyword">else</span> {
-                <span class="keyword">if</span> (abs(x[i]) &lt; energy_thr) {
-                    <span class="keyword">if</span> (++energy_cnt &gt;= CONTINUOUS_END) {
-                        status = <span class="number">0</span>;
-                        energy_cnt = <span class="number">0</span>;
+                energy_cnt = 0;
+            } else {
+                if (abs(x[i]) &lt; energy_thr) {
+                    if (++energy_cnt &gt;= CONTINUOUS_END) {
+                        status = 0;
+                        energy_cnt = 0;
                     }
-                } <span class="keyword">else</span> {
+                } else {
                     // do nothing
                 }
             }
-            <span class="keyword">break</span>;
+            break;
         default:
-            status = <span class="number">0</span>;
-            <span class="keyword">break</span>;
+            status = 0;
+            break;
         }
     }
 
-    <span class="keyword">return</span> zero_cnt;
+    return zero_cnt;
 }</code></pre>
-<h2>补充：测试效果及新方法提出</h2>
+<h2 id="补充测试效果及新方法提出">补充：测试效果及新方法提出</h2>
 <p>好吧：结论只有一个：</p>
 <blockquote>
 <p>在含有低频噪声的环境，使用过零率是很难区分脚步声和卡车的。</p>
 </blockquote>
 <p>如下，是分别采集脚步声和卡车的图形：</p>
-<p><img src="../images/自适应含噪信号过零率算法/step.PNG" alt="step">
-<img src="../images/自适应含噪信号过零率算法/car.PNG" alt="car"></p>
+<div class="figure">
+<img src="../images/自适应含噪信号过零率算法/step.PNG" alt="step" /><p class="caption">step</p>
+</div>
+<div class="figure">
+<img src="../images/自适应含噪信号过零率算法/car.PNG" alt="car" /><p class="caption">car</p>
+</div>
 <p>因为卡车的采集信号高频都载波到低频信号上了，而在未判断实际目标之前，是无法使用低通滤波进行滤波（可能滤掉脚步声信号）。</p>
 <p>综上，我看过很多的论文，大都提到使用过零率对脚步声了卡车进行识别，而且识别效果还不错，我不知他们的实验环境是什么样的，至少从上面的实验分析，还是有问题的。</p>
 <p>因此，提出新的特征，用于区分两类信号——数字化占空比。其过程是：设定一个阈值，从头到尾扫描一帧信号，大于阈值的点设为1，否则设为0，我称之为数字化过程，然后计算高电平（即1）占所有一帧（512点）的百分比，用该百分比作为脚步声和卡车的识别数学特征。好了，我们用数学表述得专业些：</p>
-<p><img src="http://www.forkosh.com/mathtex.cgi? \Large Dutycycle=\frac{\{x&gt;=THR\}}{N} * 100%"></p>
+<p><img src="http://www.forkosh.com/mathtex.cgi? \Large Dutycycle=\frac{\{x>=THR}}{N}*100%&quot;&gt;</p>
 <p>其中{x&gt;=THR}表示序列中值大于THR的点数。</p>
 <p>测试结果：取THR=0.4*Vpp，则计算脚步信号的Dutycycle=4，而卡车信号的Dutycycle=113，差异非常明显。</p>
-<p></p><div align="right"><a href="../index.html" target="_self" title="返回主页"><img src="../images/Home.png"></a> <a href="#top" target="_self" title="返回顶部"><img src="../images/top.png"></a></div>
-<a name="bottom"></a>
-<a href="../README.html"><font size="4">←返回主目录<font></font></font></a><font size="4"><font><br><p></p>
+<div align="right">
+<a href="../index.html" target="_self" title="返回主页"><img src="../images/Home.png"></a> <a href="#top" target="_self" title="返回顶部"><img src="../images/top.png"></a>
+</div>
+<p><a name="bottom"></a> <a href="../README.md"><font size=4>←返回主目录<font></a></br></p>
 <!-- 
 
 本模板为转成Html后需要修改的地方:
@@ -178,25 +215,5 @@ uint16_t zero_rate(int16_t x[], uint32_t n, struct st_zerorate_thr thr, uint16_t
 5. 修正其它可能不正确的链接 
 
 -->
-
-<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"slide":{"type":"slide","bdImg":"5","bdPos":"right","bdTop":"200"},"image":{"viewList":["qzone","tsina","tqq","renren","weixin"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["qzone","tsina","tqq","renren","weixin"]}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
-
-<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="自适应含噪信号过零率算法" data-title="自适应含噪信号过零率算法" data-url="xiahouzuoxin.github.io/notes/html/自适应含噪信号过零率算法.html"></div>
-<!-- 多说评论框 end -->
-<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
-<script type="text/javascript">
-var duoshuoQuery = {short_name:"xiahouzuoxin"};
-	(function() {
-		var ds = document.createElement('script');
-		ds.type = 'text/javascript';ds.async = true;
-		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-		ds.charset = 'UTF-8';
-		(document.getElementsByTagName('head')[0] 
-		 || document.getElementsByTagName('body')[0]).appendChild(ds);
-	})();
-	</script>
-<!-- 多说公共JS代码 end -->
-
-
-</font></font></font></font></body></html>
+</body>
+</html>

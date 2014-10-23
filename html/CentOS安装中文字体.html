@@ -1,14 +1,24 @@
-<html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"><link rel="stylesheet" id="theme" href="../stylesheets/Github.css"></head><body><p><a href="../README.html"><font size="4">←返回主目录<font></font></font></a><font size="4"><font>
-<br><br><br></font></font></p><font size="4"><font>
-<h2>从Windows拷贝字体</h2>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="../stylesheets/Github.css" type="text/css" />
+</head>
+<body>
+<p><a href="../README.md"><font size=4>←返回主目录<font></a> </br></br></br></p>
+<h2 id="从windows拷贝字体">从Windows拷贝字体</h2>
 <p>Windows字体目录为<code>C:\Windows\Fonts\</code>，将需要的字体文件拷贝到Linux中，假设放置在/home目录下。</p>
-<h2>创建中文字体文件夹</h2>
+<h2 id="创建中文字体文件夹">创建中文字体文件夹</h2>
 <p>CentOS字体所在目录为/usr/share/fonts，在该目录下新建文件夹chinese，</p>
-<pre><code class="nginx"><span class="title">su</span> root
+<pre><code>su root
 mkdir /usr/share/fonts/chinese
 cd /usr/share/fonts/chinese</code></pre>
-<h2>安装字体</h2>
-<pre><code class="nginx"><span class="title">yum</span> install mkfontscale
+<h2 id="安装字体">安装字体</h2>
+<pre><code>yum install mkfontscale
 yum install fontconfig
 
 mkfontscale
@@ -17,6 +27,7 @@ fc-cache -fv</code></pre>
 <p>重启系统或者<code>source /etc/profile</code>。</p>
 <p>此时，使用<code>fc-list :lang=zh</code>即可看到安装的中文字体。</p>
 <p>为使系统所有用户都能使用该字体，需要给字体访问权限：</p>
-<pre><code class="nginx"><span class="title">chmod</span> -R <span class="number">755</span> <span class="regexp">*.tff</span>
-chmod -R <span class="number">755</span> *.TFF</code></pre>
-</font></font></body></html>
+<pre><code>chmod -R 755 *.tff
+chmod -R 755 *.TFF</code></pre>
+</body>
+</html>

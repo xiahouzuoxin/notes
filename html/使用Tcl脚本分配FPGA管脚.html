@@ -1,20 +1,36 @@
-<html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"><link rel="stylesheet" id="theme" href="../stylesheets/Github.css"></head><body><p><a href="../README.html"><font size="4">←返回主目录<font></font></font></a><font size="4"><font>
-<br><br><br></font></font></p><font size="4"><font>
-<h2>自动生成Tcl文件</h2>
-<pre><code class="nginx"><span class="title">Project</span> -&gt; Generate Tcl File for Project...</code></pre>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="../stylesheets/Github.css" type="text/css" />
+</head>
+<body>
+<p><a href="../README.md"><font size=4>←返回主目录<font></a> </br></br></br></p>
+<h2 id="自动生成tcl文件">自动生成Tcl文件</h2>
+<pre><code>Project -&gt; Generate Tcl File for Project...</code></pre>
 <p>弹出如下对话框，设置脚本路径。</p>
-<p><img src="../images/使用Tcl脚本分配FPGA管脚/Create-Tcl.png" alt=""></p>
-<h2>编辑引脚</h2>
+<div class="figure">
+<img src="../images/使用Tcl脚本分配FPGA管脚/Create-Tcl.png" />
+</div>
+<h2 id="编辑引脚">编辑引脚</h2>
 <p>使用<code>set_location_assignment</code>分配管脚如下：</p>
-<p><img src="../images/使用Tcl脚本分配FPGA管脚/Tcl.png" alt=""></p>
+<div class="figure">
+<img src="../images/使用Tcl脚本分配FPGA管脚/Tcl.png" />
+</div>
 <p>第一次配制时，没有<code>set_location_assignment</code>语句，自已在<code>set_global_assignment</code>语句下一行添加即可。</p>
-<h2>执行Tcl脚本</h2>
-<pre><code class="nginx"><span class="title">Tools</span> -&gt; Tcl Scripts...</code></pre>
-<p><img src="../images/使用Tcl脚本分配FPGA管脚/Tcl-Run.jpg" alt=""></p>
+<h2 id="执行tcl脚本">执行Tcl脚本</h2>
+<pre><code>Tools -&gt; Tcl Scripts...</code></pre>
+<div class="figure">
+<img src="../images/使用Tcl脚本分配FPGA管脚/Tcl-Run.jpg" />
+</div>
 <p>选中刚新建的Tcl文件，点击Run运行即可！</p>
-<h2>答疑解惑</h2>
+<h2 id="答疑解惑">答疑解惑</h2>
 <p>1. 为什么Tcl中没有为每个引脚分配输入输出属性，也能保证引脚属性正确？</p>
 <p>因为引脚输入输出属性都已经在Verilog语言的module中或原理图中设置了，如下图，</p>
-<p><img src="../images/使用Tcl脚本分配FPGA管脚/Pin2.png" alt="Pin2">
-<img src="../images/使用Tcl脚本分配FPGA管脚/Pin1.png" alt="Pin1"></p>
-</font></font></body></html>
+<p><img src="../images/使用Tcl脚本分配FPGA管脚/Pin2.png" alt="Pin2" /> <img src="../images/使用Tcl脚本分配FPGA管脚/Pin1.png" alt="Pin1" /></p>
+</body>
+</html>

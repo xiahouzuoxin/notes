@@ -1,93 +1,106 @@
-<html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"><link rel="stylesheet" id="theme" href="../stylesheets/Github.css"></head><body><p><a href="../README.html"><font size="4">←返回主目录<font></font></font></a><font size="4"><font>
-<br><br><br></font></font></p><font size="4"><font>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="../stylesheets/Github.css" type="text/css" />
+</head>
+<body>
+<p><a href="../README.md"><font size=4>←返回主目录<font></a> </br></br></br></p>
 <p>CCS3.3是一款DSP的集成开发环境（IDE）。在做DSP开发时，为验证算法，常常需要使用matlab进行算法验证，验证算法就需要数据。因此，一种交互的方法是：</p>
-<ol>
+<ol style="list-style-type: decimal">
 <li>使用DSP开发板连接CCS</li>
 <li>用CCS3.3菜单中的“File-&gt;Data-&gt;Save..”功能导出DSP内存中的数据到PC的.dat文件中</li>
 <li>使用Matlab读取.dat文件，进行数据处理</li>
 </ol>
 <p>下面给出使用Matlab读取CCS导出的dat文件的方法：</p>
-<pre><code class="delphi">% =========================================================================
-% Read *dat <span class="keyword">file</span> <span class="keyword">of</span> CCS3.<span class="number">3</span>
+<pre><code>% =========================================================================
+% Read *dat file of CCS3.3
 % xiahouzuoxin
-% <span class="number">2014.04</span>.<span class="number">21</span>
+% 2014.04.21
 % =========================================================================
 
 % clc;clear all;close all;
 
 % 对话框选择*.dat文件
 [fname,pname]=uigetfile(...
-    <span class="comment">{'*.dat';'*.*'}</span>,<span class="string">'Input *.dat File'</span>);
+    {&#39;*.dat&#39;;&#39;*.*&#39;},&#39;Input *.dat File&#39;);
 
 fid = fopen(fullfile(pname,fname));
-fseek(fid, <span class="number">21</span>,-<span class="number">1</span>);  % 去文件头, <span class="number">21</span>字节，如 <span class="number">1651</span> <span class="number">1</span> <span class="number">80000006</span> <span class="number">0</span> <span class="number">100</span>
+fseek(fid, 21,-1);  % 去文件头, 21字节，如 1651 1 80000006 0 100
 
 % 按指定格式读取解析
-fm = <span class="number">4</span>;
+fm = 4;
 switch (fm)
-    <span class="keyword">case</span> <span class="number">4</span>  % 按<span class="number">4</span>Byte格式读，如 <span class="number">0</span>x <span class="number">80000000</span>
-        x = textscan(fid, <span class="string">'%2s %8s'</span>);  
-        z(:,<span class="number">1</span>) = hex2dec(x<span class="comment">{2}</span>);        
-    <span class="keyword">case</span> <span class="number">2</span> % 按<span class="number">2</span>Byte格式读，如 <span class="number">0</span>x <span class="number">8000</span> <span class="number">0000</span>
-        x = textscan(fid, <span class="string">'%2s %4s %4s'</span>);  
-        z(:,<span class="number">1</span>) = hex2dec(x<span class="comment">{3}</span>);
-        z(:,<span class="number">2</span>) = hex2dec(x<span class="comment">{2}</span>);
-    <span class="keyword">case</span> <span class="number">1</span> % 按<span class="number">1</span>Byte格式读，如 <span class="number">0</span>x <span class="number">80</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>
-        x = textscan(fid, <span class="string">'%2s %2s %2s %2s %2s'</span>);  
-        z(:,<span class="number">1</span>) = hex2dec(x<span class="comment">{5}</span>);
-        z(:,<span class="number">2</span>) = hex2dec(x<span class="comment">{4}</span>);
-        z(:,<span class="number">3</span>) = hex2dec(x<span class="comment">{3}</span>);
-        z(:,<span class="number">4</span>) = hex2dec(x<span class="comment">{2}</span>);
+    case 4  % 按4Byte格式读，如 0x 80000000
+        x = textscan(fid, &#39;%2s %8s&#39;);  
+        z(:,1) = hex2dec(x{2});        
+    case 2 % 按2Byte格式读，如 0x 8000 0000
+        x = textscan(fid, &#39;%2s %4s %4s&#39;);  
+        z(:,1) = hex2dec(x{3});
+        z(:,2) = hex2dec(x{2});
+    case 1 % 按1Byte格式读，如 0x 80 00 00 00
+        x = textscan(fid, &#39;%2s %2s %2s %2s %2s&#39;);  
+        z(:,1) = hex2dec(x{5});
+        z(:,2) = hex2dec(x{4});
+        z(:,3) = hex2dec(x{3});
+        z(:,4) = hex2dec(x{2});
     otherwise
         z = [];
-<span class="keyword">end</span>
+end
 
-<span class="keyword">if</span> ~isempty(z)
+if ~isempty(z)
     % 将数据处理代码放在这里
-
-<span class="keyword">end</span>
+    
+end
 
 fclose(fid);</code></pre>
 <p>程序中默认DSP内存中数据的存储格式为整数类型，而对于浮点型DSP如TMS320C6713B，常常在内存中是float或double格式存储的，</p>
-<p><img src="../images/导出CCS3.3数据及使用matlab处理的方法/float-double.png" alt=""></p>
+<div class="figure">
+<img src="../images/导出CCS3.3数据及使用matlab处理的方法/float-double.png" />
+</div>
 <p>这时，我们还需要一个转化为浮点数的操作，因此我写了一个转化为float类型的函数，</p>
-<pre><code class="delphi"><span class="function"><span class="keyword">function</span> <span class="title">y</span> = <span class="title">integer2float</span><span class="params">(x, ishex)</span>
+<pre><code>function y = integer2float(x, ishex)
 % =========================================================================
-% 有些数据<span class="title">y</span>原本是<span class="title">float</span>类型，在内存中是按<span class="title">float</span>格式存储
-% 而现在按整数将其从内存中读出变成了<span class="title">x</span>
-% 这个函数就是用于将按整数格式读出的<span class="title">x</span>转变成<span class="title">y</span>
-% <span class="title">ishex</span>~=0表示输入为十六进制格式
-% 注：要完成该函数，你必须了解<span class="title">IEEE</span>浮点数的格式
+% 有些数据y原本是float类型，在内存中是按float格式存储
+% 而现在按整数将其从内存中读出变成了x
+% 这个函数就是用于将按整数格式读出的x转变成y
+% ishex~=0表示输入为十六进制格式
+% 注：要完成该函数，你必须了解IEEE浮点数的格式
 %
-% <span class="title">xiahouzuoxin</span>
+% xiahouzuoxin
 % 2014.04.21
 % =========================================================================
 
-<span class="title">if</span> <span class="title">nargin</span> == 2
-    <span class="title">if</span> <span class="params">(ishex)</span>
-        <span class="title">x</span> = <span class="title">hex2dec</span><span class="params">(x)</span>;</span>
-    <span class="keyword">end</span>
-<span class="keyword">end</span>
+if nargin == 2
+    if (ishex)
+        x = hex2dec(x);
+    end
+end
 
 [h w] = size(x);
 y = zeros(h,w);
 
-<span class="keyword">for</span> i = <span class="number">1</span>:h
-    <span class="keyword">for</span> j = <span class="number">1</span>:w
-        sign = bitget(x(i,j),<span class="number">32</span>);
-        exponent = bitget(x(i,j),<span class="number">24</span>:<span class="number">31</span>) * <span class="number">2</span>.^(<span class="number">0</span>:<span class="number">7</span>).<span class="string">';
-        fraction = bitget(x(i,j),1:23) * 2.^(-23:-1).'</span>;
-        y(i,j) = (-<span class="number">1</span>)^sign * (<span class="number">1</span>+fraction) * <span class="number">2</span>^(exponent-<span class="number">127</span>);
-    <span class="keyword">end</span>
-<span class="keyword">end</span></code></pre>
+for i = 1:h
+    for j = 1:w
+        sign = bitget(x(i,j),32);
+        exponent = bitget(x(i,j),24:31) * 2.^(0:7).&#39;;
+        fraction = bitget(x(i,j),1:23) * 2.^(-23:-1).&#39;;
+        y(i,j) = (-1)^sign * (1+fraction) * 2^(exponent-127);
+    end
+end</code></pre>
 <p>根据不同的输入情况（可以为十六进制的字符串表示或十进制数，但必须≤8Bytes），使用方法举个例子：</p>
-<pre><code class="undefined">&gt;&gt; x='4565A012'
+<pre><code>&gt;&gt; x=&#39;4565A012&#39;
 &gt;&gt; y=integer2float(x,1);
 
 &gt;&gt; x = 23974881923;
 &gt;&gt; y = integer2float(x)</code></pre>
 <p>后来发现，Matlab已经早有对应的方法了，</p>
-<pre><code class="ini"><span class="setting">y = <span class="value">typecast(uint32(z),'single');</span></span></code></pre>
+<pre><code>y = typecast(uint32(z),&#39;single&#39;);</code></pre>
 <p>可以直接把z转化为解析为单精度浮点数，具体使用请参见</p>
-<pre><code class="undefined">&gt;&gt; help typecast</code></pre>
-</font></font></body></html>
+<pre><code>&gt;&gt; help typecast</code></pre>
+</body>
+</html>

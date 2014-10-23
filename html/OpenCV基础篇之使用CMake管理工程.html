@@ -1,56 +1,85 @@
-<html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"><link rel="stylesheet" id="theme" href="../stylesheets/Github.css"></head><body><p><a href="../README.html"><font size="4">←返回主目录<font></font></font></a><font size="4"><font>
-<br><br><br></font></font></p><font size="4"><font>
-<h2>程序及分析</h2>
-<pre><code class="language-c cpp"><span class="comment">/*
- * FileName : read.cpp
- * Author   : xiahouzuoxin @163.com
- * Version  : v1.0
- * Date     : Tue 13 May 2014 07:34:25 PM CST
- * Brief    : 
- * 
- * Copyright (C) MICL,USTB
- */</span>
-<span class="preprocessor">#include &lt;cv.h&gt;</span>
-<span class="preprocessor">#include &lt;highgui.h&gt;</span>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
+  </style>
+  <link rel="stylesheet" href="../stylesheets/Github.css" type="text/css" />
+</head>
+<body>
+<p><a href="../README.md"><font size=4>←返回主目录<font></a> </br></br></br></p>
+<h2 id="程序及分析">程序及分析</h2>
+<pre class="sourceCode c"><code class="sourceCode c"><span class="co">/*</span>
+<span class="co"> * FileName : read.cpp</span>
+<span class="co"> * Author   : xiahouzuoxin @163.com</span>
+<span class="co"> * Version  : v1.0</span>
+<span class="co"> * Date     : Tue 13 May 2014 07:34:25 PM CST</span>
+<span class="co"> * Brief    : </span>
+<span class="co"> * </span>
+<span class="co"> * Copyright (C) MICL,USTB</span>
+<span class="co"> */</span>
+<span class="ot">#include &lt;cv.h&gt;</span>
+<span class="ot">#include &lt;highgui.h&gt;</span>
 
-<span class="keyword">using</span> <span class="keyword">namespace</span> cv;
-<span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;
+using namespace cv;
+using namespace std;
 
-<span class="keyword">int</span> main(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)
+<span class="dt">int</span> main(<span class="dt">int</span> argc, <span class="dt">char</span> **argv)
 {
     Mat img;
 
-    img = imread(argv[<span class="number">1</span>], <span class="number">1</span>);
+    img = imread(argv[<span class="dv">1</span>], <span class="dv">1</span>);
 
-    <span class="keyword">if</span> (argc != <span class="number">2</span> || !img.data) {
-        <span class="built_in">cout</span>&lt;&lt;<span class="string">"No image data.\n"</span>&lt;&lt;endl;
-        <span class="keyword">return</span> -<span class="number">1</span>;
+    <span class="kw">if</span> (argc != <span class="dv">2</span> || !img.data) {
+        cout&lt;&lt;<span class="st">&quot;No image data.</span><span class="ch">\n</span><span class="st">&quot;</span>&lt;&lt;endl;
+        <span class="kw">return</span> -<span class="dv">1</span>;
     }
 
-    namedWindow(<span class="string">"Display Image"</span>, CV_WINDOW_AUTOSIZE);
-    imshow(<span class="string">"Display Image"</span>, img);
+    namedWindow(<span class="st">&quot;Display Image&quot;</span>, CV_WINDOW_AUTOSIZE);
+    imshow(<span class="st">&quot;Display Image&quot;</span>, img);
 
-    waitKey(<span class="number">0</span>);
+    waitKey(<span class="dv">0</span>);
 
-    <span class="keyword">return</span> <span class="number">0</span>;
+    <span class="kw">return</span> <span class="dv">0</span>;
 }</code></pre>
-<ol>
-<li><p>这就是<a href="OpenCV基础篇之读取显示图片.md">OpenCV基础篇之读取显示图片</a>中使用的代码</p>
-</li>
+<ol style="list-style-type: decimal">
+<li><p>这就是<a href="OpenCV基础篇之读取显示图片.md">OpenCV基础篇之读取显示图片</a>中使用的代码</p></li>
 <li><p>如果没有安装CMake，则使用下面命令安装</p>
-<pre><code class="nginx"><span class="title">yum</span> install cmake</code></pre>
-</li>
+<pre><code>yum install cmake</code></pre></li>
 <li><p>CMake是一款工程管理软件，比Makefile平台迁移性更好，通过CMake能自动生成Makefile。用于本程序的CMake文件内容如下：</p>
-<pre><code class="ruby">project(read)
-find_package(<span class="constant">OpenCV</span> <span class="constant">REQUIRED</span>)
+<pre><code>project(read)
+find_package(OpenCV REQUIRED)
 add_executable(read read)
-target_link_libraries(read <span class="variable">${</span><span class="constant">OpenCV_LIBS</span>})</code></pre>
+target_link_libraries(read ${OpenCV_LIBS})</code></pre>
 <p>将上述内容保存到文件名为CMakeLists.txt（必须是这个文件名）的文件中，依次执行</p>
-<pre><code class="nginx"><span class="title">cmake</span> ./
+<pre><code>cmake ./
 make</code></pre>
-<p>cmake命令直接生成Makefile，通过Makefile生成可执行文件（这也就是为什么cmake平台迁移性好，不同的平台能生成对应的Makefile，很容易迁移到Windows）。</p>
-</li>
+<p>cmake命令直接生成Makefile，通过Makefile生成可执行文件（这也就是为什么cmake平台迁移性好，不同的平台能生成对应的Makefile，很容易迁移到Windows）。</p></li>
 </ol>
-<h2>效果</h2>
-<p><img src="../images/OpenCV基础篇之使用CMake管理工程/result.png" alt="result"></p>
-</font></font></body></html>
+<h2 id="效果">效果</h2>
+<div class="figure">
+<img src="../images/OpenCV基础篇之使用CMake管理工程/result.png" alt="result" /><p class="caption">result</p>
+</div>
+</body>
+</html>

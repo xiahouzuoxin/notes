@@ -1,86 +1,115 @@
-<html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"><link rel="stylesheet" id="theme" href="../stylesheets/Github.css"></head><body><p><a href="../README.html"><font size="4">←返回主目录<font></font></font></a><font size="4"><font>
-<br><br><br></font></font></p><font size="4"><font>
-<h2>程序及分析</h2>
-<pre><code class="language-c cpp"><span class="comment">/*
- * FileName : lookup_table.cpp
- * Author   : xiahouzuoxin @163.com
- * Version  : v1.0
- * Date     : Sun 01 Jun 2014 04:35:37 PM CST
- * Brief    : 
- * 
- * Copyright (C) MICL,USTB
- */</span>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
+  </style>
+  <link rel="stylesheet" href="../stylesheets/Github.css" type="text/css" />
+</head>
+<body>
+<p><a href="../README.md"><font size=4>←返回主目录<font></a> </br></br></br></p>
+<h2 id="程序及分析">程序及分析</h2>
+<pre class="sourceCode c"><code class="sourceCode c"><span class="co">/*</span>
+<span class="co"> * FileName : lookup_table.cpp</span>
+<span class="co"> * Author   : xiahouzuoxin @163.com</span>
+<span class="co"> * Version  : v1.0</span>
+<span class="co"> * Date     : Sun 01 Jun 2014 04:35:37 PM CST</span>
+<span class="co"> * Brief    : </span>
+<span class="co"> * </span>
+<span class="co"> * Copyright (C) MICL,USTB</span>
+<span class="co"> */</span>
+ 
+<span class="ot">#include &lt;cv.h&gt;</span>
+<span class="ot">#include &lt;highgui.h&gt;</span>
 
-<span class="preprocessor">#include &lt;cv.h&gt;</span>
-<span class="preprocessor">#include &lt;highgui.h&gt;</span>
+using namespace std;
+using namespace cv;
 
-<span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;
-<span class="keyword">using</span> <span class="keyword">namespace</span> cv;
+<span class="ot">#define QUAN_VAL1          (10)</span>
+<span class="ot">#define QUAN_VAL2          (100)</span>
 
-<span class="preprocessor">#define QUAN_VAL1          (10)</span>
-<span class="preprocessor">#define QUAN_VAL2          (100)</span>
-
-<span class="keyword">void</span> CreateLookupTable(Mat&amp; table, uchar quan_val)
+<span class="dt">void</span> CreateLookupTable(Mat&amp; table, uchar quan_val)
 {
-    table.create(<span class="number">1</span>,<span class="number">256</span>,CV_8UC1);
-
+    table.create(<span class="dv">1</span>,<span class="dv">256</span>,CV_8UC1);
+    
     uchar *p = table.data;
-    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">256</span>; ++i)
+    <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; <span class="dv">256</span>; ++i)
     {
         p[i] = quan_val*(i/quan_val);
     }
 }
 
-<span class="keyword">int</span> main(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])
+<span class="dt">int</span> main(<span class="dt">int</span> argc, <span class="dt">char</span> *argv[])
 {
     Mat img;
     Mat out1;
     Mat out2;
 
-    <span class="keyword">if</span> (argc &lt; <span class="number">2</span>) {
-        <span class="built_in">cout</span> &lt;&lt; <span class="string">"Please input image file name."</span> &lt;&lt; endl;
-        <span class="keyword">return</span> -<span class="number">1</span>;
+    <span class="kw">if</span> (argc &lt; <span class="dv">2</span>) {
+        cout &lt;&lt; <span class="st">&quot;Please input image file name.&quot;</span> &lt;&lt; endl;
+        <span class="kw">return</span> -<span class="dv">1</span>;
     }
 
-    img = imread(argv[<span class="number">1</span>], <span class="number">1</span>);
+    img = imread(argv[<span class="dv">1</span>], <span class="dv">1</span>);
 
 
     Mat table;
     CreateLookupTable(table, QUAN_VAL1);
     LUT(img, table, out1);
     CreateLookupTable(table, QUAN_VAL2);
-    LUT(img, table, out2);  <span class="comment">// Call OpenCV function</span>
+    LUT(img, table, out2);  <span class="co">// Call OpenCV function</span>
 
-    namedWindow(<span class="string">"Lena"</span>, CV_WINDOW_NORMAL);
-    imshow(<span class="string">"Lena"</span>, img);
-    namedWindow(<span class="string">"QUAN_VAL=10"</span>, CV_WINDOW_NORMAL);
-    imshow(<span class="string">"QUAN_VAL=10"</span>, out1);
-    namedWindow(<span class="string">"QUAN_VAL=100"</span>, CV_WINDOW_NORMAL);
-    imshow(<span class="string">"QUAN_VAL=100"</span>, out2);
+    namedWindow(<span class="st">&quot;Lena&quot;</span>, CV_WINDOW_NORMAL);
+    imshow(<span class="st">&quot;Lena&quot;</span>, img);
+    namedWindow(<span class="st">&quot;QUAN_VAL=10&quot;</span>, CV_WINDOW_NORMAL);
+    imshow(<span class="st">&quot;QUAN_VAL=10&quot;</span>, out1);
+    namedWindow(<span class="st">&quot;QUAN_VAL=100&quot;</span>, CV_WINDOW_NORMAL);
+    imshow(<span class="st">&quot;QUAN_VAL=100&quot;</span>, out2);
 
-    waitKey(<span class="number">0</span>);
+    waitKey(<span class="dv">0</span>);
 
-    <span class="keyword">return</span> <span class="number">0</span>;
+    <span class="kw">return</span> <span class="dv">0</span>;
 }</code></pre>
-<ol>
+<ol style="list-style-type: decimal">
 <li><p>为什么要使用查找表？</p>
-<p>一般的灰度图像有256个灰度级，而有时我们并不需要这么精确的灰度级（严重影响运算时间），比如黑白图像。这意味着我们以一个新的输入值划分当前的颜色空间，比如灰度到黑白色，将0~127灰度值直接赋值0，128~255赋值1，最终得到较少的黑白两色。查找表就扮演着这种降低灰度级而提高运算速度的角色。量化前和量化后的灰度值可以用下面的表达式表示：</p>
+<p>一般的灰度图像有256个灰度级，而有时我们并不需要这么精确的灰度级（严重影响运算时间），比如黑白图像。这意味着我们以一个新的输入值划分当前的颜色空间，比如灰度到黑白色，将0<sub>127灰度值直接赋值0，128</sub>255赋值1，最终得到较少的黑白两色。查找表就扮演着这种降低灰度级而提高运算速度的角色。量化前和量化后的灰度值可以用下面的表达式表示：</p>
 <p><img src="http://www.forkosh.com/mathtex.cgi? \small I_{\text{new}}=\frac{I_{\text{old}}}{Q}*Q"></p>
-<p>其中Q表示量化级别，如取10，表示：灰度值1-10用灰度值1表示，灰度值11-20用灰度值11表示，以此类推！</p>
-</li>
-<li><p>使用上面公式和查找表有毛关系，当然没有，但上面公式代价就是要对图片遍历的每个灰度值都计算一次。因此，本着程序设计中的“以空间换时间”的基本算法策略，引入查找表，查找表就是将0~255个灰度值量化后的结果提前计算好存储在一个表中，上面程序中的CreateLookupTable就是完成该功能的函数。从程序中可以看出，查找表的数据结构定义为Mat类型。</p>
-</li>
+<p>其中Q表示量化级别，如取10，表示：灰度值1-10用灰度值1表示，灰度值11-20用灰度值11表示，以此类推！</p></li>
+<li><p>使用上面公式和查找表有毛关系，当然没有，但上面公式代价就是要对图片遍历的每个灰度值都计算一次。因此，本着程序设计中的“以空间换时间”的基本算法策略，引入查找表，查找表就是将0~255个灰度值量化后的结果提前计算好存储在一个表中，上面程序中的CreateLookupTable就是完成该功能的函数。从程序中可以看出，查找表的数据结构定义为Mat类型。</p></li>
 <li><p>有了查找表后，要对图像中的像素灰度值进行替换，OpenVC提供了使用查找表直接计算出量化灰度级后图像的函数——LUT，其函数原型为：</p>
-<pre><code class="cpp"><span class="comment">//! transforms array of numbers using a lookup table: dst(i)=lut(src(i))</span>
-CV_EXPORTS_W <span class="keyword">void</span> LUT(InputArray src, InputArray lut, OutputArray dst,
-                    <span class="keyword">int</span> interpolation=<span class="number">0</span>);</code></pre>
-<p>注意哦，我们程序中定义的查找表类型为Mat，这里LUT的输入输出参数类型怎么是InputArray和OutputArray。在OpenCV中，InputArray/OutputArray这个接口类可以是Mat、Mat<em><t>、Mat</t></em><t, m,="" n="">、vector<t>、vector<vector<t>&gt;、vector<mat>。</mat></vector<t></t></t,></p>
+<pre><code>//! transforms array of numbers using a lookup table: dst(i)=lut(src(i))
+CV_EXPORTS_W void LUT(InputArray src, InputArray lut, OutputArray dst,
+                      int interpolation=0);</code></pre>
+<p>注意哦，我们程序中定义的查找表类型为Mat，这里LUT的输入输出参数类型怎么是InputArray和OutputArray。在OpenCV中，InputArray/OutputArray这个接口类可以是Mat、Mat_<T>、Mat_<T, m, n>、vector<T>、vector<vector<T>&gt;、vector<Mat>。</p>
 <p>也就意味着当你看refman或者源代码时，如果看见函数的参数类型是InputArray/OutputArray型时，把上诉几种类型作为参数都是可以的。</p>
-<p>另外，请注意，InputArray/OutputArray只能作为函数的形参参数使用，不要试图声明一个InputArray类型的变量，OutputArray也只是InputArray的派生。还有，还有就是OutputArrayOfArrays、InputOutputArray、InputOutputArrayOfArrays都是OutputArray的别名，碰到别慌张!</p>
-</li>
+<p>另外，请注意，InputArray/OutputArray只能作为函数的形参参数使用，不要试图声明一个InputArray类型的变量，OutputArray也只是InputArray的派生。还有，还有就是OutputArrayOfArrays、InputOutputArray、InputOutputArrayOfArrays都是OutputArray的别名，碰到别慌张!</p></li>
 </ol>
-<h2>效果</h2>
-<p><img src="../images/OpenCV基础篇之查找表/result.png" alt="result"></p>
+<h2 id="效果">效果</h2>
+<div class="figure">
+<img src="../images/OpenCV基础篇之查找表/result.png" alt="result" /><p class="caption">result</p>
+</div>
 <p>江南好，千钟美酒，一曲满庭芳</p>
 <p>左边是原始图片；中间是量化值Q=10时的结果，信息丢失很少；右边是量化值Q=100的图片，很多信息丢失了，但也别有一番风味。</p>
-</font></font></body></html>
+</body>
+</html>

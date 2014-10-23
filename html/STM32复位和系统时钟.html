@@ -1,14 +1,45 @@
-<html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"><link rel="stylesheet" id="theme" href="../stylesheets/Github.css"></head><body><p><a href="../README.html"><font size="4">←返回主目录<font></font></font></a><font size="4"><font><br></font></font></p><font size="4"><font>
-<div align="right"><a href="../index.html" target="_self" title="返回主页"><img src="../images/Home.png"></a><a href="../Archives.html" target="_self" title="文章存档"><img src="../images/Archives.jpg"></a><a href="#bottom" target="_self" title="跳转底部"><img src="../images/bottom.png"></a></div>
-
-<p><strong>文题</strong>：STM32复位和系统时钟<br></p>
-<p><strong>作者</strong>：xiahouzuoxin<br></p>
-<p><strong>日期</strong>：2011-10-17，整理于2014-09-25<br></p>
-<p><em>转载请注明出处：<a href="http://xiahouzuoxin.github.io/notes">http://xiahouzuoxin.github.io/notes</a></em></p>
-<hr>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
+  </style>
+  <link rel="stylesheet" href="../stylesheets/Github.css" type="text/css" />
+</head>
+<body>
+<p><a href="../README.md"><font size=4>←返回主目录<font></a></br></p>
+<div align="right">
+<a href="../index.html" target="_self" title="返回主页"><img src="../images/Home.png"></a> <a href="#bottom" target="_self" title="跳转底部"><img src="../images/bottom.png"></a>
+</div>
+<p><strong>文题</strong>：STM32复位和系统时钟</br></p>
+<p><strong>作者</strong>：xiahouzuoxin</br></p>
+<p><strong>日期</strong>：2011-10-17，整理于2014-09-25</br></p>
+<p><em>转载请注明出处：<http://xiahouzuoxin.github.io/notes></em></p>
+<hr />
 <p>这是一篇旧文，早在上大二的时候，在地下室（当时实验室在防空地下室）顺手在word上写的，当时STM32正刚刚开始蓬勃发展，如今时隔3年，整理到这里！</p>
 <p>系统复位后，首先使用内部RC时钟源，由于内部时钟精度不高且不能倍频到较高频率，所以实际应用中一般使用外接晶振（8M）,下面是建立系统时钟的步骤：</p>
-<ol>
+<ol style="list-style-type: decimal">
 <li>将所有RCC外设寄存器重设为默认值</li>
 <li>启用外部高速晶振</li>
 <li>等待，直到外部晶振稳定</li>
@@ -21,47 +52,48 @@
 <li>设置PLL为系统时钟源</li>
 <li>等待PLL成功作为系统时钟源</li>
 </ol>
-<pre><code class="language-c javascript"><span class="comment">/*******************************************************************/</span>
-<span class="comment">/* function : Sysclk configuration
-/* author   : 夏侯佐鑫
-/* data     : 2011-10-17
-/*******************************************************************/</span>
-<span class="keyword">void</span> SysclkInit(<span class="keyword">void</span>)
+<pre class="sourceCode c"><code class="sourceCode c"><span class="co">/*******************************************************************/</span>
+<span class="co">/* function : Sysclk configuration</span>
+<span class="co">/* author   : 夏侯佐鑫</span>
+<span class="co">/* data     : 2011-10-17</span>
+<span class="co">/*******************************************************************/</span>
+<span class="dt">void</span> SysclkInit(<span class="dt">void</span>)
 {
     ErrorStatus HSEStartUpStatus;
-    <span class="comment">//重设默认值</span>
+    <span class="co">//重设默认值</span>
     RCC_DeInit();
-    <span class="comment">//HSE</span>
+    <span class="co">//HSE</span>
     RCC_HSEConfig(RCC_HES_ON);
-    <span class="comment">//等待HSE稳定</span>
+    <span class="co">//等待HSE稳定</span>
     HSEStratUpStatus = RCC_WaitForHSEStartUp();
-    <span class="keyword">if</span>(HSEStratUpStatus == SUCCESS)
+    <span class="kw">if</span>(HSEStratUpStatus == SUCCESS)
     {
-        <span class="comment">//预取址缓存使能</span>
+        <span class="co">//预取址缓存使能</span>
         FLASH_PrefetchBufferCmd(FLASH_PrefetchBuffer_Enable);
-        <span class="comment">//设置代码延时值,2延时周期</span>
+        <span class="co">//设置代码延时值,2延时周期</span>
         FLASH_SetLatency(FLSAH_Latency_2);
-        <span class="comment">//AHB</span>
+        <span class="co">//AHB</span>
         RCC_HCLKConfig(RCC_SYSCLK_Div1);
-        <span class="comment">//APB2</span>
+        <span class="co">//APB2</span>
         RCC_PCLK2Config(RCC_SYSCLK_Div1); 
-        <span class="comment">//APB1</span>
+        <span class="co">//APB1</span>
         RCC_PCLK1Config(RCC_SYSCLK_Div2);
-        <span class="comment">//PLLCLK = 8MHz * 9</span>
+        <span class="co">//PLLCLK = 8MHz * 9</span>
         RCC_PLLConfig(RCC_PLLSource_HSE_Div1, RCC_PLLMul_9);
-        <span class="comment">//Enable PLL</span>
+        <span class="co">//Enable PLL</span>
         RCC_PLLCmd(ENABLE);
-        <span class="comment">//Wait PLL Init successed</span>
-        <span class="keyword">while</span>(RESET == RCC_GetFlagStatus(RCC_FLAG_PLLRDY));
-        <span class="comment">//SYSCLK = PLL clk</span>
+        <span class="co">//Wait PLL Init successed</span>
+        <span class="kw">while</span>(RESET == RCC_GetFlagStatus(RCC_FLAG_PLLRDY));
+        <span class="co">//SYSCLK = PLL clk</span>
         RCC_SYSCLKConfig(RCC_SYSCLKSource_PLLCLK);
-        <span class="comment">//Wait PLL be SYSCLK</span>
-        <span class="keyword">while</span>(RCC_GetSYSCLKSource() != <span class="number">0x08</span>);    
+        <span class="co">//Wait PLL be SYSCLK</span>
+        <span class="kw">while</span>(RCC_GetSYSCLKSource() != <span class="bn">0x08</span>);    
     }        
 }</code></pre>
-<p></p><div align="right"><a href="../index.html" target="_self" title="返回主页"><img src="../images/Home.png"></a><a href="../Archives.html" target="_self" title="文章存档"><img src="../images/Archives.jpg"></a><a href="#top" target="_self" title="返回顶部"><img src="../images/top.png"></a></div>
-<a name="bottom"></a>
-<a href="../README.html"><font size="4">←返回主目录<font></font></font></a><font size="4"><font><br><p></p>
+<div align="right">
+<a href="../index.html" target="_self" title="返回主页"><img src="../images/Home.png"></a> <a href="#top" target="_self" title="返回顶部"><img src="../images/top.png"></a>
+</div>
+<p><a name="bottom"></a> <a href="../README.md"><font size=4>←返回主目录<font></a></br></p>
 <!-- 
 
 本模板为转成Html后需要修改的地方:
@@ -72,25 +104,5 @@
 5. 修正其它可能不正确的链接 
 
 -->
-
-<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"slide":{"type":"slide","bdImg":"5","bdPos":"right","bdTop":"200"},"image":{"viewList":["qzone","tsina","tqq","renren","weixin"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["qzone","tsina","tqq","renren","weixin"]}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
-
-<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="STM32复位和系统时钟" data-title="STM32复位和系统时钟" data-url="xiahouzuoxin.github.io/notes/html/STM32复位和系统时钟.html"></div>
-<!-- 多说评论框 end -->
-<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
-<script type="text/javascript">
-var duoshuoQuery = {short_name:"xiahouzuoxin"};
-	(function() {
-		var ds = document.createElement('script');
-		ds.type = 'text/javascript';ds.async = true;
-		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-		ds.charset = 'UTF-8';
-		(document.getElementsByTagName('head')[0] 
-		 || document.getElementsByTagName('body')[0]).appendChild(ds);
-	})();
-	</script>
-<!-- 多说公共JS代码 end -->
-
-
-</font></font></font></font></body></html>
+</body>
+</html>

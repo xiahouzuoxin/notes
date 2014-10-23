@@ -1,27 +1,38 @@
-<html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"><link rel="stylesheet" id="theme" href="../stylesheets/Github.css"></head><body><p><a href="../README.html"><font size="4">←返回主目录<font></font></font></a><font size="4"><font>
-<br><br><br></font></font></p><font size="4"><font>
-<p>在绘制电路原理图时，FPGA器件的管脚非常多（少则200多个，多则上千个），手工一不小心就可能出错。Altera提供了其所有器件的Cadence原理图和PCB的封装库，可以到<a href="http://www.altera.com.cn/download/board-layout-test/pcb/pcb-cadence.html">http://www.altera.com.cn/download/board-layout-test/pcb/pcb-cadence.html</a>下载。</p>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="../stylesheets/Github.css" type="text/css" />
+</head>
+<body>
+<p><a href="../README.md"><font size=4>←返回主目录<font></a> </br></br></br></p>
+<p>在绘制电路原理图时，FPGA器件的管脚非常多（少则200多个，多则上千个），手工一不小心就可能出错。Altera提供了其所有器件的Cadence原理图和PCB的封装库，可以到<http://www.altera.com.cn/download/board-layout-test/pcb/pcb-cadence.html>下载。</p>
 <p>然而，官方的Cadence库也存在一些问题：我在使用Altera的EP2C8F256原理图封装时，居然倒不出网表。通过查看日志文件的“错误信息”，</p>
-<pre><code class="ruby"><span class="constant">Loading</span>... <span class="symbol">e:</span>\mydesigner\cadence\dsp_sound_prj\dsp_sound\sch\allegro/pstxnet.dat
-<span class="constant">ERROR</span>(<span class="constant">SPCODD</span>-<span class="number">409</span>)<span class="symbol">:</span> 
-            <span class="constant">Reference</span> <span class="constant">Designator</span><span class="symbol">:</span> <span class="constant">U7</span>. <span class="constant">Error</span> at line <span class="number">3422</span> <span class="keyword">in</span> file <span class="symbol">e:</span>\mydesigner\cadence\dsp_sound_prj\dsp_sound\sch\allegro/pstxnet.dat. <span class="constant">Could</span> <span class="keyword">not</span> create new pin <span class="symbol">inst:</span> <span class="constant">GND</span><span class="comment"># A1  .</span>
-        <span class="constant">Schematic</span> <span class="constant">Instance</span><span class="symbol">:</span> <span class="variable">@dsp_sound</span>.root(sch_1)<span class="symbol">:fpga</span><span class="variable">@dsp_sound</span>.\<span class="number">02</span>fpga\(sch_1)<span class="symbol">:ins939036</span><span class="variable">@ep2c8</span>.\ep2c8f256g.normal\(chips) (<span class="constant">MODULE</span><span class="symbol">:</span> <span class="number">02</span>FPGA; <span class="constant">PART</span><span class="symbol">:</span> <span class="constant">EP2C8F256</span>). <span class="constant">Check</span> the symbol <span class="keyword">for</span> consistency of pin definition.
+<pre><code>Loading... e:\mydesigner\cadence\dsp_sound_prj\dsp_sound\sch\allegro/pstxnet.dat
+ERROR(SPCODD-409): 
+            Reference Designator: U7. Error at line 3422 in file e:\mydesigner\cadence\dsp_sound_prj\dsp_sound\sch\allegro/pstxnet.dat. Could not create new pin inst: GND# A1  .
+        Schematic Instance: @dsp_sound.root(sch_1):fpga@dsp_sound.\02fpga\(sch_1):ins939036@ep2c8.\ep2c8f256g.normal\(chips) (MODULE: 02FPGA; PART: EP2C8F256). Check the symbol for consistency of pin definition.
 
-<span class="constant">ERROR</span>(<span class="constant">SPCODD</span>-<span class="number">383</span>)<span class="symbol">:</span> <span class="constant">Error</span> at line <span class="number">3422</span> <span class="keyword">in</span> file <span class="symbol">e:</span>\mydesigner\cadence\dsp_sound_prj\dsp_sound\sch\allegro/pstxnet.dat. <span class="constant">Error</span> loading the net list file
+ERROR(SPCODD-383): Error at line 3422 in file e:\mydesigner\cadence\dsp_sound_prj\dsp_sound\sch\allegro/pstxnet.dat. Error loading the net list file
 
-<span class="comment">#82 Error   [ALG0036] Unable to read logical netlist data.</span></code></pre>
+#82 Error   [ALG0036] Unable to read logical netlist data.</code></pre>
 <p>根据错误信息提示，我找到pstxnet.dat文件的3422行：</p>
-<pre><code class="apache">3417 NODE_NAME    U7 A16
-3418  '@DSP_SOUND.ROOT(SCH_1):FPGA@DSP_SOUND.02FPGA(SCH_1):INS939036@EP2C8.EP2C8F256G.NORMAL(CHIPS)':
-3419  'GND<span class="comment">#A16':;</span>
-3420 NODE_NAME    U7  A1  
-3421  '@DSP_SOUND.ROOT(SCH_1):FPGA@DSP_SOUND.02FPGA(SCH_1):INS939036@EP2C8.EP2C8F256G.NORMAL(CHIPS)':
-3422  'GND<span class="comment"># A1  ':;</span>
-3423 NODE_NAME    U7 J9
-3424  '@DSP_SOUND.ROOT(SCH_1):FPGA@DSP_SOUND.02FPGA(SCH_1):INS939036@EP2C8.EP2C8F256G.NORMAL(CHIPS)':
-3425  'GND<span class="comment">#J9':;</span></code></pre>
+<pre><code>3417 NODE_NAME  U7 A16
+3418  &#39;@DSP_SOUND.ROOT(SCH_1):FPGA@DSP_SOUND.02FPGA(SCH_1):INS939036@EP2C8.EP2C8F256G.NORMAL(CHIPS)&#39;:
+3419  &#39;GND#A16&#39;:;
+3420 NODE_NAME  U7  A1  
+3421  &#39;@DSP_SOUND.ROOT(SCH_1):FPGA@DSP_SOUND.02FPGA(SCH_1):INS939036@EP2C8.EP2C8F256G.NORMAL(CHIPS)&#39;:
+3422  &#39;GND# A1  &#39;:;
+3423 NODE_NAME  U7 J9
+3424  &#39;@DSP_SOUND.ROOT(SCH_1):FPGA@DSP_SOUND.02FPGA(SCH_1):INS939036@EP2C8.EP2C8F256G.NORMAL(CHIPS)&#39;:
+3425  &#39;GND#J9&#39;:;</code></pre>
 <p>这是网表数据文件，和上下文对比分析下就想到了：Cadence原理图封装的管脚号中不能含有空格，就是因为3422行的Cadence网络名存在空格才无法生成网表，</p>
-<pre><code class="apache">3422  'GND<span class="comment"># A1  ':;</span></code></pre>
+<pre><code>3422  &#39;GND# A1  &#39;:;</code></pre>
 <p>问题找到了，于是修改了下EP2C8F256的第G个Part的管脚名就好了。</p>
 <p>唉，官方的库也是人做出来的，总免不了也有出错的时候！回想起当初刚使用STM32的时候，STM32的库不也是各种问题吗？</p>
-</font></font></body></html>
+</body>
+</html>

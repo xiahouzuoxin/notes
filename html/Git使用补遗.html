@@ -1,26 +1,36 @@
-<html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"><link rel="stylesheet" id="theme" href="../stylesheets/Github.css"></head><body><p><a href="../README.html"><font size="4">←返回主目录<font></font></font></a><font size="4"><font>
-<br><br><br></font></font></p><font size="4"><font>
-<h2>删除错误提交</h2>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="../stylesheets/Github.css" type="text/css" />
+</head>
+<body>
+<p><a href="../README.md"><font size=4>←返回主目录<font></a> </br></br></br></p>
+<h2 id="删除错误提交">删除错误提交</h2>
 <p>噢，My God，不小心把含有私有密码信息的版本提交了，还提交到了Github………没问题：</p>
-<pre><code class="nginx"><span class="title">git</span> log                        <span class="comment"># 查看要回退的版本</span>
-git reset --hard &lt;commit-id&gt;   <span class="comment"># 回退到commit-id&gt;版本</span>
-git push origin HEAD --force   <span class="comment"># 远程版本回退</span></code></pre>
-<h2>暂时保存而不提交当前工作</h2>
+<pre><code>git log                        # 查看要回退的版本
+git reset --hard &lt;commit-id&gt;   # 回退到commit-id&gt;版本
+git push origin HEAD --force   # 远程版本回退</code></pre>
+<h2 id="暂时保存而不提交当前工作">暂时保存而不提交当前工作</h2>
 <p>现在正在进行debug分支的工作，突然发现，之前软件存在一个严重的错误，因此急需对dev分支中该错误进行修改，这时，你使用</p>
-<pre><code class="nginx"><span class="title">git</span> checkout dev</code></pre>
+<pre><code>git checkout dev</code></pre>
 <p>想要切换。但系统却提示你“debug分支没有提交，无法切换分支”，然而，当前的debug正在开发，可能压根编译都无法通过，如果提交会产生大量的日志信息，这不是我想要的。</p>
 <p>这种情况下就可以使用到git stash命令暂时保存。</p>
-<pre><code class="nginx"><span class="title">git</span> stash</code></pre>
+<pre><code>git stash </code></pre>
 <p>与压栈的效果一样，将保存当前工作区和暂存区的内容。可以多次进行git stash操作，最新一次的git stash存储在栈的顶层。</p>
 <p>同样的，要恢复栈中的内容，使用</p>
-<pre><code class="nginx"><span class="title">git</span> pop</code></pre>
+<pre><code>git pop</code></pre>
 <p>恢复栈顶的工作空间和暂存空间。当然，查询功能是必需的</p>
-<pre><code class="nginx"><span class="title">git</span> stash list</code></pre>
+<pre><code>git stash list</code></pre>
 <p>可查看栈空间的内容。</p>
-<pre><code class="sql">git stash <span class="operator"><span class="keyword">drop</span> [stash]</span></code></pre>
+<pre><code>git stash drop [stash]</code></pre>
 <p>删除一个栈顶最新的存储，[stash]参数为git stash list中显示的编号。要一次删除栈中所有的内容也是可以的，</p>
-<pre><code class="nginx"><span class="title">git</span> stash clear</code></pre>
-<h2>比较修改</h2>
+<pre><code>git stash clear</code></pre>
+<h2 id="比较修改">比较修改</h2>
 <p><code>git diff</code>查看更改但未使用git add暂存的内容与git add的暂存区内容的差异。</p>
 <p><code>git diff --cached</code>查看git add暂存区的内容与上次提交HEAD之间的差异。</p>
 <p><code>git diff</code>与<code>git diff --cached</code>和在一起就包含了所有未提交的更改。当然，这也可以直接通过<code>git diff HEAD</code>一条命令直接查看工作区更改与上次提交的差异。</p>
@@ -28,11 +38,17 @@ git push origin HEAD --force   <span class="comment"># 远程版本回退</span>
 <p><code>git diff dev...master</code> 比较dev分支与master分支自从分开开发以来master分支的所有改变。</p>
 <p><code>git diff sha1 sha2</code> 比较两次不同提交sha1和sha2之间的差别。</p>
 <p>如果只是要比较某个文件而不是所有的变化，则在响应的命令后添加文件名即可，如<code>git diff README.md</code>。</p>
-<h2>放弃工作区的修改</h2>
+<h2 id="放弃工作区的修改">放弃工作区的修改</h2>
 <p><code>git checkout [filename]</code>可以放弃工作区（没有使用git add.命令添加到暂存区）的修改。</p>
 <p>放弃的修改无法找回，谨慎使用！</p>
-<h2>放弃本地修改，强制更新</h2>
-<pre><code class="sql">git fetch <span class="comment">--all</span>
-git re<span class="operator"><span class="keyword">set</span> --hard origin/master</span></code></pre>
+<h2 id="放弃本地修改强制更新">放弃本地修改，强制更新</h2>
+<pre><code>git fetch --all
+git reset --hard origin/master</code></pre>
 <p><code>git fetch</code>命令只是从远程下载而不进行merge，之后的<code>git reset</code>命令直接将HEAD指向刚刚下载的最新版本。</p>
-</font></font></body></html>
+<h2 id="git-add时的中文问题">git add时的中文问题</h2>
+<p>在cygwin中，使用git add添加要提交的文件的时候，如果文件名是中文，会显示形如<code>274\232\350\256\256\346\200\273\347\273\223.png</code>的乱码。</p>
+<p>在bash下输入</p>
+<pre><code>git config --global core.quotepath false</code></pre>
+<p>core.quotepath设为false的话，就不会对0×80以上的字符进行quote。中文显示正常。</p>
+</body>
+</html>

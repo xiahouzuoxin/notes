@@ -1,20 +1,31 @@
-<html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"><link rel="stylesheet" id="theme" href="../stylesheets/Github.css"></head><body><p><a href="../README.html"><font size="4">←返回主目录<font></font></font></a><font size="4"><font>
-<br><br><br></font></font></p><font size="4"><font>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="../stylesheets/Github.css" type="text/css" />
+</head>
+<body>
+<p><a href="../README.md"><font size=4>←返回主目录<font></a> </br></br></br></p>
 <p>操作环境：CentOS 6.5 64bit 宽带外网</p>
-<h2>国内的yum源都在哪里</h2>
-<ol>
-<li>上海交大：<a href="http://ftp.sjtu.edu.cn/centos/">http://ftp.sjtu.edu.cn/centos/</a>，地理位置在北方，教育网中较快</li>
-<li>中国科大：<a href="http://centos.ustc.edu.cn/">http://centos.ustc.edu.cn/</a>，地理位置在合肥，南方</li>
-<li>网易163：<a href="http://mirrors.163.com/centos">http://mirrors.163.com/centos</a>，外网推荐</li>
-<li>搜狐镜像：<a href="http://mirrors.sohu.com/">http://mirrors.sohu.com/</a>，山东联通网络</li>
+<h2 id="国内的yum源都在哪里">国内的yum源都在哪里</h2>
+<ol style="list-style-type: decimal">
+<li>上海交大：<http://ftp.sjtu.edu.cn/centos/>，地理位置在北方，教育网中较快</li>
+<li>中国科大：<http://centos.ustc.edu.cn/>，地理位置在合肥，南方</li>
+<li>网易163：<http://mirrors.163.com/centos>，外网推荐</li>
+<li>搜狐镜像：<http://mirrors.sohu.com/>，山东联通网络</li>
 </ol>
-<h2>如何替换原有的yum源</h2>
+<h2 id="如何替换原有的yum源">如何替换原有的yum源</h2>
 <p>本文将替换原来CentOS官方的yum为163的yum源：</p>
-<pre><code class="language-shell nginx"><span class="title">su</span> root
+<pre class="shell"><code>su root
 cd /etc/yum.repos.d
-mv CentOS-Base.repo CentOS-Base.repo.bak                 <span class="comment"># 备份原有的yum源</span>
-wget <span class="url">http://mirrors.163.com/.help/CentOS6-Base-163.repo</span>  <span class="comment"># 获取163的yum源文件</span>
-mv CentOS6-Base-<span class="number">163</span>.repo CentOS-Base.repo                <span class="comment"># 使用163的yum源作为默认的yum源</span>
-yum clean all &amp;&amp; yum makecache &amp;&amp; yum update -y          <span class="comment"># yum更新</span></code></pre>
+mv CentOS-Base.repo CentOS-Base.repo.bak                 # 备份原有的yum源
+wget http://mirrors.163.com/.help/CentOS6-Base-163.repo  # 获取163的yum源文件
+mv CentOS6-Base-163.repo CentOS-Base.repo                # 使用163的yum源作为默认的yum源
+yum clean all &amp;&amp; yum makecache &amp;&amp; yum update -y          # yum更新</code></pre>
 <p>网易613提供了yum源的CentOS-Base.repo文件，而上海交大和中科大的yum源可能需要自己写，相对来说，使用163的yum更新更方便些。</p>
-</font></font></body></html>
+</body>
+</html>

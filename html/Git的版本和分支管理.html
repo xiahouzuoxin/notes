@@ -1,108 +1,123 @@
-<html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"><link rel="stylesheet" id="theme" href="../stylesheets/Github.css"></head><body><p><a href="../README.html"><font size="4">←返回主目录<font></font></font></a><font size="4"><font>
-<br><br><br></font></font></p><font size="4"><font>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="../stylesheets/Github.css" type="text/css" />
+</head>
+<body>
+<p><a href="../README.md"><font size=4>←返回主目录<font></a> </br></br></br></p>
 <p>由于已经对git使用比较熟悉了，此篇关于git分支和版本的的管理将不会详细记录每一个细节。如果你还不熟悉git，请先参看：</p>
-<p>[1] <a href="http://blog.csdn.net/xiahouzuoxin/article/details/9393119">http://blog.csdn.net/xiahouzuoxin/article/details/9393119</a></p>
-<p>[2] <a href="http://blog.csdn.net/xiahouzuoxin/article/details/9398629">http://blog.csdn.net/xiahouzuoxin/article/details/9398629</a></p>
-<p>[3] <a href="http://blog.csdn.net/xiahouzuoxin/article/details/18076043">http://blog.csdn.net/xiahouzuoxin/article/details/18076043</a></p>
-<h2>本地的分支管理</h2>
+<p>[1] http://blog.csdn.net/xiahouzuoxin/article/details/9393119</p>
+<p>[2] http://blog.csdn.net/xiahouzuoxin/article/details/9398629</p>
+<p>[3] http://blog.csdn.net/xiahouzuoxin/article/details/18076043</p>
+<h2 id="本地的分支管理">本地的分支管理</h2>
 <p>创建分支，你可以使用</p>
-<pre><code class="nginx"><span class="title">git</span> branch dev</code></pre>
+<pre><code>git branch dev</code></pre>
 <p>这就创建了一个dev（development之意），更好的，选择使用下面的方法创建两个分支——dev，创建后会自动切换到新创建的分支，</p>
-<pre><code class="nginx"><span class="title">git</span> checkout -b dev</code></pre>
+<pre><code>git checkout -b dev</code></pre>
 <p>要切回master分支怎么办？使用</p>
-<pre><code class="nginx"><span class="title">git</span> checkout master</code></pre>
+<pre><code>git checkout master</code></pre>
 <p>当然你也可以使用</p>
-<pre><code class="language-` nginx"><span class="title">git</span> checkout dev</code></pre>
+<p>`<code>git checkout dev</code></p>
 <p>再次切换到dev分支。</p>
 <p>好了，现在有两个分支：master和dev了。比如切来切去，突然暂停手下的活要先撸一把，撸完回过头不知道现在在哪个分支了，怎么办？</p>
-<pre><code class="nginx"><span class="title">git</span> branch</code></pre>
-<p><img src="../images/Git版本和分支管理/git-branch.png" alt="git-branch"></p>
+<pre><code>git branch</code></pre>
+<div class="figure">
+<img src="../images/Git版本和分支管理/git-branch.png" alt="git-branch" /><p class="caption">git-branch</p>
+</div>
 <p>搞定，git branch可以查看当前已有的分支信息，并在将当前所在分支高亮，当前分支前还有个*号。</p>
 <p>某天要调试某个新算法，又不能保证能调好，又怕打乱了原有的程序，怎么办？建一个新分支：</p>
-<pre><code class="nginx"><span class="title">git</span> checkout -b <span class="built_in">debug</span></code></pre>
+<pre><code>git checkout -b debug</code></pre>
 <p>在debug分支中慢慢玩，master分支和dev分支毫不受影响。这时就有两种情况：</p>
 <ul>
 <li>悲剧的最后还是没调出来，我又有强迫症，debug分支一直放在那总是不爽，删了</li>
 </ul>
-<pre><code class="nginx"><span class="title">git</span> branch -d <span class="built_in">debug</span></code></pre>
+<pre><code>git branch -d debug</code></pre>
 <ul>
 <li>恭喜，算法调试成功，我要合并到master中</li>
 </ul>
-<pre><code class="nginx"><span class="title">git</span> checkout master   // 切换到master
-git merge <span class="built_in">debug</span>       // 合并<span class="built_in">debug</span>到master</code></pre>
+<pre><code>git checkout master   // 切换到master
+git merge debug       // 合并debug到master </code></pre>
 <p>这时如果你很幸运，直接合并成功。悲伤的事情总是时有发生，“合并发生冲突”是常有的事，因此一旦出现类似下面的提示</p>
-<pre><code class="nginx"><span class="title">CONFLICT</span> (content): Merge conflict in ...
-Automatic merge failed; <span class="title">fix</span> conflicts and then commit the result.</code></pre>
-<p>就得自己动手解决冲突了，git会用 </p>
-<pre><code class="javascript">&lt;<span class="xml"><span class="tag">&lt;<span class="title">&lt;&lt;&lt;&lt;&lt;HEAD
-</span> <span class="attribute">master</span>原有的内容
-=<span class="value">======</span>
- <span class="attribute">debug</span>分支中冲突的内容
-&gt;</span>&gt;&gt;&gt;&gt;&gt;&gt;debug</span></code></pre>
+<pre><code>CONFLICT (content): Merge conflict in ...
+Automatic merge failed; fix conflicts and then commit the result.</code></pre>
+<p>就得自己动手解决冲突了，git会用</p>
+<pre><code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;HEAD
+ master原有的内容
+=======
+ debug分支中冲突的内容
+&gt;&gt;&gt;&gt;&gt;&gt;&gt;debug</code></pre>
 <p>这样的格式提醒你，只要修改保留实际需要的内容后即可解决冲突，解决冲突后就可以执行git commit。</p>
 <p>好了，我们合并了master和debug，做IT的人总会偷个腥，想看看git是怎么记录合并的，没问题，</p>
-<pre><code class="nginx"><span class="title">git</span> log --graph --pretty=oneline --abbrev-commit</code></pre>
+<pre><code>git log --graph --pretty=oneline --abbrev-commit</code></pre>
 <p>就可以直接看到分支合并的过程。我这有个大点的工程合并效果的例子，</p>
-<p><img src="../images/Git版本和分支管理/example.png" alt="example"></p>
+<div class="figure">
+<img src="../images/Git版本和分支管理/example.png" alt="example" /><p class="caption">example</p>
+</div>
 <p>最后，反正debug我玩完了，删除debug分支</p>
-<pre><code class="nginx"><span class="title">git</span> branch -d <span class="built_in">debug</span></code></pre>
-<h2>远程的分支管理</h2>
+<pre><code>git branch -d debug</code></pre>
+<h2 id="远程的分支管理">远程的分支管理</h2>
 <p>我们所有的开发工作都在dev上进行，一旦有了大的突破，则合并到master。</p>
 <ul>
 <li>既然有了dev分支，我也要把它推送到github上</li>
 </ul>
 <p>如果不在dev，切换到dev，</p>
-<pre><code class="nginx"><span class="title">git</span> branch
-git checkout dev</code></pre>
+<pre><code>git branch
+git checkout dev </code></pre>
 <p>还记得我们之前推送master分支到远程origin吗？</p>
-<pre><code class="nginx"><span class="title">git</span> push -u origin master</code></pre>
+<pre><code>git push -u origin master</code></pre>
 <p>推送dev也是一样的，只要指定分支名为dev就可以了，</p>
-<pre><code class="nginx"><span class="title">git</span> push -u origin dev</code></pre>
+<pre><code>git push -u origin dev </code></pre>
 <ul>
 <li>同学A开头写了个项目，老板让我也跟着做，同学A说，你到github上图clone我的代码吧</li>
 </ul>
-<pre><code class="nginx"><span class="title">git</span> clone git<span class="variable">@github</span>.com:....</code></pre>
+<pre><code>git clone git@github.com:....</code></pre>
 <p>这是，你用git branch看看，这只是clone了master分支，dev呢？这可是费劲苦心，要在同学A的dev分支上开发，就必须创建远程的dev分支到本地</p>
-<pre><code class="nginx"><span class="title">git</span> checkout -b dev origin/dev</code></pre>
+<pre><code>git checkout -b dev origin/dev </code></pre>
 <p>再用git branch看看？有了吧。</p>
 <ul>
 <li>在同学A的基础上我又添了新功能，老板催着，赶紧提交</li>
 </ul>
-<pre><code class="nginx"><span class="title">git</span> checkout dev 
-git pull origin dev</code></pre>
+<pre><code>git checkout dev 
+git pull origin dev </code></pre>
 <ul>
 <li>老板某天突然和我说：你看同学A，又修改了好多Bug，还不下下来学学</li>
 </ul>
-<pre><code class="nginx"><span class="title">git</span> pull origin dev</code></pre>
+<pre><code>git pull origin dev  </code></pre>
 <p>可能出现冲突，解决后才能进行下一次的提交。</p>
 <p>极少的场合，要不就是老板的老婆月经乱了，要不就是。。。哎，不说了，非要删除远程dev分支，也是有办法的，</p>
-<pre><code class="nginx"><span class="title">git</span> push oringin :dev</code></pre>
-<h2>本地Tag管理</h2>
+<pre><code>git push oringin :dev </code></pre>
+<h2 id="本地tag管理">本地Tag管理</h2>
 <p>哇，第一个里程碑式的突破，有木有，这时你可小小的庆幸一下，打个标签（Tag），表示这是个可靠的可发布版本，</p>
-<pre><code class="nginx"><span class="title">git</span> tag -a v1.<span class="number">0</span> -m <span class="string">"第一个里程碑的突破"</span></code></pre>
-<p>当然，注释别向上面一样（"第一个里程碑的突破"）写得那么没有营养。起个好名字很重要。默认的标签将打在最新的commit上。</p>
+<pre><code>git tag -a v1.0 -m &quot;第一个里程碑的突破&quot;</code></pre>
+<p>当然，注释别向上面一样（&quot;第一个里程碑的突破&quot;）写得那么没有营养。起个好名字很重要。默认的标签将打在最新的commit上。</p>
 <p>查看打了哪些标签使用</p>
-<pre><code class="nginx"><span class="title">git</span> tag</code></pre>
+<pre><code>git tag </code></pre>
 <p>查看某个标签的信息用</p>
-<pre><code class="sql">git <span class="operator"><span class="keyword">show</span> v1<span class="number">.0</span></span></code></pre>
+<pre><code>git show v1.0</code></pre>
 <p>好了，好马也有失前蹄的时候，标签打错也是正常的，</p>
-<pre><code class="nginx"><span class="title">git</span> tag -d v1.<span class="number">0</span></code></pre>
+<pre><code>git tag -d v1.0</code></pre>
 <p>果断删了v1.0标签。</p>
-<h2>远程Tag管理</h2>
+<h2 id="远程tag管理">远程Tag管理</h2>
 <p>我想要把v1.0推送到远程，</p>
-<pre><code class="nginx"><span class="title">git</span> push origin v1.<span class="number">0</span></code></pre>
+<pre><code>git push origin v1.0</code></pre>
 <p>把所有的标签一次推送到远程更爽，</p>
-<pre><code class="nginx"><span class="title">git</span> push origin --tags</code></pre>
+<pre><code>git push origin --tags</code></pre>
 <p>删除远程的标签，你可以到github上删除，也可以，</p>
 <ul>
 <li>先删除本地的</li>
 </ul>
-<pre><code class="nginx"><span class="title">git</span> tag -d v1.<span class="number">0</span></code></pre>
+<pre><code>git tag -d v1.0</code></pre>
 <ul>
 <li>删除远程的</li>
 </ul>
-<pre><code class="ruby">git push origin <span class="symbol">:refs/tags/v1</span>.<span class="number">0</span></code></pre>
-<h2>结尾及参考</h2>
+<pre><code>git push origin :refs/tags/v1.0</code></pre>
+<h2 id="结尾及参考">结尾及参考</h2>
 <p>好了，告一段落了，接着就是使用git策马奔腾吧！</p>
-<p>[1] <a href="http://www.liaoxuefeng.com">廖雪峰Git教程</a></p>
-</font></font></body></html>
+<p>[1] [廖雪峰Git教程](http://www.liaoxuefeng.com)</p>
+</body>
+</html>

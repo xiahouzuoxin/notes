@@ -1,139 +1,173 @@
-<html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"><link rel="stylesheet" id="theme" href="../stylesheets/Github.css"></head><body><p><a href="../README.html"><font size="4">←返回主目录<font></font></font></a><font size="4"><font>
-<br><br><br></font></font></p><font size="4"><font>
-<h2>程序及分析</h2>
-<pre><code class="language-c xml">/*
- * FileName : MatObj.cpp
- * Author   : xiahouzuoxin @163.com
- * Version  : v1.0
- * Date     : Thu 15 May 2014 09:12:45 PM CST
- * Brief    : 
- * 
- * Copyright (C) MICL,USTB
- */
-#include <span class="tag">&lt;<span class="title">cv.h</span>&gt;</span>
-#include <span class="tag">&lt;<span class="title">highgui.h</span>&gt;</span>
-#include <span class="tag">&lt;<span class="title">iostream</span>&gt;</span>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
+  </style>
+  <link rel="stylesheet" href="../stylesheets/Github.css" type="text/css" />
+</head>
+<body>
+<p><a href="../README.md"><font size=4>←返回主目录<font></a> </br></br></br></p>
+<h2 id="程序及分析">程序及分析</h2>
+<pre class="sourceCode c"><code class="sourceCode c"><span class="co">/*</span>
+<span class="co"> * FileName : MatObj.cpp</span>
+<span class="co"> * Author   : xiahouzuoxin @163.com</span>
+<span class="co"> * Version  : v1.0</span>
+<span class="co"> * Date     : Thu 15 May 2014 09:12:45 PM CST</span>
+<span class="co"> * Brief    : </span>
+<span class="co"> * </span>
+<span class="co"> * Copyright (C) MICL,USTB</span>
+<span class="co"> */</span>
+<span class="ot">#include &lt;cv.h&gt;</span>
+<span class="ot">#include &lt;highgui.h&gt;</span>
+<span class="ot">#include &lt;iostream&gt;</span>
 
 using namespace std;
 using namespace cv;
 
-int main(void)
+<span class="dt">int</span> main(<span class="dt">void</span>)
 {
-    /*
-     * Create Mat
-     */
-    Mat M(2,2,CV_8UC3, Scalar(0,0,255));
-    cout <span class="tag">&lt;<span class="title">&lt;</span> "<span class="attribute">M</span>=<span class="value">" &lt;&lt; endl &lt;&lt; "</span> " &lt;&lt; <span class="attribute">M</span> &lt;&lt; <span class="attribute">endl</span> &lt;&lt; <span class="attribute">endl</span>;
+    <span class="co">/*</span>
+<span class="co">     * Create Mat</span>
+<span class="co">     */</span>
+    Mat M(<span class="dv">2</span>,<span class="dv">2</span>,CV_8UC3, Scalar(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">255</span>));
+    cout &lt;&lt; <span class="st">&quot;M=&quot;</span> &lt;&lt; endl &lt;&lt; <span class="st">&quot; &quot;</span> &lt;&lt; M &lt;&lt; endl &lt;&lt; endl;
 
-    /*
-     * <span class="attribute">Matlab</span> <span class="attribute">style</span>
-     */
-    <span class="attribute">Mat</span> <span class="attribute">E</span> = <span class="attribute">Mat::eye</span>(<span class="attribute">4</span>,<span class="attribute">4</span>,<span class="attribute">CV_64F</span>);
-    <span class="attribute">cout</span> &lt;&lt; "<span class="attribute">E</span>=<span class="value">" &lt;&lt; endl &lt;&lt; "</span> " &lt;&lt; <span class="attribute">E</span> &lt;&lt; <span class="attribute">endl</span> &lt;&lt; <span class="attribute">endl</span>;
-    <span class="attribute">E</span> = <span class="attribute">Mat::ones</span>(<span class="attribute">4</span>,<span class="attribute">4</span>,<span class="attribute">CV_64F</span>);
-    <span class="attribute">cout</span> &lt;&lt; "<span class="attribute">E</span>=<span class="value">" &lt;&lt; endl &lt;&lt; "</span> " &lt;&lt; <span class="attribute">E</span> &lt;&lt; <span class="attribute">endl</span> &lt;&lt; <span class="attribute">endl</span>;
-    <span class="attribute">E</span> = <span class="attribute">Mat::zeros</span>(<span class="attribute">4</span>,<span class="attribute">4</span>,<span class="attribute">CV_64F</span>);
-    <span class="attribute">cout</span> &lt;&lt; "<span class="attribute">E</span>=<span class="value">" &lt;&lt; endl &lt;&lt; "</span> " &lt;&lt; <span class="attribute">E</span> &lt;&lt; <span class="attribute">endl</span> &lt;&lt; <span class="attribute">endl</span>;
-
-
-    /*
-     * <span class="attribute">Convert</span> <span class="attribute">IplImage</span> <span class="attribute">to</span> <span class="attribute">Mat</span>
-     */
-    <span class="attribute">IplImage</span> *<span class="attribute">img</span> = <span class="attribute">cvLoadImage</span>("<span class="attribute">..</span>/<span class="attribute">test_imgs</span>/<span class="attribute">Lena.jpg</span>");
-    <span class="attribute">Mat</span> <span class="attribute">L</span>(<span class="attribute">img</span>);
-    <span class="attribute">namedWindow</span>("<span class="attribute">Lena.jpg</span>", <span class="attribute">CV_WINDOW_AUTOSIZE</span>); 
-    <span class="attribute">imshow</span>("<span class="attribute">Lena.jpg</span>", <span class="attribute">L</span>);
-    <span class="attribute">waitKey</span>(<span class="attribute">0</span>);
-
-    /*
-     * <span class="attribute">Init</span> <span class="attribute">Mat</span> <span class="attribute">with</span> <span class="attribute">separated</span> <span class="attribute">data</span>
-     */
-    <span class="attribute">Mat</span> <span class="attribute">C</span> = (<span class="attribute">Mat_</span>&lt;<span class="attribute">int</span>&gt;</span>(3,3) <span class="tag">&lt;<span class="title">&lt;</span> <span class="attribute">0</span>,<span class="attribute">1</span>,<span class="attribute">2</span>,<span class="attribute">3</span>,<span class="attribute">4</span>,<span class="attribute">5</span>,<span class="attribute">6</span>,<span class="attribute">7</span>,<span class="attribute">8</span>);
-    <span class="attribute">cout</span> &lt;&lt; "<span class="attribute">C</span>=<span class="value">" &lt;&lt; endl &lt;&lt; "</span> " &lt;&lt; <span class="attribute">C</span> &lt;&lt; <span class="attribute">endl</span> &lt;&lt; <span class="attribute">endl</span>;
+    <span class="co">/*</span>
+<span class="co">     * Matlab style</span>
+<span class="co">     */</span>
+    Mat E = Mat::eye(<span class="dv">4</span>,<span class="dv">4</span>,CV_64F);
+    cout &lt;&lt; <span class="st">&quot;E=&quot;</span> &lt;&lt; endl &lt;&lt; <span class="st">&quot; &quot;</span> &lt;&lt; E &lt;&lt; endl &lt;&lt; endl;
+    E = Mat::ones(<span class="dv">4</span>,<span class="dv">4</span>,CV_64F);
+    cout &lt;&lt; <span class="st">&quot;E=&quot;</span> &lt;&lt; endl &lt;&lt; <span class="st">&quot; &quot;</span> &lt;&lt; E &lt;&lt; endl &lt;&lt; endl;
+    E = Mat::zeros(<span class="dv">4</span>,<span class="dv">4</span>,CV_64F);
+    cout &lt;&lt; <span class="st">&quot;E=&quot;</span> &lt;&lt; endl &lt;&lt; <span class="st">&quot; &quot;</span> &lt;&lt; E &lt;&lt; endl &lt;&lt; endl;
 
 
-    <span class="attribute">return</span> <span class="attribute">0</span>;
-}</span></code></pre>
-<ol>
+    <span class="co">/*</span>
+<span class="co">     * Convert IplImage to Mat</span>
+<span class="co">     */</span>
+    IplImage *img = cvLoadImage(<span class="st">&quot;../test_imgs/Lena.jpg&quot;</span>);
+    Mat L(img);
+    namedWindow(<span class="st">&quot;Lena.jpg&quot;</span>, CV_WINDOW_AUTOSIZE); 
+    imshow(<span class="st">&quot;Lena.jpg&quot;</span>, L);
+    waitKey(<span class="dv">0</span>);
+
+    <span class="co">/*</span>
+<span class="co">     * Init Mat with separated data</span>
+<span class="co">     */</span>
+    Mat C = (Mat_&lt;<span class="dt">int</span>&gt;(<span class="dv">3</span>,<span class="dv">3</span>) &lt;&lt; <span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">6</span>,<span class="dv">7</span>,<span class="dv">8</span>);
+    cout &lt;&lt; <span class="st">&quot;C=&quot;</span> &lt;&lt; endl &lt;&lt; <span class="st">&quot; &quot;</span> &lt;&lt; C &lt;&lt; endl &lt;&lt; endl;
+
+
+    <span class="kw">return</span> <span class="dv">0</span>;
+}</code></pre>
+<ol style="list-style-type: decimal">
 <li><p>Mat是OpenCV最基本的数据结构，Mat即矩阵（Matrix）的缩写，Mat数据结构主要包含2部分：Header和Pointer。Header中主要包含矩阵的大小，存储方式，存储地址等信息；Pointer中存储指向像素值的指针。我们在读取图片的时候就是将图片定义为Mat类型，其重载的构造函数一大堆，</p>
-<pre><code class="cpp"><span class="keyword">class</span> CV_EXPORTS Mat
+<pre><code>class CV_EXPORTS Mat
 {
-<span class="keyword">public</span>:
-  <span class="comment">//! default constructor</span>
-  Mat();
-  <span class="comment">//! constructs 2D matrix of the specified size and type</span>
-  <span class="comment">// (_type is CV_8UC1, CV_64FC3, CV_32SC(12) etc.)</span>
-  Mat(<span class="keyword">int</span> _rows, <span class="keyword">int</span> _cols, <span class="keyword">int</span> _type);
-  Mat(Size _size, <span class="keyword">int</span> _type);
-  <span class="comment">//! constucts 2D matrix and fills it with the specified value _s.</span>
-  Mat(<span class="keyword">int</span> _rows, <span class="keyword">int</span> _cols, <span class="keyword">int</span> _type, <span class="keyword">const</span> Scalar&amp; _s);
-  Mat(Size _size, <span class="keyword">int</span> _type, <span class="keyword">const</span> Scalar&amp; _s);
+public:
+    //! default constructor
+    Mat();
+    //! constructs 2D matrix of the specified size and type
+    // (_type is CV_8UC1, CV_64FC3, CV_32SC(12) etc.)
+    Mat(int _rows, int _cols, int _type);
+    Mat(Size _size, int _type);
+    //! constucts 2D matrix and fills it with the specified value _s.
+    Mat(int _rows, int _cols, int _type, const Scalar&amp; _s);
+    Mat(Size _size, int _type, const Scalar&amp; _s);
 
-  <span class="comment">//! constructs n-dimensional matrix</span>
-  Mat(<span class="keyword">int</span> _ndims, <span class="keyword">const</span> <span class="keyword">int</span>* _sizes, <span class="keyword">int</span> _type);
-  Mat(<span class="keyword">int</span> _ndims, <span class="keyword">const</span> <span class="keyword">int</span>* _sizes, <span class="keyword">int</span> _type, <span class="keyword">const</span> Scalar&amp; _s);
+    //! constructs n-dimensional matrix
+    Mat(int _ndims, const int* _sizes, int _type);
+    Mat(int _ndims, const int* _sizes, int _type, const Scalar&amp; _s);
 
-  <span class="comment">//! copy constructor</span>
-  Mat(<span class="keyword">const</span> Mat&amp; m);
-  <span class="comment">//! constructor for matrix headers pointing to user-allocated data</span>
-  Mat(<span class="keyword">int</span> _rows, <span class="keyword">int</span> _cols, <span class="keyword">int</span> _type, <span class="keyword">void</span>* _data, size_t _step=AUTO_STEP);
-  Mat(Size _size, <span class="keyword">int</span> _type, <span class="keyword">void</span>* _data, size_t _step=AUTO_STEP);
-  Mat(<span class="keyword">int</span> _ndims, <span class="keyword">const</span> <span class="keyword">int</span>* _sizes, <span class="keyword">int</span> _type, <span class="keyword">void</span>* _data, <span class="keyword">const</span> size_t* _steps=<span class="number">0</span>);
+    //! copy constructor
+    Mat(const Mat&amp; m);
+    //! constructor for matrix headers pointing to user-allocated data
+    Mat(int _rows, int _cols, int _type, void* _data, size_t _step=AUTO_STEP);
+    Mat(Size _size, int _type, void* _data, size_t _step=AUTO_STEP);
+    Mat(int _ndims, const int* _sizes, int _type, void* _data, const size_t* _steps=0);
 
-  <span class="comment">//! creates a matrix header for a part of the bigger matrix</span>
-  Mat(<span class="keyword">const</span> Mat&amp; m, <span class="keyword">const</span> Range&amp; rowRange, <span class="keyword">const</span> Range&amp; colRange=Range::all());
-  Mat(<span class="keyword">const</span> Mat&amp; m, <span class="keyword">const</span> Rect&amp; roi);
-  Mat(<span class="keyword">const</span> Mat&amp; m, <span class="keyword">const</span> Range* ranges);
-  <span class="comment">//! converts old-style CvMat to the new matrix; the data is not copied by default</span>
-  Mat(<span class="keyword">const</span> CvMat* m, <span class="keyword">bool</span> copyData=<span class="keyword">false</span>);
-  <span class="comment">//! converts old-style CvMatND to the new matrix; the data is not copied by default</span>
-  Mat(<span class="keyword">const</span> CvMatND* m, <span class="keyword">bool</span> copyData=<span class="keyword">false</span>);
-  <span class="comment">//! converts old-style IplImage to the new matrix; the data is not copied by default</span>
-  Mat(<span class="keyword">const</span> IplImage* img, <span class="keyword">bool</span> copyData=<span class="keyword">false</span>);
+    //! creates a matrix header for a part of the bigger matrix
+    Mat(const Mat&amp; m, const Range&amp; rowRange, const Range&amp; colRange=Range::all());
+    Mat(const Mat&amp; m, const Rect&amp; roi);
+    Mat(const Mat&amp; m, const Range* ranges);
+    //! converts old-style CvMat to the new matrix; the data is not copied by default
+    Mat(const CvMat* m, bool copyData=false);
+    //! converts old-style CvMatND to the new matrix; the data is not copied by default
+    Mat(const CvMatND* m, bool copyData=false);
+    //! converts old-style IplImage to the new matrix; the data is not copied by default
+    Mat(const IplImage* img, bool copyData=false);
 
-  ......
-  }</code></pre>
+    ......
+    }</code></pre>
 <p>要了解如何初始化Mat结构，就应该了解它的构造函数，比如程序中的第一初始化方式调用额就是</p>
-<pre><code class="cpp">Mat(<span class="keyword">int</span> _rows, <span class="keyword">int</span> _cols, <span class="keyword">int</span> _type, <span class="keyword">const</span> Scalar&amp; _s);</code></pre>
+<pre><code>Mat(int _rows, int _cols, int _type, const Scalar&amp; _s);</code></pre>
 <p>这个构造函数。</p>
 <p>IplImage*是C语言操作OpenCV的数据结构，在当时C操纵OpenCV的时候，地位等同于Mat，OpenCV为其提供了一个接口，很方便的直接将IplImage转化为Mat，即使用构造函数</p>
-<pre><code class="cpp">Mat(<span class="keyword">const</span> IplImage* img, <span class="keyword">bool</span> copyData=<span class="keyword">false</span>);</code></pre>
-<p>上面程序中的第二种方法就是使用的这个构造函数。</p>
-</li>
+<pre><code>Mat(const IplImage* img, bool copyData=false);</code></pre>
+<p>上面程序中的第二种方法就是使用的这个构造函数。</p></li>
 <li><p>关于Mat数据复制：前面说过Mat包括头和数据指针，当使用Mat的构造函数初始化的时候，会将头和数据指针复制（注意：只是指针复制，指针指向的地址不会复制），若要将数据也复制，则必须使用copyTo或clone函数</p>
-<p><img src="../images/OpenCV基础篇之Mat数据结构/Mat.png" alt="mat"></p>
-</li>
+<div class="figure">
+<img src="../images/OpenCV基础篇之Mat数据结构/Mat.png" alt="mat" /><p class="caption">mat</p>
+</div></li>
 <li><p>Mat还有几个常用的成员函数，在之后的文章中将会使用到：</p>
-<pre><code class="cpp"><span class="comment">//! returns true iff the matrix data is continuous</span>
-<span class="comment">// (i.e. when there are no gaps between successive rows).</span>
-<span class="comment">// similar to CV_IS_MAT_CONT(cvmat-&gt;type)</span>
-<span class="keyword">bool</span> isContinuous() <span class="keyword">const</span>;</code></pre>
+<pre><code>//! returns true iff the matrix data is continuous
+// (i.e. when there are no gaps between successive rows).
+// similar to CV_IS_MAT_CONT(cvmat-&gt;type)
+bool isContinuous() const;</code></pre>
 <p>这了解上面的函数作用前，得了解下OpenCV中存储像素的方法，如下，灰度图（单通道）存储按行列存储，</p>
-<p><img src="../images/OpenCV基础篇之Mat数据结构/single_channel.png" alt="single_channel"></p>
+<div class="figure">
+<img src="../images/OpenCV基础篇之Mat数据结构/single_channel.png" alt="single_channel" /><p class="caption">single_channel</p>
+</div>
 <p>三通道RGB存储方式如下，每列含有三个通道，</p>
-<p><img src="../images/OpenCV基础篇之Mat数据结构/rgb_channel.png" alt="rgb_channel"></p>
+<div class="figure">
+<img src="../images/OpenCV基础篇之Mat数据结构/rgb_channel.png" alt="rgb_channel" /><p class="caption">rgb_channel</p>
+</div>
 <p>为了加快访问的速度，openCV往往会在内存中将像素数据连续地存储成一行，isContinus()函数的作用就是用于判断是否连续存储成一行。存储成一行有什么好处呢？给定这行的头指针p，则只要使用p++操作就能逐个访问数据。</p>
 <p>因此当判断存放在一行的时候，可以通过数据指针++很容易遍历图像像素：</p>
-<pre><code class="cpp"><span class="keyword">long</span> nRows = M.rows * M.channels();  <span class="comment">// channels()也是Mat中一个常用的函数，用于获取通道数（RGB=3，灰度=1）</span>
-<span class="keyword">long</span> nCols = M.cols;
-uchar *p = M.data;  <span class="comment">// 数据指针</span>
-<span class="keyword">if</span>(M.isContinuous())
+<pre><code>long nRows = M.rows * M.channels();  // channels()也是Mat中一个常用的函数，用于获取通道数（RGB=3，灰度=1）
+long nCols = M.cols;
+uchar *p = M.data;  // 数据指针
+if(M.isContinuous())
 {
-  nCols *= nRows;
-  <span class="keyword">for</span> (<span class="keyword">long</span> i=<span class="number">0</span>; i &lt; nCols; i++) {
-      *p++ = ...; <span class="comment">// 像素赋值或读取操作</span>
-  }        
+    nCols *= nRows;
+    for (long i=0; i &lt; nCols; i++) {
+        *p++ = ...; // 像素赋值或读取操作
+    }       
 }</code></pre>
 <p>请注意以上几个常用的Mat成员遍历和函数：</p>
-<pre><code class="ruby"><span class="constant">M</span>.row; <span class="regexp">//</span> 返回图像行数
-<span class="constant">M</span>.nCols;  <span class="regexp">//</span> 返回图像列数
-<span class="constant">M</span>.channels();  <span class="regexp">//</span>返回通道数
-<span class="constant">M</span>.isContinuous(); <span class="regexp">//</span> 返回bool类型表示是否连续存储</code></pre>
-</li>
-<li><p>更多关于Mat的信息请参考安装目录下的include/opencv2/core.hpp文件</p>
-</li>
+<pre><code>M.row; // 返回图像行数
+M.nCols;  // 返回图像列数
+M.channels();  //返回通道数
+M.isContinuous(); // 返回bool类型表示是否连续存储</code></pre></li>
+<li><p>更多关于Mat的信息请参考安装目录下的include/opencv2/core.hpp文件</p></li>
 </ol>
-<h2>效果</h2>
-<p><img src="../images/OpenCV基础篇之Mat数据结构/result.png" alt="result"></p>
+<h2 id="效果">效果</h2>
+<div class="figure">
+<img src="../images/OpenCV基础篇之Mat数据结构/result.png" alt="result" /><p class="caption">result</p>
+</div>
 <p>左边是矩阵的一些操作输出结果，右边的图是通过IplImage *结构读入，转换为Mat后显示结果。</p>
-</font></font></body></html>
+</body>
+</html>

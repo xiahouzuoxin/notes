@@ -1,105 +1,136 @@
-<html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"><link rel="stylesheet" id="theme" href="../stylesheets/Github.css"></head><body><p><a href="../README.html"><font size="4">←返回主目录<font></font></font></a><font size="4"><font><br></font></font></p><font size="4"><font>
-<div align="right"><a href="../index.html" target="_self" title="返回主页"><img src="../images/Home.png"></a> <a href="#bottom" target="_self" title="跳转底部"><img src="../images/bottom.png"></a></div>
-
-<p><strong>文题</strong>：STM32用作编码器接口的原理<br></p>
-<p><strong>作者</strong>：xiahouzuoxin<br></p>
-<p><strong>日期</strong>：2011-10-25，整理于2014-09-25<br></p>
-<p><em>转载请注明出处：<a href="http://xiahouzuoxin.github.io/notes">http://xiahouzuoxin.github.io/notes</a></em></p>
-<hr>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
+  </style>
+  <link rel="stylesheet" href="../stylesheets/Github.css" type="text/css" />
+</head>
+<body>
+<p><a href="../README.md"><font size=4>←返回主目录<font></a></br></p>
+<div align="right">
+<a href="../index.html" target="_self" title="返回主页"><img src="../images/Home.png"></a> <a href="#bottom" target="_self" title="跳转底部"><img src="../images/bottom.png"></a>
+</div>
+<p><strong>文题</strong>：STM32用作编码器接口的原理</br></p>
+<p><strong>作者</strong>：xiahouzuoxin</br></p>
+<p><strong>日期</strong>：2011-10-25，整理于2014-09-25</br></p>
+<p><em>转载请注明出处：<http://xiahouzuoxin.github.io/notes></em></p>
+<hr />
 <p>这是一篇旧文，早在上大二的时候，在地下室（当时实验室在防空地下室）顺手在word上写的，当时STM32正刚刚开始蓬勃发展，如今时隔3年，整理到这里！</p>
-<h2>关于定时器实现编码器计数的两点说明</h2>
-<ol>
+<h2 id="关于定时器实现编码器计数的两点说明">关于定时器实现编码器计数的两点说明</h2>
+<ol style="list-style-type: decimal">
 <li><p>外部编码器为定时器提供带有方向的时钟，如下图1右上角。通用定时器总共四种时钟提供方式，现在使用的即是TI1F和TI2F的组合时钟方式。</p>
-<p><img src="../images/STM32用作编码器接口的原理/img1.png" alt="img1"></p>
-</li>
+<div class="figure">
+<img src="../images/STM32用作编码器接口的原理/img1.png" alt="img1" /><p class="caption">img1</p>
+</div></li>
 <li><p>TI1、TI2作为编码器输入口，通过配置在TI1和TI2边沿的计数位置实现所谓的倍频特性，通过向上向下计数实现鉴相，若向上计数往前走，则向下计数则是往后退的过程。由图2和图3知，控制计数点的不同，只能0/2/4倍频。</p>
-<p><img src="../images/STM32用作编码器接口的原理/img2.png" alt="img2">
-<img src="../images/STM32用作编码器接口的原理/img3.png" alt="img3"></p>
-</li>
+<p><img src="../images/STM32用作编码器接口的原理/img2.png" alt="img2" /> <img src="../images/STM32用作编码器接口的原理/img3.png" alt="img3" /></p></li>
 </ol>
-<h2>实例代码（调试通过）</h2>
-<pre><code class="language-c javascript"><span class="comment">/******************************************************************************
-                        使用到变量定义
-******************************************************************************/</span>
-#define PULSE_PER_CIRCLE       <span class="number">600</span>   <span class="comment">//编码器分辨率，即转一圈脉冲数</span>
-#define MAX_COUNT                 <span class="number">800</span>   <span class="comment">//最大计数值，解决计数问题时要用</span>
-#define ENCODER_TIM_PERIOD   (PULSE_PER_CIRCLE * <span class="number">4</span> - <span class="number">1</span>)  <span class="comment">//定时器周期</span>
-SINT32 encoder_last = <span class="number">0</span>;               <span class="comment">//记录上一次采集编码器数值</span>
-SINT32 encoder_cnt = <span class="number">0</span>;               <span class="comment">//编码器采集值</span>
-<span class="comment">/******************************************************************************
-                    TIM3定时器配置为编码器模式
-******************************************************************************/</span>
-<span class="keyword">void</span> EncodeInit(<span class="keyword">void</span>)
+<h2 id="实例代码调试通过">实例代码（调试通过）</h2>
+<pre class="sourceCode c"><code class="sourceCode c"><span class="co">/******************************************************************************</span>
+<span class="co">                        使用到变量定义</span>
+<span class="co">******************************************************************************/</span>
+<span class="ot">#define PULSE_PER_CIRCLE       600   </span><span class="co">//编码器分辨率，即转一圈脉冲数</span>
+<span class="ot">#define MAX_COUNT            800   </span><span class="co">//最大计数值，解决计数问题时要用</span>
+<span class="ot">#define ENCODER_TIM_PERIOD   (PULSE_PER_CIRCLE * 4 - 1)  </span><span class="co">//定时器周期</span>
+SINT32 encoder_last = <span class="dv">0</span>;               <span class="co">//记录上一次采集编码器数值</span>
+SINT32 encoder_cnt = <span class="dv">0</span>;               <span class="co">//编码器采集值</span>
+<span class="co">/******************************************************************************</span>
+<span class="co">                    TIM3定时器配置为编码器模式</span>
+<span class="co">******************************************************************************/</span>
+<span class="dt">void</span> EncodeInit(<span class="dt">void</span>)
 {
     GPIO_InitTypeDef GPIO_InitStructure;
     TIM_TimeBaseInitTypeDef  TIM3_TimeBaseStructure;
     TIM_ICInitTypeDef TIM3_ICInitStructure;
 
-    <span class="comment">/*TIM2 Clock enable*/</span>
+    <span class="co">/*TIM2 Clock enable*/</span>
     RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3, ENABLE);
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);
-    <span class="comment">/*Configure PA6,7*/</span>
+    <span class="co">/*Configure PA6,7*/</span>
     GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6 | GPIO_Pin_7;       
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING; 
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz; 
     GPIO_Init(GPIOA, &amp;GPIO_InitStructure);
-    <span class="comment">/*COnfigure TIM3*/</span>
-    TIM3_TimeBaseStructure.TIM_Prescaler = <span class="number">0</span>;                      <span class="comment">//TIM clock = 72MHz        </span>
+    <span class="co">/*COnfigure TIM3*/</span>
+    TIM3_TimeBaseStructure.TIM_Prescaler = <span class="dv">0</span>;                      <span class="co">//TIM clock = 72MHz        </span>
     TIM3_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;  
     TIM3_TimeBaseStructure.TIM_Period = ENCODER_TIM_PERIOD;                            
     TIM3_TimeBaseStructure.TIM_ClockDivision = TIM_CKD_DIV1;            
-    TIM3_TimeBaseStructure.TIM_RepetitionCounter = <span class="number">0</span>; 
+    TIM3_TimeBaseStructure.TIM_RepetitionCounter = <span class="dv">0</span>; 
     TIM_TimeBaseInit(TIM3, &amp;TIM3_TimeBaseStructure);     
-
+    
     TIM_EncoderInterfaceConfig(TIM3, TIM_EncoderMode_TI12, TIM_ICPolarity_Rising,
-                               TIM_ICPolarity_Rising);  <span class="comment">//配置编码器模式，4倍频</span>
+                               TIM_ICPolarity_Rising);  <span class="co">//配置编码器模式，4倍频</span>
 
     TIM_ICStructInit(&amp;TIM3_ICInitStructure);
-    TIM3_ICInitStructure.TIM_ICFilter = <span class="number">6</span>;
+    TIM3_ICInitStructure.TIM_ICFilter = <span class="dv">6</span>;
     TIM_ICInit(TIM3, &amp;TIM3_ICInitStructure);
-    <span class="comment">/*Reset counter*/</span>
-    TIM3-&gt;CNT = <span class="number">0</span>;
+    <span class="co">/*Reset counter*/</span>
+    TIM3-&gt;CNT = <span class="dv">0</span>;
     TIM_Cmd(TIM3, ENABLE);
 }</code></pre>
-<p>到此，编码器初始化就已经配置好了，按理应该接上就能用了。但是，STM32定时器是16位，假如计数值超过65535，数据会丢失。因此，参考了<a href="http://www.21ic.com">http://www.21ic.com</a>上相关资料。定义32位全局变量存储脉冲数，通过下面的程序技巧实现计数，下面程序是关键。</p>
-<pre><code class="cpp"><span class="comment">/*****************************************************************************/</span>
+<p>到此，编码器初始化就已经配置好了，按理应该接上就能用了。但是，STM32定时器是16位，假如计数值超过65535，数据会丢失。因此，参考了<http://www.21ic.com>上相关资料。定义32位全局变量存储脉冲数，通过下面的程序技巧实现计数，下面程序是关键。</p>
+<pre><code>/*****************************************************************************/
 Function Name: ENC_Get_Electrical_Angle
 Author       : 夏侯佐鑫
-Date         : <span class="number">2011</span>-<span class="number">10</span>-<span class="number">22</span>
+Date         : 2011-10-22
 ******************************************************************************/
-SINT16 ENC_Get_Electrical_Angle(<span class="keyword">void</span>)
+SINT16 ENC_Get_Electrical_Angle(void)
 {
-    <span class="keyword">static</span>  UINT16   lastCount = <span class="number">0</span>;
+    static  UINT16   lastCount = 0;
     UINT16  curCount = TIM3-&gt;CNT;
     SINT32 dAngle = curCount - lastCount;
 
-    <span class="keyword">if</span>(dAngle &gt;= MAX_COUNT)
+    if(dAngle &gt;= MAX_COUNT)
     {
         dAngle -= ENCODER_TIM_PERIOD;
     }
-    <span class="keyword">else</span> <span class="keyword">if</span>(dAngle &lt; -MAX_COUNT)
+    else if(dAngle &lt; -MAX_COUNT)
     {
         dAngle += ENCODER_TIM_PERIOD;
     }
     lastCount = curCount;
-    <span class="keyword">return</span> (SINT16)dAngle;    
+    return (SINT16)dAngle;  
 }</code></pre>
 <p>在SysTick中采集数值，SysTick配置为SysTick_Config(720000)即10ms。SysTick中断函数如下：</p>
-<pre><code class="javascript"><span class="comment">/******************************************************************************
+<pre><code>/******************************************************************************
 Function Name: SysTick_Handler
 Author       : 夏侯佐鑫
 Date         : 2011-04-22
-******************************************************************************/</span>
-<span class="keyword">void</span> SysTick_Handler(<span class="keyword">void</span>)
+******************************************************************************/
+void SysTick_Handler(void)
 {
-    <span class="comment">/*Encoder*/</span>
+    /*Encoder*/
     encoder_last = encoder_cnt;
     encoder_cnt = encoder_cnt + ENC_Get_Electrical_Angle();
 }</code></pre>
 <p>到此，编码器记里程功能完美实现。此实现代码用于2012年全国电脑鼠走迷宫大赛的电脑鼠制作中。</p>
-<p></p><div align="right"><a href="../index.html" target="_self" title="返回主页"><img src="../images/Home.png"></a> <a href="#top" target="_self" title="返回顶部"><img src="../images/top.png"></a></div>
-<a name="bottom"></a>
-<a href="../README.html"><font size="4">←返回主目录<font></font></font></a><font size="4"><font><br><p></p>
+<div align="right">
+<a href="../index.html" target="_self" title="返回主页"><img src="../images/Home.png"></a> <a href="#top" target="_self" title="返回顶部"><img src="../images/top.png"></a>
+</div>
+<p><a name="bottom"></a> <a href="../README.md"><font size=4>←返回主目录<font></a></br></p>
 <!-- 
 
 本模板为转成Html后需要修改的地方:
@@ -110,24 +141,5 @@ Date         : 2011-04-22
 5. 修正其它可能不正确的链接 
 
 -->
-
-<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"slide":{"type":"slide","bdImg":"5","bdPos":"right","bdTop":"200"},"image":{"viewList":["qzone","tsina","tqq","renren","weixin"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["qzone","tsina","tqq","renren","weixin"]}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
-
-<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="STM32用作编码器接口的原理" data-title="STM32用作编码器接口的原理" data-url="xiahouzuoxin.github.io/notes/html/STM32用作编码器接口的原理.html"></div>
-<!-- 多说评论框 end -->
-<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
-<script type="text/javascript">
-var duoshuoQuery = {short_name:"xiahouzuoxin"};
-	(function() {
-		var ds = document.createElement('script');
-		ds.type = 'text/javascript';ds.async = true;
-		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-		ds.charset = 'UTF-8';
-		(document.getElementsByTagName('head')[0] 
-		 || document.getElementsByTagName('body')[0]).appendChild(ds);
-	})();
-	</script>
-<!-- 多说公共JS代码 end -->
-
-</font></font></font></font></body></html>
+</body>
+</html>

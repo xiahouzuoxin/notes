@@ -1,11 +1,42 @@
-<html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"><link rel="stylesheet" id="theme" href="../stylesheets/Github.css"></head><body><p><a href="../README.html"><font size="4">←返回主目录<font></font></font></a><font size="4"><font><br></font></font></p><font size="4"><font>
-<div align="right"><a href="../index.html" target="_self" title="返回主页"><img src="../images/Home.png"></a><a href="../Archives.html" target="_self" title="文章存档"><img src="../images/Archives.jpg"></a><a href="#bottom" target="_self" title="跳转底部"><img src="../images/bottom.png"></a></div>
-
-<p><strong>文题</strong>：STM32中NVIC(嵌套向量中断控制)的理解<br></p>
-<p><strong>作者</strong>：xiahouzuoxin<br></p>
-<p><strong>日期</strong>：2011-10-04，整理于2014-09-25<br></p>
-<p><em>转载请注明出处：<a href="http://xiahouzuoxin.github.io/notes">http://xiahouzuoxin.github.io/notes</a></em></p>
-<hr>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
+  </style>
+  <link rel="stylesheet" href="../stylesheets/Github.css" type="text/css" />
+</head>
+<body>
+<p><a href="../README.md"><font size=4>←返回主目录<font></a></br></p>
+<div align="right">
+<a href="../index.html" target="_self" title="返回主页"><img src="../images/Home.png"></a> <a href="#bottom" target="_self" title="跳转底部"><img src="../images/bottom.png"></a>
+</div>
+<p><strong>文题</strong>：STM32中NVIC(嵌套向量中断控制)的理解</br></p>
+<p><strong>作者</strong>：xiahouzuoxin</br></p>
+<p><strong>日期</strong>：2011-10-04，整理于2014-09-25</br></p>
+<p><em>转载请注明出处：<http://xiahouzuoxin.github.io/notes></em></p>
+<hr />
 <p>这是一篇旧文，早在上大二的时候，在地下室（当时实验室在防空地下室）顺手在word上写的，当时STM32正刚刚开始蓬勃发展，如今时隔3年，整理到这里！</p>
 <p>两日被些许琐事所牵，身心俱累，本无心记录，但回想前几天的点滴收获，无录甚是可惜，于是身倚椅，旁敲键盘记之，唯慰藉自己及共享同道仁友。废言不再多，就此入题。</p>
 <p>NVIC，中文名嵌套中断向量控制器，是Cortex-M3系列控制器内部独有集成单元，与CPU结合紧密，降低中断延迟时间并且能更加高效处理后续中断。举个例子，比如火车站买票，那些火车站的规章制度就是NVIC，规定学生和军人有比一般人更高优先级，它们则给你单独安排个窗口，同学与同学之间也有区别，那就是你也得排队，也就是你的组别（抢断优先级）和你的排队序号（响应优先级）决定你何时能买到票。</p>
@@ -13,60 +44,62 @@
 <p>STM32中指定优先级的寄存器为4位，其定义如下：</p>
 <blockquote>
 <p>第0组：所有4位用于指定响应优先级</p>
+</blockquote>
+<blockquote>
 <p>第1组：最高1位用于指定抢占式优先级，最低3位用于指定响应优先级</p>
+</blockquote>
+<blockquote>
 <p>第2组：最高2位用于指定抢占式优先级，最低2位用于指定响应优先级</p>
+</blockquote>
+<blockquote>
 <p>第3组：最高3位用于指定抢占式优先级，最低1位用于指定响应优先级</p>
+</blockquote>
+<blockquote>
 <p>第4组：所有4位用于指定抢占式优先级</p>
 </blockquote>
 <p>以上定义也称作中断优先级分组，相关内容在STM32固件库的misc.h文件中有详细定义。</p>
 <p>基础了解了就可以对中断进行操作了：</p>
-<ol>
+<ol style="list-style-type: decimal">
 <li><p>使用<code>void NVIC_PriorityGroupConfig(uint32_t NVIC_PriorityGroup)</code>函数对优先级分组配置。<code>NVIC_PriorityGroup</code>可以配置为</p>
 <p>NVIC_PriorityGroup_0 =&gt; 选择第0组</p>
 <p>NVIC_PriorityGroup_1 =&gt; 选择第1组</p>
 <p>NVIC_PriorityGroup_2 =&gt; 选择第2组</p>
 <p>NVIC_PriorityGroup_3 =&gt; 选择第3组</p>
-<p>NVIC_PriorityGroup_4 =&gt; 选择第4组 </p>
-<p>例如：NVIC_PriorityGroupConfig(NVIC_PriorityGroup_0)配置为0组。</p>
-</li>
+<p>NVIC_PriorityGroup_4 =&gt; 选择第4组</p>
+<p>例如：NVIC_PriorityGroupConfig(NVIC_PriorityGroup_0)配置为0组。</p></li>
 <li><p>中断初始化结构体配置，结构体类型定义如下：</p>
-<pre><code class="language-c cpp"><span class="keyword">typedef</span> <span class="keyword">struct</span>
+<pre class="sourceCode c"><code class="sourceCode c"><span class="kw">typedef</span> <span class="kw">struct</span>
 {
-uint8_t NVIC_IRQChannel;                  
-uint8_t NVIC_IRQChannelPreemptionPriority;  <span class="comment">//抢断优先级</span>
-uint8_t NVIC_IRQChannelSubPriority;  <span class="comment">//响应优先级       </span>
-FunctionalState NVIC_IRQChannelCmd;       
+  <span class="dt">uint8_t</span> NVIC_IRQChannel;                  
+  <span class="dt">uint8_t</span> NVIC_IRQChannelPreemptionPriority;  <span class="co">//抢断优先级</span>
+  <span class="dt">uint8_t</span> NVIC_IRQChannelSubPriority;  <span class="co">//响应优先级       </span>
+  FunctionalState NVIC_IRQChannelCmd;       
 } NVIC_InitTypeDef;</code></pre>
 <p>例如：STM32外部中断0配置如下：</p>
-<pre><code class="ruby"><span class="constant">EXTI_NVIC_InitStructure</span>.<span class="constant">NVIC_IRQChannel</span> = <span class="constant">EXTI0_IRQn</span>;
-<span class="constant">EXTI_NVIC_InitStructure</span>.<span class="constant">NVIC_IRQChannelPreemptionPriority</span> = <span class="number">1</span>;  <span class="regexp">//</span>抢占优先级别(<span class="number">0</span>~<span class="number">1</span>)
-<span class="constant">EXTI_NVIC_InitStructure</span>.<span class="constant">NVIC_IRQChannelSubPriority</span> = <span class="number">7</span>;  <span class="regexp">//</span>响应优先级别(<span class="number">0</span>~<span class="number">7</span>)
-<span class="constant">EXTI_NVIC_InitStructure</span>.<span class="constant">NVIC_IRQChannelCmd</span> = <span class="constant">ENABLE</span>;</code></pre>
-</li>
+<pre><code>EXTI_NVIC_InitStructure.NVIC_IRQChannel = EXTI0_IRQn;
+EXTI_NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;  //抢占优先级别(0~1)
+EXTI_NVIC_InitStructure.NVIC_IRQChannelSubPriority = 7;  //响应优先级别(0~7)
+EXTI_NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;</code></pre></li>
 <li><p>中断初始化结构体初始化操作如下</p>
-<pre><code class="http"><span class="attribute">NVIC_Init(&amp;EXTI_NVIC_InitStructure);</span></code></pre>
-</li>
+<pre><code>NVIC_Init(&amp;EXTI_NVIC_InitStructure);</code></pre></li>
 <li><p>开关总中断操作。在STM32中是通过改变CPU优先级来允许和禁止中断的。</p>
 <ul>
 <li><p>下面两个函数等效关闭总中断</p>
-<pre><code class="language-c javascript"><span class="keyword">void</span> NVIC_SETPRIMASK(<span class="keyword">void</span>)； 
-<span class="keyword">void</span> NVIC_SETFAULTMASK(<span class="keyword">void</span>)；</code></pre>
-</li>
+<pre class="sourceCode c"><code class="sourceCode c"><span class="dt">void</span> NVIC_SETPRIMASK(<span class="dt">void</span>)； 
+<span class="dt">void</span> NVIC_SETFAULTMASK(<span class="dt">void</span>)；</code></pre></li>
 <li><p>下面两个函数等效开放总中断</p>
-<pre><code class="language-c javascript"><span class="keyword">void</span> NVIC_RESETPRIMASK(<span class="keyword">void</span>)； 
-<span class="keyword">void</span> NVIC_RESETFAULTMASK(<span class="keyword">void</span>)；</code></pre>
-</li>
+<pre class="sourceCode c"><code class="sourceCode c"><span class="dt">void</span> NVIC_RESETPRIMASK(<span class="dt">void</span>)； 
+<span class="dt">void</span> NVIC_RESETFAULTMASK(<span class="dt">void</span>)；</code></pre></li>
 <li><p>常用操作是先关后开中断</p>
-<pre><code class="language-c ruby"><span class="constant">NVIC_SETPRIMASK</span>();     <span class="regexp">//</span> <span class="constant">Disable</span> <span class="constant">Interrupts</span> 
-<span class="constant">NVIC_RESETPRIMASK</span>();   <span class="regexp">//</span> <span class="constant">Enable</span> <span class="constant">Interrupts</span></code></pre>
-</li>
+<pre class="sourceCode c"><code class="sourceCode c">NVIC_SETPRIMASK();     <span class="co">// Disable Interrupts </span>
+NVIC_RESETPRIMASK();   <span class="co">// Enable Interrupts</span></code></pre></li>
 </ul>
-<p>两种类型函数要成对使用。</p>
-</li>
+<p>两种类型函数要成对使用。</p></li>
 </ol>
-<p></p><div align="right"><a href="../index.html" target="_self" title="返回主页"><img src="../images/Home.png"></a><a href="../Archives.html" target="_self" title="文章存档"><img src="../images/Archives.jpg"></a><a href="#top" target="_self" title="返回顶部"><img src="../images/top.png"></a></div>
-<a name="bottom"></a>
-<a href="../README.html"><font size="4">←返回主目录<font></font></font></a><font size="4"><font><br><p></p>
+<div align="right">
+<a href="../index.html" target="_self" title="返回主页"><img src="../images/Home.png"></a> <a href="#top" target="_self" title="返回顶部"><img src="../images/top.png"></a>
+</div>
+<p><a name="bottom"></a> <a href="../README.md"><font size=4>←返回主目录<font></a></br></p>
 <!-- 
 
 本模板为转成Html后需要修改的地方:
@@ -77,24 +110,5 @@ FunctionalState NVIC_IRQChannelCmd;
 5. 修正其它可能不正确的链接 
 
 -->
-
-<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"slide":{"type":"slide","bdImg":"5","bdPos":"right","bdTop":"200"},"image":{"viewList":["qzone","tsina","tqq","renren","weixin"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["qzone","tsina","tqq","renren","weixin"]}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
-
-<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="STM32中NVIC(嵌套向量中断控制)的理解" data-title="STM32中NVIC(嵌套向量中断控制)的理解" data-url="xiahouzuoxin.github.io/notes/html/STM32中NVIC(嵌套向量中断控制)的理解.html"></div>
-<!-- 多说评论框 end -->
-<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
-<script type="text/javascript">
-var duoshuoQuery = {short_name:"xiahouzuoxin"};
-	(function() {
-		var ds = document.createElement('script');
-		ds.type = 'text/javascript';ds.async = true;
-		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-		ds.charset = 'UTF-8';
-		(document.getElementsByTagName('head')[0] 
-		 || document.getElementsByTagName('body')[0]).appendChild(ds);
-	})();
-	</script>
-<!-- 多说公共JS代码 end -->
-
-</font></font></font></font></body></html>
+</body>
+</html>

@@ -1,65 +1,98 @@
-<html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"><link rel="stylesheet" id="theme" href="../stylesheets/Github.css"></head><body><p><a href="../README.html"><font size="4">←返回主目录<font></font></font></a><font size="4"><font><br></font></font></p><font size="4"><font>
-<div align="right"><a href="../index.html" target="_self" title="返回主页"><img src="../images/Home.png"></a> <a href="#bottom" target="_self" title="跳转底部"><img src="../images/bottom.png"></a></div>
-
-<p><strong>文题</strong>：OpenCV图像处理篇之采样金字塔<br></p>
-<p><strong>作者</strong>：xiahouzuoxin<br></p>
-<p><strong>日期</strong>：2014-09-20<br></p>
-<p><em>转载请注明出处：<a href="http://xiahouzuoxin.github.io/notes">http://xiahouzuoxin.github.io/notes</a></em></p>
-<hr>
-<h2>图像金字塔</h2>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
+  </style>
+  <link rel="stylesheet" href="../stylesheets/Github.css" type="text/css" />
+</head>
+<body>
+<p><a href="../README.md"><font size=4>←返回主目录<font></a></br></p>
+<div align="right">
+<a href="../index.html" target="_self" title="返回主页"><img src="../images/Home.png"></a> <a href="#bottom" target="_self" title="跳转底部"><img src="../images/bottom.png"></a>
+</div>
+<p><strong>文题</strong>：OpenCV图像处理篇之采样金字塔</br></p>
+<p><strong>作者</strong>：xiahouzuoxin</br></p>
+<p><strong>日期</strong>：2014-09-20</br></p>
+<p><em>转载请注明出处：<http://xiahouzuoxin.github.io/notes></em></p>
+<hr />
+<h2 id="图像金字塔">图像金字塔</h2>
 <p>图像金字塔是通过将原始图像经过平滑、下采样所生成一系列具有不同分辨率的图像的集合。金字塔结构(Pyramid)适于多分辨率处理的一种图像存储数据结构。</p>
 <p>最常用的生成图像金字塔的方法是采用高斯函数平滑图像，每次将分辨率降低为原来的一半，由此得到一个图像序列{ML，ML-1，……，M0}，图像金字塔的存储量为<code>N^2*(1+1/4+1/16+...)=(4*N^2)/3</code>。</p>
-<p><img src="../images/OpenCV图像处理篇之采样金字塔/example.png" alt="example"></p>
+<div class="figure">
+<img src="../images/OpenCV图像处理篇之采样金字塔/example.png" alt="example" /><p class="caption">example</p>
+</div>
 <p>如上图：最右边为原始图像，从右到左依次为使用高斯平滑1次、2次和3次后的图像，这些图像共同组成了图像金字塔。</p>
-<p>图像金字塔这种结构在图像处理中有广泛的用途。最著名的特征匹配算子SIFT就是通过构造图像金字塔来完成的。有关图像金字塔在SIFT特征提取算法中的应用可参见Rachel Zhang的博文<a href="http://blog.csdn.net/abcjennifer/article/details/7639681">"SIFT特征提取分析"</a>。</p>
-<h2>程序分析</h2>
-<pre><code class="language-c cpp"><span class="comment">/*
- * FileName : pyramids.cpp
- * Author   : xiahouzuoxin @163.com
- * Version  : v1.0
- * Date     : Sat 20 Sep 2014 07:04:29 PM CST
- * Brief    : 
- * 
- * Copyright (C) MICL,USTB
- */</span>
-<span class="preprocessor">#include &lt;iostream&gt;</span>
-<span class="preprocessor">#include "cv.h" </span>
-<span class="preprocessor">#include "highgui.h"</span>
-<span class="preprocessor">#include "opencv2/imgproc/imgproc.hpp"</span>
+<p>图像金字塔这种结构在图像处理中有广泛的用途。最著名的特征匹配算子SIFT就是通过构造图像金字塔来完成的。有关图像金字塔在SIFT特征提取算法中的应用可参见Rachel Zhang的博文<a href="http://blog.csdn.net/abcjennifer/article/details/7639681">&quot;SIFT特征提取分析&quot;</a>。</p>
+<h2 id="程序分析">程序分析</h2>
+<pre class="sourceCode c"><code class="sourceCode c"><span class="co">/*</span>
+<span class="co"> * FileName : pyramids.cpp</span>
+<span class="co"> * Author   : xiahouzuoxin @163.com</span>
+<span class="co"> * Version  : v1.0</span>
+<span class="co"> * Date     : Sat 20 Sep 2014 07:04:29 PM CST</span>
+<span class="co"> * Brief    : </span>
+<span class="co"> * </span>
+<span class="co"> * Copyright (C) MICL,USTB</span>
+<span class="co"> */</span>
+<span class="ot">#include &lt;iostream&gt;</span>
+<span class="ot">#include &quot;cv.h&quot; </span>
+<span class="ot">#include &quot;highgui.h&quot;</span>
+<span class="ot">#include &quot;opencv2/imgproc/imgproc.hpp&quot;</span>
 
-<span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;
-<span class="keyword">using</span> <span class="keyword">namespace</span> cv;
+using namespace std;
+using namespace cv;
 
-<span class="keyword">const</span> <span class="keyword">char</span> *wn = <span class="string">"Pyramids Demo"</span>;
+<span class="dt">const</span> <span class="dt">char</span> *wn = <span class="st">&quot;Pyramids Demo&quot;</span>;
 
-<span class="keyword">int</span> main(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])
+<span class="dt">int</span> main(<span class="dt">int</span> argc, <span class="dt">char</span> *argv[])
 {
-    <span class="keyword">if</span> (argc &lt; <span class="number">2</span>) {
-        <span class="built_in">cout</span>&lt;&lt;<span class="string">"Usage: ./pyramids [file name]"</span>&lt;&lt;endl;
-        <span class="keyword">return</span> -<span class="number">1</span>;
+    <span class="kw">if</span> (argc &lt; <span class="dv">2</span>) {
+        cout&lt;&lt;<span class="st">&quot;Usage: ./pyramids [file name]&quot;</span>&lt;&lt;endl;
+        <span class="kw">return</span> -<span class="dv">1</span>;
     }
 
-    Mat src = imread(argv[<span class="number">1</span>]);
-    <span class="keyword">if</span> (!src.data) {
-        <span class="built_in">cout</span>&lt;&lt;<span class="string">"Error: read image error."</span>&lt;&lt;endl;
-        <span class="keyword">return</span> -<span class="number">1</span>;
+    Mat src = imread(argv[<span class="dv">1</span>]);
+    <span class="kw">if</span> (!src.data) {
+        cout&lt;&lt;<span class="st">&quot;Error: read image error.&quot;</span>&lt;&lt;endl;
+        <span class="kw">return</span> -<span class="dv">1</span>;
     }
 
-    <span class="comment">/* Size of input image must be 2^n */</span>
-    <span class="keyword">if</span> ( src.cols &amp; (src.cols-<span class="number">1</span>) ) {  <span class="comment">// src.cols &gt; 0 first</span>
-        <span class="built_in">cout</span>&lt;&lt;<span class="string">"Error: input image's column must be 2^n"</span>&lt;&lt;endl;
-        <span class="keyword">return</span> -<span class="number">1</span>;
+    <span class="co">/* Size of input image must be 2^n */</span>
+    <span class="kw">if</span> ( src.cols &amp; (src.cols<span class="dv">-1</span>) ) {  <span class="co">// src.cols &gt; 0 first</span>
+        cout&lt;&lt;<span class="st">&quot;Error: input image&#39;s column must be 2^n&quot;</span>&lt;&lt;endl;
+        <span class="kw">return</span> -<span class="dv">1</span>;
     }
-    <span class="keyword">if</span> ( src.rows &amp; (src.rows-<span class="number">1</span>) ) {  <span class="comment">// src.cols &gt; 0 first</span>
-        <span class="built_in">cout</span>&lt;&lt;<span class="string">"Error: input image's row must be 2^n"</span>&lt;&lt;endl;
-        <span class="keyword">return</span> -<span class="number">1</span>;
+    <span class="kw">if</span> ( src.rows &amp; (src.rows<span class="dv">-1</span>) ) {  <span class="co">// src.cols &gt; 0 first</span>
+        cout&lt;&lt;<span class="st">&quot;Error: input image&#39;s row must be 2^n&quot;</span>&lt;&lt;endl;
+        <span class="kw">return</span> -<span class="dv">1</span>;
     }
 
-    <span class="built_in">cout</span>&lt;&lt;<span class="string">"User Guide:"</span>&lt;&lt;endl;
-    <span class="built_in">cout</span>&lt;&lt;<span class="string">"---------------------"</span>&lt;&lt;endl;
-    <span class="built_in">cout</span>&lt;&lt;<span class="string">"u   -&gt; Zoom out"</span>&lt;&lt;endl;
-    <span class="built_in">cout</span>&lt;&lt;<span class="string">"d   -&gt; Zoom in"</span>&lt;&lt;endl;
-    <span class="built_in">cout</span>&lt;&lt;<span class="string">"ESC -&gt; Exit program"</span>&lt;&lt;endl;
+    cout&lt;&lt;<span class="st">&quot;User Guide:&quot;</span>&lt;&lt;endl;
+    cout&lt;&lt;<span class="st">&quot;---------------------&quot;</span>&lt;&lt;endl;
+    cout&lt;&lt;<span class="st">&quot;u   -&gt; Zoom out&quot;</span>&lt;&lt;endl;
+    cout&lt;&lt;<span class="st">&quot;d   -&gt; Zoom in&quot;</span>&lt;&lt;endl;
+    cout&lt;&lt;<span class="st">&quot;ESC -&gt; Exit program&quot;</span>&lt;&lt;endl;
 
     namedWindow(wn, WINDOW_AUTOSIZE);
     imshow(wn, src);
@@ -67,52 +100,61 @@
     Mat cur = src;
     Mat dst = cur;
 
-    <span class="keyword">int</span> end_while = <span class="number">0</span>;
-    <span class="keyword">while</span>(!end_while) {
-        <span class="keyword">char</span> c;
+    <span class="dt">int</span> end_while = <span class="dv">0</span>;
+    <span class="kw">while</span>(!end_while) {
+        <span class="dt">char</span> c;
 
-        c = waitKey(<span class="number">10</span>);
-        <span class="keyword">switch</span> (c) {
-        <span class="keyword">case</span> <span class="number">27</span>:   <span class="comment">/* ESC */</span>
-            end_while = <span class="number">1</span>;
-            <span class="keyword">break</span>;
-        <span class="keyword">case</span> <span class="string">'u'</span>:
-            pyrUp(cur, dst, Size(cur.cols*<span class="number">2</span>, cur.rows*<span class="number">2</span>));
+        c = waitKey(<span class="dv">10</span>);
+        <span class="kw">switch</span> (c) {
+        <span class="kw">case</span> <span class="dv">27</span>:   <span class="co">/* ESC */</span>
+            end_while = <span class="dv">1</span>;
+            <span class="kw">break</span>;
+        <span class="kw">case</span> &#39;u&#39;:
+            pyrUp(cur, dst, Size(cur.cols*<span class="dv">2</span>, cur.rows*<span class="dv">2</span>));
             imshow(wn, dst);
             cur = dst;
-            <span class="keyword">break</span>;
-        <span class="keyword">case</span> <span class="string">'d'</span>:
-            pyrDown(cur, dst, Size(cur.cols/<span class="number">2</span>, cur.rows/<span class="number">2</span>));
+            <span class="kw">break</span>;
+        <span class="kw">case</span> &#39;d&#39;:
+            pyrDown(cur, dst, Size(cur.cols/<span class="dv">2</span>, cur.rows/<span class="dv">2</span>));
             imshow(wn, dst);
             cur = dst;
-            <span class="keyword">break</span>;
-        <span class="keyword">default</span>:
-            <span class="keyword">break</span>;
+            <span class="kw">break</span>;
+        <span class="kw">default</span>:
+            <span class="kw">break</span>;
         }
 
     }
 }</code></pre>
-<ol>
-<li><p>使用高斯图像金字塔进行降采样和插值的函数分别是<code>pyrDown</code>和<code>pyrUp</code>，参数依次为原图像、采样结果图像、采样后的图像尺寸。</p>
-</li>
-<li><p>上述程序中的降采样操作因为都是按2为倍数进行的，因此要求输入图像的长宽都必须是2^n。<code>if ( src.cols &amp; (src.cols-1) )</code>是用来判断原图像的列是否为2^n的语句。请仔细体会这种判断某个数是否是2^n的方法——x*(x-1)返回0表示x是2^n，否则不是。</p>
-</li>
+<ol style="list-style-type: decimal">
+<li><p>使用高斯图像金字塔进行降采样和插值的函数分别是<code>pyrDown</code>和<code>pyrUp</code>，参数依次为原图像、采样结果图像、采样后的图像尺寸。</p></li>
+<li><p>上述程序中的降采样操作因为都是按2为倍数进行的，因此要求输入图像的长宽都必须是2<sup>n。<code>if ( src.cols &amp; (src.cols-1) )</code>是用来判断原图像的列是否为2</sup>n的语句。请仔细体会这种判断某个数是否是2^n的方法——x*(x-1)返回0表示x是2^n，否则不是。</p></li>
 </ol>
-<h2>结果显示</h2>
+<h2 id="结果显示">结果显示</h2>
 <p>下面一系列图片展现的是先将原图像通过图像金字塔降采样（会存在数据丢失），再通过金字塔插值恢复图像过程中图像的变化过程。由于降采样过程中存在数据丢失，所以可以看到恢复到原图像大小后的图像比原图像模糊。</p>
-<p><img src="../images/OpenCV图像处理篇之采样金字塔/origin.png" alt="origin"></p>
+<div class="figure">
+<img src="../images/OpenCV图像处理篇之采样金字塔/origin.png" alt="origin" /><p class="caption">origin</p>
+</div>
 <p><strong>图注</strong> 原图像</p>
-<p><img src="../images/OpenCV图像处理篇之采样金字塔/div2.png" alt="div2"></p>
+<div class="figure">
+<img src="../images/OpenCV图像处理篇之采样金字塔/div2.png" alt="div2" /><p class="caption">div2</p>
+</div>
 <p><strong>图注</strong> 1次降采样后的图像</p>
-<p><img src="../images/OpenCV图像处理篇之采样金字塔/div4.png" alt="div4"></p>
+<div class="figure">
+<img src="../images/OpenCV图像处理篇之采样金字塔/div4.png" alt="div4" /><p class="caption">div4</p>
+</div>
 <p><strong>图注</strong> 2次降采样后的图像</p>
-<p><img src="../images/OpenCV图像处理篇之采样金字塔/MUL2.png" alt="MUL2"></p>
+<div class="figure">
+<img src="../images/OpenCV图像处理篇之采样金字塔/MUL2.png" alt="MUL2" /><p class="caption">MUL2</p>
+</div>
 <p><strong>图注</strong> 2次降采样后，再经过1次图像金字塔插值操作后的图像，大小与1次降采样后图像相同，但变得模糊</p>
-<p><img src="../images/OpenCV图像处理篇之采样金字塔/MUL4.png" alt="MUL4"></p>
+<div class="figure">
+<img src="../images/OpenCV图像处理篇之采样金字塔/MUL4.png" alt="MUL4" /><p class="caption">MUL4</p>
+</div>
 <p><strong>图注</strong> 2次降采样后，再经过2次图像金字塔插值操作后的图像，大小与原图相同，但变得模糊</p>
-<p></p><div align="right"><a href="../index.html" target="_self" title="返回主页"><img src="../images/Home.png"></a> <a href="#top" target="_self" title="返回顶部"><img src="../images/top.png"></a></div>
-<a name="bottom"></a>
-<a href="../README.html"><font size="4">←返回主目录<font></font></font></a><font size="4"><font><br><p></p>
+<div align="right">
+<a href="../index.html" target="_self" title="返回主页"><img src="../images/Home.png"></a> <a href="#top" target="_self" title="返回顶部"><img src="../images/top.png"></a>
+</div>
+<p><a name="bottom"></a> <a href="../README.md"><font size=4>←返回主目录<font></a></br></p>
 <!-- 
 
 本模板为转成Html后需要修改的地方:
@@ -123,25 +165,5 @@
 5. 修正其它可能不正确的链接 
 
 -->
-
-<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"slide":{"type":"slide","bdImg":"5","bdPos":"right","bdTop":"200"},"image":{"viewList":["qzone","tsina","tqq","renren","weixin"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["qzone","tsina","tqq","renren","weixin"]}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
-
-<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="OpenCV图像处理篇之采样金字塔" data-title="OpenCV图像处理篇之采样金字塔" data-url="xiahouzuoxin.github.io/notes/html/OpenCV图像处理篇之采样金字塔.html"></div>
-<!-- 多说评论框 end -->
-<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
-<script type="text/javascript">
-var duoshuoQuery = {short_name:"xiahouzuoxin"};
-	(function() {
-		var ds = document.createElement('script');
-		ds.type = 'text/javascript';ds.async = true;
-		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-		ds.charset = 'UTF-8';
-		(document.getElementsByTagName('head')[0] 
-		 || document.getElementsByTagName('body')[0]).appendChild(ds);
-	})();
-	</script>
-<!-- 多说公共JS代码 end -->
-
-
-</font></font></font></font></body></html>
+</body>
+</html>

@@ -1,17 +1,33 @@
-<html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"><link rel="stylesheet" id="theme" href="../stylesheets/Github.css"></head><body><h3 id="-">有关超声探头阻抗的分析</h3>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="../stylesheets/Github.css" type="text/css" />
+</head>
+<body>
+<h3 id="有关超声探头阻抗的分析">有关超声探头阻抗的分析</h3>
 <p>Author: <a href="http://xiahouzuoxin.github.io">xiahouzuoxin</a> / Date: <a href="http://xiahouzuoxin.github.io/notes/Archives.html">2014-10-18</a></p>
-<p>转载请注明出处：<a href="http://xiahouzuoxin.github.io">http://xiahouzuoxin.github.io</a></p>
-<hr>
+<p>转载请注明出处：<a href="http://xiahouzuoxin.github.io" class="uri">http://xiahouzuoxin.github.io</a></p>
+<hr />
 <p>我们知道正常人耳能听到的声音频率范围是20Hz~20KHz，超声就是声音频率在20KHz以上的声信号，避开人耳能听到的声音信号，这样超声就具有强的抗干扰能力。</p>
 <p>最简便的方法就是使用网络分析仪，两端口一对上，直接给出|Z|~f的变化曲线图。但网络分析仪太贵了，除非大公司否则一般用不起，另一种方法就是自己搭电路，用正弦波信号发生器测量。下面是搭电路的测量方法（这部分方法和测试数据来自网络文章《<a href="http://www.docin.com/p-329355873.html">超声波测距模块</a>》）。</p>
 <blockquote>
-<p><img src="../images/有关超声探头阻抗的分析/Ultrasound.jpg" alt="Ultrasound"></p>
+<div class="figure">
+<img src="../images/有关超声探头阻抗的分析/Ultrasound.jpg" alt="Ultrasound" /><p class="caption">Ultrasound</p>
+</div>
 </blockquote>
 <p>实验最后给出了两个不同频率下的匹配阻抗值。非线性电路中也满足欧姆定律，只不过电阻被阻抗代替了，“欧姆定律真是一项伟大的发现”，</p>
 <p><img src="http://www.forkosh.com/mathtex.cgi? \Small |Z|=\frac{U_o}I=\frac{U_{i}-U_R}I"></p>
 <p>超声的发送距离与超声探头发射的能量P=U^2/|Z|有关，远距离超声测距当然希望的是：相同电压下，超声探头的阻抗越小越好。</p>
 <p>由于40KHz和51KHz是阻抗匹配谐振的两个低峰值点，对应阻抗的极小值点，这也是为什么市面上的超声一般都用40KHz（40KHz谐振点处变化相对于51KHz平缓，当驱动频率存在小的偏差时对输出的影响要比50KHz小）。从上面的曲线可以看出，如果电路允许，使用51KHz进行超声测距距离会更远（阻抗比40KHz更低）。</p>
-<p>由于超声发射头生产的原因，谐振频率不一定精确的是40KHz和51KHz，难免会存在误差，最好的方法是使用矢量网络分析仪直接测|Z|~f曲线，使用|Z|~f测出的谐振频率。我购买的收发一体超声探头的谐振频率点时51.48KHz。</p>
+<p>由于超声发射头生产的原因，谐振频率不一定精确的是40KHz和51KHz，难免会存在误差，最好的方法是使用矢量网络分析仪直接测|Z|<sub>f曲线，使用|Z|</sub>f测出的谐振频率。我购买的收发一体超声探头的谐振频率点时51.48KHz。</p>
+<h3 id="测试后的修正">测试后的修正</h3>
+<p>通过设计电路测试发现，在51KHz附近，超声接收到的信号非常弱，反而40KHz附近接收到的信号很强。上面的分析结论——如果电路允许，使用51KHz进行超声测距距离会更远——存在问题。做如下修正：</p>
+<p>因为51KHz只考虑的是发射端的增益，而整体的信号接收情况是Gain(总)=Gain(发射)*Gain(接收)，当发射增益在51KHz时很大，而51KHz时接收端的增益却很小，最后造成了Gain(总)很小。通过发射（使用信号发生器手动调节频率来测试）接收联合测试，最后还是在40KHz（就买到的超声探头具体一点是39.5KHz）时Gain(总)达到最大。</p>
 <!-- 
 
 本模板为转成Html后需要修改的地方:
@@ -24,46 +40,4 @@
 
 -->
 </body>
-
-<script type="text/javascript">
-window.onscroll = function () {
-    var div = document.getElementById("divSuspended");
-    div.style.top = document.body.scrollTop;
-}
-window.onresize = window.onscroll;
-function init(){
-    var df = document.createDocumentFragment();
-    for(var i=0;i<20;i++){
-        var p = document.createElement("p");
-        p.appendChild(document.createTextNode(" Line "+i));
-        df.appendChild(p);
-    }
-    document.body.appendChild(df);
-    window.onscroll();
-}
-</script>
-<div id="divSuspended" style="position: absolute; bottom: 10px; right: 0px; color: #FFFFFF; width: 200px; height: 30px; background-color: transparent" align="right">
-</br></br></br>
-<a href="#top" target="_self" title="返回顶部"><img src="../images/top.png"></a></br><a href="../Search.html" target="_self" title="站内搜索"><img src="../images/Search.png"></a></br><a href="http://xiahouzuoxin.github.io/notes/index.html" target="_self" title="返回主页"><img src="../images/Home.png"></a></br><a href="http://xiahouzuoxin.github.io/notes/Archives.html" target="_self" title="文章存档"><img src="../images/Archives.png"></a></br><a href="http://xiahouzuoxin.github.io/notes/README.html" target="_self" title="分类目录"><img src="../images/Contents.png"></a>
-</div>
-
-<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"slide":{"type":"slide","bdImg":"5","bdPos":"right","bdTop":"300"},"image":{"viewList":["qzone","tsina","tqq","renren","weixin"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["qzone","tsina","tqq","renren","weixin"]}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
-
-<!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key="有关超声探头阻抗的分析" data-title="有关超声探头阻抗的分析" data-url="xiahouzuoxin.github.io/notes/html/有关超声探头阻抗的分析"></div>
-<!-- 多说评论框 end -->
-<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
-<script type="text/javascript">
-var duoshuoQuery = {short_name:"xiahouzuoxin"};
-	(function() {
-		var ds = document.createElement('script');
-		ds.type = 'text/javascript';ds.async = true;
-		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-		ds.charset = 'UTF-8';
-		(document.getElementsByTagName('head')[0] 
-		 || document.getElementsByTagName('body')[0]).appendChild(ds);
-	})();
-	</script>
-<!-- 多说公共JS代码 end -->
-
 </html>

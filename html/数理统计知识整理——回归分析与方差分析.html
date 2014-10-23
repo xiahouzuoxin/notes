@@ -1,156 +1,240 @@
-<html><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"><link rel="stylesheet" id="theme" href="../stylesheets/Github.css"></head><body><p><a href="../README.html"><font size="4">←返回主目录<font></font></font></a><font size="4"><font>
-<br><br><br></font></font></p><font size="4"><font>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
+  </style>
+  <link rel="stylesheet" href="../stylesheets/Github.css" type="text/css" />
+</head>
+<body>
+<p><a href="../README.md"><font size=4>←返回主目录<font></a> </br></br></br></p>
 <p>题记：时值我的北科研究生第一年下，选学《统计优化》课程，备考促学，成此笔记，以谨记。</p>
-<h2>1 线性回归</h2>
-<h3>1.1 原理分析</h3>
+<h2 id="线性回归">1 线性回归</h2>
+<h3 id="原理分析">1.1 原理分析</h3>
 <p>要研究最大积雪深度x与灌溉面积y之间的关系，测试得到近10年的数据如下表：</p>
-<p><img src="../images/数理统计知识整理/最大积雪深度-灌溉面积.png" alt=""></p>
+<div class="figure">
+<img src="../images/数理统计知识整理/最大积雪深度-灌溉面积.png" />
+</div>
 <p>使用线性回归的方法可以估计x与y之间的线性关系。</p>
 <p>线性回归方程式：</p>
-<p><img src="../images/数理统计知识整理/回归方程.png" alt=""></p>
+<div class="figure">
+<img src="../images/数理统计知识整理/回归方程.png" />
+</div>
 <p>对应的估计方程式为</p>
-<p><img src="../images/数理统计知识整理/线性回归方程.png" alt=""></p>
+<div class="figure">
+<img src="../images/数理统计知识整理/线性回归方程.png" />
+</div>
 <p>线性回归完成的任务是，依据观测数据集(x1,y1),(x2,y2),...,(xn,yn)使用线性拟合估计回归方程中的参数a和b。a,b都为估计结果，原方程中的真实值一般用α和β表示。</p>
 <p>为什么要做这种拟合呢？</p>
 <p>答案是：为了预测。比如根据前期的股票数据拟合得到股票的变化趋势（当然股票的变化可就不是这么简单的线性关系了）。</p>
 <p>线性回归的拟合过程使用最小二乘法，</p>
-<p><img src="../images/数理统计知识整理/最小二乘法.png" alt=""></p>
+<div class="figure">
+<img src="../images/数理统计知识整理/最小二乘法.png" />
+</div>
 <p>最小二乘法的原理是：选择a,b的值，使得残差的平方和最小。</p>
 <p>为什么是平方和最小，不是绝对值的和？答案是，绝对值也可以，但是，绝对值进行代数运算没有平方那样的方便，4次方又显得太复杂，数学中这种“转化化归”的思路表现得是那么的优美！</p>
 <p>残差平方和Q，</p>
-<p><img src="../images/数理统计知识整理/残差.png" alt=""></p>
+<div class="figure">
+<img src="../images/数理统计知识整理/残差.png" />
+</div>
 <p>求最小，方法有很多。代数方法是求导，还有一些运筹学优化的方法（梯度下降、牛顿法），这里只需要使用求导就OK了，</p>
-<p><img src="../images/数理统计知识整理/残差和求导.png" alt=""></p>
+<div class="figure">
+<img src="../images/数理统计知识整理/残差和求导.png" />
+</div>
 <p>为表示方便，引入一些符号，</p>
-<p><img src="../images/数理统计知识整理/线性回归符号.png" alt=""></p>
+<div class="figure">
+<img src="../images/数理统计知识整理/线性回归符号.png" />
+</div>
 <p>最终估计参数a与b的结果是：</p>
-<p><img src="../images/数理统计知识整理/b.png" alt=""></p>
-<p><img src="../images/数理统计知识整理/a.png" alt=""></p>
+<div class="figure">
+<img src="../images/数理统计知识整理/b.png" />
+</div>
+<div class="figure">
+<img src="../images/数理统计知识整理/a.png" />
+</div>
 <p>自此，针对前面的例子，只要将观测数据带入上面表达式即可计算得到拟合之后的a和b。不妨试一试？</p>
 <p>从线性函数的角度，b表示的拟合直线的斜率，不考虑数学的严谨性，从应用的角度，结果的b可以看成是离散点的斜率，表示变化趋势，b的绝对值越大，表示数据的变化越快。</p>
 <p>线性回归的估计方法存在误差，误差的大小通过Q衡量。</p>
-<h3>1.2 误差分析</h3>
+<h3 id="误差分析">1.2 误差分析</h3>
 <p>考虑获取观测数据的实验中存在其它的影响因素，将这些因素全部考虑到e~N(0,δ^2)中，回归方程重写为</p>
 <p>y = a + bx + e</p>
 <p>由此计算估计量a与b的方差结果为，</p>
-<p><img src="../images/数理统计知识整理/Dab.png" alt=""></p>
+<div class="figure">
+<img src="../images/数理统计知识整理/Dab.png" />
+</div>
 <p>a与b的方差不仅与δ和x的波动大小有关，而且还与观察数据的个数有关。在设计观测实验时，x的取值越分散，估计ab的误差就越小，数据量越大，估计量b的效果越好。这也许能为设计实验搜集数据提供某些指导。</p>
-<h3>1.3 拟合优度检验及统计量</h3>
+<h3 id="拟合优度检验及统计量">1.3 拟合优度检验及统计量</h3>
 <p>拟合优度检验模型对样本观测值的拟合程度，其方法是构造一个可以表征拟合程度的指标，称为统计量，统计量是样本的函数。从检验对象中计算出该统计量的数值，然后与某一标准进行比较，得出检验结论。</p>
 <p>这是又会问了，最小二乘法不是保证了模型最好的拟合样本观测值了吗？为什么还要检验拟合程度？</p>
 <p>最小二乘法保证的是同一个样本集使用最小二乘法拟合程度最好，而拟合优度检验结果表示的是多个不同样本集各自进行拟合后对拟合效果的比较。比如，下面的直线方程都是使用最小二乘法拟合的结果，但二者对样本观测值的拟合程度显然不同。</p>
-<p><img src="../images/数理统计知识整理/拟合优度检验.png" alt=""></p>
+<div class="figure">
+<img src="../images/数理统计知识整理/拟合优度检验.png" />
+</div>
 <p>为构造统计量，先定义三个表达式：</p>
-<p><img src="../images/数理统计知识整理/Se.gif" alt=""></p>
-<p><img src="../images/数理统计知识整理/SR.gif" alt=""></p>
-<p><img src="../images/数理统计知识整理/ST.gif" alt=""></p>
-<p>通过推倒可以发现：<img src="../images/数理统计知识整理/ST_Se_SR.gif" alt=""></p>
-<p><img src="../images/数理统计知识整理/_ST.gif" alt="">表示观测值y1,y2,y3,...yn与它们的平均值的离差平方和，<img src="../images/数理统计知识整理/_ST.gif" alt="">越大，则观测值的波动越大。因此称总离差平方和。</p>
-<p><img src="../images/数理统计知识整理/_SR.gif" alt="">表示回归直线上点的纵坐标^y1,^y2,...,^yn与与观测值均值的离差平方和。所以称为回归平方和。<img src="../images/数理统计知识整理/_SR.gif" alt="">反映出回归直线因素对<img src="../images/数理统计知识整理/_ST.gif" alt="">的影响。</p>
-<p><img src="../images/数理统计知识整理/_Se.gif" alt="">是最小二乘法中残差平方和Q的最小值，它是实际观测值yi与回归直线上的点(xi,^yi)的纵坐标^yi的离差平方和。<img src="../images/数理统计知识整理/_Se.gif" alt="">是扣除线性影响外的剩余平方和，因此称为残差平方和。</p>
-<p>显然，一个拟合得比较好的模型，<img src="../images/数理统计知识整理/_ST.gif" alt="">与<img src="../images/数理统计知识整理/_SR.gif" alt="">应该比较接近，而<img src="../images/数理统计知识整理/_Se.gif" alt="">应该尽可能的小。因此，可以通过构造某种<img src="../images/数理统计知识整理/_ST.gif" alt="">与<img src="../images/数理统计知识整理/_SR.gif" alt="">的表达式作为拟合优度检验中的统计量。</p>
+<div class="figure">
+<img src="../images/数理统计知识整理/Se.gif" />
+</div>
+<div class="figure">
+<img src="../images/数理统计知识整理/SR.gif" />
+</div>
+<div class="figure">
+<img src="../images/数理统计知识整理/ST.gif" />
+</div>
+<p>通过推倒可以发现：<img src="../images/数理统计知识整理/ST_Se_SR.gif" /></p>
+<p><img src="../images/数理统计知识整理/_ST.gif" />表示观测值y1,y2,y3,...yn与它们的平均值的离差平方和，<img src="../images/数理统计知识整理/_ST.gif" />越大，则观测值的波动越大。因此称总离差平方和。</p>
+<p><img src="../images/数理统计知识整理/_SR.gif" />表示回归直线上点的纵坐标<sup>y1,</sup>y2,...,^yn与与观测值均值的离差平方和。所以称为回归平方和。<img src="../images/数理统计知识整理/_SR.gif" />反映出回归直线因素对<img src="../images/数理统计知识整理/_ST.gif" />的影响。</p>
+<p><img src="../images/数理统计知识整理/_Se.gif" />是最小二乘法中残差平方和Q的最小值，它是实际观测值yi与回归直线上的点(xi,<sup>yi)的纵坐标</sup>yi的离差平方和。<img src="../images/数理统计知识整理/_Se.gif" />是扣除线性影响外的剩余平方和，因此称为残差平方和。</p>
+<p>显然，一个拟合得比较好的模型，<img src="../images/数理统计知识整理/_ST.gif" />与<img src="../images/数理统计知识整理/_SR.gif" />应该比较接近，而<img src="../images/数理统计知识整理/_Se.gif" />应该尽可能的小。因此，可以通过构造某种<img src="../images/数理统计知识整理/_ST.gif" />与<img src="../images/数理统计知识整理/_SR.gif" />的表达式作为拟合优度检验中的统计量。</p>
 <ul>
 <li>构造统计量——相关系数</li>
 </ul>
 <p>因此，构造相关系数</p>
-<p><img src="../images/数理统计知识整理/相关系数.png" alt=""></p>
+<div class="figure">
+<img src="../images/数理统计知识整理/相关系数.png" />
+</div>
 <p>不同的r值有不同的线性相关表示，如下图</p>
-<p><img src="../images/数理统计知识整理/相关系数图.png" alt=""></p>
+<div class="figure">
+<img src="../images/数理统计知识整理/相关系数图.png" />
+</div>
 <p>结论：</p>
-<pre><code class="undefined">当|r|-&gt;0时，表示x与y之间的线性关系不明显，不适合使用线性回归建模。反之，当|r|越接近1时，表示x与y之间的线性关系越密切。</code></pre>
+<pre><code>当|r|-&gt;0时，表示x与y之间的线性关系不明显，不适合使用线性回归建模。反之，当|r|越接近1时，表示x与y之间的线性关系越密切。</code></pre>
 <ul>
 <li>构造统计量——F</li>
 </ul>
-<p><img src="../images/数理统计知识整理/统计量F.png" alt=""></p>
+<div class="figure">
+<img src="../images/数理统计知识整理/统计量F.png" />
+</div>
 <p>F值越小表示线性关系越密切，反之线性关系越弱。</p>
 <ul>
 <li>构造统计量——t</li>
 </ul>
-<p><img src="../images/数理统计知识整理/统计量t.png" alt=""></p>
+<div class="figure">
+<img src="../images/数理统计知识整理/统计量t.png" />
+</div>
 <p>|t|越大，x与y之间的线性关系越密切；反之，越小，x与y之间的线性关系越微弱。</p>
 <p>不管是相关系数，还是F，或者t，都能用于描述x与y之间的线性相关程度。并且可以通过验证，这三种统计量用于下面的显著性检验是完全一致的。</p>
-<h3>1.4 显著性检验</h3>
+<h3 id="显著性检验">1.4 显著性检验</h3>
 <p>显著性检验，</p>
 <p>以开头“最大积雪深度x与灌溉面积y之间的关系”的线性关系是否显著为例，使用上面构造的统计量进行显著性检验的过程如下：</p>
-<p><img src="../images/数理统计知识整理/显著性检验-1.png" alt=""></p>
-<p><img src="../images/数理统计知识整理/显著性检验-2.png" alt=""></p>
-<p><img src="../images/数理统计知识整理/显著性检验-3.png" alt=""></p>
-<p><img src="../images/数理统计知识整理/显著性检验-4.png" alt=""></p>
-<p><img src="../images/数理统计知识整理/显著性检验-5.png" alt=""></p>
+<div class="figure">
+<img src="../images/数理统计知识整理/显著性检验-1.png" />
+</div>
+<div class="figure">
+<img src="../images/数理统计知识整理/显著性检验-2.png" />
+</div>
+<div class="figure">
+<img src="../images/数理统计知识整理/显著性检验-3.png" />
+</div>
+<div class="figure">
+<img src="../images/数理统计知识整理/显著性检验-4.png" />
+</div>
+<div class="figure">
+<img src="../images/数理统计知识整理/显著性检验-5.png" />
+</div>
 <p>在当中，计算线性回归及显著性检验使用到如下的公式，下面的公式不用记住，使用时查询即可。</p>
-<p><img src="../images/数理统计知识整理/线性回归季显著性检验的公式.png" alt=""></p>
+<div class="figure">
+<img src="../images/数理统计知识整理/线性回归季显著性检验的公式.png" />
+</div>
 <p>相关系数的查表参见<a href="../enclosure/数理统计知识整理/相关系数显着性检验表(完整润色版).xls">相关系数显著性检验表</a></p>
-<h3>1.5 置信区间</h3>
+<h3 id="置信区间">1.5 置信区间</h3>
 <p>回归系数α以1-α为置信度的置信区间为</p>
-<p><img src="../images/数理统计知识整理/alpha置信区间.png" alt=""></p>
+<div class="figure">
+<img src="../images/数理统计知识整理/alpha置信区间.png" />
+</div>
 <p>回归系数β以1-α为置信度的置信区间为</p>
-<p><img src="../images/数理统计知识整理/beta置信区间.png" alt=""></p>
+<div class="figure">
+<img src="../images/数理统计知识整理/beta置信区间.png" />
+</div>
 <p>其中S都为，</p>
-<p><img src="../images/数理统计知识整理/S_Equal.png" alt=""></p>
-<h3>1.6 使用Matlab做回归分析</h3>
+<div class="figure">
+<img src="../images/数理统计知识整理/S_Equal.png" />
+</div>
+<h3 id="使用matlab做回归分析">1.6 使用Matlab做回归分析</h3>
 <p>使用最小二乘法做多元线性回归分析的函数为：</p>
-<pre><code class="undefined">[b,bint,r,rint,stats] = regress(y,X,alpha);
+<pre><code>[b,bint,r,rint,stats] = regress(y,X,alpha);
 
 % alpha  为显著性水平
 % b bint 为回归系数估计值向量及其置信区间
 % r rint 为残差向量及其置信区间，可用rcoplot(r,rint)绘图</code></pre>
 <p>下面是一个使用Matlab做线性回归分析的实例：</p>
-<pre><code class="undefined">EG: 
+<pre><code>EG: 
 x  0.10 0.11 0.12 0.13  0.14 0.15 0.16 0.17 0.18 
 y  42.0 41.5 45.0 45.5 45.0 47.5 49.0 55.0 50.0 </code></pre>
 <p>Matlab代码如下：</p>
-<pre><code class="delphi">clear all
+<pre><code>clear all
 clf
 close all
 
 % 绘制(X,Y)散点图
 figure,
-x=<span class="number">0.1</span>:<span class="number">0.01</span>:<span class="number">0.18</span>; 
-y=[<span class="number">42</span>,<span class="number">41.5</span>,<span class="number">45.0</span>,<span class="number">45.5</span>,<span class="number">45.0</span>,<span class="number">47.5</span>,<span class="number">49.0</span>,<span class="number">55.0</span>,<span class="number">50.0</span>]; 
-plot(x,y,<span class="string">'+'</span>) 
+x=0.1:0.01:0.18; 
+y=[42,41.5,45.0,45.5,45.0,47.5,49.0,55.0,50.0]; 
+plot(x,y,&#39;+&#39;) 
 
 % 线性回归分析
-x1=x<span class="string">'; 
-y1=y'</span>;  
-x2=[ones(<span class="number">9</span>,<span class="number">1</span>),x1]; 
+x1=x&#39;; 
+y1=y&#39;;  
+x2=[ones(9,1),x1]; 
 [b,bint,r,rint,stats]=regress(y1,x2); 
 
 % 绘制拟合直线
-y = b(<span class="number">2</span>)*x + b(<span class="number">1</span>);
-hold <span class="keyword">on</span>,plot(x,y,<span class="string">'r'</span>);
+y = b(2)*x + b(1);
+hold on,plot(x,y,&#39;r&#39;);
 
 % 绘制残差图
 figure,rcoplot(r,rint);</code></pre>
 <p>结果为拟合直线图和残差图如下：</p>
-<p><img src="../images/数理统计知识整理/回归分析Matlab1.png" alt="">
-<img src="../images/数理统计知识整理/回归分析Matlab2.png" alt=""></p>
+<p><img src="../images/数理统计知识整理/回归分析Matlab1.png" /> <img src="../images/数理统计知识整理/回归分析Matlab2.png" /></p>
 <p>在Matlab中还可以使用polyfit函数非常方便的对数据进行拟合，polyfit除了能进行线性拟合，还可以进行非线性的拟合。</p>
 <p>使用polyfit拟合方法如下：</p>
-<pre><code class="delphi">% 绘制(X,Y)散点图
+<pre><code>% 绘制(X,Y)散点图
 figure,
-x=<span class="number">0.1</span>:<span class="number">0.01</span>:<span class="number">0.18</span>; 
-y=[<span class="number">42</span>,<span class="number">41.5</span>,<span class="number">45.0</span>,<span class="number">45.5</span>,<span class="number">45.0</span>,<span class="number">47.5</span>,<span class="number">49.0</span>,<span class="number">55.0</span>,<span class="number">50.0</span>]; 
-plot(x,y,<span class="string">'+'</span>); 
+x=0.1:0.01:0.18; 
+y=[42,41.5,45.0,45.5,45.0,47.5,49.0,55.0,50.0]; 
+plot(x,y,&#39;+&#39;); 
 
 % 绘制拟合直线
-hold <span class="keyword">on</span>, 
-p = polyfit(x<span class="string">',y'</span>,<span class="number">1</span>);
-y = p(<span class="number">1</span>).*x + p(<span class="number">2</span>);
-plot(x,y2，<span class="string">'r'</span>);</code></pre>
+hold on, 
+p = polyfit(x&#39;,y&#39;,1);
+y = p(1).*x + p(2);
+plot(x,y2，&#39;r&#39;);</code></pre>
 <p>拟合结果与上面的一样。</p>
-<h3>1.7 回归分析的实际操作步骤</h3>
+<h3 id="回归分析的实际操作步骤">1.7 回归分析的实际操作步骤</h3>
 <p>回归分析的主要内容是通过试验或观测数据，寻找相关变量之间的统计规律性，再利用自变量的值有效预测因变量的可能取值。</p>
 <p>其实际操作的步骤是：</p>
-<ol>
+<ol style="list-style-type: decimal">
 <li>设定回归方程</li>
 <li>根据误差分析，考虑搜集数据对回归方程参数的影响，有目的的搜集数据</li>
 <li>确定回归系数</li>
 <li>进行相关性检验</li>
 <li>预测</li>
 </ol>
-<h2>2 方差分析</h2>
-<h3>2.1 引入</h3>
-<p><img src="../images/数理统计知识整理/灯泡寿命-灯丝.png" alt=""></p>
+<h2 id="方差分析">2 方差分析</h2>
+<h3 id="引入">2.1 引入</h3>
+<div class="figure">
+<img src="../images/数理统计知识整理/灯泡寿命-灯丝.png" />
+</div>
 <p>如上图，对A1~A4共4种不同灯丝的灯泡进行抽样检测灯泡寿命，根据测试数据，现在要问：灯泡寿命是否与灯丝材料的不同有关。</p>
 <p>问题特点有：</p>
 <ul>
@@ -159,7 +243,7 @@ plot(x,y2，<span class="string">'r'</span>);</code></pre>
 <li>因素存在多个不同状态（<strong>水平</strong>），要求分析因素的不同状态是否对指标有显著影响</li>
 </ul>
 <p>这就是方差分析问题：用数理统计分析试验结果、鉴别各因素对结果影响程度的方法称为方差分析（Analysis Of Variance），记作ANOVA。</p>
-<h3>2.2 单因素方差分析</h3>
+<h3 id="单因素方差分析">2.2 单因素方差分析</h3>
 <p>其它因素不变，只考虑一个因素A，因素存在多个水平，在每个水平上做若干次实验，从实验结果推断是否该因素对指标有显著影响？这就是单因素的方差分析，上面的例子就是单因素方差分析的例子。</p>
 <ul>
 <li>前提假设</li>
@@ -169,96 +253,112 @@ plot(x,y2，<span class="string">'r'</span>);</code></pre>
 <li>模型建立</li>
 </ul>
 <p>实验数据的格式：</p>
-<p><img src="../images/数理统计知识整理/单因素方差分析实验数据表.png" alt=""></p>
+<div class="figure">
+<img src="../images/数理统计知识整理/单因素方差分析实验数据表.png" />
+</div>
 <p>因子对指标是否有影响取决于指标的正态分布是否一致，如果有影响，则正态分布应该存在差异，而正态分布由均值和方差决定，假设中方差相同，因此各个水平下的正态分布均值直接决定因素是否对指标有影响。</p>
 <p>所以，问题可以转化为假设检验，设</p>
 <p>H0: u1=u2=u3=...=ur</p>
 <p>检验结果如果拒绝原假设，则认为因素A对指标有显著影响，否则认为无显著影响。</p>
 <p>设</p>
-<p>u = (1/r)\sum_1^a{ui}</p>
+<p>u = (1/r)_1^a{ui}</p>
 <p>αi = ui - u</p>
 <p>则，H0假设改写成</p>
 <p>H0: α1=α2=α3=...=αr=0</p>
 <ul>
 <li>构造统计量（摘自《数学建模Matlab大全》）</li>
 </ul>
-<p><img src="../images/数理统计知识整理/方差分析1.png" alt="">
-<img src="../images/数理统计知识整理/方差分析2.png" alt=""></p>
+<p><img src="../images/数理统计知识整理/方差分析1.png" /> <img src="../images/数理统计知识整理/方差分析2.png" /></p>
 <ul>
 <li>单因素方差分析表</li>
 </ul>
 <p>过对上面模型中相关参数进行计算，为计算分析方便，将结果填入下表中：</p>
-<p><img src="../images/数理统计知识整理/单因素方差分析表.png" alt=""></p>
+<div class="figure">
+<img src="../images/数理统计知识整理/单因素方差分析表.png" />
+</div>
 <p>表中的Pr反映的就是&gt;F值的概率，F值通过因素A均方除以误差均方获得。</p>
 <p>因此，有</p>
-<ol>
+<ol style="list-style-type: decimal">
 <li>如果Pr大于α，则接受H0，因素对指标无显著影响</li>
 <li>如果Pr小于α，则拒绝H0，因素对指标有显著影响</li>
 </ol>
 <p>Matlab的输出结果即为上面的方差分析表，因此，用matlab很容易进行方差分析。</p>
-<h3>2.3 用Matlab进行单因素方差分析</h3>
-<p><img src="../images/数理统计知识整理/单因素方差分析题.png" alt=""></p>
+<h3 id="用matlab进行单因素方差分析">2.3 用Matlab进行单因素方差分析</h3>
+<div class="figure">
+<img src="../images/数理统计知识整理/单因素方差分析题.png" />
+</div>
 <p>能否认为这三所小学五年级男学生的平均身高相同？取显著水平α=0.05.</p>
 <p>假设H0: 这三所小学五年级男学生的平均身高相同。</p>
-<pre><code class="language-Matlab apache">data =<span class="sqbracket"> [...
-128.1    134.1    131.1    138.9    140.8    127.4; ...
-150.3    147.9    136.8    126.0    150.7    155.8; ...
-140.6    143.1    144.5    143.7    148.5    146.4...
+<pre class="sourceCode matlab"><code class="sourceCode matlab">data = [...
+<span class="fl">128.1</span>   <span class="fl">134.1</span>   <span class="fl">131.1</span>   <span class="fl">138.9</span>   <span class="fl">140.8</span>   <span class="fl">127.4</span>; ...
+<span class="fl">150.3</span>   <span class="fl">147.9</span>   <span class="fl">136.8</span>   <span class="fl">126.0</span>   <span class="fl">150.7</span>   <span class="fl">155.8</span>; ...
+<span class="fl">140.6</span>   <span class="fl">143.1</span>   <span class="fl">144.5</span>   <span class="fl">143.7</span>   <span class="fl">148.5</span>   <span class="fl">146.4</span>...
 ];
-data = data';
+data = data&#39;;
 
-P=anova1(data);  % 方差分析函数anova1</span></code></pre>
+P=anova1(data);  <span class="co">% 方差分析函数anova1</span></code></pre>
 <p>Matlab程序的运行结果为：</p>
-<p><img src="../images/数理统计知识整理/单因素方差分析Matlab.png" alt=""></p>
-<p>∵ Pr=0.0275 &lt; α
-∴ 拒绝H0，即不能认为这三所小学五年级男学生的平均身高相同。</p>
+<div class="figure">
+<img src="../images/数理统计知识整理/单因素方差分析Matlab.png" />
+</div>
+<p>∵ Pr=0.0275 &lt; α ∴ 拒绝H0，即不能认为这三所小学五年级男学生的平均身高相同。</p>
 <p>实验数据也可以是非平衡数据，如上，假设小学2的测试数据少一组：</p>
-<p><img src="../images/数理统计知识整理/单因素方差分析题1.png" alt=""></p>
+<div class="figure">
+<img src="../images/数理统计知识整理/单因素方差分析题1.png" />
+</div>
 <p>此时，anova1调用格式有所改变，</p>
-<pre><code class="apache">p=anova1(x,<span class="keyword">group</span>) 
+<pre><code>p=anova1(x,group) 
 
-% x 为向量，从第 1 组到第r组数据依次排列；<span class="keyword">group</span> 为与 x 同长度的向量，标志 x 中数
+% x 为向量，从第 1 组到第r组数据依次排列；group 为与 x 同长度的向量，标志 x 中数
 % 据的组别（在与 x 第i组数据相对应的位置处输入整数 i=1,2,..r）</code></pre>
 <p>此时的Matlab代码为：</p>
-<pre><code class="language-matlab apache">x =<span class="sqbracket"> [...
-128.1    134.1    131.1    138.9    140.8    127.4; ...
-150.3    147.9    136.8    126.0    150.7    0; ...
-140.6    143.1    144.5    143.7    148.5    146.4...
+<pre class="sourceCode matlab"><code class="sourceCode matlab">x = [...
+<span class="fl">128.1</span>   <span class="fl">134.1</span>   <span class="fl">131.1</span>   <span class="fl">138.9</span>   <span class="fl">140.8</span>   <span class="fl">127.4</span>; ...
+<span class="fl">150.3</span>   <span class="fl">147.9</span>   <span class="fl">136.8</span>   <span class="fl">126.0</span>   <span class="fl">150.7</span>   <span class="fl">0</span>; ...
+<span class="fl">140.6</span>   <span class="fl">143.1</span>   <span class="fl">144.5</span>   <span class="fl">143.7</span>   <span class="fl">148.5</span>   <span class="fl">146.4</span>...
 ];
-x = [x(1,:),x(2,1:5),x(3,:)];
-g = [ones(1,6),2*ones(1,5),3*ones(1,6)];
-
-P=anova1(x, g);</span></code></pre>
+x = [x(<span class="fl">1</span>,:),x(<span class="fl">2</span>,<span class="fl">1</span>:<span class="fl">5</span>),x(<span class="fl">3</span>,:)];
+g = [ones(<span class="fl">1</span>,<span class="fl">6</span>),<span class="fl">2</span>*ones(<span class="fl">1</span>,<span class="fl">5</span>),<span class="fl">3</span>*ones(<span class="fl">1</span>,<span class="fl">6</span>)];
+    
+P=anova1(x, g);</code></pre>
 <p>结果为</p>
-<p><img src="../images/数理统计知识整理/单因素方差分析Matlab1.png" alt=""></p>
+<div class="figure">
+<img src="../images/数理统计知识整理/单因素方差分析Matlab1.png" />
+</div>
 <p>因为仅改变了一个实验数据，其结果和前面的一致。</p>
-<h3>2.4 双因素方差分析</h3>
+<h3 id="双因素方差分析">2.4 双因素方差分析</h3>
 <p>关于双因素方差分析的模型请参考[3]，这里从实际角度出发：</p>
 <ul>
 <li>考虑如何测试实验数据</li>
 </ul>
 <p>按下表测试数据，每组t各数据，共r x s组。</p>
-<p><img src="../images/数理统计知识整理/双因素分析实验数据表.png" alt=""></p>
+<div class="figure">
+<img src="../images/数理统计知识整理/双因素分析实验数据表.png" />
+</div>
 <ul>
 <li>考虑双因素间是否有交互影响</li>
 </ul>
 <p>无交互影响时可简化测试的实验数据数，每组测一个数据（令t=1）即可，因为无交互影响双因素方差分析表中各量都与t无关。</p>
-<p><img src="../images/数理统计知识整理/无交互影响双因素方差分析表.png" alt=""></p>
+<div class="figure">
+<img src="../images/数理统计知识整理/无交互影响双因素方差分析表.png" />
+</div>
 <p>有交互影响的方差分析表如下：</p>
-<p><img src="../images/数理统计知识整理/有交互影响方差分析表.png" alt=""></p>
+<div class="figure">
+<img src="../images/数理统计知识整理/有交互影响方差分析表.png" />
+</div>
 <p>从方差分析表中可以看出：与单因素方差分析相比，双因素方差分析只是多了一个因素，因此方差分析表中多了一行而已，再加上要考虑交互影响，则方差分析表中再增加1行。</p>
 <ul>
 <li>考虑如何使用Matlab进行分析</li>
 </ul>
 <p>Matlab中通过</p>
-<pre><code class="ini"><span class="setting">p=<span class="value">anova2(x,reps)</span></span></code></pre>
+<pre><code>p=anova2(x,reps)</code></pre>
 <p>进行双因素的方差分析，不妨使用</p>
-<pre><code class="undefined">&gt;&gt; help anova2</code></pre>
+<pre><code>&gt;&gt; help anova2</code></pre>
 <p>查看anova2函数的使用方法。</p>
-<pre><code class="undefined">对无交互关系的双因素方差分析，此时每个单元只需要测一个值，reps=1
+<pre><code>对无交互关系的双因素方差分析，此时每个单元只需要测一个值，reps=1
 对于交互关系的双因素方差分析，此时每个单元需要测多个值（t&gt;1）,reps=2</code></pre>
 <p>参数x的格式为：</p>
-<pre><code class="undefined">% 列因素有3个水平(s=3)，行因素有2个水平(r=2)，每组测试2个数据(t=2)
+<pre><code>% 列因素有3个水平(s=3)，行因素有2个水平(r=2)，每组测试2个数据(t=2)
 x =[x111 x121 x131
     x112 x122 x132
     x211 x221 x231 
@@ -266,55 +366,56 @@ x =[x111 x121 x131
 <p>1. 无交互作用双因素方差分析的例子</p>
 <blockquote>
 <blockquote>
-<p>一种火箭使用了四种燃料、三种推进器，进行射程试验，对于每种燃料与每种推进器的组合作一次试验，得到如下数据表，问各种燃料之间及各种推进器之间有无显著差异？设显著性水平α=0.05.
-<img src="../images/数理统计知识整理/火箭试验数据.png" alt=""></p>
+<p>一种火箭使用了四种燃料、三种推进器，进行射程试验，对于每种燃料与每种推进器的组合作一次试验，得到如下数据表，问各种燃料之间及各种推进器之间有无显著差异？设显著性水平α=0.05. <img src="../images/数理统计知识整理/火箭试验数据.png" /></p>
 </blockquote>
 </blockquote>
 <p>Matlab解题代码如下：</p>
-<pre><code class="language-matlab apache">x=[58.2 56.2 65.3 
-49.1 54.1 51.6 
-60.1 70.9 39.2 
-75.8 58.2 48.7]; 
-<span class="sqbracket">
-[p,t,st]=anova2(x,1);</span></code></pre>
+<pre class="sourceCode matlab"><code class="sourceCode matlab">x=[<span class="fl">58.2</span> <span class="fl">56.2</span> <span class="fl">65.3</span> 
+<span class="fl">49.1</span> <span class="fl">54.1</span> <span class="fl">51.6</span> 
+<span class="fl">60.1</span> <span class="fl">70.9</span> <span class="fl">39.2</span> 
+<span class="fl">75.8</span> <span class="fl">58.2</span> <span class="fl">48.7</span>]; 
+
+[p,t,st]=anova2(x,<span class="fl">1</span>); </code></pre>
 <p>分析结果的方差分析表如下：</p>
-<p><img src="../images/数理统计知识整理/双因素方差分析EG1.png" alt=""></p>
+<div class="figure">
+<img src="../images/数理统计知识整理/双因素方差分析EG1.png" />
+</div>
 <p>求得p=[0.4491 0.7387]，都大于α，所以各种燃料之间及各种推进器的差异都对火箭射程没影响。</p>
 <p>2. 有交互作用双因素方差分析的例子</p>
 <blockquote>
 <blockquote>
-<p>一种火箭使用了四种燃料、三种推进器，进行射程试验，对于每种燃料与每种推进器的组合作2次试验，得到如下数据表，问各种燃料之间及各种推进器之间有无显著差异？两因素的交互作用是否显著？设显著性水平α=0.05.
-<img src="../images/数理统计知识整理/火箭试验数据2.png" alt=""></p>
+<p>一种火箭使用了四种燃料、三种推进器，进行射程试验，对于每种燃料与每种推进器的组合作2次试验，得到如下数据表，问各种燃料之间及各种推进器之间有无显著差异？两因素的交互作用是否显著？设显著性水平α=0.05. <img src="../images/数理统计知识整理/火箭试验数据2.png" /></p>
 </blockquote>
 </blockquote>
 <p>Matlab解题代码如下：</p>
-<pre><code class="language-matlab ruby">x<span class="number">0</span>=[<span class="number">58.2</span>,<span class="number">52.6</span> <span class="number">56.2</span>,<span class="number">41.2</span>  <span class="number">65.3</span>,<span class="number">60.8</span> 
-<span class="number">49.1</span>,<span class="number">42.8</span> <span class="number">54.1</span>,<span class="number">50.5</span> <span class="number">51.6</span>,<span class="number">48.4</span> 
-<span class="number">60.1</span>,<span class="number">58.3</span> <span class="number">70.9</span>,<span class="number">73.2</span> <span class="number">39.2</span>,<span class="number">40.7</span> 
-<span class="number">75.8</span>,<span class="number">71.5</span> <span class="number">58.2</span>,<span class="number">51.0</span> <span class="number">48.7</span>,<span class="number">41.4</span>]; 
+<pre class="sourceCode matlab"><code class="sourceCode matlab">x0=[<span class="fl">58.2</span>,<span class="fl">52.6</span> <span class="fl">56.2</span>,<span class="fl">41.2</span>  <span class="fl">65.3</span>,<span class="fl">60.8</span> 
+<span class="fl">49.1</span>,<span class="fl">42.8</span> <span class="fl">54.1</span>,<span class="fl">50.5</span> <span class="fl">51.6</span>,<span class="fl">48.4</span> 
+<span class="fl">60.1</span>,<span class="fl">58.3</span> <span class="fl">70.9</span>,<span class="fl">73.2</span> <span class="fl">39.2</span>,<span class="fl">40.7</span> 
+<span class="fl">75.8</span>,<span class="fl">71.5</span> <span class="fl">58.2</span>,<span class="fl">51.0</span> <span class="fl">48.7</span>,<span class="fl">41.4</span>]; 
 
-x1=x<span class="number">0</span>(<span class="symbol">:</span>,<span class="number">1</span><span class="symbol">:</span><span class="number">2</span><span class="symbol">:</span><span class="number">5</span>);x2=x<span class="number">0</span>(<span class="symbol">:</span>,<span class="number">2</span><span class="symbol">:</span><span class="number">2</span><span class="symbol">:</span><span class="number">6</span>); 
-<span class="keyword">for</span> i=<span class="number">1</span><span class="symbol">:</span><span class="number">4</span> 
-    x(<span class="number">2</span>*i-<span class="number">1</span>,<span class="symbol">:</span>)=x1(i,<span class="symbol">:</span>); 
-    x(<span class="number">2</span>*i,<span class="symbol">:</span>)=x2(i,<span class="symbol">:</span>); 
-<span class="keyword">end</span>
+x1=x0(:,<span class="fl">1</span>:<span class="fl">2</span>:<span class="fl">5</span>);x2=x0(:,<span class="fl">2</span>:<span class="fl">2</span>:<span class="fl">6</span>); 
+for i=<span class="fl">1</span>:<span class="fl">4</span> 
+    x(<span class="fl">2</span>*i-<span class="fl">1</span>,:)=x1(i,:); 
+    x(<span class="fl">2</span>*i,:)=x2(i,:); 
+end
 
-[p,t,st]=anova2(x,<span class="number">2</span>);</code></pre>
+[p,t,st]=anova2(x,<span class="fl">2</span>);</code></pre>
 <p>分析结果的方差分析表如下：</p>
-<p><img src="../images/数理统计知识整理/双因素方差分析EG2.png" alt=""></p>
+<div class="figure">
+<img src="../images/数理统计知识整理/双因素方差分析EG2.png" />
+</div>
 <p>求得p=[ 0.0035 0.0260 0.0001]，都小于α，所以各实验均值相等的概率很小，认为不同燃料、不同推进器下的射程有显著差异，交互作用也是显著的。</p>
-<h2>3 回归分析与方差分析的比较</h2>
+<h2 id="回归分析与方差分析的比较">3 回归分析与方差分析的比较</h2>
 <p>回归分析与方差分析之间都是研究相关关系的统计方法，就我理解，两者之间的差异在于：</p>
-<ol>
-<li><p>回归分析在于建立自变量与因变量之间的定量关系（表达式），这种定量的关系可用于将来的预测（如：根据14年以前的房价数据建立回归模型，可用于14年的房价预测）；方差分析在于解释因素的不同水平（状态）是否对指标有显著影响，如有显著影响，其具体影响的定量关系还需要用其它方法做进一步的分析（如：通过测试试验数据，分析货币的价值（因素）是否对房价（指标）有显著影响，方差分析无法提供房价与货币价值间的定量表达式）</p>
-</li>
-<li><p>应用上：当不确定谋因素是否对指标有影响时，可先测量小部分数据，做方差分析。若确定因素对指标有影响，则增加测量因素在不同状态下的数据，进一步用回归分析确定因素与指标之间的定量关系。否则认为因素与指标之间无关。</p>
-</li>
+<ol style="list-style-type: decimal">
+<li><p>回归分析在于建立自变量与因变量之间的定量关系（表达式），这种定量的关系可用于将来的预测（如：根据14年以前的房价数据建立回归模型，可用于14年的房价预测）；方差分析在于解释因素的不同水平（状态）是否对指标有显著影响，如有显著影响，其具体影响的定量关系还需要用其它方法做进一步的分析（如：通过测试试验数据，分析货币的价值（因素）是否对房价（指标）有显著影响，方差分析无法提供房价与货币价值间的定量表达式）</p></li>
+<li><p>应用上：当不确定谋因素是否对指标有影响时，可先测量小部分数据，做方差分析。若确定因素对指标有影响，则增加测量因素在不同状态下的数据，进一步用回归分析确定因素与指标之间的定量关系。否则认为因素与指标之间无关。</p></li>
 </ol>
-<h2>参考</h2>
-<ol>
+<h2 id="参考">参考</h2>
+<ol style="list-style-type: decimal">
 <li><a href="../enclosure/数理统计知识整理/相关系数显着性检验表(完整润色版).xls">相关系数显著性检验表</a></li>
 <li>北京科技大学统计优化研究生课程课件</li>
 <li>数学建模Matlab大全（共30章）</li>
 </ol>
-</font></font></body></html>
+</body>
+</html>
