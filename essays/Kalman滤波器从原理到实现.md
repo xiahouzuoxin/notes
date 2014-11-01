@@ -109,7 +109,7 @@ z(n)就是测量结果，H(n)是观测矢量，x(n)就是要求的物理量（�
 
 	误差增益：
 
-		<img src="http://www.forkosh.com/mathtex.cgi? \large \mathbf{K(n)=P(n|n-1)H^T(n)[R(n)+H(n)P(n|n-1)H^T(n)]^{-1}}.............(7)">
+	<img src="http://www.forkosh.com/mathtex.cgi? \large \mathbf{K(n)=P(n|n-1)H^T(n)[R(n)+H(n)P(n|n-1)H^T(n)]^{-1}}.............(7)">
 
 	修正值：
 

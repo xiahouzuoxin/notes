@@ -1,4 +1,5 @@
 /* Original css Name: Github */
+
 *{margin:0;padding:0;}
 body {
 	font:13px helvetica,arial,freesans,clean,sans-serif;
@@ -208,4 +209,43 @@ pre .diff .change {
 
 pre .chunk {
   color: #aaa
+}
+
+#header {
+    background-color: #fff;
+    /* background: #151515 url("../images/bkg.png") 0 0;*/
+    height: 10px;
+    border-bottom: 0px solid #666666;
+}
+
+.header_titleline {
+    color: #fff;
+    font-size: 18px;
+    text-align: center;
+    padding-top: 0px;
+}
+
+.header_subline {
+    color: #fff;
+    font-size: 15px;
+    text-align: center;
+}
+
+#footer {
+    background-color: #ffffff;
+    border-top: 1px solid #666666;
+    height: 30;
+}
+
+.footer_titleline {
+    color: #0;
+    font-size: 16px;
+    text-align: center;
+}
+
+.footer_subline {
+    color: #0;
+    font-size: 12px;
+    text-align: center;
+    text-vertical-align: top;
 }
