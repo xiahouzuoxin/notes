@@ -28,12 +28,12 @@ all:$(HTML)
 	@sed -n -e "s/<!---keywords:\(.\+\)-->/<meta name=\"keywords\" content=\"\1\">/p" $< >> temp_head_keywords.html # 生成<head>中的关键字标签
 	@sed -n -e "s/<!---title:\(.\+\)-->/<h1>\1<\/h1>/p" $< > temp_title.html # 生成<body>中的标题标签<h1>
 	@sed -n -e "s/<!---date:\(.\+\)-->/<h4>\1 \/ xiahouzuoxin<\/h4>/p" $< >> temp_title.html # 生成<body>中的标题标签<h1>
+	@sed -n -e "s/<!---date:\(.\+\)-->/<h4>\1 \/ xiahouzuoxin<\/h4>/p" $1 >> temp_title.html # 提取日期
+	@sed -n -e "s/<!---keywords:\(.\+\)-->/<h4>Tags: \1<\/h4>/p" $1 >> temp_title.html       # 提取关键词
+	@echo "转载请注明出处: <a href="xiahouzuoxin.github.io">xiahouzuoxin.github.io</a>" >> temp_title.html
+	
 	@pandoc $(PANDOC_FLAG) --from=markdown --to=html $< -o $@ # 调用pandoc编译
 	@rm -f temp_head_keywords.html temp_title.html            # 删除临时文件
-
-# 检查无效链接
-check:
-	./checkinvalidlink.sh
 
 clean:
 	@rm $(HTML) -f

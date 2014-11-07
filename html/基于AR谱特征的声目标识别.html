@@ -1,0 +1,173 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
+  </style>
+  <link rel="stylesheet" href="../stylesheets/Github.css" type="text/css" />
+  <title>基于AR谱特征的声目标识别</title>
+</head>
+<body>
+<div id="header"><center>
+    <p class="header_titleline">
+    <a href="../Search.html" target="_self" title="站内搜索">站内搜索  </a><a href="../index.html" target="_self" title="返回主页">返回主页  </a><a href="../Archives.html" target="_self" title="文章存档">文章存档  </a><a href="../README.html" target="_self" title="分类目录">分类目录</a>
+    </p>
+</center></div>
+<h1>基于AR谱特征的声目标识别</h1>
+<h4>2014-11-06 / xiahouzuoxin</h4>
+<h4>Tags: AR谱,SVM</h4>
+转载请注明出处: <a href=xiahouzuoxin.github.io>xiahouzuoxin.github.io</a>
+<div id="TOC">
+<ul>
+<li><a href="#关于ar谱">关于AR谱</a></li>
+<li><a href="#音频信号特征提取">音频信号特征提取</a><ul>
+<li><a href="#短时平均能量short-time-energy-ste">1 短时平均能量(Short Time Energy, STE)</a></li>
+<li><a href="#短时过零率short-time-zero-corssing-rate-zcr">2 短时过零率(Short Time Zero-Corssing Rate, ZCR)</a></li>
+<li><a href="#子带能量比sub-band-energy-ratio-ser">3 子带能量比（Sub-band energy ratio, SER)</a></li>
+<li><a href="#谱频率重心spectrum-centroid-sc">4 谱频率重心（Spectrum Centroid, SC）</a></li>
+<li><a href="#带宽band-width-bw">5 带宽（Band Width, BW）</a></li>
+</ul></li>
+<li><a href="#基于支持向量机的识别">基于支持向量机的识别</a></li>
+</ul>
+</div>
+<!---title:基于AR谱特征的声目标识别-->
+<!---keywords:AR谱,SVM-->
+<!---date:2014-11-06-->
+<p>本文第一部分先解释AR谱，但并不会给出太多的细节，第二部分介绍几种常见的语音中的特征，有些在之前的博文中已经用过，诸如过零率。第三部分给出实际操作的过程及识别的效果。本文的目标是通过对DSP采集的声音信号提取特征，识别卡车和飞机。</p>
+<h2 id="关于ar谱">关于AR谱</h2>
+<p>AR模型全称Auto-Regression Model，是通过参数计算信号功率谱的一种方法。在Matlab中计算AR谱很简单：假设有一个1024个点的车辆信号x，</p>
+<pre class="sourceCode matlab"><code class="sourceCode matlab">y = pyulear(x, <span class="fl">256</span>, <span class="fl">128</span>);</code></pre>
+<div class="figure">
+<img src="../images/基于AR谱特征的车辆识别/ARspectrum.jpg" alt="ARspectrum" /><p class="caption">ARspectrum</p>
+</div>
+<p>AR谱的计算有2个重要的参数：系数阶数、FFT反变换的点数。AR谱是一种递推模型，即用前p个时刻的时域值估计当前第n时刻的值：</p>
+<p><img src="http://www.forkosh.com/mathtex.cgi? x(n)=-\sum_{k=1}^{p}a_kx(n-k)+u(n)"></p>
+<p>其中u(n)是噪声输入，系数阶数就是上式中的p。牵扯到FFT，是因为功率谱的计算中可以使用FFT进行快速计算，因此就有离散FFT在单位圆上抽样点数的问题，功率谱的计算公式是：</p>
+<p><img src="http://www.forkosh.com/mathtex.cgi? P_x(e^{jw})=\frac{\sigma^2}{|1+\sum_{k=1}^pa_ke^{-jwk}}|^2=\frac{\sigma^2}{|\sum_{k=0}^{N-1}a_ke^{-jwk}}|^2"></p>
+<p>上式中转化后有a0=1，将FFT计算扩充到N点后有a(p+1)...a(N-1)=0，FFT点数就是指的这里用于FFT计算的长度N。</p>
+<p>AR谱是一个什么样的概念呢，首先我对功率谱的理解就是：不同频率处的能量值的大小，这个大小并不一定是真实的能量值，但不同频率的能量谱值的相对大小关系却接近真实值，因此不同频率处功率谱值的相对关系比其真实的谱值更重要。比如，车辆在远处的时候能量相对较小，在近处的时候能量较大，但对于平稳的信号，虽然能量值不同，但都具有相似的谱包络，因此我们更关注的是谱在不同频率上的分布大小，就像概率一样，看在哪个频率值（或段）的功率谱大。</p>
+<p>通过观察AR谱，我们能清晰的知道：主要的能量都集中在什么频率段，从而对信号进行分析主要关注这些频率段就行了。</p>
+<p>AR谱的细节参见胡广书编著《数字信号处理》一书，其C实现参考我的<a href="https://github.com/xiahouzuoxin/ar_model">Github项目</a>，关于AR的基本理论参见之前的博文“<a href="http://blog.csdn.net/xiahouzuoxin/article/details/9904147">现代数字信号处理——AR模型</a>”</p>
+<h2 id="音频信号特征提取">音频信号特征提取</h2>
+<h3 id="短时平均能量short-time-energy-ste">1 短时平均能量(Short Time Energy, STE)</h3>
+<p><img src="http://www.forkosh.com/mathtex.cgi? STE=\sum_{n=1}^Nx(n)^2"></p>
+<p>其中N表示一帧的长度。短时平均能量可用于判断静音帧，静音帧的短时能量小，这比直接通x(n)的最高幅值进行判断稳定性要高。对于静音帧，应该在后续的处理之前去除。通常，语音比音乐含有更多的静音（人说话没有音乐那样着腔带调），因此，语音的平均能量的变化要比音乐中大很多。</p>
+<h3 id="短时过零率short-time-zero-corssing-rate-zcr">2 短时过零率(Short Time Zero-Corssing Rate, ZCR)</h3>
+<p>短时过零率是在一个音频帧内，离散采样信号值由负到正或由正到负的变换次数。</p>
+<p><img src="http://www.forkosh.com/mathtex.cgi? ZCR=\frac{1}{N}\sum_{m=0}^{N-1}|sgn[x_n(m+1)]-sgn[x_n(m)]|"></p>
+<p>从某种程序上讲，过零率表达了信号的跳变速度，是频率的一种简单度量。过零率与平均能量结合能用于语音端点检测。在博文<a href="../html/自适应含噪信号过零率算法.html">自适应含噪信号过零率算法</a>中也曾尝试改进过零率用于震动信号的识别。</p>
+<h3 id="子带能量比sub-band-energy-ratio-ser">3 子带能量比（Sub-band energy ratio, SER)</h3>
+<p>子带能量用于描述主要能量的频域分布特征，其过程就是将频域等间隔划分成B个子带，在AR谱图上，对每个子带范围进行积分就可求出子带能量Ei，则子带能量比就是</p>
+<p><img src="http://www.forkosh.com/mathtex.cgi? \frac{E_i}{E_{all}},i=1,...B"></p>
+<p>不同音频信号的能量分布不同，通过子带能量能区分能量的主要分布频带。子带能量比是一个很好参数，用于识别频率能量分布不同的目标。当然类似的思想也可以用到FFT频谱图上。</p>
+<h3 id="谱频率重心spectrum-centroid-sc">4 谱频率重心（Spectrum Centroid, SC）</h3>
+<p>将AR谱的幅值看做权值w，则谱频率重心的计算是：</p>
+<p><img src="http://www.forkosh.com/mathtex.cgi? SC=\frac{w_k*f_k}{\sum{w_k}},k=1,...N/2"></p>
+<p>谱频率重心是通过谱峰统计的中心，并不会（当然也可能等于）等于AR谱主峰对应的频率。</p>
+<h3 id="带宽band-width-bw">5 带宽（Band Width, BW）</h3>
+<p>带宽指信号谱值下降到中心频率谱值的0.707处的高低频率差BW=fH-fL。</p>
+<h2 id="基于支持向量机的识别">基于支持向量机的识别</h2>
+<p>卡车和飞机的主频位置可能存在不同，所以使用声音信号AR谱的最高峰值对应的频率Fmax作为一个特征维度；另外使用谱频率重心和子带能量比分别作为特征的另两个维度。因此，最后组合特征为{Fmax,SC,SER}。</p>
+<p>值得注意的是，本文使用的谱频率重心不是简单的对所有频域进行统计计算，而是：</p>
+<ol style="list-style-type: decimal">
+<li><p>先对频谱org_psd进行从高到低排序，排序后的psd以及对应的频率索引为idx</p></li>
+<li><p>选择部分具有高的谱值（这些谱值的和占整个频域谱值和的0.707）进行频谱重心计算，这样能避免一些高频噪声的影响。</p></li>
+</ol>
+<p>识别使用支持向量机（SVM）模型，关于支持向量机，对于没太多基础的可以参考July的博文<a href="http://blog.csdn.net/v_july_v/article/details/7624837">支持向量机通俗导论（理解SVM的三层境界）</a>，有一点基础的可以看看<a href="http://download.csdn.net/detail/xiahouzuoxin/5778927">林智仁老师的讲义</a>，这里使用的工具箱就是林智仁的LibSVM，可以从软件主页 <a href="http://www.csie.ntu.edu.tw/~cjlin/libsvm/index.html" class="uri">http://www.csie.ntu.edu.tw/~cjlin/libsvm/index.html</a> 中下载到。</p>
+<p>实际操作通过自己设计的DSP+FPGA控制AD7606采集声音信号，将声音信号上传到PC的matlab上进行训练，提取特征。很重要的一点是：使用分类算法（比如这里的LibSVM支持向量机或其它的如神经网络等）进行分类的前提是数据本身可分，如下为卡车和飞机的特征可视化结果，从图中可以看出，两类样本使用上面构造的特征可分，因此才可以接着做识别的工作。</p>
+<div class="figure">
+<img src="../images/基于AR谱特征的车辆识别/特征.jpg" alt="特征" /><p class="caption">特征</p>
+</div>
+<p>使用LibSVM训练，核函数使用RBF，效果一般比其它的要好一些，这里大部分参数默认（主要有gamma和C参数）。要使用LibSVM获得好的效果，请参考我的另一篇博文“<a href="http://blog.csdn.net/xiahouzuoxin/article/details/9372805">LibSVM笔记系列（2）——如何提升LibSVM分类效果</a>”，主要是一些关于如何搜索获得最佳参数的方法。</p>
+<p>实验总共数据1400组，卡车和飞机各选200组用于训练（代码为实际代码的一部分，由于其它原因，暂时无法公开代码），</p>
+<pre><code>n_trian = 200;
+
+label_car = zeros(length(car_feat),1);
+label_plane = ones(length(plane_feat),1);
+
+instance = [car_feat(idx,1:n_trian) plane_feat(idx,1:n_trian)];   % idx表示第idx维的特征
+instance = instance&#39;;
+label = [label_car(1:n_trian); label_plane(1:n_trian)];
+model = svmtrain(label, instance, &#39;-s 0 -t 2&#39;);  % SVM训练结果为model模型，这个模型将用于下面的预测</code></pre>
+<p>其余的1000组用于测试，</p>
+<pre><code>tests = [car_feat(idx,(n_trian+1):end) plane_feat(idx,(n_trian+1):end)];
+test_label = [label_car((n_trian+1):end); label_plane((n_trian+1):end)];
+tests = tests&#39;;
+pd_label = svmpredict(test_label, tests, model);
+fprintf(&#39;\n识别正确率%.4f\n&#39;, length(pd_label(test_label==pd_label))/length(test_label));</code></pre>
+<p>最后的预测结果如下：</p>
+<div class="figure">
+<img src="../images/基于AR谱特征的车辆识别/识别结果.jpg" alt="识别结果" /><p class="caption">识别结果</p>
+</div>
+<p>预测正确率达到86.50%，能使用到到实际当中。</p>
+<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"slide":{"type":"slide","bdImg":"5","bdPos":"right","bdTop":"300"},"image":{"viewList":["qzone","tsina","tqq","renren","weixin"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["qzone","tsina","tqq","renren","weixin"]}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+
+<!-- 多说评论框 start -->
+
+<div class="ds-thread" data-thread-key="基于AR谱特征的声目标识别" data-title="基于AR谱特征的声目标识别" data-url="xiahouzuoxin.github.io/notes/html/基于AR谱特征的声目标识别.html">
+</div>
+<!-- 多说评论框 end -->
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"xiahouzuoxin"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- 多说公共JS代码 end -->
+
+<div id="footer">
+    <p class="footer_subline">联系邮箱: xiahouzuoxin@163.com</p>
+    <p class="footer_subline">声明: 本站所有文章如非特别说明均为原创，转载请注明出处！</p>
+</div>
+
+<!-- 回到顶部 -->
+<script>
+lastScrollY=0;
+function heartBeat(){
+var diffY;
+if (document.documentElement && document.documentElement.scrollTop)
+    diffY = document.documentElement.scrollTop;
+else if (document.body)
+    diffY = document.body.scrollTop
+else
+    {/*Netscape stuff*/}
+percent=.1*(diffY-lastScrollY);
+if(percent>0)percent=Math.ceil(percent);
+else percent=Math.floor(percent);
+document.getElementById("full").style.top=parseInt(document.getElementById("full").style.top)+percent+"px";
+lastScrollY=lastScrollY+percent;
+}
+suspendcode="<div id=\"full\" style='right:1px;POSITION:absolute;TOP:600px;z-index:100'><a onclick='window.scrollTo(0,0);'><img src='../images/top.png'></a><br></div>"
+document.write(suspendcode);
+window.setInterval("heartBeat()",1);
+</script>
+</body>
+</html>
