@@ -1,5 +1,6 @@
-[<font size=4>←返回主目录<font>](../README.md)
-</br></br></br>
+<!---title:基于SPI的双MCU通信-->
+<!---keywords:DSP,ARM-->
+<!---date:old-->
 
 ## 设置通信帧格式
 

@@ -26,9 +26,28 @@ code > span.fu { color: #06287e; }
 code > span.er { color: #ff0000; font-weight: bold; }
   </style>
   <link rel="stylesheet" href="../stylesheets/Github.css" type="text/css" />
+  <title>整数转字符串的一种快速实现</title>
 </head>
 <body>
-<p><a href="../README.md"><font size=4>←返回主目录<font></a> </br></br></br></p>
+<div id="header"><center>
+    <p class="header_titleline">
+    <a href="../index.html" target="_self" title="主页">主页  </a><a href="../Search.html" target="_self" title="站内搜索">站内搜索  </a><a href="../Projects.html" target="_self" title="项目研究">项目研究  </a><a href="../Archives.html" target="_self" title="文章存档">文章存档  </a><a href="../README.html" target="_self" title="分类目录">分类目录 </a><a href="../AboutMe.html" target="_self" title="关于我">关于我  </a>
+    </p>
+</center></div>
+<h1>整数转字符串的一种快速实现</h1>
+<h4>old / xiahouzuoxin</h4>
+<h4>Tags: 字符串</h4>
+转载请注明出处: <a href=xiahouzuoxin.github.io>xiahouzuoxin.github.io</a>
+<div id="TOC">
+<ul>
+<li><a href="#基本思路">基本思路</a></li>
+<li><a href="#详细的程序">详细的程序</a></li>
+<li><a href="#源代码">源代码</a></li>
+</ul>
+</div>
+<!---title:整数转字符串的一种快速实现-->
+<!---keywords:字符串-->
+<!---date:old-->
 <h3 id="基本思路">基本思路</h3>
 <ul>
 <li>若输入为正整数，则直接按10求模，取出十进制中的每个bit，存储到字符串中即可</li>
@@ -148,5 +167,48 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <h3 id="源代码">源代码</h3>
 <p><a href="../codes/整数转字符串的一种快速实现">format2str</a></p>
 <p>可能还会有其它的更新，如float转字符串等的实现（float可以通过先乘以一个系数化为整数后再转字符串）。</p>
+<div class="ds-thread" data-thread-key="整数转字符串的一种快速实现" data-title="整数转字符串的一种快速实现" data-url="xiahouzuoxin.github.io/notes/html/整数转字符串的一种快速实现.html"></div>
+<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"slide":{"type":"slide","bdImg":"5","bdPos":"right","bdTop":"300"},"image":{"viewList":["qzone","tsina","tqq","renren","weixin"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["qzone","tsina","tqq","renren","weixin"]}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"xiahouzuoxin"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- 多说公共JS代码 end -->
+
+<div id="footer">
+    <p class="footer_subline">联系邮箱: xiahouzuoxin@163.com</p>
+    <p class="footer_subline">声明: 本站所有文章如非特别说明均为原创，转载请注明出处！</p>
+</div>
+
+<!-- 回到顶部 -->
+<script>
+lastScrollY=0;
+function heartBeat(){
+var diffY;
+if (document.documentElement && document.documentElement.scrollTop)
+    diffY = document.documentElement.scrollTop;
+else if (document.body)
+    diffY = document.body.scrollTop
+else
+    {/*Netscape stuff*/}
+percent=.1*(diffY-lastScrollY);
+if(percent>0)percent=Math.ceil(percent);
+else percent=Math.floor(percent);
+document.getElementById("full").style.top=parseInt(document.getElementById("full").style.top)+percent+"px";
+lastScrollY=lastScrollY+percent;
+}
+suspendcode="<div id=\"full\" style='right:1px;POSITION:absolute;TOP:600px;z-index:100'><a onclick='window.scrollTo(0,0);'><img src='../images/top.png'></a><br></div>"
+document.write(suspendcode);
+window.setInterval("heartBeat()",1);
+</script>
 </body>
 </html>

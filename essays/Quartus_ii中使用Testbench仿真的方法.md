@@ -1,5 +1,6 @@
-[<font size=4>←返回主目录<font>](../README.md)
-</br></br></br>
+<!---title:Quartus_ii中使用Testbench仿真的方法-->
+<!---keywords:FPGA-->
+<!---date:old-->
 
 ## 设置Modelsim路径
 

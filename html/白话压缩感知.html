@@ -26,9 +26,31 @@ code > span.fu { color: #06287e; }
 code > span.er { color: #ff0000; font-weight: bold; }
   </style>
   <link rel="stylesheet" href="../stylesheets/Github.css" type="text/css" />
+  <title>白话压缩感知</title>
 </head>
 <body>
-<p><a href="../README.md"><font size=4>←返回主目录<font></a> </br></br></br></p>
+<div id="header"><center>
+    <p class="header_titleline">
+    <a href="../index.html" target="_self" title="主页">主页  </a><a href="../Search.html" target="_self" title="站内搜索">站内搜索  </a><a href="../Projects.html" target="_self" title="项目研究">项目研究  </a><a href="../Archives.html" target="_self" title="文章存档">文章存档  </a><a href="../README.html" target="_self" title="分类目录">分类目录 </a><a href="../AboutMe.html" target="_self" title="关于我">关于我  </a>
+    </p>
+</center></div>
+<h1>白话压缩感知</h1>
+<h4>old / xiahouzuoxin</h4>
+<h4>Tags: DSP</h4>
+转载请注明出处: <a href=xiahouzuoxin.github.io>xiahouzuoxin.github.io</a>
+<div id="TOC">
+<ul>
+<li><a href="#压缩感知介绍">压缩感知介绍</a><ul>
+<li><a href="#稀疏表示">1. 稀疏表示</a></li>
+<li><a href="#感知测量">2. 感知测量</a></li>
+</ul></li>
+<li><a href="#数学描述">数学描述</a></li>
+<li><a href="#程序分析">程序分析</a></li>
+</ul>
+</div>
+<!---title:白话压缩感知-->
+<!---keywords:DSP-->
+<!---date:old-->
 <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
 <h2 id="压缩感知介绍">压缩感知介绍</h2>
 <p>压缩感知（Compressive Sensing，CS），有时也叫成Compressive Sampling。相对于传统的奈奎斯特采样定理——要求采样频率必须是信号最高频率的两倍或两倍以上（这就要求信号是带限信号，通常在采样前使用低通滤波器使信号带限），压缩感知则利用数据的冗余特性，只采集少量的样本还原原始数据。</p>
@@ -188,5 +210,48 @@ cvx_end
 <img src="../images/白话压缩感知/err.png" alt="err" /><p class="caption">err</p>
 </div></li>
 </ol>
+<div class="ds-thread" data-thread-key="白话压缩感知" data-title="白话压缩感知" data-url="xiahouzuoxin.github.io/notes/html/白话压缩感知.html"></div>
+<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"slide":{"type":"slide","bdImg":"5","bdPos":"right","bdTop":"300"},"image":{"viewList":["qzone","tsina","tqq","renren","weixin"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["qzone","tsina","tqq","renren","weixin"]}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"xiahouzuoxin"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- 多说公共JS代码 end -->
+
+<div id="footer">
+    <p class="footer_subline">联系邮箱: xiahouzuoxin@163.com</p>
+    <p class="footer_subline">声明: 本站所有文章如非特别说明均为原创，转载请注明出处！</p>
+</div>
+
+<!-- 回到顶部 -->
+<script>
+lastScrollY=0;
+function heartBeat(){
+var diffY;
+if (document.documentElement && document.documentElement.scrollTop)
+    diffY = document.documentElement.scrollTop;
+else if (document.body)
+    diffY = document.body.scrollTop
+else
+    {/*Netscape stuff*/}
+percent=.1*(diffY-lastScrollY);
+if(percent>0)percent=Math.ceil(percent);
+else percent=Math.floor(percent);
+document.getElementById("full").style.top=parseInt(document.getElementById("full").style.top)+percent+"px";
+lastScrollY=lastScrollY+percent;
+}
+suspendcode="<div id=\"full\" style='right:1px;POSITION:absolute;TOP:600px;z-index:100'><a onclick='window.scrollTo(0,0);'><img src='../images/top.png'></a><br></div>"
+document.write(suspendcode);
+window.setInterval("heartBeat()",1);
+</script>
 </body>
 </html>

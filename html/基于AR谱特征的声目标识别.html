@@ -31,7 +31,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <body>
 <div id="header"><center>
     <p class="header_titleline">
-    <a href="../Search.html" target="_self" title="站内搜索">站内搜索  </a><a href="../index.html" target="_self" title="返回主页">返回主页  </a><a href="../Archives.html" target="_self" title="文章存档">文章存档  </a><a href="../README.html" target="_self" title="分类目录">分类目录</a>
+    <a href="../index.html" target="_self" title="主页">主页  </a><a href="../Search.html" target="_self" title="站内搜索">站内搜索  </a><a href="../Projects.html" target="_self" title="项目研究">项目研究  </a><a href="../Archives.html" target="_self" title="文章存档">文章存档  </a><a href="../README.html" target="_self" title="分类目录">分类目录 </a><a href="../AboutMe.html" target="_self" title="关于我">关于我  </a>
     </p>
 </center></div>
 <h1>基于AR谱特征的声目标识别</h1>
@@ -64,7 +64,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <p>AR谱的计算有2个重要的参数：系数阶数、FFT反变换的点数。AR谱是一种递推模型，即用前p个时刻的时域值估计当前第n时刻的值：</p>
 <p><img src="http://www.forkosh.com/mathtex.cgi? x(n)=-\sum_{k=1}^{p}a_kx(n-k)+u(n)"></p>
 <p>其中u(n)是噪声输入，系数阶数就是上式中的p。牵扯到FFT，是因为功率谱的计算中可以使用FFT进行快速计算，因此就有离散FFT在单位圆上抽样点数的问题，功率谱的计算公式是：</p>
-<p><img src="http://www.forkosh.com/mathtex.cgi? P_x(e^{jw})=\frac{\sigma^2}{|1+\sum_{k=1}^pa_ke^{-jwk}}|^2=\frac{\sigma^2}{|\sum_{k=0}^{N-1}a_ke^{-jwk}}|^2"></p>
+<p><img src="http://www.forkosh.com/mathtex.cgi? P_x(e^{jw})=\frac{\sigma^2}{|1+\sum_{k=1}^pa_ke^{-jwk}|^2}=\frac{\sigma^2}{|\sum_{k=0}^{N-1}a_ke^{-jwk}|^2}"></p>
 <p>上式中转化后有a0=1，将FFT计算扩充到N点后有a(p+1)...a(N-1)=0，FFT点数就是指的这里用于FFT计算的长度N。</p>
 <p>AR谱是一个什么样的概念呢，首先我对功率谱的理解就是：不同频率处的能量值的大小，这个大小并不一定是真实的能量值，但不同频率的能量谱值的相对大小关系却接近真实值，因此不同频率处功率谱值的相对关系比其真实的谱值更重要。比如，车辆在远处的时候能量相对较小，在近处的时候能量较大，但对于平稳的信号，虽然能量值不同，但都具有相似的谱包络，因此我们更关注的是谱在不同频率上的分布大小，就像概率一样，看在哪个频率值（或段）的功率谱大。</p>
 <p>通过观察AR谱，我们能清晰的知道：主要的能量都集中在什么频率段，从而对信号进行分析主要关注这些频率段就行了。</p>
@@ -121,13 +121,8 @@ fprintf(&#39;\n识别正确率%.4f\n&#39;, length(pd_label(test_label==pd_label)
 <img src="../images/基于AR谱特征的车辆识别/识别结果.jpg" alt="识别结果" /><p class="caption">识别结果</p>
 </div>
 <p>预测正确率达到86.50%，能使用到到实际当中。</p>
+<div class="ds-thread" data-thread-key="基于AR谱特征的声目标识别" data-title="基于AR谱特征的声目标识别" data-url="xiahouzuoxin.github.io/notes/html/基于AR谱特征的声目标识别.html"></div>
 <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"slide":{"type":"slide","bdImg":"5","bdPos":"right","bdTop":"300"},"image":{"viewList":["qzone","tsina","tqq","renren","weixin"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["qzone","tsina","tqq","renren","weixin"]}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
-
-<!-- 多说评论框 start -->
-
-<div class="ds-thread" data-thread-key="基于AR谱特征的声目标识别" data-title="基于AR谱特征的声目标识别" data-url="xiahouzuoxin.github.io/notes/html/基于AR谱特征的声目标识别.html">
-</div>
-<!-- 多说评论框 end -->
 
 <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 <script type="text/javascript">

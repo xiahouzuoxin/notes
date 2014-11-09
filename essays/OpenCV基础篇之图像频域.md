@@ -1,17 +1,6 @@
-
-[<font size=4>←返回主目录<font>](../README.md)</br>
-
-<div align="right"><a href="../index.html" target="_self" title="返回主页"><img src="../images/Home.png"></a> <a href="#bottom" target="_self" title="跳转底部"><img src="../images/bottom.png"></a></div>
-
-__文题__：OpenCV基础篇之图像频域</br>
-
-__作者__：xiahouzuoxin</br>
-
-__日期__：2014-09-16</br>
-
-_转载请注明出处：<http://xiahouzuoxin.github.io/note>_
-
------------------------------------
+<!---title:OpenCV基础篇之图像频域-->
+<!---keywords:OpenCV-->
+<!---date:2014-09-16-->
 
 ## 程序及分析
 
@@ -210,22 +199,5 @@ int main(int argc, char *argv[])
 
 
 [dft]:../images/OpenCV基础篇之图像频域/dft.png
-
-
-<div align="right"><a href="../index.html" target="_self" title="返回主页"><img src="../images/Home.png"></a> <a href="#top" target="_self" title="返回顶部"><img src="../images/top.png"></a></div>
-<a name="bottom"></a>
-[<font size=4>←返回主目录<font>](../README.md)</br>
-
-<!-- 
-
-本模板为转成Html后需要修改的地方:
-1. 修改README.md为README.html，共2处
-2. 修改Github样式目录
-3. 添加一键分享功能，源码在stylesheets目录下mystyle.md
-4. 添加评论功能，并修改评论中的标题项等，源码在stylesheets目录下mystyle.md
-5. 修正其它可能不正确的链接 
-
--->
-
 
 

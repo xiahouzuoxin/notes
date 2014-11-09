@@ -1,6 +1,6 @@
-[<font size=4>←返回主目录<font>](../README.md)
-</br></br></br>
-
+<!---title:FPGA的边沿检测-->
+<!---keywords:FPGA-->
+<!---date:old-->
 
 以前我曾一度傻乎乎的使用
 

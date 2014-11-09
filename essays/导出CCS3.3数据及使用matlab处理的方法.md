@@ -1,5 +1,6 @@
-[<font size=4>←返回主目录<font>](../README.md)
-</br></br></br>
+<!---title:导出CCS3.3数据及使用matlab处理的方法-->
+<!---keywords:DSP,Matlab-->
+<!---date:old-->
 
 CCS3.3是一款DSP的集成开发环境（IDE）。在做DSP开发时，为验证算法，常常需要使用matlab进行算法验证，验证算法就需要数据。因此，一种交互的方法是：
 

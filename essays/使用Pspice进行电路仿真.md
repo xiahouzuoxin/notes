@@ -1,5 +1,6 @@
-[<font size=4>←返回主目录<font>](../README.md)
-</br></br></br>
+<!---title:使用Pspice进行电路仿真-->
+<!---keywords:电路-->
+<!---date:old-->
 
 Pspice现在是集成到Cadence中的一个电路仿真工具，能通过Pspice模型的原理图仿真电路的输出结果。其大致步骤是：
 

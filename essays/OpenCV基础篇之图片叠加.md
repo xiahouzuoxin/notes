@@ -1,5 +1,6 @@
-[<font size=4>←返回主目录<font>](../README.md)
-</br></br></br>
+<!---title:OpenCV基础篇之图片叠加-->
+<!---keywords:OpenCV-->
+<!---date:2014-09-18-->
 
 ## 程序及分析
 

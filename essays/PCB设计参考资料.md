@@ -1,5 +1,6 @@
-[<font size=4>←返回主目录<font>](../README.md)
-</br></br></br>
+<!---title:PCB设计参考资料-->
+<!---keywords:电路-->
+<!---date:old-->
 
 ## 参考资料
 

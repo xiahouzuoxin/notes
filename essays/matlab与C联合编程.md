@@ -1,6 +1,6 @@
-[<font size=4>←返回主目录<font>](../README.md)
-</br></br></br>
-
+<!---title:matlab与C联合编程-->
+<!---keywords:Matlab-->
+<!---date:old-->
 
 ## 在MATLAB中配置C语言编译器
 

@@ -1,5 +1,6 @@
-[<font size=4>←返回主目录<font>](../README.md)
-</br></br></br>
+<!---title:CentOS上编译安装OpenCV-2.3.1与ffmpeg-2.1.2-->
+<!---keywords:CentOS,opencv-->
+<!---date:old-->
 
 已测试环境：
 

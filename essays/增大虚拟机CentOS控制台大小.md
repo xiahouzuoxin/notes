@@ -1,5 +1,6 @@
-[<font size=4>←返回主目录<font>](../README.md)
-</br></br></br>
+<!---title:增大虚拟机CentOS控制台大小-->
+<!---keywords:CentOS-->
+<!---date:old-->
 
 在虚拟机上装了个CentOS，可是控制台分辨率太小了，如果想放大控制台分辨率，则修改文件/boot/grub/grub.conf的kernel项。
 

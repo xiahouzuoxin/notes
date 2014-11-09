@@ -1,5 +1,6 @@
-[<font size=4>←返回主目录<font>](../README.md)
-</br></br></br>
+<!---title:DSP-BIOS使用入门-->
+<!---keywords:DSP-->
+<!---date:old-->
 
 
 ## 从环境说到搭建第一个工程

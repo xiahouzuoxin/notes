@@ -1,6 +1,6 @@
-[<font size=4>←返回主目录<font>](../README.md)
-</br></br></br>
-
+<!---title:LabVIEW上位机与串口通信-->
+<!---keywords:工具-->
+<!---date:old-->
 
 ## 渊源
 

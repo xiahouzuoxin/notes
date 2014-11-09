@@ -1,5 +1,6 @@
-[<font size=4>←返回主目录<font>](../README.md)
-</br></br></br>
+<!---title:在DSP671x上使用Timer统计信号处理算法的时间消耗-->
+<!---keywords:DSP-->
+<!---date:old-->
 
 ## 代码实例
 

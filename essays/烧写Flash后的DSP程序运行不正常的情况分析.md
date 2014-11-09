@@ -1,5 +1,6 @@
-[<font size=4>←返回主目录<font>](../README.md)
-</br></br></br>
+<!---title:烧写Flash后的DSP程序运行不正常的情况分析-->
+<!---keywords:DSP-->
+<!---date:old-->
 
 这段时间一直在调试DSP6713的Flash烧写，现在对Flash的烧写也算心中了如。
 

@@ -1,6 +1,6 @@
-[<font size=4>←返回主目录<font>](../README.md)
-</br></br></br>
-
+<!---title:Git使用补遗-->
+<!---keywords:工具-->
+<!---date:old-->
 
 ## 删除错误提交
 

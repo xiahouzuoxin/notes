@@ -26,16 +26,28 @@ code > span.fu { color: #06287e; }
 code > span.er { color: #ff0000; font-weight: bold; }
   </style>
   <link rel="stylesheet" href="../stylesheets/Github.css" type="text/css" />
+  <title>自适应含噪信号过零率算法</title>
 </head>
 <body>
-<p><a href="../README.md"><font size=4>←返回主目录<font></a></br></p>
-<div align="right">
-<a href="../index.html" target="_self" title="返回主页"><img src="../images/Home.png"></a> <a href="#bottom" target="_self" title="跳转底部"><img src="../images/bottom.png"></a>
+<div id="header"><center>
+    <p class="header_titleline">
+    <a href="../index.html" target="_self" title="主页">主页  </a><a href="../Search.html" target="_self" title="站内搜索">站内搜索  </a><a href="../Projects.html" target="_self" title="项目研究">项目研究  </a><a href="../Archives.html" target="_self" title="文章存档">文章存档  </a><a href="../README.html" target="_self" title="分类目录">分类目录 </a><a href="../AboutMe.html" target="_self" title="关于我">关于我  </a>
+    </p>
+</center></div>
+<h1>自适应含噪信号过零率算法</h1>
+<h4>old / xiahouzuoxin</h4>
+<h4>Tags: 过零率</h4>
+转载请注明出处: <a href=xiahouzuoxin.github.io>xiahouzuoxin.github.io</a>
+<div id="TOC">
+<ul>
+<li><a href="#自适应噪声阈值">自适应噪声阈值</a></li>
+<li><a href="#改进增加能量阈值的策略">改进：增加能量阈值的策略</a></li>
+<li><a href="#补充测试效果及新方法提出">补充：测试效果及新方法提出</a></li>
+</ul>
 </div>
-<p><strong>文题</strong>：自适应含噪信号过零率算法</br></p>
-<p><strong>作者</strong>：xiahouzuoxin</br></p>
-<p><strong>日期</strong>：2014-09-11</br></p>
-<hr />
+<!---title:自适应含噪信号过零率算法-->
+<!---keywords:过零率-->
+<!---date:old-->
 <p>本文讨论的是实际使用过程中计算过零率的一种自适应方法。过零率常用于语音检测识别中，一般叫短时过零率更贴切些（指一段短时平稳信号才能计算过零率），简单有效，近期亦打算将这个简单的概念用于识别脚步声和卡车声（近似短时平稳）。过零率的定义计算一般通过下面的表达式描述：</p>
 <p><img src="http://www.forkosh.com/mathtex.cgi? \Large Z_n=\frac{1}{N}\sum_{m=0}^{N-1}\|{sgn[x_n(m+1)]-sgn[x_n(m)]}\|"></p>
 <p>过零率是对频率从时域进行的一种简单的度量，一般情况下，过零率越大频率近似越高，反正亦然，相关推倒可参考相关文献。</p>
@@ -198,22 +210,50 @@ uint16_t zero_rate(int16_t x[], uint32_t n, struct st_zerorate_thr thr, uint16_t
 <p>因为卡车的采集信号高频都载波到低频信号上了，而在未判断实际目标之前，是无法使用低通滤波进行滤波（可能滤掉脚步声信号）。</p>
 <p>综上，我看过很多的论文，大都提到使用过零率对脚步声了卡车进行识别，而且识别效果还不错，我不知他们的实验环境是什么样的，至少从上面的实验分析，还是有问题的。</p>
 <p>因此，提出新的特征，用于区分两类信号——数字化占空比。其过程是：设定一个阈值，从头到尾扫描一帧信号，大于阈值的点设为1，否则设为0，我称之为数字化过程，然后计算高电平（即1）占所有一帧（512点）的百分比，用该百分比作为脚步声和卡车的识别数学特征。好了，我们用数学表述得专业些：</p>
-<p><img src="http://www.forkosh.com/mathtex.cgi? \Large Dutycycle=\frac{\{x>=THR}}{N}*100%&quot;&gt;</p>
-<p>其中{x&gt;=THR}表示序列中值大于THR的点数。</p>
-<p>测试结果：取THR=0.4*Vpp，则计算脚步信号的Dutycycle=4，而卡车信号的Dutycycle=113，差异非常明显。</p>
-<div align="right">
-<a href="../index.html" target="_self" title="返回主页"><img src="../images/Home.png"></a> <a href="#top" target="_self" title="返回顶部"><img src="../images/top.png"></a>
+<p><img src="http://www.forkosh.com/mathtex.cgi? Dutycycle=\frac{x>=THR}{N}*100%&quot;&gt;</p>
+<p>其中x&gt;=THR表示序列中值大于THR的点数。测试结果：取THR=0.4*Vpp，则计算脚步信号的Dutycycle=4，而卡车信号的Dutycycle=113，差异非常明显。</p>
+<div class="ds-thread" data-thread-key="自适应含噪信号过零率算法" data-title="自适应含噪信号过零率算法" data-url="xiahouzuoxin.github.io/notes/html/自适应含噪信号过零率算法.html"></div>
+<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"slide":{"type":"slide","bdImg":"5","bdPos":"right","bdTop":"300"},"image":{"viewList":["qzone","tsina","tqq","renren","weixin"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["qzone","tsina","tqq","renren","weixin"]}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"xiahouzuoxin"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- 多说公共JS代码 end -->
+
+<div id="footer">
+    <p class="footer_subline">联系邮箱: xiahouzuoxin@163.com</p>
+    <p class="footer_subline">声明: 本站所有文章如非特别说明均为原创，转载请注明出处！</p>
 </div>
-<p><a name="bottom"></a> <a href="../README.md"><font size=4>←返回主目录<font></a></br></p>
-<!-- 
 
-本模板为转成Html后需要修改的地方:
-1. 修改README.md为README.html，共2处
-2. 修改Github样式目录
-3. 添加一键分享功能，源码在stylesheets目录下mystyle.md
-4. 添加评论功能，并修改评论中的标题项等，源码在stylesheets目录下mystyle.md
-5. 修正其它可能不正确的链接 
-
--->
+<!-- 回到顶部 -->
+<script>
+lastScrollY=0;
+function heartBeat(){
+var diffY;
+if (document.documentElement && document.documentElement.scrollTop)
+    diffY = document.documentElement.scrollTop;
+else if (document.body)
+    diffY = document.body.scrollTop
+else
+    {/*Netscape stuff*/}
+percent=.1*(diffY-lastScrollY);
+if(percent>0)percent=Math.ceil(percent);
+else percent=Math.floor(percent);
+document.getElementById("full").style.top=parseInt(document.getElementById("full").style.top)+percent+"px";
+lastScrollY=lastScrollY+percent;
+}
+suspendcode="<div id=\"full\" style='right:1px;POSITION:absolute;TOP:600px;z-index:100'><a onclick='window.scrollTo(0,0);'><img src='../images/top.png'></a><br></div>"
+document.write(suspendcode);
+window.setInterval("heartBeat()",1);
+</script>
 </body>
 </html>

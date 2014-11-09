@@ -1,5 +1,6 @@
-[<font size=4>←返回主目录<font>](../README.md)
-</br></br></br>
+<!---title:CentOS在Win7下的硬盘安装-->
+<!---keywords:Linux-->
+<!---date:old-->
 
 其实该注意的地方很早就整理出来了，一直放在硬盘里，今天无意中翻到，整理出来，以备下次安装的不时之需。
 

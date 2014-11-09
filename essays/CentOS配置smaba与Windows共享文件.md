@@ -1,5 +1,6 @@
-[<font size=4>←返回主目录<font>](../README.md)
-</br></br></br>
+<!---title:CentOS配置smaba与Windows共享文件-->
+<!---keywords:CentOS,samba>
+<!---date:old-->
 
 操作环境：CentOS 6.5 64bit
 
@@ -177,8 +178,8 @@ eth0      Link encap:Ethernet  HWaddr 00:0C:29:FD:DC:43
 
 ## 参考
 
-1. http://www.livingelsewhere.net/tag/unix-linux-samba-ftp-smb-cifs/
-2. http://www.tangrucheng.com/centos6-5-setup-configure-samba.html
+1. <http://www.livingelsewhere.net/tag/unix-linux-samba-ftp-smb-cifs/>
+2. <http://www.tangrucheng.com/centos6-5-setup-configure-samba.html>
 
 [smbstatus]:../images/CentOS配置smaba与Windows共享文件/smbstatus.png
 [smb]:../images/CentOS配置smaba与Windows共享文件/smb.png

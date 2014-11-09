@@ -12,7 +12,7 @@
 <body>
 <div id="header"><center>
     <p class="header_titleline">
-    <a href="../Search.html" target="_self" title="站内搜索">站内搜索  </a><a href="../index.html" target="_self" title="返回主页">返回主页  </a><a href="../Archives.html" target="_self" title="文章存档">文章存档  </a><a href="../README.html" target="_self" title="分类目录">分类目录</a>
+    <a href="../index.html" target="_self" title="主页">主页  </a><a href="../Search.html" target="_self" title="站内搜索">站内搜索  </a><a href="../Projects.html" target="_self" title="项目研究">项目研究  </a><a href="../Archives.html" target="_self" title="文章存档">文章存档  </a><a href="../README.html" target="_self" title="分类目录">分类目录 </a><a href="../AboutMe.html" target="_self" title="关于我">关于我  </a>
     </p>
 </center></div>
 <h1>一个程序猿从金庸开始的读书历程</h1>
@@ -48,13 +48,8 @@
 <div class="figure">
 <img src="../images/一个程序猿从金庸开始的非专业读书历程/曾小贤-别做梦好好学习.jpg" alt="曾小贤-别做梦好好学习" /><p class="caption">曾小贤-别做梦好好学习</p>
 </div>
+<div class="ds-thread" data-thread-key="一个程序猿从金庸开始的读书历程" data-title="一个程序猿从金庸开始的读书历程" data-url="xiahouzuoxin.github.io/notes/html/一个程序猿从金庸开始的读书历程.html"></div>
 <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"slide":{"type":"slide","bdImg":"5","bdPos":"right","bdTop":"300"},"image":{"viewList":["qzone","tsina","tqq","renren","weixin"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["qzone","tsina","tqq","renren","weixin"]}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
-
-<!-- 多说评论框 start -->
-
-<div class="ds-thread" data-thread-key="一个程序猿从金庸开始的读书历程" data-title="一个程序猿从金庸开始的读书历程" data-url="xiahouzuoxin.github.io/notes/html/一个程序猿从金庸开始的读书历程.html">
-</div>
-<!-- 多说评论框 end -->
 
 <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 <script type="text/javascript">
@@ -74,5 +69,27 @@ var duoshuoQuery = {short_name:"xiahouzuoxin"};
     <p class="footer_subline">联系邮箱: xiahouzuoxin@163.com</p>
     <p class="footer_subline">声明: 本站所有文章如非特别说明均为原创，转载请注明出处！</p>
 </div>
+
+<!-- 回到顶部 -->
+<script>
+lastScrollY=0;
+function heartBeat(){
+var diffY;
+if (document.documentElement && document.documentElement.scrollTop)
+    diffY = document.documentElement.scrollTop;
+else if (document.body)
+    diffY = document.body.scrollTop
+else
+    {/*Netscape stuff*/}
+percent=.1*(diffY-lastScrollY);
+if(percent>0)percent=Math.ceil(percent);
+else percent=Math.floor(percent);
+document.getElementById("full").style.top=parseInt(document.getElementById("full").style.top)+percent+"px";
+lastScrollY=lastScrollY+percent;
+}
+suspendcode="<div id=\"full\" style='right:1px;POSITION:absolute;TOP:600px;z-index:100'><a onclick='window.scrollTo(0,0);'><img src='../images/top.png'></a><br></div>"
+document.write(suspendcode);
+window.setInterval("heartBeat()",1);
+</script>
 </body>
 </html>

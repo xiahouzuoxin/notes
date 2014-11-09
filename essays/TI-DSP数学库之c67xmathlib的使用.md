@@ -1,5 +1,6 @@
-[<font size=4>←返回主目录<font>](../README.md)
-</br></br></br>
+<!---title:TI-DSP数学库之c67xmathlib的使用-->
+<!---keywords:DSP-->
+<!---date:old-->
 
 正如TI描述的：
 

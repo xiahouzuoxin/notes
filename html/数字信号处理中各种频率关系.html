@@ -7,9 +7,28 @@
   <title></title>
   <style type="text/css">code{white-space: pre;}</style>
   <link rel="stylesheet" href="../stylesheets/Github.css" type="text/css" />
+  <title>数字信号处理中各种频率关系</title>
 </head>
 <body>
-<p><a href="../README.md"><font size=4>←返回主目录<font></a> </br></br></br></p>
+<div id="header"><center>
+    <p class="header_titleline">
+    <a href="../index.html" target="_self" title="主页">主页  </a><a href="../Search.html" target="_self" title="站内搜索">站内搜索  </a><a href="../Projects.html" target="_self" title="项目研究">项目研究  </a><a href="../Archives.html" target="_self" title="文章存档">文章存档  </a><a href="../README.html" target="_self" title="分类目录">分类目录 </a><a href="../AboutMe.html" target="_self" title="关于我">关于我  </a>
+    </p>
+</center></div>
+<h1>数字信号处理中各种频率关系</h1>
+<h4>old / xiahouzuoxin</h4>
+<h4>Tags: DSP</h4>
+转载请注明出处: <a href=xiahouzuoxin.github.io>xiahouzuoxin.github.io</a>
+<div id="TOC">
+<ul>
+<li><a href="#种频率及其数量关系"><font color="blue">4种频率及其数量关系</font></a></li>
+<li><a href="#有关fft频率与实际物理频率的分析"><font color="blue">有关FFT频率与实际物理频率的分析</font></a></li>
+<li><a href="#离散信号傅里叶变换的周期性讨论"><font color="blue">离散信号傅里叶变换的周期性讨论</font></a></li>
+</ul>
+</div>
+<!---title:数字信号处理中各种频率关系-->
+<!---keywords:DSP-->
+<!---date:old-->
 <h3 id="种频率及其数量关系"><font color="blue">4种频率及其数量关系</font></h3>
 <div class="figure">
 <img src="../images/数字信号处理中各种频率关系/1.png" alt="imag1" /><p class="caption">imag1</p>
@@ -48,5 +67,48 @@
 </ul>
 <p>我们知道__离散信号的傅里叶变换对应到单位圆上的z变换__，因此上面的结论就验证了为什么离散信号的傅里叶变换是周期性：根本原因所是单位圆上的周期性。</p>
 <p>考虑到我们实际应用中可选择一个周期，这也能够解释：因为实际信号的频率总是在fs/2以下，这就对应到z平面单位圆上的0~pi，在一个周期范围内就可以进行信号分析了。</p>
+<div class="ds-thread" data-thread-key="数字信号处理中各种频率关系" data-title="数字信号处理中各种频率关系" data-url="xiahouzuoxin.github.io/notes/html/数字信号处理中各种频率关系.html"></div>
+<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"slide":{"type":"slide","bdImg":"5","bdPos":"right","bdTop":"300"},"image":{"viewList":["qzone","tsina","tqq","renren","weixin"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["qzone","tsina","tqq","renren","weixin"]}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"xiahouzuoxin"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- 多说公共JS代码 end -->
+
+<div id="footer">
+    <p class="footer_subline">联系邮箱: xiahouzuoxin@163.com</p>
+    <p class="footer_subline">声明: 本站所有文章如非特别说明均为原创，转载请注明出处！</p>
+</div>
+
+<!-- 回到顶部 -->
+<script>
+lastScrollY=0;
+function heartBeat(){
+var diffY;
+if (document.documentElement && document.documentElement.scrollTop)
+    diffY = document.documentElement.scrollTop;
+else if (document.body)
+    diffY = document.body.scrollTop
+else
+    {/*Netscape stuff*/}
+percent=.1*(diffY-lastScrollY);
+if(percent>0)percent=Math.ceil(percent);
+else percent=Math.floor(percent);
+document.getElementById("full").style.top=parseInt(document.getElementById("full").style.top)+percent+"px";
+lastScrollY=lastScrollY+percent;
+}
+suspendcode="<div id=\"full\" style='right:1px;POSITION:absolute;TOP:600px;z-index:100'><a onclick='window.scrollTo(0,0);'><img src='../images/top.png'></a><br></div>"
+document.write(suspendcode);
+window.setInterval("heartBeat()",1);
+</script>
 </body>
 </html>

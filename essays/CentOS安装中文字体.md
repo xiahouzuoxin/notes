@@ -1,5 +1,6 @@
-[<font size=4>←返回主目录<font>](../README.md)
-</br></br></br>
+<!---title:CentOS安装中文字体-->
+<!---keywords:CentOS,中文字体-->
+<!---date:old-->
 
 ## 从Windows拷贝字体
 

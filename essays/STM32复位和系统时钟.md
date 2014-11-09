@@ -1,17 +1,6 @@
-
-[<font size=4>←返回主目录<font>](../README.md)</br>
-
-<div align="right"><a href="../index.html" target="_self" title="返回主页"><img src="../images/Home.png"></a> <a href="#bottom" target="_self" title="跳转底部"><img src="../images/bottom.png"></a></div>
-
-__文题__：STM32复位和系统时钟</br>
-
-__作者__：xiahouzuoxin</br>
-
-__日期__：2011-10-17，整理于2014-09-25</br>
-
-_转载请注明出处：<http://xiahouzuoxin.github.io/notes>_
-
------------------------------------
+<!---title:STM32复位和系统时钟-->
+<!---keywords:ARM-->
+<!---date:2011-10-17，整理于2014-09-25-->
 
 这是一篇旧文，早在上大二的时候，在地下室（当时实验室在防空地下室）顺手在word上写的，当时STM32正刚刚开始蓬勃发展，如今时隔3年，整理到这里！
 
@@ -69,23 +58,4 @@ void SysclkInit(void)
     }        
 }
 ```
-
-
-
-<div align="right"><a href="../index.html" target="_self" title="返回主页"><img src="../images/Home.png"></a> <a href="#top" target="_self" title="返回顶部"><img src="../images/top.png"></a></div>
-<a name="bottom"></a>
-[<font size=4>←返回主目录<font>](../README.md)</br>
-
-<!-- 
-
-本模板为转成Html后需要修改的地方:
-1. 修改README.md为README.html，共2处
-2. 修改Github样式目录
-3. 添加一键分享功能，源码在stylesheets目录下mystyle.md
-4. 添加评论功能，并修改评论中的标题项等，源码在stylesheets目录下mystyle.md
-5. 修正其它可能不正确的链接 
-
--->
-
-
 

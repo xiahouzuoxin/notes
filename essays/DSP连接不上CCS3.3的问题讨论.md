@@ -1,5 +1,6 @@
-[<font size=4>←返回主目录<font>](../README.md)
-</br></br></br>
+<!---title:DSP连接不上CCS3.3的问题讨论-->
+<!---keywords:DSP-->
+<!---date:old-->
 
 ## 环境
 

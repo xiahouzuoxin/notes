@@ -1,5 +1,6 @@
-[<font size=4>←返回主目录<font>](../README.md)
-</br></br></br>
+<!---title:FPGA的复位-->
+<!---keywords:FPGA-->
+<!---date:old-->
 
 ### 关于FGPA的复位
 

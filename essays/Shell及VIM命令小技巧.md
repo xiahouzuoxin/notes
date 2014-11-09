@@ -1,5 +1,6 @@
-[<font size=4>←返回主目录<font>](../README.md)
-</br></br></br>
+<!---title:Shell及VIM命令小技巧-->
+<!---keywords:工具-->
+<!---date:old-->
 
 说明：
 

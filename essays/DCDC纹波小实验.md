@@ -1,5 +1,6 @@
-[<font size=4>←返回主目录<font>](../README.md)
-</br></br></br>
+<!---title:DCDC纹波小实验-->
+<!---keywords:电路-->
+<!---date:old-->
 
 ## 关于使用示波器测试纹波的注意事项
 

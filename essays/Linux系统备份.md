@@ -1,5 +1,6 @@
-[<font size=4>←返回主目录<font>](../README.md)
-</br></br></br>
+<!---title:Linux系统备份-->
+<!---keywords:Linux-->
+<!---date:old-->
 
 Linux相对于Windows有一个最大的好处就是：Linux安装程序的过程只有复制文件的过程，没有写注册表的过程，因此，Linux系统重装之后只要将之前系统的程序文件备份好，重新放到新系统下即可使用。
 

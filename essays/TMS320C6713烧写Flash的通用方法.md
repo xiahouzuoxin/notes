@@ -1,5 +1,6 @@
-﻿[<font size=4>←返回主目录<font>](../README.md)
-</br></br></br>
+﻿<!---title:TMS320C6713烧写Flash的通用方法-->
+<!---keywords:DSP-->
+<!---date:old-->
 
 ## 1 你必须知道的TMS320C6000启动过程
 

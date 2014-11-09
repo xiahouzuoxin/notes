@@ -1,6 +1,6 @@
-[<font size=4>←返回主目录<font>](../README.md)
-</br></br></br>
-
+<!---title:模拟信号采样与AD转换-->
+<!---keywords:DSP-->
+<!---date:old-->
 
 ## 1 著名的Nyquist采样定理
 

@@ -1,5 +1,6 @@
-[<font size=4>←返回主目录<font>](../README.md)
-</br></br></br>
+<!---title:OpenCV基础篇之使用CMake管理工程-->
+<!---keywords:OpenCV-->
+<!---date:2014-09-18-->
 
 ## 程序及分析
 

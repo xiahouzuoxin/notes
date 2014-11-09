@@ -1,5 +1,6 @@
-[<font size=4>←返回主目录<font>](../README.md)
-</br></br></br>
+<!---title:AlteraFPGA功耗估计工具-->
+<!---keywords:FPGA-->
+<!---date:old-->
 
 注：以下资料来自网络摘录，由于水平有限，自己尚未测试过，请去粗取精！
 

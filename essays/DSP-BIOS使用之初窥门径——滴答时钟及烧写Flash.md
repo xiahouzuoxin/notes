@@ -1,5 +1,6 @@
-[<font size=4>←返回主目录<font>](../README.md)
-</br></br></br>
+<!---title:DSP-BIOS使用之初窥门径——滴答时钟及烧写Flash-->
+<!---keywords:DSP-->
+<!---date:old-->
 
 ## 操作平台和环境
 

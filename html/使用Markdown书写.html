@@ -7,9 +7,28 @@
   <title></title>
   <style type="text/css">code{white-space: pre;}</style>
   <link rel="stylesheet" href="../stylesheets/Github.css" type="text/css" />
+  <title>使用Markdown书写</title>
 </head>
 <body>
-<p><a href="../README.md"><font size=4>←返回主目录<font></a> </br></br></br></p>
+<div id="header"><center>
+    <p class="header_titleline">
+    <a href="../index.html" target="_self" title="主页">主页  </a><a href="../Search.html" target="_self" title="站内搜索">站内搜索  </a><a href="../Projects.html" target="_self" title="项目研究">项目研究  </a><a href="../Archives.html" target="_self" title="文章存档">文章存档  </a><a href="../README.html" target="_self" title="分类目录">分类目录 </a><a href="../AboutMe.html" target="_self" title="关于我">关于我  </a>
+    </p>
+</center></div>
+<h1>使用Markdown书写</h1>
+<h4>old / xiahouzuoxin</h4>
+<h4>Tags: 工具</h4>
+转载请注明出处: <a href=xiahouzuoxin.github.io>xiahouzuoxin.github.io</a>
+<div id="TOC">
+<ul>
+<li><a href="#markdown是什么">Markdown是什么</a></li>
+<li><a href="#markdown与自由书籍">Markdown与自由书籍</a></li>
+<li><a href="#使用markdown">使用Markdown</a></li>
+</ul>
+</div>
+<!---title:使用Markdown书写-->
+<!---keywords:工具-->
+<!---date:old-->
 <h2 id="markdown是什么">Markdown是什么</h2>
 <p>Markdown是一种网络书写语言，其目标是实现易读易写，且兼容HTML语言。 Markdown的流行得益于<a href="www.github.com">Github</a>和<a href="www.stackoverflow.com">Stackoverflow</a>，Stackoverflow的代码块以及Github上的README.md文件格式都是通过Markdown表现的。 从这里您可以很直观的看到Markdown的效果:<a href="https://github.com/adam-p/markdown-here" class="uri">https://github.com/adam-p/markdown-here</a>。</p>
 <h2 id="markdown与自由书籍">Markdown与自由书籍</h2>
@@ -27,5 +46,48 @@
 <p>谷歌浏览器貌似也有Markdown的预览插件<a href="https://github.com/volca/markdown-preview">markdown-preview</a>，这样您就可以用记事本编辑，用浏览器预览了。印象笔记也有Chrome的扩展，可在商店搜素“马克飞象”。</p>
 <p>我们说Markdown是为了书写自由电子书，那么Markdown如何生成pdf或html格式的文档呢？我们可以借助Markdown文档编辑器的功能，StackEdit就能胜任，使用StackEdit左上角的菜单，save as..就可以做到，但似乎对中文的支持不是很好。我们还可使用VIM插件将Markdown转换为html格式。</p>
 <p>还有一款集编辑与Markdown预览于一身的不错工具<a href="http://www.everedit.net/">Everedit</a>，国产的哦..</p>
+<div class="ds-thread" data-thread-key="使用Markdown书写" data-title="使用Markdown书写" data-url="xiahouzuoxin.github.io/notes/html/使用Markdown书写.html"></div>
+<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"slide":{"type":"slide","bdImg":"5","bdPos":"right","bdTop":"300"},"image":{"viewList":["qzone","tsina","tqq","renren","weixin"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["qzone","tsina","tqq","renren","weixin"]}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"xiahouzuoxin"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- 多说公共JS代码 end -->
+
+<div id="footer">
+    <p class="footer_subline">联系邮箱: xiahouzuoxin@163.com</p>
+    <p class="footer_subline">声明: 本站所有文章如非特别说明均为原创，转载请注明出处！</p>
+</div>
+
+<!-- 回到顶部 -->
+<script>
+lastScrollY=0;
+function heartBeat(){
+var diffY;
+if (document.documentElement && document.documentElement.scrollTop)
+    diffY = document.documentElement.scrollTop;
+else if (document.body)
+    diffY = document.body.scrollTop
+else
+    {/*Netscape stuff*/}
+percent=.1*(diffY-lastScrollY);
+if(percent>0)percent=Math.ceil(percent);
+else percent=Math.floor(percent);
+document.getElementById("full").style.top=parseInt(document.getElementById("full").style.top)+percent+"px";
+lastScrollY=lastScrollY+percent;
+}
+suspendcode="<div id=\"full\" style='right:1px;POSITION:absolute;TOP:600px;z-index:100'><a onclick='window.scrollTo(0,0);'><img src='../images/top.png'></a><br></div>"
+document.write(suspendcode);
+window.setInterval("heartBeat()",1);
+</script>
 </body>
 </html>

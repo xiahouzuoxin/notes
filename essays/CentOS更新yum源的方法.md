@@ -1,5 +1,6 @@
-[<font size=4>←返回主目录<font>](../README.md)
-</br></br></br>
+<!---title:CentOS更新yum源的方法-->
+<!---keywords:CentOS,yum-->
+<!---date:old-->
 
 操作环境：CentOS 6.5 64bit 宽带外网
 

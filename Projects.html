@@ -1,86 +1,50 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset='utf-8'>
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="./stylesheets/Github.css" type="text/css" />
+</head>
+<body>
+<div id="header"><center>
+    <p class="header_titleline">
+    <a href="index.html" target="_self" title="主页">主页  </a><a href="Search.html" target="_self" title="站内搜索">站内搜索  </a><a href="Projects.html" target="_self" title="项目研究">项目研究  </a><a href="Archives.html" target="_self" title="文章存档">文章存档  </a><a href="README.html" target="_self" title="分类目录">分类目录 </a><a href="AboutMe.html" target="_self" title="关于我">关于我  </a>
+    </p>
+</center></div>
+<h1 id="allegro绘制pcb流程及规范">Allegro绘制PCB流程及规范</h1>
+<p>本部分是关于使用Allegro绘制PCB的流程及技巧，是我从最开始学习使用Allegro到使用Allegro绘制6层PCB板的成长过程中积累总结的，先给出一张目录图，这只是目录的一部分：</p>
+<p><img src="./images/root_images/PCB_Guide.png"></p>
+<p>现公布整个文档，文档<a href="enclosure/PCB设计参考资料/Allegro绘制PCB流程及规范.pdf">链接</a>。</p>
+<h1 id="基于支持向量机与条件随机场的图像目标识别">基于支持向量机与条件随机场的图像目标识别</h1>
+<h1 id="电脑鼠">电脑鼠</h1>
+<div id="footer">
+    <p class="footer_subline">联系邮箱: xiahouzuoxin@163.com</p>
+    <p class="footer_subline">声明: 本站所有文章如非特别说明均为原创，转载请注明出处！</p>
+</div>
 
-    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
-
-    <title>斋中人</title>
-
-  </head>
-
-  <body>
-
-    <header>
-      <div class="container">
-        <h1>&nbsp;&nbsp;xiahouzuoxin</h1>
-        <h2>千淘万漉虽辛苦，吹尽狂沙始到金</h2>
-      </div>
-    </header>
-
-	<div class="sider">
-        <section id="downloads">
-          <a href="https://github.com/xiahouzuoxin/notes/zipball/master" class="btn">Download as .zip</a>
-          <a href="https://github.com/xiahouzuoxin/notes/tarball/master" class="btn">Download as .tar.gz</a>
-          <a href="https://github.com/xiahouzuoxin/notes" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
-        </section>
-	</div>
-
-	<div class="menu">
-		<font size=4>
-		<a href="index.html">Home</a></p>
-		<a href="README.html">Category</a></p>
-		<a href="Archives.html">Archives</a></p>
-		<a href="Projects.html"><div class="click_change">Projects</div></a></p>		
-		<a href="AboutMe.html">About Me</a></p>
-		<a href="http://blog.csdn.net/xiahouzuoxin">CSDN</a></p>
-		<a href="./Links.html">Links</a></p>
-		</font>
-	</div>
-	
-    <div class="container">
-    	<section id="main_content">
-    	
-		<h3><a name="数字信号处理算法库" class="anchor" href="#数字信号处理算法库"><span class="octicon octicon-link"></span></a>数字信号处理算法库</h3>
-
-		<p>
-		
-		</p>
-
-		<h3><a name="Allegro绘制PCB流程及规范" class="anchor" href="#Allegro绘制PCB流程及规范"><span class="octicon octicon-link"></span></a>Allegro绘制PCB流程及规范</h3>
-
-		<p>
-		本部分是关于使用Allegro绘制PCB的流程及技巧，是我从最开始学习使用Allegro到使用Allegro绘制6层PCB板的成长过程中积累总结的，先给出一张目录图，这只是目录的一部分：
-		<img src="./images/root_images/PCB_Guide.png">
-		现公布整个文档，文档链接“<a href="enclosure/PCB设计参考资料/Allegro绘制PCB流程及规范.pdf">Allegro绘制PCB流程及规范</a>”。
-		</p>
-
-		<h3><a name="基于支持向量机与条件随机场的图像目标识别" class="anchor" href="#基于支持向量机与条件随机场的图像目标识别"><span class="octicon octicon-link"></span></a>基于支持向量机与条件随机场的图像目标识别</h3>
-
-		<p>
-
-		</p>
-
-		<h3><a name="电脑鼠" class="anchor" href="#电脑鼠"><span class="octicon octicon-link"></span></a>电脑鼠</h3>
-
-		<p>
-
-		</p>	
-				
-		</section>
-
-		<hr>
-		<div class="footer">
-		<font size=2 face="Courier" color="white">
-		<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1253219218'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1253219218%26online%3D1%26show%3Dline' type='text/javascript'%3E%3C/script%3E"));</script>
-		Copyright (c) xiahouzuoxin.
-		</font>
-		</p></p>
-		</div>
-    </div>
-    
-  </body>
+<!-- 回到顶部 -->
+<script>
+lastScrollY=0;
+function heartBeat(){
+var diffY;
+if (document.documentElement && document.documentElement.scrollTop)
+    diffY = document.documentElement.scrollTop;
+else if (document.body)
+    diffY = document.body.scrollTop
+else
+    {/*Netscape stuff*/}
+percent=.1*(diffY-lastScrollY);
+if(percent>0)percent=Math.ceil(percent);
+else percent=Math.floor(percent);
+document.getElementById("full").style.top=parseInt(document.getElementById("full").style.top)+percent+"px";
+lastScrollY=lastScrollY+percent;
+}
+suspendcode="<div id=\"full\" style='right:1px;POSITION:absolute;TOP:600px;z-index:100'><a onclick='window.scrollTo(0,0);'><img src='./images/top.png'></a><br></div>"
+document.write(suspendcode);
+window.setInterval("heartBeat()",1);
+</script>
+</body>
 </html>

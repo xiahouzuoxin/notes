@@ -1,5 +1,6 @@
-[<font size=4>←返回主目录<font>](../README.md)
-</br></br></br>
+<!---title:使用Tcl脚本分配FPGA管脚-->
+<!---keywords:FPGA-->
+<!---date:old-->
 
 ## 自动生成Tcl文件
 

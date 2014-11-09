@@ -20,7 +20,7 @@ AR谱的计算有2个重要的参数：系数阶数、FFT反变换的点数。AR
 
 其中u(n)是噪声输入，系数阶数就是上式中的p。牵扯到FFT，是因为功率谱的计算中可以使用FFT进行快速计算，因此就有离散FFT在单位圆上抽样点数的问题，功率谱的计算公式是：
 
-<img src="http://www.forkosh.com/mathtex.cgi? P_x(e^{jw})=\frac{\sigma^2}{|1+\sum_{k=1}^pa_ke^{-jwk}}|^2=\frac{\sigma^2}{|\sum_{k=0}^{N-1}a_ke^{-jwk}}|^2">
+<img src="http://www.forkosh.com/mathtex.cgi? P_x(e^{jw})=\frac{\sigma^2}{|1+\sum_{k=1}^pa_ke^{-jwk}|^2}=\frac{\sigma^2}{|\sum_{k=0}^{N-1}a_ke^{-jwk}|^2}">
 
 上式中转化后有a0=1，将FFT计算扩充到N点后有a(p+1)...a(N-1)=0，FFT点数就是指的这里用于FFT计算的长度N。
 

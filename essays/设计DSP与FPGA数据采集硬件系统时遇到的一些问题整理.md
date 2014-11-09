@@ -1,5 +1,6 @@
-[<font size=4>←返回主目录<font>](../README.md)
-</br></br></br>
+<!---title:设计DSP与FPGA数据采集硬件系统时遇到的一些问题整理-->
+<!---keywords:DSP,FPGA-->
+<!---date:old-->
 
 硬件系统的构建如下图：
 
