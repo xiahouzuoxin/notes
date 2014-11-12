@@ -14,19 +14,20 @@
 - [自适应含噪信号过零率算法](./essays/自适应含噪信号过零率算法.md)
 
 # OpenCV系列
-
+- [CentOS上编译安装OpenCV-2.3.1与ffmpeg-2.1.2](./essays/CentOS上编译安装OpenCV-2.3.1与ffmpeg-2.1.2.md)
+- [OpenCV基础篇之读取显示图片](./essays/OpenCV基础篇之读取显示图片.md)
+- [OpenCV基础篇之使用CMake管理工程](./essays/OpenCV基础篇之使用CMake管理工程.md)
+- [OpenCV基础篇之Mat数据结构](./essays/OpenCV基础篇之Mat数据结构.md)
+- [OpenCV基础篇之像素访问](./essays/OpenCV基础篇之像素访问.md)
+- [OpenCV基础篇之图片叠加](./essays/OpenCV基础篇之图片叠加.md)
+- [OpenCV基础篇之像素操作对比度调节](./essays/OpenCV基础篇之像素操作对比度调节.md)
+- [OpenCV基础篇之绘图及RNG随机数对象](./essays/OpenCV基础篇之绘图及RNG随机数对象.md)
+- [OpenCV基础篇之查找表](./essays/OpenCV基础篇之查找表.md)
+- [OpenCV基础篇之图像频域](./essays/OpenCV基础篇之图像频域.md)
 - [OpenCV图像处理篇之图像平滑](./essays/OpenCV图像处理篇之图像平滑.md)
 - [OpenCV图像处理篇之腐蚀与膨胀](./essays/OpenCV图像处理篇之腐蚀与膨胀.md)
 - [OpenCV图像处理篇之采样金字塔](./essays/OpenCV图像处理篇之采样金字塔.md)
-- [OpenCV基础篇之Mat数据结构](./essays/OpenCV基础篇之Mat数据结构.md)
-- [OpenCV基础篇之使用CMake管理工程](./essays/OpenCV基础篇之使用CMake管理工程.md)
-- [OpenCV基础篇之像素操作对比度调节](./essays/OpenCV基础篇之像素操作对比度调节.md)
-- [OpenCV基础篇之像素访问](./essays/OpenCV基础篇之像素访问.md)
-- [OpenCV基础篇之图像频域](./essays/OpenCV基础篇之图像频域.md)
-- [OpenCV基础篇之图片叠加](./essays/OpenCV基础篇之图片叠加.md)
-- [OpenCV基础篇之查找表](./essays/OpenCV基础篇之查找表.md)
-- [OpenCV基础篇之绘图及RNG随机数对象](./essays/OpenCV基础篇之绘图及RNG随机数对象.md)
-- [OpenCV基础篇之读取显示图片](./essays/OpenCV基础篇之读取显示图片.md)
+- [OpenCV图像处理篇之阈值操作函数](./essays/OpenCV图像处理篇之阈值操作函数.md)
 
 # 嵌入式处理(DSP/FPGA/ARM)
 
@@ -66,7 +67,6 @@
 
 # Linux 
 
-- [CentOS上编译安装OpenCV-2.3.1与ffmpeg-2.1.2](./essays/CentOS上编译安装OpenCV-2.3.1与ffmpeg-2.1.2.md)
 - [CentOS在Win7下的硬盘安装](./essays/CentOS在Win7下的硬盘安装.md)
 - [CentOS安装中文字体](./essays/CentOS安装中文字体.md)
 - [CentOS更新yum源的方法](./essays/CentOS更新yum源的方法.md)

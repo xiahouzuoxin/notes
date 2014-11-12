@@ -1,0 +1,199 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
+  </style>
+  <link rel="stylesheet" href="../stylesheets/Github.css" type="text/css" />
+  <title>OpenCV图像处理篇之阈值操作函数</title>
+</head>
+<body>
+<div id="header"><center>
+    <p class="header_titleline">
+    <a href="../index.html" target="_self" title="主页">主页  </a><a href="../Search.html" target="_self" title="站内搜索">站内搜索  </a><a href="../Projects.html" target="_self" title="项目研究">项目研究  </a><a href="../Archives.html" target="_self" title="文章存档">文章存档  </a><a href="../README.html" target="_self" title="分类目录">分类目录 </a><a href="../AboutMe.html" target="_self" title="关于我">关于我  </a>
+    </p>
+</center></div>
+<h1>OpenCV图像处理篇之阈值操作函数</h1>
+<h4>2014-11-12 / xiahouzuoxin</h4>
+<h4>Tags: OpenCV</h4>
+转载请注明出处: <a href="http://xiahouzuoxin.github.io/notes/">http://xiahouzuoxin.github.io/notes/</a>
+<div id="TOC">
+<ul>
+<li><a href="#阈值操作类型">阈值操作类型</a></li>
+<li><a href="#程序分析">程序分析</a></li>
+<li><a href="#效果">效果</a></li>
+</ul>
+</div>
+<!---title:OpenCV图像处理篇之阈值操作函数-->
+<!---keywords:OpenCV-->
+<!---date:2014-11-12-->
+<h2 id="阈值操作类型">阈值操作类型</h2>
+<p>这5种阈值操作类型保留opencv tutorials中的英文名称，依次为：</p>
+<ol style="list-style-type: decimal">
+<li>Threshold Binary：即二值化，将大于阈值的灰度值设为最大灰度值，小于阈值的值设为0。</li>
+<li>Threshold Binary, Inverted：将大于阈值的灰度值设为0，大于阈值的值设为最大灰度值。</li>
+<li>Truncate：将大于阈值的灰度值设为阈值，小于阈值的值保持不变。</li>
+<li>Threshold to Zero：将小于阈值的灰度值设为0，大于阈值的值保持不变。</li>
+<li>Threshold to Zero, Inverted：将大于阈值的灰度值设为0，小于阈值的值保持不变。</li>
+</ol>
+<p>OpenCV提供了<code>threshold</code>函数专门用于阈值操作，其实实现起来很简单，为什么非得调用函数呢？一是熟悉了调用函数很方便，如果一行代码能搞定的事为什么非得用几个循环呢？二是对于新手，自己实现未必敢保证运行效率上未必能达到opencv那样好。</p>
+<h2 id="程序分析">程序分析</h2>
+<pre class="sourceCode c"><code class="sourceCode c"><span class="co">/*</span>
+<span class="co"> * FileName : filter_and_threshold.cpp</span>
+<span class="co"> * Author   : xiahouzuoxin @163.com</span>
+<span class="co"> * Version  : v1.0</span>
+<span class="co"> * Date     : Sat 20 Sep 2014 07:04:29 PM CST</span>
+<span class="co"> * Brief    : </span>
+<span class="co"> * </span>
+<span class="co"> * Copyright (C) MICL,USTB</span>
+<span class="co"> */</span>
+<span class="ot">#include &quot;cv.h&quot;</span>
+<span class="ot">#include &quot;highgui.h&quot;</span>
+<span class="ot">#include &quot;opencv2/imgproc/imgproc.hpp&quot;</span>
+
+using namespace std;
+using namespace cv;
+
+Mat src,gray,dst;
+
+<span class="dt">const</span> <span class="dt">char</span> *wn = <span class="st">&quot;Demo&quot;</span>;
+<span class="dt">int</span> th_val = <span class="dv">0</span>;
+<span class="dt">int</span> th_type = <span class="dv">3</span>;
+<span class="dt">int</span> <span class="dt">const</span> max_val = <span class="dv">255</span>;
+<span class="dt">int</span> <span class="dt">const</span> max_type = <span class="dv">4</span>;
+<span class="dt">int</span> <span class="dt">const</span> max_BINARY_val = <span class="dv">255</span>;
+
+<span class="dt">static</span> <span class="dt">void</span> Thresh(<span class="dt">int</span>, <span class="dt">void</span> *)
+{
+    <span class="co">/*</span>
+<span class="co">     * 0: Binary</span>
+<span class="co">     * 1: Binary Inverted</span>
+<span class="co">     * 2: Threshold Truncated</span>
+<span class="co">     * 3: Threshold to Zero</span>
+<span class="co">     * 4: Threshold to Zero Inverted</span>
+<span class="co">     */</span>
+    
+    threshold(gray, dst, th_val, max_BINARY_val, th_type);
+
+    imshow(wn, dst);
+}
+
+<span class="co">/*</span>
+<span class="co"> * @brief   </span>
+<span class="co"> * @inputs  </span>
+<span class="co"> * @outputs </span>
+<span class="co"> * @retval  </span>
+<span class="co"> */</span>
+<span class="dt">int</span> main(<span class="dt">int</span> argc, <span class="dt">char</span> *argv[])
+{
+    <span class="kw">if</span> (argc &lt; <span class="dv">2</span>) {
+        cout&lt;&lt;<span class="st">&quot;Usage: ./threshold [file name]&quot;</span>&lt;&lt;endl;
+        <span class="kw">return</span> -<span class="dv">1</span>;
+    }
+
+    <span class="co">// read image as GRAYSCALE</span>
+    src = imread(argv[<span class="dv">1</span>], CV_LOAD_IMAGE_COLOR);
+    <span class="kw">if</span> (!src.data) {
+        cout&lt;&lt;<span class="st">&quot;Error: read data&quot;</span>&lt;&lt;endl;
+        <span class="kw">return</span> -<span class="dv">1</span>;
+    }
+
+    <span class="co">// window to display</span>
+    namedWindow(wn);
+    createTrackbar(<span class="st">&quot;Value&quot;</span>, wn, &amp;th_val, max_val, Thresh);  <span class="co">/* bar */</span>
+    createTrackbar(<span class="st">&quot;Type: </span><span class="ch">\n</span><span class="st"> 0: Binary </span><span class="ch">\n</span><span class="st"> 1: Binary Inverted </span><span class="ch">\n</span><span class="st"> 2: Truncate </span><span class="ch">\n</span><span class="st"> 3: To Zero </span><span class="ch">\n</span><span class="st"> 4: To Zero Inverted&quot;</span>, 
+            wn, &amp;th_type, max_type, Thresh);
+
+    cvtColor(src, gray, CV_RGB2GRAY);
+
+    <span class="co">// Init by Calling Thresh</span>
+    Thresh(<span class="dv">0</span>, <span class="dv">0</span>);
+
+    <span class="co">// wait if ESC be pressed</span>
+    <span class="kw">while</span>(<span class="dv">1</span>)
+    {
+        <span class="dt">char</span> c = waitKey(<span class="dv">20</span>);
+
+        <span class="kw">if</span>(c == <span class="dv">27</span>)         <span class="co">/* ESC */</span>
+        {
+            <span class="kw">break</span>;
+        }
+    }
+}</code></pre>
+<ol style="list-style-type: decimal">
+<li><p>整个程序就一句话是关键：</p>
+<pre class="sourceCode c"><code class="sourceCode c">threshold(gray, dst, th_val, max_BINARY_val, th_type);</code></pre>
+<p>threshold的参数依次是原灰度图、输出阈值操作后的图、阈值、最大灰度值以及阈值类型。其中，最大灰度值并不一定就是255，在上面提到的阈值操作1和2中提到，“设为最大灰度值”，如果你觉得不像让图像的最大灰度值大于200，那就设为200就好了。阈值类型取值为0~4，按顺序依次对应前面提到的5种阈值操作类型。</p></li>
+<li><p><code>createTrackbar</code>是创建滑动条的gui函数。以<code>createTrackbar(&quot;Value&quot;, wn, &amp;th_val, max_val, Thresh);</code>为例，该滑动条值与变量<code>th_val</code>的值关联，一旦<code>th_val</code>改变，自动调用回调函数Thresh，<code>createTrackbar</code>使用的回调函数格式必需是程序中的<code>void Thresh(int, void *)</code>，即返回void，参数含<code>int</code>和<code>void *</code>类型。</p></li>
+</ol>
+<h2 id="效果">效果</h2>
+<p><img src="../images/OpenCV图像处理篇之阈值操作函数/原图-林依晨.png" alt="原图-林依晨" /> <img src="../images/OpenCV图像处理篇之阈值操作函数/结果-使用阈值操作2.png" alt="结果-使用阈值操作2" /></p>
+<p>林依晨的的图片被我P一下就成那样了！上面的第二幅图片使用的是阈值操作2。</p>
+<p><img src="../images/OpenCV图像处理篇之阈值操作函数/原图-未知美女一枚.png" alt="原图-未知美女一枚" /> <img src="../images/OpenCV图像处理篇之阈值操作函数/结果-使用阈值操作3.png" alt="结果-使用阈值操作3" /></p>
+<p>这回是未知美女一枚，使用阈值操作方法3后的结果如右图，感觉没什么差别，有木有？确实差别不大，谁叫人家头发本来就那么黑那么靓丽呢！细看还是能看出来眉毛变细了，发丝变黑了。</p>
+<div class="ds-thread" data-thread-key="OpenCV图像处理篇之阈值操作函数" data-title="OpenCV图像处理篇之阈值操作函数" data-url="xiahouzuoxin.github.io/notes/html/OpenCV图像处理篇之阈值操作函数.html"></div>
+<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"slide":{"type":"slide","bdImg":"5","bdPos":"right","bdTop":"300"},"image":{"viewList":["qzone","tsina","tqq","renren","weixin"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["qzone","tsina","tqq","renren","weixin"]}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"xiahouzuoxin"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- 多说公共JS代码 end -->
+
+<div id="footer">
+    <p class="footer_subline">联系邮箱: xiahouzuoxin@163.com</p>
+    <p class="footer_subline">声明: 本站所有文章如非特别说明均为原创，转载请注明出处！</p>
+</div>
+
+<!-- 回到顶部 -->
+<script>
+lastScrollY=0;
+function heartBeat(){
+var diffY;
+if (document.documentElement && document.documentElement.scrollTop)
+    diffY = document.documentElement.scrollTop;
+else if (document.body)
+    diffY = document.body.scrollTop
+else
+    {/*Netscape stuff*/}
+percent=.1*(diffY-lastScrollY);
+if(percent>0)percent=Math.ceil(percent);
+else percent=Math.floor(percent);
+document.getElementById("full").style.top=parseInt(document.getElementById("full").style.top)+percent+"px";
+lastScrollY=lastScrollY+percent;
+}
+suspendcode="<div id=\"full\" style='right:1px;POSITION:absolute;TOP:600px;z-index:100'><a onclick='window.scrollTo(0,0);'><img src='../images/top.png'></a><br></div>"
+document.write(suspendcode);
+window.setInterval("heartBeat()",1);
+</script>
+</body>
+</html>

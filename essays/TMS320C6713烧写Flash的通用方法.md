@@ -927,7 +927,7 @@ int main(void) {
 
 [1] Creating a Second-Level Bootloader for FLASH Bootloading on TMS320C6000 Platform With Code Composer Studio
 
-[2] [My Flash burn CCS project][burnflash]
+[2] My Flash burn CCS project：[burnflash]
 
 
 [DSP TMS320C6000基础学习（7）—— Bootloader与VectorTable]:http://blog.csdn.net/xiahouzuoxin/article/details/9713461
