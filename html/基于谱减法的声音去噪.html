@@ -1,0 +1,163 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
+  </style>
+  <link rel="stylesheet" href="../stylesheets/Github.css" type="text/css" />
+  <title>基于谱减法的声音去噪</title>
+</head>
+<body>
+<div id="header"><center>
+    <p class="header_titleline">
+    <a href="../index.html" target="_self" title="主页">主页  </a><a href="../Search.html" target="_self" title="站内搜索">站内搜索  </a><a href="../Projects.html" target="_self" title="项目研究">项目研究  </a><a href="../Archives.html" target="_self" title="文章存档">文章存档  </a><a href="../README.html" target="_self" title="分类目录">分类目录 </a><a href="../AboutMe.html" target="_self" title="关于我">关于我  </a>
+    </p>
+</center></div>
+<h1>基于谱减法的声音去噪</h1>
+<h4>2014-11-14 / xiahouzuoxin</h4>
+<h4>Tags: 谱减法</h4>
+转载请注明出处: <a href="http://xiahouzuoxin.github.io/notes/">http://xiahouzuoxin.github.io/notes/</a>
+<div id="TOC">
+<ul>
+<li><a href="#谱减法模型">谱减法模型</a></li>
+<li><a href="#matlab的谱减法实例">Matlab的谱减法实例</a></li>
+<li><a href="#参考文献">参考文献</a></li>
+</ul>
+</div>
+<!---title:基于谱减法的声音去噪-->
+<!---keywords:谱减法-->
+<!---date:2014-11-14-->
+<h2 id="谱减法模型">谱减法模型</h2>
+<p>实际听觉环境中，肯定是含有噪声的，那掺杂有噪声的声音信号中原声音信号和噪声信号是如何体现的呢？一种普遍被使用的方法是：采集到的声音信号永远都是原信号与噪声信号的叠加，即</p>
+<p><img src="http://www.forkosh.com/mathtex.cgi? y(n)=s(n)+d(n), n=1,...,N"></p>
+<p>模型是信号的直接叠加，这就要满足：原信号与噪声信号不相关。其实有些情况下这个条件是不满足的，所以依然有很多其他的模型，如有人认为原信号和噪声信号是卷积的关系。当然，这些都是模型，还没有明确的理论证明那种是对的，反正哪种好用我们就捡谁。谱减法就是基于噪声的加法模型。</p>
+<p>语音信号本身是非平稳过程，但假如取很短的一段（10~30ms），则具有短时平稳特性。因此，使用窗函数取含噪语音信号的一帧（N点）进行处理。信号叠加模型两边同时进行傅里叶变换，并取模，</p>
+<p><img src="http://www.forkosh.com/mathtex.cgi? |Y(k)|=|S(k)|+|N(k)|, n=1,...,N"></p>
+<p>则对原信号幅值的估计就可通过|S(k)|=|Y(k)|-|N(k)|求得，但仅这样存在2个问题：</p>
+<ol style="list-style-type: decimal">
+<li>|S(k)|可能为负值，语音信号的FFT谱幅值怎么可能为负值呢</li>
+<li>|S(k)|中不包含相位信息，必需在取模时同时保留相位信息</li>
+</ol>
+<p>因此，谱减法考虑到这两点，其流程如下：</p>
+<div class="figure">
+<img src="../images/基于谱减法的声音去噪/谱减法流程图.jpg" alt="图注：谱减法流程图" /><p class="caption">图注：谱减法流程图</p>
+</div>
+<p>在语音增强的应用中，由于人耳对相位信息的感知不敏感，信号恢复时仍使用的相位信息为带噪信号的相位，相位信息保存在哪里呢？我们知道FFT的结果是复数，</p>
+<p><img src="http://www.forkosh.com/mathtex.cgi? Y(K)=|Y(k)|e^{-j\phi(w)}"></p>
+<p><span class="math"><em>ϕ</em>(<em>w</em>)</span> 就是相位，具体一些，复数在直角坐标系上表示，</p>
+<div class="figure">
+<img src="../images/基于谱减法的声音去噪/关于保持相位不变.png" alt="图注：关于保持相位不变" /><p class="caption">图注：关于保持相位不变</p>
+</div>
+<p>在上面的谱减法流程中，考虑噪声的高斯分布特性，用噪声的均值E[N(k)]替换N(k)，考虑减完后可能为负值的情况，将值小于0的部分全部截断为0，这样处理虽然带来一定的方便性，但同时引入了新的噪声，习惯上称之为“音乐噪声”。通过FFT谱进行谱减法并不是最普遍的方法，更多情况下是用功率谱代替FFT谱。</p>
+<div class="figure">
+<img src="../images/基于谱减法的声音去噪/功率谱的谱减法.jpg" alt="图注：功率谱的谱减法" /><p class="caption">图注：功率谱的谱减法</p>
+</div>
+<h2 id="matlab的谱减法实例">Matlab的谱减法实例</h2>
+<pre class="sourceCode matlab"><code class="sourceCode matlab">clc
+clear all;
+
+<span class="co">% 选择.wav音频文件</span>
+[fname,pname]=uigetfile(...
+    {<span class="st">&#39;*.wav&#39;</span>;<span class="st">&#39;*.*&#39;</span>},...
+    <span class="st">&#39;Input wav File&#39;</span>);
+[x,fs] = audioread(fullfile(pname,fname));
+
+x = x(<span class="fl">1</span>:<span class="fl">8912</span>,<span class="fl">1</span>);     <span class="co">% 如果是双声道，取单通道</span>
+N = length(x);       <span class="co">% 帧长</span>
+max_x = max(x);
+noise_add = random(<span class="st">&#39;norm&#39;</span>, <span class="fl">0</span>, <span class="fl">0.1</span>*max_x, [N,<span class="fl">1</span>]);
+
+<span class="co">% 添加高斯噪声</span>
+y = x + noise_add;
+noise_estimated = random(<span class="st">&#39;norm&#39;</span>, <span class="fl">0</span>, <span class="fl">0.1</span>*max_x, [N,<span class="fl">1</span>]);
+fft_y = fft(y);
+fft_n = fft(noise_estimated);
+E_noise = sum(abs(fft_n)) / N;
+mag_y = abs(fft_y);
+phase_y = angle(fft_y);   <span class="co">% 保留相位信息</span>
+mag_s = mag_y - E_noise;
+mag_s(mag_s&lt;<span class="fl">0</span>)=<span class="fl">0</span>;
+
+<span class="co">% 恢复</span>
+fft_s = mag_s .* exp(<span class="fl">1i</span>.*phase_y);
+s = ifft(fft_s);
+
+subplot(<span class="fl">311</span>);plot(x);ylim([-<span class="fl">1.5</span>,<span class="fl">1.5</span>]);title(<span class="st">&#39;原始干净信号&#39;</span>);
+subplot(<span class="fl">312</span>);plot(y);ylim([-<span class="fl">1.5</span>,<span class="fl">1.5</span>]);title(<span class="st">&#39;加噪信号&#39;</span>);
+subplot(<span class="fl">313</span>);plot(real(s));ylim([-<span class="fl">1.5</span>,<span class="fl">1.5</span>]);title(<span class="st">&#39;谱减法去噪后信号&#39;</span>);</code></pre>
+<div class="figure">
+<img src="../images/基于谱减法的声音去噪/Matlab谱减法去噪.jpg" alt="图注：Matlab谱减法去噪" /><p class="caption">图注：Matlab谱减法去噪</p>
+</div>
+<p>上图取了一段wav文件的脚步声，从第二张图到第3张图，有一些去噪效果，但信号本身也有衰减。谱减法应用范围还是很有限，在实际应用中，主要限制在环境噪声的特性上大部分情况不是简单的高斯特性，而且也很难满足噪声加法模型，另外，在谱减之后截断为0引入的新的音乐噪声至今没办法完全解决。但在高SNR的条件下，使用谱减法进行语音信号的增强确也能达到不错的效果。</p>
+<h2 id="参考文献">参考文献</h2>
+<ol style="list-style-type: decimal">
+<li>Navneet Upadhyay etc. Spectral Subtractive-Type Algorithms for Enhancement of Noisy Speech: An Integrative Review. 2013.</li>
+<li>林琴，张道信，吴小培. 一种基于改进谱减法的语音去噪新方法. 计算机技术与发展, 2007年7月.</li>
+<li>Marc Karam, Hasan F. Khazaal, Heshmat Aglan, Cliston Cole. Noise Removal in Speech Processing Using Spectral Subtraction. Journal of Signal and Information Processing, 2014, 5, 32-41.</li>
+</ol>
+<div class="ds-thread" data-thread-key="基于谱减法的声音去噪" data-title="基于谱减法的声音去噪" data-url="xiahouzuoxin.github.io/notes/html/基于谱减法的声音去噪.html"></div>
+<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"slide":{"type":"slide","bdImg":"5","bdPos":"right","bdTop":"300"},"image":{"viewList":["qzone","tsina","tqq","renren","weixin"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["qzone","tsina","tqq","renren","weixin"]}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"xiahouzuoxin"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- 多说公共JS代码 end -->
+
+<div id="footer">
+    <p class="footer_subline">联系邮箱: xiahouzuoxin@163.com</p>
+    <p class="footer_subline">声明: 本站所有文章如非特别说明均为原创，转载请注明出处！</p>
+</div>
+
+<!-- 回到顶部 -->
+<script>
+lastScrollY=0;
+function heartBeat(){
+var diffY;
+if (document.documentElement && document.documentElement.scrollTop)
+    diffY = document.documentElement.scrollTop;
+else if (document.body)
+    diffY = document.body.scrollTop
+else
+    {/*Netscape stuff*/}
+percent=.1*(diffY-lastScrollY);
+if(percent>0)percent=Math.ceil(percent);
+else percent=Math.floor(percent);
+document.getElementById("full").style.top=parseInt(document.getElementById("full").style.top)+percent+"px";
+lastScrollY=lastScrollY+percent;
+}
+suspendcode="<div id=\"full\" style='right:1px;POSITION:absolute;TOP:600px;z-index:100'><a onclick='window.scrollTo(0,0);'><img src='../images/top.png'></a><br></div>"
+document.write(suspendcode);
+window.setInterval("heartBeat()",1);
+</script>
+</body>
+</html>
