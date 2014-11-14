@@ -35,7 +35,7 @@
 <h2 id="删除错误提交">删除错误提交</h2>
 <p>噢，My God，不小心把含有私有密码信息的版本提交了，还提交到了Github………没问题：</p>
 <pre><code>git log                        # 查看要回退的版本
-git reset --hard &lt;commit-id&gt;   # 回退到commit-id&gt;版本
+git reset --hard &lt;commit-id&gt;   # 回退到&lt;commit-id&gt;版本
 git push origin HEAD --force   # 远程版本回退</code></pre>
 <h2 id="暂时保存而不提交当前工作">暂时保存而不提交当前工作</h2>
 <p>现在正在进行debug分支的工作，突然发现，之前软件存在一个严重的错误，因此急需对dev分支中该错误进行修改，这时，你使用</p>
@@ -53,15 +53,22 @@ git push origin HEAD --force   # 远程版本回退</code></pre>
 <p>删除一个栈顶最新的存储，[stash]参数为git stash list中显示的编号。要一次删除栈中所有的内容也是可以的，</p>
 <pre><code>git stash clear</code></pre>
 <h2 id="比较修改">比较修改</h2>
-<p><code>git diff</code>查看更改但未使用git add暂存的内容与git add的暂存区内容的差异。</p>
-<p><code>git diff --cached</code>查看git add暂存区的内容与上次提交HEAD之间的差异。</p>
-<p><code>git diff</code>与<code>git diff --cached</code>和在一起就包含了所有未提交的更改。当然，这也可以直接通过<code>git diff HEAD</code>一条命令直接查看工作区更改与上次提交的差异。</p>
-<p><code>git diff dev..master</code> 比较dev分支与master分支最新提交的diff。</p>
-<p><code>git diff dev...master</code> 比较dev分支与master分支自从分开开发以来master分支的所有改变。</p>
-<p><code>git diff sha1 sha2</code> 比较两次不同提交sha1和sha2之间的差别。</p>
-<p>如果只是要比较某个文件而不是所有的变化，则在响应的命令后添加文件名即可，如<code>git diff README.md</code>。</p>
+<ul>
+<li><code>git diff</code>查看更改但未使用git add暂存的内容与git add的暂存区内容的差异。</li>
+<li><code>git diff --cached</code>查看git add暂存区的内容与上次提交HEAD之间的差异。</li>
+<li><code>git diff</code>与<code>git diff --cached</code>和在一起就包含了所有未提交的更改。当然，这也可以直接通过<code>git diff HEAD</code>一条命令直接查看工作区更改与上次提交的差异。</li>
+<li><code>git diff dev..master</code> 比较dev分支与master分支最新提交的diff。</li>
+<li><code>git diff dev...master</code> 比较dev分支与master分支自从分开开发以来master分支的所有改变。</li>
+<li><code>git diff sha1 sha2</code> 比较两次不同提交sha1和sha2之间的差别（sha1与sha2表示版本标识，可以通过<code>git log</code>查看），在比较的输出中sha2用+表示，sha1用-表示，因此在使用该命令比较时推荐将新版本放在sha2的位置，方便阅读。</li>
+<li><code>git diff --stat</code> 查看简单的diff结果，通过这个可以直观看到都有哪些文件修改过。</li>
+</ul>
+<p>上面所列都是一些基本的命令，将这些命令和实际的文件结合起来感觉非常棒，比如：</p>
+<ul>
+<li>只是要比较某个文件而不是所有的变化，则在相应的命令后添加文件名即可，如<code>git diff sha1 sha2 README.md</code>，<code>git diff dev..master README.md</code>。</li>
+<li>比较当前工作区相对于之前某个版本的变化，<code>git diff sha1 README</code>相当于<code>git diff sha1 sha2</code>，只不过sha2默认使用的是当前工作空间。</li>
+</ul>
 <h2 id="放弃工作区的修改">放弃工作区的修改</h2>
-<p><code>git checkout [filename]</code>可以放弃工作区（没有使用git add.命令添加到暂存区）的修改。</p>
+<p><code>git checkout -- [filename]</code>可以放弃工作区（没有使用git add.命令添加到暂存区）的修改。</p>
 <p>放弃的修改无法找回，谨慎使用！</p>
 <h2 id="放弃本地修改强制更新">放弃本地修改，强制更新</h2>
 <pre><code>git fetch --all

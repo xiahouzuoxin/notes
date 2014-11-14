@@ -8,7 +8,7 @@
 
 ```
 git log                        # 查看要回退的版本
-git reset --hard <commit-id>   # 回退到commit-id>版本
+git reset --hard <commit-id>   # 回退到<commit-id>版本
 git push origin HEAD --force   # 远程版本回退
 ```
 
@@ -56,24 +56,23 @@ git stash clear
 
 ## 比较修改
 
-`git diff`查看更改但未使用git add暂存的内容与git add的暂存区内容的差异。
+- `git diff`查看更改但未使用git add暂存的内容与git add的暂存区内容的差异。
+- `git diff --cached`查看git add暂存区的内容与上次提交HEAD之间的差异。
+- `git diff`与`git diff --cached`和在一起就包含了所有未提交的更改。当然，这也可以直接通过`git diff HEAD`一条命令直接查看工作区更改与上次提交的差异。
+- `git diff dev..master` 比较dev分支与master分支最新提交的diff。
+- `git diff dev...master` 比较dev分支与master分支自从分开开发以来master分支的所有改变。
+- `git diff sha1 sha2` 比较两次不同提交sha1和sha2之间的差别（sha1与sha2表示版本标识，可以通过`git log`查看），在比较的输出中sha2用+表示，sha1用-表示，因此在使用该命令比较时推荐将新版本放在sha2的位置，方便阅读。
+- `git diff --stat` 查看简单的diff结果，通过这个可以直观看到都有哪些文件修改过。
 
-`git diff --cached`查看git add暂存区的内容与上次提交HEAD之间的差异。
+上面所列都是一些基本的命令，将这些命令和实际的文件结合起来感觉非常棒，比如：
 
-`git diff`与`git diff --cached`和在一起就包含了所有未提交的更改。当然，这也可以直接通过`git diff HEAD`一条命令直接查看工作区更改与上次提交的差异。
-
-`git diff dev..master` 比较dev分支与master分支最新提交的diff。
-
-`git diff dev...master` 比较dev分支与master分支自从分开开发以来master分支的所有改变。
-
-`git diff sha1 sha2` 比较两次不同提交sha1和sha2之间的差别。
-
-如果只是要比较某个文件而不是所有的变化，则在响应的命令后添加文件名即可，如`git diff README.md`。
+- 只是要比较某个文件而不是所有的变化，则在相应的命令后添加文件名即可，如`git diff sha1 sha2 README.md`，`git diff dev..master README.md`。
+- 比较当前工作区相对于之前某个版本的变化，`git diff sha1 README`相当于`git diff sha1 sha2`，只不过sha2默认使用的是当前工作空间。
 
 
 ## 放弃工作区的修改
 
-`git checkout [filename]`可以放弃工作区（没有使用git add.命令添加到暂存区）的修改。
+`git checkout -- [filename]`可以放弃工作区（没有使用git add.命令添加到暂存区）的修改。
 
 放弃的修改无法找回，谨慎使用！
 
