@@ -1,0 +1,575 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
+  </style>
+  <link rel="stylesheet" href="../stylesheets/Github.css" type="text/css" />
+  <title>OpenCV图像处理篇之边缘检测算子</title>
+</head>
+<body>
+<div id="header"><center>
+    <p class="header_titleline">
+    <a href="../index.html" target="_self" title="主页">主页  </a><a href="../Search.html" target="_self" title="站内搜索">站内搜索  </a><a href="../Projects.html" target="_self" title="项目研究">项目研究  </a><a href="../Archives.html" target="_self" title="文章存档">文章存档  </a><a href="../README.html" target="_self" title="分类目录">分类目录 </a><a href="../AboutMe.html" target="_self" title="关于我">关于我  </a>
+    </p>
+</center></div>
+<h1>OpenCV图像处理篇之边缘检测算子</h1>
+<h4>2014-11-16 / xiahouzuoxin</h4>
+<h4>Tags: OpenCV</h4>
+转载请注明出处: <a href="http://xiahouzuoxin.github.io/notes/">http://xiahouzuoxin.github.io/notes/</a>
+<div id="TOC">
+<ul>
+<li><a href="#种边缘检测算子">3种边缘检测算子</a><ul>
+<li><a href="#一阶导数的梯度算子">一阶导数的梯度算子</a></li>
+<li><a href="#高斯拉普拉斯算子">高斯拉普拉斯算子</a></li>
+<li><a href="#canny算子">Canny算子</a></li>
+</ul></li>
+<li><a href="#opencv中相关源码">OpenCV中相关源码</a></li>
+<li><a href="#试试身手">试试身手</a></li>
+</ul>
+</div>
+<!---title:OpenCV图像处理篇之边缘检测算子-->
+<!---keywords:OpenCV-->
+<!---date:2014-11-16-->
+<h2 id="种边缘检测算子">3种边缘检测算子</h2>
+<p>灰度或结构等信息的突变位置是图像的边缘，图像的边缘有幅度和方向属性，沿边缘方向像素变化缓慢，垂直边缘方向像素变化剧烈。因此，边缘上的变化能通过梯度计算出来。</p>
+<h3 id="一阶导数的梯度算子">一阶导数的梯度算子</h3>
+<p>对于二维的图像，梯度定义为一个向量，</p>
+<p><img src="http://www.forkosh.com/mathtex.cgi? \nabla f(x,y)=\begin{pmatrix}G_x \\ G_y\end{pmatrix}=\begin{pmatrix} \frac{\partial f}{x} \\ \frac{\partial f}{y} \end{pmatrix}"></p>
+<p>Gx对于x方向的梯度，Gy对应y方向的梯度，向量的幅值本来是 <span class="math"><em>m</em><em>a</em><em>g</em>(<em>f</em>) = (<em>G</em><sub><em>x</em></sub><sup>2</sup> + <em>G</em><sub><em>y</em></sub><sup>2</sup>)<sup>1/2</sup></span>，为简化计算，一般用mag(f)=|Gx|+|Gy|近似，幅值同时包含了x而后y方向的梯度信息。梯度的方向为 <span class="math"><em>α</em> = <em>a</em><em>r</em><em>c</em><em>t</em><em>a</em><em>n</em>(<em>G</em><em>x</em>/<em>G</em><em>y</em>)</span> 。</p>
+<p>由于图像的数字离散特性，所以梯度微分运算用差分代替，并且用小的空域模板和图像进行卷积近似计算梯度，由于模板的不同，因此衍生处多种梯度算子：Roberts算子、Sobel算子和Prewitt算子。</p>
+<div class="figure">
+<img src="../images/OpenCV图像处理篇之边缘检测算子/算子模板.png" alt="Sobel与Prewitt算子模板" /><p class="caption">Sobel与Prewitt算子模板</p>
+</div>
+<p>平滑模板都有一个特点，即模板内所有平滑值的和为0，因此梯度计算的步骤是：</p>
+<ol style="list-style-type: decimal">
+<li>计算Gx与Gy</li>
+<li>用mag(f)=|Gx|+|Gy|近似近似计算(x,y)点处的梯度值G(x,y)</li>
+<li>模板中心移动一个像素点，计算下一像素点的梯度值（这一平移求和的过程实质就是卷积运算）</li>
+<li>计算完所有的像素点处的梯度值后，选择一个阈值T，如果(x,y)处的G(x,y)&gt;T，则认为该点是边缘点</li>
+</ol>
+<h3 id="高斯拉普拉斯算子">高斯拉普拉斯算子</h3>
+<p>上面的一阶导数算子，是各向异性的，因此分x方向和y方向的梯度值，而高斯拉普拉斯算子是对图像求二阶导数，边缘对应二阶导数的过零点。</p>
+<p><img src="http://www.forkosh.com/mathtex.cgi? \nabla^2f(x,y)=\frac{\partial^2f(x,y)}{\partial x^2}+\frac{\partial^2f(x,y)}{\partial y^2}"></p>
+<p>由上式可知，xy进行互换的结果是一样的，所以拉普拉斯算子没有x方向和y方向的区分，拉普拉斯算子对应图像中的差分运算是：</p>
+<p><img src="http://www.forkosh.com/mathtex.cgi? \nabla^2f(x,y)=f(x+1,y)+f(x-1,y)+f(x,y+1)+f(x,y-1)-4f(x,y)"></p>
+<p>也可以通过卷积模板实现，</p>
+<div class="figure">
+<img src="../images/OpenCV图像处理篇之边缘检测算子/LOG算子.png" alt="LOG算子" /><p class="caption">LOG算子</p>
+</div>
+<p>相对于一阶导数，高斯拉普拉斯算子（Laplacian of Gaussian, LOG算子）由于求二阶导数，很容易将点噪声判别为边界，因此常在使用LOG算子前先用高斯平滑滤波器去除正态分布的噪声，二维高斯分布为：</p>
+<p><img src="http://www.forkosh.com/mathtex.cgi? h(x,y)=\frac{1}{2\pi\sigma^2}e^{-\frac{x^2+y^2}{2\sigma^2}}"></p>
+<p>其中 <span class="math"><em>σ</em></span> 为高斯分布标准差，决定高斯滤波器的宽度，用该函数对图像平滑滤波，可以减少椒盐噪声对LOG算子的影响。</p>
+<h3 id="canny算子">Canny算子</h3>
+<p>1983，MIT，Canny提出的边缘检测三个标准：</p>
+<ol style="list-style-type: decimal">
+<li>检测标准：不丢失重要的边缘，不应有虚假的边缘；</li>
+<li>定位标准：实际边缘与检测到的边缘位置之间的偏差最小；</li>
+<li>单响应标准：将多个响应降低为单个边缘响应。也就是说，图像中本来只有一个边缘点，可是却检测出多个边缘点，这就对应了多个响应。</li>
+</ol>
+<p>Canny算子力图在抗噪声干扰与精度之间寻求最佳方案，Canny算子有相关的复杂理论，其<a href="http://en.wikipedia.org/wiki/Canny_edge_detector">基本的步骤</a>是：</p>
+<ol style="list-style-type: decimal">
+<li>使用高斯滤波器平滑图像，卷积核尺度通过高斯滤波器的标准差确定</li>
+<li><p>计算滤波后图像的梯度幅值和方向 可以使用Sobel算子计算Gx与Gy方向的梯度，则梯度幅值和梯度的方向依次为 <img src="http://www.forkosh.com/mathtex.cgi? G=\srqt{G_x^2+G_y^2}, \Theta=atan2(Gy,Gx)"></p></li>
+<li>使用非最大化抑制方法确定当前像素点是否比邻域像素点更可能属于边缘的像素，以得到细化的边缘 其实现是：将当前像素位置的梯度值与其梯度方向上相邻的的梯度方向的梯度值进行比较，如果周围存在梯度值大于当前像素的梯度值，则不认为查找到的当前像素点为边缘点。举例来说，Gx方向的3个梯度值依次为[2 4 3]，则在Gx梯度方向上4所在像素点就是边缘点，如果把改成[2 4 1]就不是边缘点。如果用全向的梯度方向作为非最大抑制的判断依据，则要求G(x,y)&gt;所有4邻域的或8邻域的梯度值才被认为是边缘点。</li>
+<li><p>使用双阈值[T1,T2]法检测边缘的起点和终点，这样能形成连接的边缘。T2&gt;T1，T2用来找到没条线段，T1用来在这条线段两端延伸寻找边缘的断裂处，并连接这些边缘。</p></li>
+</ol>
+<h2 id="opencv中相关源码">OpenCV中相关源码</h2>
+<p>Sobel算子及LOG算子的源码在<a href="https://github.com/Itseez/opencv/blob/master/modules/imgproc/src/deriv.cpp">/modules/imgproc/src/deriv.cpp</a>中，Canny算子实现在<a href="https://github.com/Itseez/opencv/blob/master/modules/imgproc/src/canny.cpp">/modules/imgproc/src/canny.cpp</a>中。</p>
+<p>经过之前的基础准备，感觉只要知道什么时候该用什么OpenCV函数，其它的一切都变得简单起来了。于是感觉学着去探索OpenCV的源码对自己的受益会更大，就从这里开始吧。</p>
+<p>deriv.cpp中有Sobel算子的源码：</p>
+<pre class="sourceCode c"><code class="sourceCode c"><span class="dt">void</span> cv::Sobel( InputArray _src, OutputArray _dst, <span class="dt">int</span> ddepth, <span class="dt">int</span> dx, <span class="dt">int</span> dy,
+                <span class="dt">int</span> ksize, <span class="dt">double</span> scale, <span class="dt">double</span> delta, <span class="dt">int</span> borderType )
+{
+    Mat src = _src.getMat();   <span class="co">// 从InputArray中提取Mat数据结构，InputArray只能作为形参的类型，但可以传入Mat类型实参</span>
+    <span class="kw">if</span> (ddepth &lt; <span class="dv">0</span>)
+        ddepth = src.depth();  <span class="co">// 像素深度（即像素位数），有CV_8U=0, CV_8S=1, CV_16U=2, CV_16S=3, CV_32S=4, CV_32F=5, CV_64F=6</span>
+    _dst.create( src.size(), CV_MAKETYPE(ddepth, src.channels()) );
+    Mat dst = _dst.getMat();
+    
+<span class="ot">#if defined (HAVE_IPP) &amp;&amp; (IPP_VERSION_MAJOR &gt;= 7)</span>
+    <span class="kw">if</span>(dx &lt; <span class="dv">3</span> &amp;&amp; dy &lt; <span class="dv">3</span> &amp;&amp; src.channels() == <span class="dv">1</span> &amp;&amp; borderType == <span class="dv">1</span>)
+    {
+        <span class="kw">if</span>(IPPDeriv(src, dst, ddepth, dx, dy, ksize,scale))
+            <span class="kw">return</span>;
+    }
+<span class="ot">#endif</span>
+    <span class="dt">int</span> ktype = std::max(CV_32F, std::max(ddepth, src.depth()));
+
+    Mat kx, ky;
+    getDerivKernels( kx, ky, dx, dy, ksize, false, ktype );  <span class="co">// 创建Sobel算子差分用的卷积模板，结果放在kx,ky中</span>
+    <span class="kw">if</span>( scale != <span class="dv">1</span> )
+    {
+        <span class="co">// usually the smoothing part is the slowest to compute,</span>
+        <span class="co">// so try to scale it instead of the faster differenciating part</span>
+        <span class="kw">if</span>( dx == <span class="dv">0</span> )
+            kx *= scale;
+        <span class="kw">else</span>
+            ky *= scale;
+    }
+    sepFilter2D( src, dst, ddepth, kx, ky, Point(-<span class="dv">1</span>,-<span class="dv">1</span>), delta, borderType );  <span class="co">// 使用卷积核进行平滑操作，前面已经说过，差分转化为卷积操作，而卷积运算就是平滑滤波</span>
+}</code></pre>
+<p><code>getSobelKernels</code>是实际创建卷积模板的函数，被上面的<code>getDerivKernels</code>调用，不妨看看OpenCV中Sobel创建的卷积模板是啥样的，下面只是<code>getSobelKernels</code>函数的一部分，</p>
+<pre class="sourceCode c"><code class="sourceCode c"><span class="kw">for</span>( <span class="dt">int</span> k = <span class="dv">0</span>; k &lt; <span class="dv">2</span>; k++ )
+{
+    Mat* kernel = k == <span class="dv">0</span> ? &amp;kx : &amp;ky;
+    <span class="dt">int</span> order = k == <span class="dv">0</span> ? dx : dy;
+    <span class="dt">int</span> ksize = k == <span class="dv">0</span> ? ksizeX : ksizeY;
+
+    CV_Assert( ksize &gt; order );
+
+    <span class="kw">if</span>( ksize == <span class="dv">1</span> )
+        kerI[<span class="dv">0</span>] = <span class="dv">1</span>;
+    <span class="kw">else</span> <span class="kw">if</span>( ksize == <span class="dv">3</span> )
+    {
+        <span class="kw">if</span>( order == <span class="dv">0</span> )
+            kerI[<span class="dv">0</span>] = <span class="dv">1</span>, kerI[<span class="dv">1</span>] = <span class="dv">2</span>, kerI[<span class="dv">2</span>] = <span class="dv">1</span>;   <span class="co">// 只进行均值平滑，无差分作用</span>
+        <span class="kw">else</span> <span class="kw">if</span>( order == <span class="dv">1</span> )
+            kerI[<span class="dv">0</span>] = -<span class="dv">1</span>, kerI[<span class="dv">1</span>] = <span class="dv">0</span>, kerI[<span class="dv">2</span>] = <span class="dv">1</span>;  <span class="co">// 差分算子</span>
+        <span class="kw">else</span>
+            kerI[<span class="dv">0</span>] = <span class="dv">1</span>, kerI[<span class="dv">1</span>] = -<span class="dv">2</span>, kerI[<span class="dv">2</span>] = <span class="dv">1</span>;
+    }
+    <span class="kw">else</span>
+    {
+        ...
+    }</code></pre>
+<p><code>ksize</code>表示卷积核的大小，之前理论分析中取的是3x3的模板，对应到<code>if( ksize == 3 )</code>，<code>order</code>变量确定对x梯度方向的卷积模板进行赋值还是y梯度方向的卷积进行赋值，因此，当且仅当Sobel函数的输入实参中dx=1时才计算Gx方向的梯度，dy=1时才计算dy方向的梯度。OpenCV没有给出Prewiit算子的源码，但可以自己通过修改替换<code>getDerivKernels</code>函数实现Prewiit的功能。</p>
+<p>LOG算子也可以进行相同的分析，这里就不写下来了。再看Canny算子，</p>
+<pre class="sourceCode c"><code class="sourceCode c"><span class="dt">void</span> cv::Canny( InputArray image, OutputArray _edges,
+                <span class="dt">double</span> threshold1, <span class="dt">double</span> threshold2,
+                <span class="dt">int</span> apertureSize, bool L2gradient )
+{
+    Mat src = image.getMat();
+    _edges.create(src.size(), CV_8U);
+    CvMat c_src = src, c_dst = _edges.getMat();
+    cvCanny( &amp;c_src, &amp;c_dst, threshold1, threshold2,
+        apertureSize + (L2gradient ? CV_CANNY_L2_GRADIENT : <span class="dv">0</span>));
+}</code></pre>
+<p>C++版本的Canny算子实际就是调用原来C版本中的函数，只是进行了下封装而已，在<code>cvCanny</code>函数中我看到这么几行代码：</p>
+<pre class="sourceCode c"><code class="sourceCode c">dx = cvCreateMat( size.height, size.width, CV_16SC1 );
+dy = cvCreateMat( size.height, size.width, CV_16SC1 );
+cvSobel( src, dx, <span class="dv">1</span>, <span class="dv">0</span>, aperture_size );  <span class="co">// 计算Gx </span>
+cvSobel( src, dy, <span class="dv">0</span>, <span class="dv">1</span>, aperture_size );  <span class="co">// 计算Gy</span></code></pre>
+<p>Canny就是调用Sobel算子计算x方向的梯度Gx和y方向的梯度Gy。计算梯度角度和非最大化抑制的代码有些长，</p>
+<pre class="sourceCode c"><code class="sourceCode c"><span class="co">// calculate magnitude and angle of gradient, perform non-maxima supression.</span>
+<span class="co">// fill the map with one of the following values:</span>
+<span class="co">//   0 - the pixel might belong to an edge</span>
+<span class="co">//   1 - the pixel can not belong to an edge</span>
+<span class="co">//   2 - the pixel does belong to an edge</span>
+<span class="kw">for</span>( i = <span class="dv">0</span>; i &lt;= size.height; i++ )
+{
+    <span class="dt">int</span>* _mag = mag_buf[(i &gt; <span class="dv">0</span>) + <span class="dv">1</span>] + <span class="dv">1</span>;
+    <span class="dt">float</span>* _magf = (<span class="dt">float</span>*)_mag;
+    <span class="dt">const</span> <span class="dt">short</span>* _dx = (<span class="dt">short</span>*)(dx-&gt;data.ptr + dx-&gt;step*i);
+    <span class="dt">const</span> <span class="dt">short</span>* _dy = (<span class="dt">short</span>*)(dy-&gt;data.ptr + dy-&gt;step*i);
+    uchar* _map;
+    <span class="dt">int</span> x, y;
+    ptrdiff_t magstep1, magstep2;
+    <span class="dt">int</span> prev_flag = <span class="dv">0</span>;
+
+    <span class="kw">if</span>( i &lt; size.height )
+    {
+        _mag[-<span class="dv">1</span>] = _mag[size.width] = <span class="dv">0</span>;
+
+        <span class="kw">if</span>( !(flags &amp; CV_CANNY_L2_GRADIENT) )
+            <span class="kw">for</span>( j = <span class="dv">0</span>; j &lt; size.width; j++ )
+                _mag[j] = abs(_dx[j]) + abs(_dy[j]);
+        <span class="co">/*else if( icvFilterSobelVert_8u16s_C1R_p != 0 ) // check for IPP</span>
+<span class="co">        {</span>
+<span class="co">            // use vectorized sqrt</span>
+<span class="co">            mag_row.data.fl = _magf;</span>
+<span class="co">            for( j = 0; j &lt; size.width; j++ )</span>
+<span class="co">            {</span>
+<span class="co">                x = _dx[j]; y = _dy[j];</span>
+<span class="co">                _magf[j] = (float)((double)x*x + (double)y*y);</span>
+<span class="co">            }</span>
+<span class="co">            cvPow( &amp;mag_row, &amp;mag_row, 0.5 );</span>
+<span class="co">        }*/</span>
+        <span class="kw">else</span>
+        {
+            <span class="kw">for</span>( j = <span class="dv">0</span>; j &lt; size.width; j++ )
+            {
+                x = _dx[j]; y = _dy[j];
+                _magf[j] = (<span class="dt">float</span>)std::sqrt((<span class="dt">double</span>)x*x + (<span class="dt">double</span>)y*y);
+            }
+        }
+    }
+    <span class="kw">else</span>
+        memset( _mag<span class="dv">-1</span>, <span class="dv">0</span>, (size.width + <span class="dv">2</span>)*<span class="kw">sizeof</span>(<span class="dt">int</span>) );
+
+    <span class="co">// at the very beginning we do not have a complete ring</span>
+    <span class="co">// buffer of 3 magnitude rows for non-maxima suppression</span>
+    <span class="kw">if</span>( i == <span class="dv">0</span> )
+        <span class="kw">continue</span>;
+
+    _map = map + mapstep*i + <span class="dv">1</span>;
+    _map[-<span class="dv">1</span>] = _map[size.width] = <span class="dv">1</span>;
+    
+    _mag = mag_buf[<span class="dv">1</span>] + <span class="dv">1</span>; <span class="co">// take the central row</span>
+    _dx = (<span class="dt">short</span>*)(dx-&gt;data.ptr + dx-&gt;step*(i<span class="dv">-1</span>));
+    _dy = (<span class="dt">short</span>*)(dy-&gt;data.ptr + dy-&gt;step*(i<span class="dv">-1</span>));
+    
+    magstep1 = mag_buf[<span class="dv">2</span>] - mag_buf[<span class="dv">1</span>];
+    magstep2 = mag_buf[<span class="dv">0</span>] - mag_buf[<span class="dv">1</span>];
+
+    <span class="kw">if</span>( (stack_top - stack_bottom) + size.width &gt; maxsize )
+    {
+        <span class="dt">int</span> sz = (<span class="dt">int</span>)(stack_top - stack_bottom);
+        maxsize = MAX( maxsize * <span class="dv">3</span>/<span class="dv">2</span>, maxsize + <span class="dv">8</span> );
+        stack.resize(maxsize);
+        stack_bottom = &amp;stack[<span class="dv">0</span>];
+        stack_top = stack_bottom + sz;
+    }
+
+    <span class="kw">for</span>( j = <span class="dv">0</span>; j &lt; size.width; j++ )
+    {
+        <span class="ot">#define CANNY_SHIFT 15</span>
+        <span class="ot">#define TG22  (int)(0.4142135623730950488016887242097*(1&lt;&lt;CANNY_SHIFT) + 0.5)</span>
+
+        x = _dx[j];
+        y = _dy[j];
+        <span class="dt">int</span> s = x ^ y;
+        <span class="dt">int</span> m = _mag[j];
+
+        x = abs(x);
+        y = abs(y);
+        <span class="kw">if</span>( m &gt; low )
+        {
+            <span class="dt">int</span> tg22x = x * TG22;
+            <span class="dt">int</span> tg67x = tg22x + ((x + x) &lt;&lt; CANNY_SHIFT);
+
+            y &lt;&lt;= CANNY_SHIFT;
+
+            <span class="kw">if</span>( y &lt; tg22x )
+            {
+                <span class="kw">if</span>( m &gt; _mag[j<span class="dv">-1</span>] &amp;&amp; m &gt;= _mag[j<span class="dv">+1</span>] )
+                {
+                    <span class="kw">if</span>( m &gt; high &amp;&amp; !prev_flag &amp;&amp; _map[j-mapstep] != <span class="dv">2</span> )
+                    {
+                        CANNY_PUSH( _map + j );
+                        prev_flag = <span class="dv">1</span>;
+                    }
+                    <span class="kw">else</span>
+                        _map[j] = (uchar)<span class="dv">0</span>;
+                    <span class="kw">continue</span>;
+                }
+            }
+            <span class="kw">else</span> <span class="kw">if</span>( y &gt; tg67x )
+            {
+                <span class="kw">if</span>( m &gt; _mag[j+magstep2] &amp;&amp; m &gt;= _mag[j+magstep1] )
+                {
+                    <span class="kw">if</span>( m &gt; high &amp;&amp; !prev_flag &amp;&amp; _map[j-mapstep] != <span class="dv">2</span> )
+                    {
+                        CANNY_PUSH( _map + j );
+                        prev_flag = <span class="dv">1</span>;
+                    }
+                    <span class="kw">else</span>
+                        _map[j] = (uchar)<span class="dv">0</span>;
+                    <span class="kw">continue</span>;
+                }
+            }
+            <span class="kw">else</span>
+            {
+                s = s &lt; <span class="dv">0</span> ? -<span class="dv">1</span> : <span class="dv">1</span>;
+                <span class="kw">if</span>( m &gt; _mag[j+magstep2-s] &amp;&amp; m &gt; _mag[j+magstep1+s] )
+                {
+                    <span class="kw">if</span>( m &gt; high &amp;&amp; !prev_flag &amp;&amp; _map[j-mapstep] != <span class="dv">2</span> )
+                    {
+                        CANNY_PUSH( _map + j );
+                        prev_flag = <span class="dv">1</span>;
+                    }
+                    <span class="kw">else</span>
+                        _map[j] = (uchar)<span class="dv">0</span>;
+                    <span class="kw">continue</span>;
+                }
+            }
+        }
+        prev_flag = <span class="dv">0</span>;
+        _map[j] = (uchar)<span class="dv">1</span>;
+    }
+
+    <span class="co">// scroll the ring buffer</span>
+    _mag = mag_buf[<span class="dv">0</span>];
+    mag_buf[<span class="dv">0</span>] = mag_buf[<span class="dv">1</span>];
+    mag_buf[<span class="dv">1</span>] = mag_buf[<span class="dv">2</span>];
+    mag_buf[<span class="dv">2</span>] = _mag;
+}</code></pre>
+<p>最后就是使用双阈值跟踪边界，形成连续边缘，</p>
+<pre class="sourceCode c"><code class="sourceCode c"><span class="co">// now track the edges (hysteresis thresholding)</span>
+<span class="kw">while</span>( stack_top &gt; stack_bottom )
+{
+    uchar* m;
+    <span class="kw">if</span>( (stack_top - stack_bottom) + <span class="dv">8</span> &gt; maxsize )
+    {
+        <span class="dt">int</span> sz = (<span class="dt">int</span>)(stack_top - stack_bottom);
+        maxsize = MAX( maxsize * <span class="dv">3</span>/<span class="dv">2</span>, maxsize + <span class="dv">8</span> );
+        stack.resize(maxsize);
+        stack_bottom = &amp;stack[<span class="dv">0</span>];
+        stack_top = stack_bottom + sz;
+    }
+
+    CANNY_POP(m);
+
+    <span class="kw">if</span>( !m[-<span class="dv">1</span>] )
+        CANNY_PUSH( m - <span class="dv">1</span> );
+    <span class="kw">if</span>( !m[<span class="dv">1</span>] )
+        CANNY_PUSH( m + <span class="dv">1</span> );
+    <span class="kw">if</span>( !m[-mapstep<span class="dv">-1</span>] )
+        CANNY_PUSH( m - mapstep - <span class="dv">1</span> );
+    <span class="kw">if</span>( !m[-mapstep] )
+        CANNY_PUSH( m - mapstep );
+    <span class="kw">if</span>( !m[-mapstep<span class="dv">+1</span>] )
+        CANNY_PUSH( m - mapstep + <span class="dv">1</span> );
+    <span class="kw">if</span>( !m[mapstep<span class="dv">-1</span>] )
+        CANNY_PUSH( m + mapstep - <span class="dv">1</span> );
+    <span class="kw">if</span>( !m[mapstep] )
+        CANNY_PUSH( m + mapstep );
+    <span class="kw">if</span>( !m[mapstep<span class="dv">+1</span>] )
+        CANNY_PUSH( m + mapstep + <span class="dv">1</span> );
+}
+
+<span class="co">// the final pass, form the final image</span>
+<span class="kw">for</span>( i = <span class="dv">0</span>; i &lt; size.height; i++ )
+{
+    <span class="dt">const</span> uchar* _map = map + mapstep*(i<span class="dv">+1</span>) + <span class="dv">1</span>;
+    uchar* _dst = dst-&gt;data.ptr + dst-&gt;step*i;
+    
+    <span class="kw">for</span>( j = <span class="dv">0</span>; j &lt; size.width; j++ )
+        _dst[j] = (uchar)-(_map[j] &gt;&gt; <span class="dv">1</span>);
+}</code></pre>
+<p>这其中貌似用到了栈对邻域梯度信息进行保存，以上详细的实现没做太多的分析，但流程就摆在那里了。请注意，OpenCV中的Canny实现包含了Canny算子的3个步骤，唯独没有第一步中的高斯平滑滤波，因此调用前得先使用高斯平滑滤波。</p>
+<h2 id="试试身手">试试身手</h2>
+<p>Sobel算子的源码：</p>
+<pre class="sourceCode c"><code class="sourceCode c"><span class="co">/*</span>
+<span class="co"> * FileName : sobel.cpp</span>
+<span class="co"> * Author   : xiahouzuoxin @163.com</span>
+<span class="co"> * Version  : v1.0</span>
+<span class="co"> * Date     : Sun 16 Nov 2014 09:53:16 AM CST</span>
+<span class="co"> * Brief    : </span>
+<span class="co"> * </span>
+<span class="co"> * Copyright (C) MICL,USTB</span>
+<span class="co"> */</span>
+<span class="ot">#include &lt;iostream&gt;</span>
+<span class="ot">#include &quot;cv.h&quot;</span>
+<span class="ot">#include &quot;highgui.h&quot;</span>
+<span class="ot">#include &quot;opencv2/imgproc/imgproc.hpp&quot;</span>
+
+using namespace std;
+using namespace cv;
+
+<span class="dt">int</span> main(<span class="dt">int</span> argc, <span class="dt">char</span> *argv[])
+{
+    <span class="kw">if</span> (argc &lt; <span class="dv">2</span>) {
+        cout &lt;&lt; <span class="st">&quot;Usage: ./sobel [image file]&quot;</span> &lt;&lt;endl;
+        <span class="kw">return</span> -<span class="dv">1</span>;
+    }
+    <span class="co">// Read image</span>
+    Mat src = imread(argv[<span class="dv">1</span>], CV_LOAD_IMAGE_COLOR);
+    <span class="kw">if</span> (!src.data) {
+        cout &lt;&lt; <span class="st">&quot;Error: read image&quot;</span> &lt;&lt; endl;
+        <span class="kw">return</span> -<span class="dv">1</span>;
+    }
+    cvtColor(src, src, CV_RGB2GRAY);
+    namedWindow(<span class="st">&quot;Origin&quot;</span>, <span class="dv">0</span>);
+    imshow(<span class="st">&quot;Origin&quot;</span>,src);
+
+    <span class="co">// CV_EXPORTS_W void Sobel( InputArray src, OutputArray dst, int ddepth,</span>
+    <span class="co">//                      int dx, int dy, int ksize=3,</span>
+    <span class="co">//                      double scale=1, double delta=0,</span>
+    <span class="co">//                      int borderType=BORDER_DEFAULT );</span>
+    Mat dst_x;
+    <span class="co">// Gradient X</span>
+    Sobel(src, dst_x, src.depth(), <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">3</span>, <span class="dv">1</span>, <span class="dv">0</span>, BORDER_DEFAULT);
+    namedWindow(<span class="st">&quot;Sobel image X gradient&quot;</span>, <span class="dv">0</span>);
+    imshow(<span class="st">&quot;Sobel image X gradient&quot;</span>, dst_x);
+    Mat dst_y;
+    <span class="co">// Gradient Y</span>
+    Sobel(src, dst_y, src.depth(), <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">1</span>, <span class="dv">0</span>, BORDER_DEFAULT);
+    namedWindow(<span class="st">&quot;Sobel image Y gradient&quot;</span>, <span class="dv">0</span>);
+    imshow(<span class="st">&quot;Sobel image Y gradient&quot;</span>, dst_y);
+
+    Mat dst;
+    <span class="co">// Method one: |G|=|Gx|+|Gy|</span>
+    convertScaleAbs(dst_x, dst_x);
+    convertScaleAbs(dst_y, dst_y);
+    addWeighted(dst_x, <span class="fl">0.5</span>, dst_y, <span class="fl">0.5</span>, <span class="dv">0</span>, dst);
+    namedWindow(<span class="st">&quot;Sobel image XY&quot;</span>, <span class="dv">0</span>);
+    imshow(<span class="st">&quot;Sobel image XY&quot;</span>, dst);
+    <span class="co">// Method two:</span>
+    Sobel(src, dst, src.depth(), <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">1</span>, <span class="dv">0</span>, BORDER_DEFAULT);
+
+    waitKey();
+
+    <span class="kw">return</span> <span class="dv">0</span>;
+}</code></pre>
+<p>简单的换一下函数，就是LOG算子的源码：</p>
+<pre class="sourceCode c"><code class="sourceCode c"><span class="co">/*</span>
+<span class="co"> * FileName : Laplace.cpp</span>
+<span class="co"> * Author   : xiahouzuoxin @163.com</span>
+<span class="co"> * Version  : v1.0</span>
+<span class="co"> * Date     : Sun 16 Nov 2014 10:52:09 AM CST</span>
+<span class="co"> * Brief    : </span>
+<span class="co"> * </span>
+<span class="co"> * Copyright (C) MICL,USTB</span>
+<span class="co"> */</span>
+<span class="ot">#include &lt;iostream&gt;</span>
+<span class="ot">#include &quot;cv.h&quot; </span>
+<span class="ot">#include &quot;highgui.h&quot;</span>
+<span class="ot">#include &quot;opencv2/imgproc/imgproc.hpp&quot;</span>
+
+using namespace std;
+using namespace cv;
+
+<span class="dt">int</span> main(<span class="dt">int</span> argc, <span class="dt">char</span> *argv[])
+{    
+    <span class="kw">if</span> (argc &lt; <span class="dv">2</span>) {
+        cout &lt;&lt; <span class="st">&quot;Usage: ./Laplace [image file]&quot;</span> &lt;&lt;endl;
+        <span class="kw">return</span> -<span class="dv">1</span>;
+    }
+    <span class="co">// Read image</span>
+    Mat src = imread(argv[<span class="dv">1</span>], CV_LOAD_IMAGE_COLOR);
+    <span class="kw">if</span> (!src.data) {
+        cout &lt;&lt; <span class="st">&quot;Error: read image&quot;</span> &lt;&lt; endl;
+        <span class="kw">return</span> -<span class="dv">1</span>;
+    }
+    cvtColor(src, src, CV_RGB2GRAY);
+    namedWindow(<span class="st">&quot;Origin&quot;</span>, CV_WINDOW_AUTOSIZE);
+    imshow(<span class="st">&quot;Origin&quot;</span>,src);
+
+    Mat dst;
+    <span class="co">// CV_EXPORTS_W void Laplacian( InputArray src, OutputArray dst, int ddepth,</span>
+    <span class="co">//                          int ksize=1, double scale=1, double delta=0,</span>
+    <span class="co">//                          int borderType=BORDER_DEFAULT );</span>
+    Laplacian(src, dst, src.depth(), <span class="dv">3</span>, <span class="dv">1</span>, <span class="dv">0</span>, BORDER_DEFAULT);
+    namedWindow(<span class="st">&quot;Laplacian&quot;</span>, CV_WINDOW_AUTOSIZE);
+    imshow(<span class="st">&quot;Laplacian&quot;</span>,dst);
+
+    waitKey();
+
+    <span class="kw">return</span> <span class="dv">0</span>;
+}</code></pre>
+<p>Canny算子的源码也很简单，只不过使用了<code>GaussianBlur</code>进行高斯平滑，</p>
+<pre class="sourceCode c"><code class="sourceCode c"><span class="co">/*</span>
+<span class="co"> * FileName : canny.cpp</span>
+<span class="co"> * Author   : xiahouzuoxin @163.com</span>
+<span class="co"> * Version  : v1.0</span>
+<span class="co"> * Date     : Sun 16 Nov 2014 10:59:31 AM CST</span>
+<span class="co"> * Brief    : </span>
+<span class="co"> * </span>
+<span class="co"> * Copyright (C) MICL,USTB</span>
+<span class="co"> */</span>
+ 
+<span class="ot">#include &lt;iostream&gt;</span>
+<span class="ot">#include &quot;cv.h&quot; </span>
+<span class="ot">#include &quot;highgui.h&quot;</span>
+<span class="ot">#include &quot;opencv2/imgproc/imgproc.hpp&quot;</span>
+
+using namespace std;
+using namespace cv;
+
+<span class="dt">int</span> main(<span class="dt">int</span> argc, <span class="dt">char</span> *argv[])
+{
+    <span class="kw">if</span> (argc &lt; <span class="dv">2</span>) {
+        cout &lt;&lt; <span class="st">&quot;Usage: ./canny [image file]&quot;</span> &lt;&lt;endl;
+        <span class="kw">return</span> -<span class="dv">1</span>;
+    }
+    <span class="co">// Read image</span>
+    Mat src = imread(argv[<span class="dv">1</span>], CV_LOAD_IMAGE_COLOR);
+    <span class="kw">if</span> (!src.data) {
+        cout &lt;&lt; <span class="st">&quot;Error: read image&quot;</span> &lt;&lt; endl;
+        <span class="kw">return</span> -<span class="dv">1</span>;
+    }
+    cvtColor(src, src, CV_RGB2GRAY);
+    namedWindow(<span class="st">&quot;Origin&quot;</span>, CV_WINDOW_AUTOSIZE);
+    imshow(<span class="st">&quot;Origin&quot;</span>,src);
+
+    Mat dst;
+    GaussianBlur(src, dst, Size(<span class="dv">3</span>,<span class="dv">3</span>), <span class="dv">0</span>, <span class="dv">0</span>);  <span class="co">// 使用Gaussian滤波器进行平滑</span>
+    <span class="co">// CV_EXPORTS_W void Canny( InputArray image, OutputArray edges,</span>
+    <span class="co">//                      double threshold1, double threshold2,</span>
+    <span class="co">//                      int apertureSize=3, bool L2gradient=false );</span>
+    Canny(dst, dst, <span class="dv">50</span>, <span class="dv">200</span>, <span class="dv">3</span>);
+    namedWindow(<span class="st">&quot;Canny&quot;</span>, CV_WINDOW_AUTOSIZE);
+    imshow(<span class="st">&quot;Canny&quot;</span>,dst);
+
+    waitKey();
+
+    <span class="kw">return</span> <span class="dv">0</span>;
+}</code></pre>
+<p>请注意，上面的Sobel和LOG算子代码都没有在计算结果后使用阈值判断是否属于边界，而直接显示了边缘信息。</p>
+<div class="figure">
+<img src="../images/OpenCV图像处理篇之边缘检测算子/Sobel边缘检测结果.png" alt="Sobel边缘检测结果：右上为x梯度结果，左下为y梯度结果，右下为G(x,y)梯度结果" /><p class="caption">Sobel边缘检测结果：右上为x梯度结果，左下为y梯度结果，右下为G(x,y)梯度结果</p>
+</div>
+<div class="figure">
+<img src="../images/OpenCV图像处理篇之边缘检测算子/Laplace边缘检测结果.png" alt="Laplace边缘检测结果" /><p class="caption">Laplace边缘检测结果</p>
+</div>
+<div class="figure">
+<img src="../images/OpenCV图像处理篇之边缘检测算子/Canny边缘检测结果.png" alt="Canny边缘检测结果" /><p class="caption">Canny边缘检测结果</p>
+</div>
+<p>Canny检测算子的效果还是很不错的。</p>
+<div class="ds-thread" data-thread-key="OpenCV图像处理篇之边缘检测算子" data-title="OpenCV图像处理篇之边缘检测算子" data-url="xiahouzuoxin.github.io/notes/html/OpenCV图像处理篇之边缘检测算子.html"></div>
+<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"slide":{"type":"slide","bdImg":"5","bdPos":"right","bdTop":"300"},"image":{"viewList":["qzone","tsina","tqq","renren","weixin"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["qzone","tsina","tqq","renren","weixin"]}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"xiahouzuoxin"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- 多说公共JS代码 end -->
+
+<div id="footer">
+    <p class="footer_subline">联系邮箱: xiahouzuoxin@163.com</p>
+    <p class="footer_subline">声明: 本站所有文章如非特别说明均为原创，转载请注明出处！</p>
+</div>
+
+<!-- 回到顶部 -->
+<script>
+lastScrollY=0;
+function heartBeat(){
+var diffY;
+if (document.documentElement && document.documentElement.scrollTop)
+    diffY = document.documentElement.scrollTop;
+else if (document.body)
+    diffY = document.body.scrollTop
+else
+    {/*Netscape stuff*/}
+percent=.1*(diffY-lastScrollY);
+if(percent>0)percent=Math.ceil(percent);
+else percent=Math.floor(percent);
+document.getElementById("full").style.top=parseInt(document.getElementById("full").style.top)+percent+"px";
+lastScrollY=lastScrollY+percent;
+}
+suspendcode="<div id=\"full\" style='right:1px;POSITION:absolute;TOP:600px;z-index:100'><a onclick='window.scrollTo(0,0);'><img src='../images/top.png'></a><br></div>"
+document.write(suspendcode);
+window.setInterval("heartBeat()",1);
+</script>
+</body>
+</html>

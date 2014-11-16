@@ -29,6 +29,7 @@
 - [OpenCV图像处理篇之腐蚀与膨胀](./essays/OpenCV图像处理篇之腐蚀与膨胀.md)
 - [OpenCV图像处理篇之采样金字塔](./essays/OpenCV图像处理篇之采样金字塔.md)
 - [OpenCV图像处理篇之阈值操作函数](./essays/OpenCV图像处理篇之阈值操作函数.md)
+- [OpenCV图像处理篇之边缘检测算子](./essays/OpenCV图像处理篇之边缘检测算子.md)
 
 # 嵌入式处理(DSP/FPGA/ARM)
 
