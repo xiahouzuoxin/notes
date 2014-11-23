@@ -16,6 +16,7 @@
 
 # OpenCV系列
 - [CentOS上编译安装OpenCV-2.3.1与ffmpeg-2.1.2](./essays/CentOS上编译安装OpenCV-2.3.1与ffmpeg-2.1.2.md)
+- [搭建Qt界面的OpenCV开发环境](./essays/搭建Qt界面的OpenCV开发环境.md)
 - [OpenCV基础篇之读取显示图片](./essays/OpenCV基础篇之读取显示图片.md)
 - [OpenCV基础篇之使用CMake管理工程](./essays/OpenCV基础篇之使用CMake管理工程.md)
 - [OpenCV基础篇之Mat数据结构](./essays/OpenCV基础篇之Mat数据结构.md)

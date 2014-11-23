@@ -1,0 +1,235 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
+  </style>
+  <link rel="stylesheet" href="../stylesheets/Github.css" type="text/css" />
+  <title>搭建Qt界面的OpenCV开发环境</title>
+</head>
+<body>
+<div id="header"><center>
+    <p class="header_titleline">
+    <a href="../index.html" target="_self" title="主页">主页  </a><a href="../Search.html" target="_self" title="站内搜索">站内搜索  </a><a href="../Projects.html" target="_self" title="项目研究">项目研究  </a><a href="../Archives.html" target="_self" title="文章存档">文章存档  </a><a href="../README.html" target="_self" title="分类目录">分类目录 </a><a href="../AboutMe.html" target="_self" title="关于我">关于我  </a>
+    </p>
+</center></div>
+<h1>搭建Qt界面的OpenCV开发环境</h1>
+<h4>2014-11-22 / xiahouzuoxin</h4>
+<h4>Tags: OpenCV,Qt,gcc</h4>
+转载请注明出处: <a href="http://xiahouzuoxin.github.io/notes/">http://xiahouzuoxin.github.io/notes/</a>
+<div id="TOC">
+<ul>
+<li><a href="#更新gcc到4.9.2">1. 更新gcc到4.9.2</a></li>
+<li><a href="#编译安装qt-4.8.6">2. 编译安装Qt-4.8.6</a></li>
+<li><a href="#安装qt-creator-2.6.1">3. 安装qt-creator-2.6.1</a></li>
+<li><a href="#qt与opencv强强联合的牛刀小试">4. Qt与OpenCV强强联合的牛刀小试</a></li>
+</ul>
+</div>
+<!---title:搭建Qt界面的OpenCV开发环境-->
+<!---keywords:OpenCV,Qt,gcc-->
+<!---date:2014-11-22-->
+<p>OpenCV包含了大量的机器视觉处理算法，虽然也提供了highgui的界面功能，但实在有限（也就是一个窗口，加一些使用像素进行绘图的方法），与用户交互相关的功能极少（比如有Trackbar），貌似连个可视化的用户接口的button也没见过，而Qt正好能弥补OpenCV在这些方面的不足：通过OpenCV完成底层算法，用Qt完成上层的应用接口，哇咔，这不是完美组合么！本文原来的初衷是想通过Qt开发来实战练练C++，现在看来是要Qt与OpenCV一起搞了。这篇文章就是安装Qt及在Qt中配置OpenCV的开发环境。</p>
+<p>安装Qt存在的一个普遍的问题是：低版本的gcc可能无法编译高版本的Qt。我参照了<a href="http://www.cnblogs.com/lit10050528/p/3936589.html">博客园中的一篇博客</a> ，搭配使用Qt4.8.6+QtCreator2.6.1+gcc4.9.2，这些软件的下载链接依次是：</p>
+<ol style="list-style-type: decimal">
+<li>qt-everywhere-opensource-src-4.8.6.tar.gz: <a href="http://download.qt-project.org/official_releases/qt/4.8/4.8.6/" class="uri">http://download.qt-project.org/official_releases/qt/4.8/4.8.6/</a></li>
+<li>qt-creator-linux-x86_64-opensource-2.6.1.bin: <a href="http://download.qt-project.org/official_releases/qtcreator/2.6/2.6.1/" class="uri">http://download.qt-project.org/official_releases/qtcreator/2.6/2.6.1/</a></li>
+<li>gcc-4.9.2: <a href="http://mirror.bjtu.edu.cn/gnu/gcc/" class="uri">http://mirror.bjtu.edu.cn/gnu/gcc/</a></li>
+</ol>
+<p>根据自己的机器环境选择下载，我的环境是：CentOS 6.5 64bit。qt-creator仅仅是Qt开发啊的IDE环境，qt是指包含相关程序的开发库，两者是不同的。在使用Qt开发的过程中完全可以通过vi+命令行的方式搞定，一开始为了能更深入一些，我也是这样做的。但在之后的实际开发中，由于qt-creator提供语法高亮，快速定位源码等很好用的功能，推荐直接使用qt-creator这个集成开发环境。上面gcc链接的镜像是来自北交大，也可以自己选择镜像下载（我用的是学校的ftp）。</p>
+<h2 id="更新gcc到4.9.2">1. 更新gcc到4.9.2</h2>
+<p>进入gcc解压包所在目录，</p>
+<pre class="shell"><code>mkdir gccout                       &quot; 新建一个目录用于保存编译gcc生成的文件
+cd gccout                          &quot; 在gccout目录中运行所有命令
+../contrib/download_prerequisites  &quot; 安装一些依赖项
+../configure --prefix=/usr/local --mandir=/usr/local/share/man --enable-checking=release --enable-languages=c,c++,java --enalbe-java-awk=gtk --disable-multilib
+make -j4                           &quot; 编译，大约半个多小时吧，看机器性能了
+make install                       &quot; 安装，很快，几十秒</code></pre>
+<p>按上面的--prefix配置，gcc4.9.2会安装到<code>/usr/local</code>目录下，系统原来会有旧版本的gcc（要安装新版gcc必须要求系统中已经含有gcc，这样才能编译gcc源码），因此还要更新gcc到刚安装的4.9.2，则</p>
+<pre class="shell"><code>su root                            &quot; 切换到root
+cd /usr/bin/
+mv gcc gcc477                      &quot; 将旧版本的gcc软链接重命名，还可以通过gcc477使用旧版gcc
+mv g++ g++477                      &quot; 将旧版本的g++软链接重命名，还可以通过g++477使用旧版g++
+ln -s /usr/local/bin/gcc gcc       &quot; 将gcc链接为gcc4.9.2
+ln -s /usr/local/bin/g++ g++</code></pre>
+<h2 id="编译安装qt-4.8.6">2. 编译安装Qt-4.8.6</h2>
+<p>解压缩之后，进入Qt目录，</p>
+<pre class="shell"><code>./configure
+make                                     &quot; 编译时间很长，2个多小时吧
+make install</code></pre>
+<p>我第一次编译中途遇到一个error，提示没有gstream，我使用yum直接就更新了，</p>
+<pre class="shell"><code>yum install gstream*</code></pre>
+<p>再接着<code>make</code>就成功了。接着要使用Qt还要配置Qt所在的路径（即环境变量），</p>
+<pre class="shell"><code>cd /etc/profile.d/      &quot; 这个目录中各种环境变量
+vi qt4.sh               &quot; 新建一个环境变量配置文件</code></pre>
+<p>在<code>qt4.sh</code>中添加如下的信息，当然，Qt默认安装目录是在<code>/usr/local/Trolltech/Qt-4.8.6</code>，我没有改（改过的修改<code>QTDIR</code>变量就好了），</p>
+<pre><code>export QTDIR=/usr/local/Trolltech/Qt-4.8.6
+export PATH=$QTDIR/bin:$PATH
+export MANPATH=$QTDIR/man:$MANPAT
+export LD_LIBRARY_PATH=$QTDIR/lib:$LD_LIBRARY_PATH</code></pre>
+<p>最后通过<code>source /etc/profile</code>使配置的环境变量生效就OK了。</p>
+<h2 id="安装qt-creator-2.6.1">3. 安装qt-creator-2.6.1</h2>
+<p>因为下载的qtcreator是bin格式文件，因此直接在shell中运行，</p>
+<pre class="shell"><code>./qt-creator-linux-x86_64-opensource-2.6.1.bin</code></pre>
+<p>安装过程同Windows下一样，提示安装目录，我保留默认的<code>opt/qtcreator</code>。安装好后在CentOS的启动栏菜单中就能看Qt-creator了。但要让qt-creator配合Qt4.8.6使用，则还要再qt-creator中进行一些配置，执行qt-creator菜单栏<code>Tools-&gt;Option...</code>，配置如下图：</p>
+<div class="figure">
+<img src="../images/搭建Qt界面的OpenCV开发环境/在qt-creator中配置Qt路径.png" alt="在qt-creator中配置Qt路径" /><p class="caption">在qt-creator中配置Qt路径</p>
+</div>
+<div class="figure">
+<img src="../images/搭建Qt界面的OpenCV开发环境/配置用于编译的gcc.png" alt="配置用于编译的gcc" /><p class="caption">配置用于编译的gcc</p>
+</div>
+<p>这时就可以使用qt-creator新建Qt工程了。然而，我们下面的例子却不打算这么做。除非你是高手，否则我们应该使用命令行而非qt-creator来进行工程规划，qt-creator仅仅是为那些为了赶时间的设计师准备的！</p>
+<h2 id="qt与opencv强强联合的牛刀小试">4. Qt与OpenCV强强联合的牛刀小试</h2>
+<p>这时我们可以写个小程序小小体验一把了，我们来写个程序实现：通过Qt弹出文件选择对话框，然后用OpenCV中的imread函数读取图片，最后通过Qt界面将图片显示出来。</p>
+<p>其中的困难点在于Qt的图片数据类型QImage格式与OpenCV的Mat格式不一致，因此要实现转换，这通过下面的函数实现Mat到QImage的转换，打开文件对话框和显示图片的代码都在main函数中，下面是源代码：</p>
+<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="co">/*</span>
+<span class="co"> * FileName : main.cpp</span>
+<span class="co"> * Author   : xiahouzuoxin @163.com</span>
+<span class="co"> * Version  : v1.0</span>
+<span class="co"> * Date     : Sun 23 Nov 2014 04:29:47 PM CST</span>
+<span class="co"> * Brief    : </span>
+<span class="co"> * </span>
+<span class="co"> * Copyright (C) MICL,USTB</span>
+<span class="co"> */</span>
+<span class="ot">#include &lt;QApplication&gt;</span>
+<span class="ot">#include &lt;QWidget&gt;</span>
+<span class="ot">#include &lt;QImage&gt;</span>
+<span class="ot">#include &lt;QLabel&gt;</span>
+<span class="ot">#include &lt;QPushButton&gt;</span>
+<span class="ot">#include &lt;QHBoxLayout&gt;</span>
+<span class="ot">#include &lt;QVBoxLayout&gt;</span>
+<span class="ot">#include &lt;QFileDialog&gt;</span>
+
+<span class="ot">#include &lt;cv.h&gt;</span>
+<span class="ot">#include &lt;highgui.h&gt;</span>
+
+<span class="kw">using</span> <span class="kw">namespace</span> cv;
+
+<span class="dt">static</span> <span class="ot">QImage</span> Mat2QImage(Mat&amp; image)
+{
+    <span class="ot">QImage</span> img;
+
+    <span class="kw">if</span> (image.channels()==<span class="dv">3</span>) {
+        cvtColor(image, image, CV_BGR2RGB);
+        img = <span class="ot">QImage</span>((<span class="dt">const</span> <span class="dt">unsigned</span> <span class="dt">char</span> *)(image.data), image.cols, image.rows,
+                image.cols*image.channels(), <span class="ot">QImage::</span>Format_RGB888);
+    } <span class="kw">else</span> <span class="kw">if</span> (image.channels()==<span class="dv">1</span>) {
+        img = <span class="ot">QImage</span>((<span class="dt">const</span> <span class="dt">unsigned</span> <span class="dt">char</span> *)(image.data), image.cols, image.rows,
+                image.cols*image.channels(), <span class="ot">QImage::</span>Format_ARGB32);
+    } <span class="kw">else</span> {
+        img = <span class="ot">QImage</span>((<span class="dt">const</span> <span class="dt">unsigned</span> <span class="dt">char</span> *)(image.data), image.cols, image.rows,
+                image.cols*image.channels(), <span class="ot">QImage::</span>Format_RGB888);
+    }
+
+    <span class="kw">return</span> img;
+}
+
+<span class="dt">int</span> main(<span class="dt">int</span> argc, <span class="dt">char</span> *argv[])
+{
+    <span class="ot">QApplication</span> app(argc, argv);
+
+    <span class="ot">QWidget</span> *wn = <span class="kw">new</span> <span class="ot">QWidget</span>;
+    wn-&gt;setWindowTitle(<span class="st">&quot;disp image&quot;</span>);
+
+    <span class="ot">QString</span> filename = <span class="ot">QFileDialog::</span>getOpenFileName(<span class="dv">0</span>, <span class="st">&quot;Open File&quot;</span>, <span class="st">&quot;&quot;</span>, <span class="st">&quot;*.jpg *.png *.bmp&quot;</span>, <span class="dv">0</span>);
+    <span class="kw">if</span> (filename.isNull()) {
+        <span class="kw">return</span> <span class="dv">-1</span>;
+    }
+
+    Mat image = imread(filename.toAscii().data(), <span class="dv">1</span>);
+    <span class="ot">QImage</span> img = Mat2QImage(image); 
+
+    <span class="ot">QLabel</span> *label = <span class="kw">new</span> <span class="ot">QLabel</span>(<span class="st">&quot;&quot;</span>, <span class="dv">0</span>);
+    label-&gt;setPixmap(<span class="ot">QPixmap::</span>fromImage(img));
+
+    <span class="ot">QPushButton</span> *bnt = <span class="kw">new</span> <span class="ot">QPushButton</span>(<span class="st">&quot;Quit&quot;</span>);
+    <span class="ot">QObject::</span>connect(bnt, <span class="kw">SIGNAL</span>(clicked()), &amp;app, <span class="kw">SLOT</span>(quit()));
+
+    <span class="ot">QVBoxLayout</span> *layout = <span class="kw">new</span> <span class="ot">QVBoxLayout</span>;
+    layout-&gt;addWidget(label);
+    layout-&gt;addWidget(bnt);
+    wn-&gt;setLayout(layout);
+
+    wn-&gt;show();
+
+    <span class="kw">return</span> app.exec();
+}</code></pre>
+<p>关键是上面的代码直接在Qt中能编译吗？肯定不行，用脚趾头想想就知道，Qt怎么能找到<code>cv.h</code>这些头文件呢，又怎么能找到<code>imread</code>这些OpenCV中的函数呢！</p>
+<p>因此我们要在Qt中使用OpenCV，我们必需要将OpenCV头文件的路径和<code>imread</code>函数的库和库路径告知Qt，如果你一直像我一样使用的是Makefile来编译OpenCV工程，那将OpenCV集成到Qt中的那真是小菜一碟了。我们先用<code>qmake -project</code>命令生成<code>pro</code>文件，<a href="http://qt-project.org/doc/qt-4.8/qmake-project-files.html"><code>.pro</code>文件</a>在Qt工程中起重要作用。要在Qt中使用OpenCV，我们只要修改<code>pro</code>文件就好了，</p>
+<div class="figure">
+<img src="../images/搭建Qt界面的OpenCV开发环境/opencv嵌入到Qt中.png" alt="opencv嵌入到Qt中" /><p class="caption">opencv嵌入到Qt中</p>
+</div>
+<p>从上图知，我们在<code>pro</code>文件的<code>INCLUDEPATH</code>变量中添加了OpenCV头文件所在路径，在<code>LIBS</code>变量中添加了库所在路径及所使用的库（-L指定库路径，-llib指定程序中用到的lib库）。修改完<code>pro</code>文件保存后，这个时候再使用<code>qmake</code>命令编译，就可以生成Makefile文件，执行<code>make</code>就得到可执行文件了。我们不妨看看执行显示图片的结果。</p>
+<div class="figure">
+<img src="../images/搭建Qt界面的OpenCV开发环境/使用Qt中的label显示lyc美图.png" alt="使用Qt中的label显示lyc美图" /><p class="caption">使用Qt中的label显示lyc美图</p>
+</div>
+<p>整理一下上面编译Qt程序依次用到的命令（其实就3个），</p>
+<pre class="shell"><code>qmake -project         &quot; 生成pro文件，修改后执行下面的命令
+qmake                  &quot; 生成Makefile文件
+make                   &quot; gcc编译生成目标可执行文件，可执行文件名默认为当前目录名</code></pre>
+<p>这个例子的<a href="../enclosure/搭建Qt界面的OpenCV开发环境/disp_img.zip">cpp源码及pro文件下载</a>。</p>
+<div class="ds-thread" data-thread-key="搭建Qt界面的OpenCV开发环境" data-title="搭建Qt界面的OpenCV开发环境" data-url="xiahouzuoxin.github.io/notes/html/搭建Qt界面的OpenCV开发环境.html"></div>
+<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"slide":{"type":"slide","bdImg":"5","bdPos":"right","bdTop":"300"},"image":{"viewList":["qzone","tsina","tqq","renren","weixin"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["qzone","tsina","tqq","renren","weixin"]}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"xiahouzuoxin"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- 多说公共JS代码 end -->
+
+<div id="footer">
+    <p class="footer_subline">联系邮箱: xiahouzuoxin@163.com</p>
+    <p class="footer_subline">声明: 本站所有文章如非特别说明均为原创，转载请注明出处！</p>
+</div>
+
+<!-- 回到顶部 -->
+<script>
+lastScrollY=0;
+function heartBeat(){
+var diffY;
+if (document.documentElement && document.documentElement.scrollTop)
+    diffY = document.documentElement.scrollTop;
+else if (document.body)
+    diffY = document.body.scrollTop
+else
+    {/*Netscape stuff*/}
+percent=.1*(diffY-lastScrollY);
+if(percent>0)percent=Math.ceil(percent);
+else percent=Math.floor(percent);
+document.getElementById("full").style.top=parseInt(document.getElementById("full").style.top)+percent+"px";
+lastScrollY=lastScrollY+percent;
+}
+suspendcode="<div id=\"full\" style='right:1px;POSITION:absolute;TOP:600px;z-index:100'><a onclick='window.scrollTo(0,0);'><img src='../images/top.png'></a><br></div>"
+document.write(suspendcode);
+window.setInterval("heartBeat()",1);
+</script>
+</body>
+</html>
