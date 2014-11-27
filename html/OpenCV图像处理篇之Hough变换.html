@@ -1,0 +1,319 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
+  </style>
+  <link rel="stylesheet" href="../stylesheets/Github.css" type="text/css" />
+  <title>OpenCV图像处理篇之Hough变换</title>
+</head>
+<body>
+<div id="header"><center>
+    <p class="header_titleline">
+    <a href="../index.html" target="_self" title="主页">主页  </a><a href="../Search.html" target="_self" title="站内搜索">站内搜索  </a><a href="../Projects.html" target="_self" title="项目研究">项目研究  </a><a href="../Archives.html" target="_self" title="文章存档">文章存档  </a><a href="../README.html" target="_self" title="分类目录">分类目录 </a><a href="../AboutMe.html" target="_self" title="关于我">关于我  </a>
+    </p>
+</center></div>
+<h1>OpenCV图像处理篇之Hough变换</h1>
+<h4>Tags: OpenCV</h4>
+转载请注明出处: <a href="http://xiahouzuoxin.github.io/notes/">http://xiahouzuoxin.github.io/notes/</a>
+<div id="TOC">
+<ul>
+<li><a href="#图像空间到参数空间的转换">图像空间到参数空间的转换</a></li>
+<li><a href="#opencv中的hough变换">OpenCV中的Hough变换</a></li>
+<li><a href="#hough变换源码分析">Hough变换源码分析</a></li>
+</ul>
+</div>
+<!---title:OpenCV图像处理篇之Hough变换-->
+<!---keywords:OpenCV-->
+<!---dkte:2014-11-20-->
+<h2 id="图像空间到参数空间的转换">图像空间到参数空间的转换</h2>
+<p>对于图像中共线的点集{(x0,y0), (x1,y1), ...}都经过直线y=kx+b，先在我们换一个说法，“斜率为k，截距为b的直线y=kx+b包含了所有在该直线上的点”。一种强调的是图像中的点集，另一种强调的是直线的参数k和b，通过直线的点集去描述这条直线明显没有直接通过k,b两个参数去描述那样直接方便。而Hough变换就是将我们“点共线”的思维转化到参数空间{k,b}进行描述，图像空间中所有经过y=kx+b的点经过Hough变换后在参数空间都会相交于点(k,b)，这样，通过Hough变换，就可以将图像空间中直线的检测转化为参数空间中对点的检测。我们不妨将y=kx+b进行一下变形：</p>
+<p><img src="http://www.forkosh.com/mathtex.cgi? b=-kx+y"></p>
+<p>这就是Hough变换将图像空间坐标(x,y)转化为参数空间(k,b)的Hough变换式。</p>
+<p>Hough变换的步骤（执行过程）：</p>
+<ol style="list-style-type: decimal">
+<li><p>在参数空间中建立一个二维（分别对应k,b）计数器，实际就是二维数组kbcnt，k维度为图像中直线斜率可能范围，b维度为图像中截距可能范围；数组中所有值都初始化为0；</p></li>
+<li><p>扫描图像空间中的所有点(xi,yi)，Hough变换式进行图像空间到参数空间的变换(ki,bi)，计数kbcnt(ki,bi)++</p></li>
+<li><p>设定阈值thr（图像中有多少个点共线才认为存在直线），kbcnt(ki,bi)&gt;thr的ki,bi组成图像中的直线y=ki*x+bi</p></li>
+</ol>
+<p>然而，上面的检测直线的方案貌似还有些问题：如果图像中存在竖直的直线呢，那kbcnt的k维度岂不是要无穷大！因此，才有了另一种参数空间的方案：利用极坐标参数而非“斜率-截距式”描述直线。</p>
+<div class="figure">
+<img src="../images/OpenCV图像处理篇之Hough变换/极坐标表示直线.jpg" alt="极坐标中的直线表示" /><p class="caption">极坐标中的直线表示</p>
+</div>
+<p>极坐标中的直线方程为</p>
+<p><img src="http://www.forkosh.com/mathtex.cgi? y=-\frac{cos(\theta)}{sin(\theta)}x+\frac{r}{sin(\theta)}"></p>
+<p>将其改写成Hough变换式，即自变量(x,y)到参数变量(r,<span class="math"><em>t</em><em>h</em><em>e</em><em>t</em><em>a</em></span>)的映射：</p>
+<p><img src="http://www.forkosh.com/mathtex.cgi? r=x\cos{\theta}+y\sin{\theta}"></p>
+<p>使用极坐标参数空间，Hough变换的步骤不变，只不过将kbcnt替换成rthcnt，r范围是图像对角线的长度，th范围是0~2*pi。因为图像是离散的，所以r和th都有一个步进值dr和dth。</p>
+<p>Hough变换除了检测直线，还可用来检测任何能用数学表达式表示的形状，如最常见的圆、椭圆，基本原理都是将图像空间的像素转变到参数空间，然后在参数空间中对共线/圆/椭圆的点进行统计，最后通过阈值判决是否是符合要求的形状。</p>
+<p><a href="http://en.wikipedia.org/wiki/Hough_transform" class="uri">http://en.wikipedia.org/wiki/Hough_transform</a> 上对Hough变换的内容有更多的描述。</p>
+<h2 id="opencv中的hough变换">OpenCV中的Hough变换</h2>
+<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="co">/*</span>
+<span class="co"> * FileName : hough.cpp</span>
+<span class="co"> * Author   : xiahouzuoxin @163.com</span>
+<span class="co"> * Version  : v1.0</span>
+<span class="co"> * Date     : Wed 26 Nov 2014 09:52:45 PM CST</span>
+<span class="co"> * Brief    : </span>
+<span class="co"> * </span>
+<span class="co"> * Copyright (C) MICL,USTB</span>
+<span class="co"> */</span>
+<span class="ot">#include &quot;cv.h&quot; </span>
+<span class="ot">#include &quot;highgui.h&quot;</span>
+<span class="ot">#include &quot;opencv2/imgproc/imgproc.hpp&quot;</span>
+
+<span class="kw">using</span> <span class="kw">namespace</span> cv;
+<span class="kw">using</span> <span class="kw">namespace</span> std;
+
+<span class="dt">int</span> main(<span class="dt">int</span> argc, <span class="dt">char</span> *argv[])
+{
+    <span class="kw">if</span> (argc &lt; <span class="dv">2</span>) {
+        cout&lt;&lt;<span class="st">&quot;Usage: ./hough [image file name]&quot;</span>&lt;&lt;endl;
+        <span class="kw">return</span> <span class="dv">-1</span>;
+    }
+
+    Mat src = imread(argv[<span class="dv">1</span>], CV_LOAD_IMAGE_COLOR);
+    <span class="kw">if</span> (!src.data) {
+        cout&lt;&lt;<span class="st">&quot;Read image error&quot;</span>&lt;&lt;endl;
+        <span class="kw">return</span> <span class="dv">-1</span>;
+    }
+    namedWindow(<span class="st">&quot;Source&quot;</span>, CV_WINDOW_AUTOSIZE);
+    imshow(<span class="st">&quot;Source&quot;</span>, src);
+
+    Mat img;
+    cvtColor(src, img, CV_RGB2GRAY); 
+    GaussianBlur(img, img, Size(<span class="dv">3</span>,<span class="dv">3</span>), <span class="dv">0</span>, <span class="dv">0</span>);
+    Canny(img, img, <span class="dv">100</span>, <span class="dv">200</span>, <span class="dv">3</span>);
+    namedWindow(<span class="st">&quot;Canny&quot;</span>, CV_WINDOW_AUTOSIZE);
+    imshow(<span class="st">&quot;Canny&quot;</span>, img);
+
+    vector&lt;Vec2f&gt; lines;
+    HoughLines(img, lines, <span class="dv">1</span>, CV_PI/<span class="dv">360</span>, <span class="dv">200</span>);  <span class="co">// 返回直线坐标对</span>
+    <span class="kw">for</span> (size_t i=<span class="dv">0</span>; i&lt;lines.size(); i++) {
+        <span class="dt">float</span> rho = lines[i][<span class="dv">0</span>]; 
+        <span class="dt">float</span> theta = lines[i][<span class="dv">1</span>];
+        Point pt1,pt2;
+        <span class="dt">double</span> a=cos(theta);
+        <span class="dt">double</span> b=sin(theta);
+        <span class="dt">double</span> x0 = rho*a;
+        <span class="dt">double</span> y0 = rho*b;
+        pt1.x = cvRound(x0<span class="dv">+1000</span>*(-b));
+        pt1.y = cvRound(y0<span class="dv">+1000</span>*a);
+        pt2.x = cvRound(x0<span class="dv">-1000</span>*(-b));
+        pt2.y = cvRound(y0<span class="dv">-1000</span>*a);
+        line(src, pt1, pt2, Scalar(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">255</span>), <span class="dv">3</span>, CV_AA);
+    } 
+    namedWindow(<span class="st">&quot;Hough&quot;</span>, CV_WINDOW_AUTOSIZE);
+    imshow(<span class="st">&quot;Hough&quot;</span>, src);
+
+    waitKey();
+
+    <span class="kw">return</span> <span class="dv">0</span>;
+}</code></pre>
+<p>在做Hough变换之前，一般都要先使用LOG或Canny先检测边缘，再对边缘图像进行Hough变换操作，上面程序使用Canny算子检测边缘，Canny算子<code>Canny(img, img, 100, 200, 3);</code>的两个阈值100,100选择很重要，间接影响Hough检测的结果，同时<code>HoughLines</code>中的阈值参数也应该细调。用上面程序对道路直线进行检测结果如下，</p>
+<div class="figure">
+<img src="../images/OpenCV图像处理篇之Hough变换/Road1.png" alt="道路图片1" /><p class="caption">道路图片1</p>
+</div>
+<div class="figure">
+<img src="../images/OpenCV图像处理篇之Hough变换/Canny1.png" alt="Canny算子边缘检测结果" /><p class="caption">Canny算子边缘检测结果</p>
+</div>
+<div class="figure">
+<img src="../images/OpenCV图像处理篇之Hough变换/Hough1.png" alt="Hough直线检测结果" /><p class="caption">Hough直线检测结果</p>
+</div>
+<div class="figure">
+<img src="../images/OpenCV图像处理篇之Hough变换/Road2.png" alt="道路图片2" /><p class="caption">道路图片2</p>
+</div>
+<div class="figure">
+<img src="../images/OpenCV图像处理篇之Hough变换/Canny2.png" alt="Canny算子边缘检测结果" /><p class="caption">Canny算子边缘检测结果</p>
+</div>
+<div class="figure">
+<img src="../images/OpenCV图像处理篇之Hough变换/Hough2.png" alt="Hough直线检测结果" /><p class="caption">Hough直线检测结果</p>
+</div>
+<h2 id="hough变换源码分析">Hough变换源码分析</h2>
+<p>Hough变换的源代码在<code>modules/imgproc/src/hough.cpp</code>中，提供了3种Hough变换源码：直线检测、概率Hough变换检测直线、圆检测，如果要实现其它有解析方程的图形的检测，则要自己动手写了。</p>
+<div class="figure">
+<img src="../images/OpenCV图像处理篇之Hough变换/HoughFunctionCall.jpg" alt="Hough变换调用接口函数解释" /><p class="caption">Hough变换调用接口函数解释</p>
+</div>
+<p>先看Hough检测直线的代码，<code>cvHoughLines2</code>也只不过是个对不同Hough方法的封装，下面是该函数中的部分代码，选择不同的Hough变换方法，</p>
+<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="kw">switch</span>( method )
+{
+<span class="kw">case</span> CV_HOUGH_STANDARD:
+      icvHoughLinesStandard( img, (<span class="dt">float</span>)rho,
+            (<span class="dt">float</span>)theta, threshold, lines, linesMax );      <span class="co">// 标准Hough变换</span>
+      <span class="kw">break</span>;
+<span class="kw">case</span> CV_HOUGH_MULTI_SCALE:
+      icvHoughLinesSDiv( img, (<span class="dt">float</span>)rho, (<span class="dt">float</span>)theta,
+            threshold, iparam1, iparam2, lines, linesMax );  <span class="co">// 多尺度Hough变换</span>
+      <span class="kw">break</span>;
+<span class="kw">case</span> CV_HOUGH_PROBABILISTIC:
+      icvHoughLinesProbabalistic( img, (<span class="dt">float</span>)rho, (<span class="dt">float</span>)theta,
+            threshold, iparam1, iparam2, lines, linesMax );  <span class="co">// 概率Hough变换</span>
+      <span class="kw">break</span>;
+<span class="kw">default</span>:
+    CV_Error( CV_StsBadArg, <span class="st">&quot;Unrecognized method id&quot;</span> );
+}</code></pre>
+<p>不妨详细看看标准Hough变换的实现代码，</p>
+<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="co">/* 这段注释解释了函数各个参数的作用</span>
+<span class="co">Here image is an input raster;</span>
+<span class="co">step is it&#39;s step; size characterizes it&#39;s ROI;</span>
+<span class="co">rho and theta are discretization steps (in pixels and radians correspondingly).</span>
+<span class="co">threshold is the minimum number of pixels in the feature for it</span>
+<span class="co">to be a candidate for line. lines is the output</span>
+<span class="co">array of (rho, theta) pairs. linesMax is the buffer size (number of pairs).</span>
+<span class="co">Functions return the actual number of found lines.</span>
+<span class="co">*/</span>
+<span class="dt">static</span> <span class="dt">void</span>
+icvHoughLinesStandard( <span class="dt">const</span> CvMat* img, <span class="dt">float</span> rho, <span class="dt">float</span> theta,
+                       <span class="dt">int</span> threshold, CvSeq *lines, <span class="dt">int</span> linesMax )
+{
+    cv::AutoBuffer&lt;<span class="dt">int</span>&gt; _accum, _sort_buf;    <span class="co">// _accum：计数用数组，_sort_buf，排序用数组</span>
+    cv::AutoBuffer&lt;<span class="dt">float</span>&gt; _tabSin, _tabCos;   <span class="co">// 提前计算sin与cos值，避免重复计算带来的计算性能下降</span>
+
+    <span class="dt">const</span> <span class="dt">uchar</span>* image;
+    <span class="dt">int</span> step, width, height;
+    <span class="dt">int</span> numangle, numrho;
+    <span class="dt">int</span> total = <span class="dv">0</span>;
+    <span class="dt">float</span> ang;
+    <span class="dt">int</span> r, n;
+    <span class="dt">int</span> i, j;
+    <span class="dt">float</span> irho = <span class="dv">1</span> / rho;   <span class="co">// rho指像素精度，常取1，因此irho常为1</span>
+    <span class="dt">double</span> scale;
+
+    CV_Assert( CV_IS_MAT(img) &amp;&amp; CV_MAT_TYPE(img-&gt;type) == CV_8UC1 );
+
+    image = img-&gt;data.ptr;
+    step = img-&gt;step;
+    width = img-&gt;cols;
+    height = img-&gt;rows;
+
+    numangle = cvRound(CV_PI / theta);  <span class="co">// 根据th精度计算th维度的长度</span>
+    numrho = cvRound(((width + height) * <span class="dv">2</span> + <span class="dv">1</span>) / rho);  <span class="co">// 根据r精度计算r维度的长度</span>
+
+    _accum.allocate((numangle<span class="dv">+2</span>) * (numrho<span class="dv">+2</span>));
+    _sort_buf.allocate(numangle * numrho);
+    _tabSin.allocate(numangle);
+    _tabCos.allocate(numangle);
+    <span class="dt">int</span> *accum = _accum, *sort_buf = _sort_buf;
+    <span class="dt">float</span> *tabSin = _tabSin, *tabCos = _tabCos;
+    
+    memset( accum, <span class="dv">0</span>, <span class="kw">sizeof</span>(accum[<span class="dv">0</span>]) * (numangle<span class="dv">+2</span>) * (numrho<span class="dv">+2</span>) );
+
+    <span class="kw">for</span>( ang = <span class="dv">0</span>, n = <span class="dv">0</span>; n &lt; numangle; ang += theta, n++ )   <span class="co">// 计算三角函数表，避免重复计算</span>
+    {
+        tabSin[n] = (<span class="dt">float</span>)(sin(ang) * irho);
+        tabCos[n] = (<span class="dt">float</span>)(cos(ang) * irho);
+    }
+
+    <span class="co">// stage 1. fill accumulator </span>
+    <span class="kw">for</span>( i = <span class="dv">0</span>; i &lt; height; i++ )
+        <span class="kw">for</span>( j = <span class="dv">0</span>; j &lt; width; j++ )
+        {
+            <span class="kw">if</span>( image[i * step + j] != <span class="dv">0</span> )
+                <span class="kw">for</span>( n = <span class="dv">0</span>; n &lt; numangle; n++ )
+                {
+                    r = cvRound( j * tabCos[n] + i * tabSin[n] );  <span class="co">// Hough极坐标变换式</span>
+                    r += (numrho - <span class="dv">1</span>) / <span class="dv">2</span>;
+                    accum[(n<span class="dv">+1</span>) * (numrho<span class="dv">+2</span>) + r<span class="dv">+1</span>]++;  <span class="co">// 计数器统计</span>
+                }
+        }
+
+    <span class="co">// stage 2. find local maximums</span>
+    <span class="kw">for</span>( r = <span class="dv">0</span>; r &lt; numrho; r++ )
+        <span class="kw">for</span>( n = <span class="dv">0</span>; n &lt; numangle; n++ )
+        {
+            <span class="dt">int</span> base = (n<span class="dv">+1</span>) * (numrho<span class="dv">+2</span>) + r<span class="dv">+1</span>;
+            <span class="kw">if</span>( accum[base] &gt; threshold &amp;&amp;             <span class="co">// 大于阈值，且是局部极大值</span>
+                accum[base] &gt; accum[base - <span class="dv">1</span>] &amp;&amp; accum[base] &gt;= accum[base + <span class="dv">1</span>] &amp;&amp;
+                accum[base] &gt; accum[base - numrho - <span class="dv">2</span>] &amp;&amp; accum[base] &gt;= accum[base + numrho + <span class="dv">2</span>] )
+                sort_buf[total++] = base;
+        }
+
+    <span class="co">// stage 3. sort the detected lines by accumulator value</span>
+    icvHoughSortDescent32s( sort_buf, total, accum );
+
+    <span class="co">// stage 4. store the first min(total,linesMax) lines to the output buffer</span>
+    linesMax = MIN(linesMax, total);  <span class="co">// linesMax是输入参数，表示最多输出多少个直线参数</span>
+    scale = <span class="fl">1.</span>/(numrho<span class="dv">+2</span>);
+    <span class="kw">for</span>( i = <span class="dv">0</span>; i &lt; linesMax; i++ )
+    {
+        CvLinePolar line;           <span class="co">// 输出结构，就是(r,theta)</span>
+        <span class="dt">int</span> idx = sort_buf[i];
+        <span class="dt">int</span> n = cvFloor(idx*scale) - <span class="dv">1</span>;
+        <span class="dt">int</span> r = idx - (n<span class="dv">+1</span>)*(numrho<span class="dv">+2</span>) - <span class="dv">1</span>;
+        line.rho = (r - (numrho - <span class="dv">1</span>)*<span class="fl">0.</span><span class="er">5f</span>) * rho;
+        line.angle = n * theta;
+        cvSeqPush( lines, &amp;line );  <span class="co">// 确定的直线入队列输出</span>
+    }
+}</code></pre>
+<p>Hough.cpp中对输出结构的定义为：</p>
+<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="kw">typedef</span> <span class="kw">struct</span> CvLinePolar
+{
+    <span class="dt">float</span> rho;           
+    <span class="dt">float</span> angle;         
+} CvLinePolar;</code></pre>
+<p>其它的Hough变换采用类似的方式逐层可以分析其源码，不妨自己试试？</p>
+<div class="ds-thread" data-thread-key="OpenCV图像处理篇之Hough变换" data-title="OpenCV图像处理篇之Hough变换" data-url="xiahouzuoxin.github.io/notes/html/OpenCV图像处理篇之Hough变换.html"></div>
+<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"slide":{"type":"slide","bdImg":"5","bdPos":"right","bdTop":"300"},"image":{"viewList":["qzone","tsina","tqq","renren","weixin"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["qzone","tsina","tqq","renren","weixin"]}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"xiahouzuoxin"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- 多说公共JS代码 end -->
+
+<div id="footer">
+    <p class="footer_subline">联系邮箱: xiahouzuoxin@163.com</p>
+    <p class="footer_subline">声明: 本站所有文章如非特别说明均为原创，转载请注明出处！</p>
+</div>
+
+<!-- 回到顶部 -->
+<script>
+lastScrollY=0;
+function heartBeat(){
+var diffY;
+if (document.documentElement && document.documentElement.scrollTop)
+    diffY = document.documentElement.scrollTop;
+else if (document.body)
+    diffY = document.body.scrollTop
+else
+    {/*Netscape stuff*/}
+percent=.1*(diffY-lastScrollY);
+if(percent>0)percent=Math.ceil(percent);
+else percent=Math.floor(percent);
+document.getElementById("full").style.top=parseInt(document.getElementById("full").style.top)+percent+"px";
+lastScrollY=lastScrollY+percent;
+}
+suspendcode="<div id=\"full\" style='right:1px;POSITION:absolute;TOP:600px;z-index:100'><a onclick='window.scrollTo(0,0);'><img src='../images/top.png'></a><br></div>"
+document.write(suspendcode);
+window.setInterval("heartBeat()",1);
+</script>
+</body>
+</html>

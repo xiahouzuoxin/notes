@@ -8,6 +8,7 @@
 - 2014-11-14 [基于谱减法的声音去噪](html/基于谱减法的声音去噪.html)
 - 2014-11-16 [OpenCV图像处理篇之边缘检测算子](html/OpenCV图像处理篇之边缘检测算子.html)
 - 2014-11-23 [搭建Qt界面的OpenCV开发环境](html/搭建Qt界面的OpenCV开发环境.html)
+- 2014-11-27 [OpenCV图像处理篇之Hough变换](html/OpenCV图像处理篇之Hough变换.html)
 
 # 2014-10
 

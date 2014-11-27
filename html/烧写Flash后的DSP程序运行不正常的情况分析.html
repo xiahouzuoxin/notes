@@ -46,6 +46,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <li><a href="#请尽量避免使用math.h中的三角及log等函数">请尽量避免使用math.h中的三角及log等函数</a></li>
 <li><a href="#请检查程序的逻辑">请检查程序的逻辑</a></li>
 <li><a href="#请特别关照一下程序中的除法运算">请特别关照一下程序中的除法运算</a></li>
+<li><a href="#隐藏强制类型转换可能导致的错误">隐藏强制类型转换可能导致的错误</a></li>
 </ul>
 </div>
 <!---title:烧写Flash后的DSP程序运行不正常的情况分析-->
@@ -59,7 +60,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <p>那天，我开始思考：是什么情况导致RAM中跑得很Happy的程序烧写到Flash就运行得如此的不堪——众多的囧相。</p>
 <p>“且行且珍惜”，珍惜这些次发现Bug的机会，因此，我要总结：在RAM中能正常运行，而烧写到Flash后无法正常运行的一些情况讨论。</p>
 <h2 id="请检查中断向量表">请检查中断向量表</h2>
-<p>中断向量表包含了所有中断的入口，在烧写Flash的时候，有两种方式可以保证中断能正常工作。具体可参见<a href="./TMS320C6713烧写Flash的通用方法.md">TMS320C6713烧写Flash的通用方法</a>的第5小节。</p>
+<p>中断向量表包含了所有中断的入口，在烧写Flash的时候，有两种方式可以保证中断能正常工作。具体可参见<a href="../html/TMS320C6713烧写Flash的通用方法.html">TMS320C6713烧写Flash的通用方法</a>的第5小节。</p>
 <h2 id="请检查cmd链接文件">请检查cmd链接文件</h2>
 <p>也不知道什么原因，我曾经在DSP的内部RAM中使用#pragma分配一个3x1024x8字节的区域，在烧写到Flash后运行会死机，</p>
 <pre class="sourceCode c"><code class="sourceCode c"><span class="ot">#pragma DATA_SECTION(g_ad_fifo, &quot;FIFO&quot;)</span>
@@ -156,6 +157,19 @@ int dist_switch(int a, int b, int c)
 <pre><code>uint32_t tmp_x = (uint32_t)x;
 y = ((tmp_x&lt;&lt;6) + (tmp_x&lt;&lt;5) + (tmp_x&lt;&lt;2)) &gt;&gt; 1;</code></pre>
 <p>这样你就再也看不到除法运算了。</p>
+<h2 id="隐藏强制类型转换可能导致的错误">隐藏强制类型转换可能导致的错误</h2>
+<p>有这么一段代码，</p>
+<pre class="sourceCode c"><code class="sourceCode c"><span class="dt">uint16_t</span> y;
+<span class="dt">uint32_t</span> x;
+<span class="dt">uint32_t</span> cnt;  <span class="co">// cnt不为0</span>
+
+y = (<span class="dt">uint16_t</span>)(<span class="fl">0.5</span> * x / cnt);</code></pre>
+<p>上面的代码直接在DSP内存运行是正常的，但烧写到Flash装载后运行也会在该位置死机，改成如下就好了，</p>
+<pre class="sourceCode c"><code class="sourceCode c"><span class="dt">uint16_t</span> y;
+<span class="dt">uint32_t</span> x;
+<span class="dt">uint32_t</span> cnt;  <span class="co">// cnt不为0</span>
+
+y = (<span class="dt">uint16_t</span>)(x / (<span class="dv">2</span>*cnt));</code></pre>
 <div class="ds-thread" data-thread-key="烧写Flash后的DSP程序运行不正常的情况分析" data-title="烧写Flash后的DSP程序运行不正常的情况分析" data-url="xiahouzuoxin.github.io/notes/html/烧写Flash后的DSP程序运行不正常的情况分析.html"></div>
 <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"slide":{"type":"slide","bdImg":"5","bdPos":"right","bdTop":"300"},"image":{"viewList":["qzone","tsina","tqq","renren","weixin"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["qzone","tsina","tqq","renren","weixin"]}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
 

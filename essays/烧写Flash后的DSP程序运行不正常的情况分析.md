@@ -183,7 +183,26 @@ y = ((tmp_x<<6) + (tmp_x<<5) + (tmp_x<<2)) >> 1;
 
 这样你就再也看不到除法运算了。
 
+## 隐藏强制类型转换可能导致的错误
 
+有这么一段代码，
 
+```c
+uint16_t y;
+uint32_t x;
+uint32_t cnt;  // cnt不为0
 
-[TMS320C6713烧写Flash的通用方法]:./TMS320C6713烧写Flash的通用方法.md
+y = (uint16_t)(0.5 * x / cnt);
+```
+
+上面的代码直接在DSP内存运行是正常的，但烧写到Flash装载后运行也会在该位置死机，改成如下就好了，
+
+```c
+uint16_t y;
+uint32_t x;
+uint32_t cnt;  // cnt不为0
+
+y = (uint16_t)(x / (2*cnt));
+```
+
+[TMS320C6713烧写Flash的通用方法]:../html/TMS320C6713烧写Flash的通用方法.html
