@@ -124,3 +124,4 @@
 - [读塞缪尔《失实》](./essays/读塞缪尔《失实》.md)
 - [金庸武侠小说之我的见解](./essays/金庸武侠小说之我的见解.md)
 - [初读《围城》](./essays/初读《围城》.md)
+- [读论文BinarizedNormedGradientsforObjectnessEstimationat300fps](essays/读论文BinarizedNormedGradientsforObjectnessEstimationat300fps.md)

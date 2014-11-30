@@ -27,6 +27,7 @@
 <li><a href="#放弃工作区的修改">放弃工作区的修改</a></li>
 <li><a href="#放弃本地修改强制更新">放弃本地修改，强制更新</a></li>
 <li><a href="#git-add时的中文问题">git add时的中文问题</a></li>
+<li><a href="#git中换行符的差异">git中换行符的差异</a></li>
 </ul>
 </div>
 <!---title:Git使用补遗-->
@@ -79,6 +80,9 @@ git reset --hard origin/master</code></pre>
 <p>在bash下输入</p>
 <pre><code>git config --global core.quotepath false</code></pre>
 <p>core.quotepath设为false的话，就不会对0×80以上的字符进行quote。中文显示正常。</p>
+<h2 id="git中换行符的差异">git中换行符的差异</h2>
+<p>同时在Windows下和Linux下编辑的代码，当你是用<code>git diff</code>命令时发现所有文件都有<code>^M</code>的差异，这是换行符造成的，Linux默认使用LF为换行符，而Windows则使用CR-LF，要让git自动处理这种差异，只需要配置</p>
+<pre><code>git config --global core.autocrlf true</code></pre>
 <div class="ds-thread" data-thread-key="Git使用补遗" data-title="Git使用补遗" data-url="xiahouzuoxin.github.io/notes/html/Git使用补遗.html"></div>
 <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"slide":{"type":"slide","bdImg":"5","bdPos":"right","bdTop":"300"},"image":{"viewList":["qzone","tsina","tqq","renren","weixin"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["qzone","tsina","tqq","renren","weixin"]}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
 

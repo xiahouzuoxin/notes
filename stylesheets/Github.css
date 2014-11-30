@@ -2,7 +2,9 @@
 
 *{margin:0;padding:0;}
 body {
-	font:13px helvetica,arial,freesans,clean,sans-serif;
+	font:13px Consolas,helvetica,sans-serif,arial,freesans,clean;
+	font-weight:normal
+	font-style:normal
 	color: #333;
 	line-height:1.6em;
 	/*background: #151515 url("../images/bkg2.png") 0 0;*/
@@ -61,7 +63,7 @@ h2,h3{margin:1em 0;}
 h1,h2,h3,h4,h5,h6{border:0;}
 h1{font-size:170%;border-top:4px solid #aaa;padding-top:.5em;margin-top:1.5em;}
 h1:first-child{margin-top:0;padding-top:.25em;border-top:none;}
-h2{font-size:150%;margin-top:1.5em;border-top:4px solid #e0e0e0;padding-top:.5em;}
+h2{font-size:150%;margin-top:1.5em;border-top:4px solid #e0e0e0;padding-top:.5em;color:blue}
 h3{margin-top:1em;}
 hr{border:1px solid #ddd;}
 ul{margin:1em 0 1em 2em;}
@@ -73,7 +75,7 @@ blockquote{
 	margin:0em 0em;
 	border-left:5px solid #ddd;
 	padding-left:.6em;
-	color:#00F;
+	color:#666;
 	font-family:georgia,serif;
 }
 
@@ -248,4 +250,12 @@ pre .chunk {
     font-size: 12px;
     text-align: center;
     text-vertical-align: top;
+}
+
+#right_side {
+    position: fixed;
+    top: 60px;
+    left: 1050px;
+    max-width: 200px;
+    border: 0px solid #666666;
 }

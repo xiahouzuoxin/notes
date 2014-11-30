@@ -97,6 +97,15 @@ git config --global core.quotepath false
 
 core.quotepath设为false的话，就不会对0×80以上的字符进行quote。中文显示正常。
 
+## git中换行符的差异
+
+同时在Windows下和Linux下编辑的代码，当你是用`git diff`命令时发现所有文件都有`^M`的差异，这是换行符造成的，Linux默认使用LF为换行符，而Windows则使用CR-LF，要让git自动处理这种差异，只需要配置
+
+```
+git config --global core.autocrlf true
+```
+
+
 
 
 
