@@ -22,7 +22,9 @@
 <div id="TOC">
 <ul>
 <li><a href="#关于论文">关于论文</a></li>
-<li><a href="#关于程序">关于程序</a></li>
+<li><a href="#关于程序">关于程序</a><ul>
+<li><a href="#检测精度dr的计算">检测精度DR的计算</a></li>
+</ul></li>
 </ul>
 </div>
 <!---title:读论文BinarizedNormedGradientsforObjectnessEstimationat300fps-->
@@ -64,6 +66,11 @@
 <div class="figure">
 <img src="../images/读论文BinarizedNormedGradientsforObjectnessEstimationat300fps/DRandMABO.png" alt="DRandMABO" /><p class="caption">DRandMABO</p>
 </div>
+<p>上面的精度曲线称为DR-#WIN curves，源自TPAMI 2012的一篇论文：Measuring the objectness of image windows。原文还提出了将窗口数量比如[[0,5000]归一化到[0,1]之间，用曲线下的面积作为目标检测的度量结果，并称之为the area under the curve(AUC)，这样AUC的范围就在[0,1]之间了。</p>
+<h3 id="检测精度dr的计算">检测精度DR的计算</h3>
+<p>DR的计算是参考<a href="http://pascallin.ecs.soton.ac.uk/challenges/VOC/pubs/everingham10.pdf">The PASCAL Visual Object Classes (VOC) Challenge</a>，目标检测任务中DR的计算的是true/false positive精度，将算法检测目标结果放到groud truth中，将“预测目标区域与groud truth区域的交集”除以“预测目标区域与groud truth区域的并集”作为DR：</p>
+<p><img src="http://www.forkosh.com/mathtex.cgi? DR = \frac{area(B_p \bigcap B_{bg})}{area(B_p \bigcup B_{bg})}"></p>
+<p>DR自少在50%以上才算目标检测正确，其实，50%已经是很低的了，几乎不能做为检测结果，难怪那些个算法（BING这篇文章也是）随随便便都到95%以上了。</p>
 <div class="ds-thread" data-thread-key="读论文BinarizedNormedGradientsforObjectnessEstimationat300fps" data-title="读论文BinarizedNormedGradientsforObjectnessEstimationat300fps" data-url="xiahouzuoxin.github.io/notes/html/读论文BinarizedNormedGradientsforObjectnessEstimationat300fps.html"></div>
 <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"slide":{"type":"slide","bdImg":"5","bdPos":"right","bdTop":"300"},"image":{"viewList":["qzone","tsina","tqq","renren","weixin"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["qzone","tsina","tqq","renren","weixin"]}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
 

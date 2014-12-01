@@ -54,3 +54,12 @@ StageI也就是训练w参数居然用了13s，StageII用了344s居然，单张�
 
 ![DRandMABO](../images/读论文BinarizedNormedGradientsforObjectnessEstimationat300fps/DRandMABO.png)
 
+上面的精度曲线称为DR-#WIN curves，源自TPAMI 2012的一篇论文：Measuring the objectness of image windows。原文还提出了将窗口数量比如[[0,5000]归一化到[0,1]之间，用曲线下的面积作为目标检测的度量结果，并称之为the area under the curve(AUC)，这样AUC的范围就在[0,1]之间了。
+
+### 检测精度DR的计算
+
+DR的计算是参考[The PASCAL Visual Object Classes (VOC) Challenge](http://pascallin.ecs.soton.ac.uk/challenges/VOC/pubs/everingham10.pdf)，目标检测任务中DR的计算的是true/false positive精度，将算法检测目标结果放到groud truth中，将“预测目标区域与groud truth区域的交集”除以“预测目标区域与groud truth区域的并集”作为DR：
+
+<img src="http://www.forkosh.com/mathtex.cgi? DR = \frac{area(B_p \bigcap B_{bg})}{area(B_p \bigcup B_{bg})}">
+
+DR自少在50%以上才算目标检测正确，其实，50%已经是很低的了，几乎不能做为检测结果，难怪那些个算法（BING这篇文章也是）随随便便都到95%以上了。
