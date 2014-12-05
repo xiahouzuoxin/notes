@@ -864,7 +864,7 @@ _vector15:  VEC_ENTRY _vec_dummy</code></pre>
 <p>这样，每次修改user_size和USER_SIZE后，挂着仿真器运行程序，此时Flash中的user_size还是上一次的，因此执行if条件中的烧写代码。烧写完成后，重新上电，因为Flash中的user_size在刚才使用仿真器烧写时已经更新，所以if条件中的烧写代码不执行，直接跳过if执行用户程序，这就为什么DSP能在单一工程中自烧写！</p>
 <h2 id="参考">7 参考</h2>
 <p>[1] Creating a Second-Level Bootloader for FLASH Bootloading on TMS320C6000 Platform With Code Composer Studio</p>
-<p>[2] [My Flash burn CCS project]<a href="../codes/TMS320C6713烧写Flash的通用方法/burn_flash">burnflash</a></p>
+<p>[2] My Flash burn CCS project：<a href="../codes/TMS320C6713烧写Flash的通用方法/burn_flash">burnflash</a></p>
 <div class="ds-thread" data-thread-key="﻿TMS320C6713烧写Flash的通用方法" data-title="﻿TMS320C6713烧写Flash的通用方法" data-url="xiahouzuoxin.github.io/notes/html/﻿TMS320C6713烧写Flash的通用方法.html"></div>
 <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"slide":{"type":"slide","bdImg":"5","bdPos":"right","bdTop":"300"},"image":{"viewList":["qzone","tsina","tqq","renren","weixin"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["qzone","tsina","tqq","renren","weixin"]}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
 
@@ -884,7 +884,9 @@ var duoshuoQuery = {short_name:"xiahouzuoxin"};
 
 <div id="footer">
     <p class="footer_subline">联系邮箱: xiahouzuoxin@163.com</p>
-    <p class="footer_subline">声明: 本站所有文章如非特别说明均为原创，转载请注明出处！</p>
+    <p class="footer_subline">声明: 本站所有文章如非特别说明均为原创，转载请注明出处！
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1253219218'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1253219218%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+    </p>
 </div>
 
 <!-- 回到顶部 -->
