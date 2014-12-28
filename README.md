@@ -125,3 +125,4 @@
 - [金庸武侠小说之我的见解](./essays/金庸武侠小说之我的见解.md)
 - [初读《围城》](./essays/初读《围城》.md)
 - [读论文BinarizedNormedGradientsforObjectnessEstimationat300fps](essays/读论文BinarizedNormedGradientsforObjectnessEstimationat300fps.md)
+- [《追风筝的人》读后简记](essays/《追风筝的人》读后简记.md)

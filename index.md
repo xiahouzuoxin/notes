@@ -1,6 +1,7 @@
 
 # 最新文章
 
+- 2014-12-28 [《追风筝的人》读后简记](html/《追风筝的人》读后简记.html)
 - 2014-11-30 [读论文BinarizedNormedGradientsforObjectnessEstimationat300fps](html/读论文BinarizedNormedGradientsforObjectnessEstimationat300fps.html)
 - 2014-11-27 [OpenCV图像处理篇之Hough变换](html/OpenCV图像处理篇之Hough变换.html)	
 - 2014-11-23 [搭建Qt界面的OpenCV开发环境](html/搭建Qt界面的OpenCV开发环境.html)
