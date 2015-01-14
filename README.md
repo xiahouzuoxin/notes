@@ -32,6 +32,7 @@
 - [OpenCV图像处理篇之阈值操作函数](./essays/OpenCV图像处理篇之阈值操作函数.md)
 - [OpenCV图像处理篇之边缘检测算子](./essays/OpenCV图像处理篇之边缘检测算子.md)
 - [OpenCV图像处理篇之Hough变换](./essays/OpenCV图像处理篇之Hough变换.md)
+- [OpenCV集成到Qt的尝试-zximage](./essays/OpenCV集成到Qt的尝试-zximage.md)
 
 # 嵌入式处理(DSP/FPGA/ARM)
 

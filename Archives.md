@@ -1,3 +1,7 @@
+# 2015-01
+
+- 2015-01-14 [OpenCV集成到Qt的尝试-zximage](html/OpenCV集成到Qt的尝试-zximage.html)
+
 # 2014-12
 
 - 2014-12-28 [《追风筝的人》读后简记](html/《追风筝的人》读后简记.html)

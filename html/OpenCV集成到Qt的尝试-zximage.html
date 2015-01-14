@@ -1,0 +1,123 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="../stylesheets/Github.css" type="text/css" />
+  <title>OpenCV集成到Qt的尝试-zximage</title>
+</head>
+<body>
+<div id="header"><center>
+    <p class="header_titleline">
+    <a href="../index.html" target="_self" title="主页">主页  </a><a href="../Search.html" target="_self" title="站内搜索">站内搜索  </a><a href="../Projects.html" target="_self" title="项目研究">项目研究  </a><a href="../Archives.html" target="_self" title="文章存档">文章存档  </a><a href="../README.html" target="_self" title="分类目录">分类目录 </a><a href="../AboutMe.html" target="_self" title="关于我">关于我  </a>
+    </p>
+</center></div>
+<h1>OpenCV集成到Qt的尝试-zximage</h1>
+<h4>2015-01-14 / xiahouzuoxin</h4>
+<h4>Tags: OpenCV,Qt,zximage</h4>
+转载请注明出处: <a href="http://xiahouzuoxin.github.io/notes/">http://xiahouzuoxin.github.io/notes/</a>
+<div id="TOC">
+<ul>
+<li><a href="#源码">源码</a></li>
+</ul>
+</div>
+<!---title:OpenCV集成到Qt的尝试-zximage-->
+<!---keywords:OpenCV,Qt,zximage-->
+<!---date:2015-01-14-->
+<p>这一个多月的时间一直忙着写程序，做论文，都没来得及更新博客，当时定下的伟大目标——每周一篇——就这样一溜烟的随着时间的缝隙划过，又留下我低徊忏悔。这是2015年的第一篇博文，希望自己继续坚持下去。回头看看之前写得博文，回忆渐渐涌上心头啊……</p>
+<p>回顾了下之前的OpenCV博文，这次用Qt简单做了个界面程序（且给个名字zximage），关于在Qt中集成OpenCV在<a href="http://xiahouzuoxin.github.io/notes/html/搭建Qt界面的OpenCV开发环境.html">搭建Qt界面的OpenCV开发环境</a>一文中详细的讨论过了。我在做zximage之前C++不熟，Qt基本上0基础，这种滥竽充数的作品按理是拿不上台面的，但虚荣心作怪，在初学者面前显摆显摆还是可以的，这里就展示展示吧，也许将来哪天回过头来看看（明年毕业的时候回来看这些幼稚的东西又会是什么感受呢？）</p>
+<p>一开始是主界面，菜单栏做得很简单，就File,Tools,About，图片载入和保存对话框那是必须的，都在File菜单下，</p>
+<div class="figure">
+<img src="../images/OpenCV集成到Qt的尝试-zximage/界面介绍.png" alt="界面介绍" /><p class="caption">界面介绍</p>
+</div>
+<p>Tools中是一些图像处理的算法（大部分都来自OpenCV），选择算法后都会弹出对话框，用于设置算法相关参数。下面就用Blur滤波器来进行磨皮的美化操作，</p>
+<div class="figure">
+<img src="../images/OpenCV集成到Qt的尝试-zximage/滤波器的美化——磨皮.png" alt="滤波器的美化——磨皮" /><p class="caption">滤波器的美化——磨皮</p>
+</div>
+<div class="figure">
+<img src="../images/OpenCV集成到Qt的尝试-zximage/幂次变换调对比度.png" alt="幂次变换调对比度" /><p class="caption">幂次变换调对比度</p>
+</div>
+<p>图像中边缘检测很常见，zximage当然给加上了，</p>
+<div class="figure">
+<img src="../images/OpenCV集成到Qt的尝试-zximage/边缘检测.png" alt="边缘检测" /><p class="caption">边缘检测</p>
+</div>
+<p>Hough变换检测道路边界，</p>
+<div class="figure">
+<img src="../images/OpenCV集成到Qt的尝试-zximage/Hough直线检测.png" alt="Hough直线检测" /><p class="caption">Hough直线检测</p>
+</div>
+<p>形态学操作在OpenCV的图像处理篇中也用过，</p>
+<div class="figure">
+<img src="../images/OpenCV集成到Qt的尝试-zximage/形态学操作.png" alt="形态学操作" /><p class="caption">形态学操作</p>
+</div>
+<p>直方图均衡化在图像处理中应用还是很普遍的，优点就是能自适应——不用设置参数，</p>
+<div class="figure">
+<img src="../images/OpenCV集成到Qt的尝试-zximage/直方图及其均衡化.png" alt="直方图及其均衡化" /><p class="caption">直方图及其均衡化</p>
+</div>
+<p>人脸检测简直碉堡了，设计这些算法的人吃的都是啥啊，下面是Haar算子进行的人脸检测结果，</p>
+<div class="figure">
+<img src="../images/OpenCV集成到Qt的尝试-zximage/人脸检测.png" alt="人脸检测" /><p class="caption">人脸检测</p>
+</div>
+<p>为了证明这个软件的摄像头功能确实是可用的，我拿着摄像头对着屏幕的运行的zximage拍。瞬间大吃一惊，这是什么！！怎么这么多窗口！！！好像发明避孕套的人发现了避孕套一样，很是惊喜，我似乎看到了鸡生蛋蛋生鸡的问题。。。。拍下软件窗口，摄像头界面显示窗口，又将显示额窗口拍下，又显示。。。所以中心出现极亮的光斑。。。</p>
+<div class="figure">
+<img src="../images/OpenCV集成到Qt的尝试-zximage/软件自拍-鸡生蛋蛋生鸡.png" alt="软件自拍-鸡生蛋蛋生鸡" /><p class="caption">软件自拍-鸡生蛋蛋生鸡</p>
+</div>
+<p>然后我把这个现象给实验室的师兄看，顺带给帅锅师兄来了一张，</p>
+<div class="figure">
+<img src="../images/OpenCV集成到Qt的尝试-zximage/摄像头拍到的帅锅师兄.png" alt="摄像头拍到的帅锅师兄" /><p class="caption">摄像头拍到的帅锅师兄</p>
+</div>
+<p>最后来一张zximage的自拍人脸检测，这个是手机拍下的屏幕照片，屏幕太亮没办法，</p>
+<div class="figure">
+<img src="../images/OpenCV集成到Qt的尝试-zximage/zximage摄像头自拍人脸识别.png" alt="zximage摄像头自拍人脸识别" /><p class="caption">zximage摄像头自拍人脸识别</p>
+</div>
+<h2 id="源码">源码</h2>
+<p>源码下载请到我的Github： <a href="https://github.com/xiahouzuoxin/opencv_study" class="uri">https://github.com/xiahouzuoxin/opencv_study</a> ,那里不仅包括zximage的源码，还包括我的OpenCV系列所有博文的源码，OpenCV系列博文链接可以在 <a href="http://xiahouzuoxin.github.io/notes/README.html" class="uri">http://xiahouzuoxin.github.io/notes/README.html</a> 找到。</p>
+<div class="ds-thread" data-thread-key="OpenCV集成到Qt的尝试-zximage" data-title="OpenCV集成到Qt的尝试-zximage" data-url="xiahouzuoxin.github.io/notes/html/OpenCV集成到Qt的尝试-zximage.html"></div>
+<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"slide":{"type":"slide","bdImg":"5","bdPos":"right","bdTop":"300"},"image":{"viewList":["qzone","tsina","tqq","renren","weixin"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["qzone","tsina","tqq","renren","weixin"]}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"xiahouzuoxin"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- 多说公共JS代码 end -->
+
+<div id="footer">
+    <p class="footer_subline">联系邮箱: xiahouzuoxin@163.com</p>
+    <p class="footer_subline">声明: 本站所有文章如非特别说明均为原创，转载请注明出处！
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1253219218'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1253219218%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+    </p>
+</div>
+
+<!-- 回到顶部 -->
+<script>
+lastScrollY=0;
+function heartBeat(){
+var diffY;
+if (document.documentElement && document.documentElement.scrollTop)
+    diffY = document.documentElement.scrollTop;
+else if (document.body)
+    diffY = document.body.scrollTop
+else
+    {/*Netscape stuff*/}
+percent=.1*(diffY-lastScrollY);
+if(percent>0)percent=Math.ceil(percent);
+else percent=Math.floor(percent);
+document.getElementById("full").style.top=parseInt(document.getElementById("full").style.top)+percent+"px";
+lastScrollY=lastScrollY+percent;
+}
+suspendcode="<div id=\"full\" style='right:1px;POSITION:absolute;TOP:600px;z-index:100'><a onclick='window.scrollTo(0,0);'><img src='../images/top.png'></a><br></div>"
+document.write(suspendcode);
+window.setInterval("heartBeat()",1);
+</script>
+</body>
+</html>
