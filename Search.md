@@ -22,7 +22,7 @@
 
 <!-- SiteSearch Google -->
 <!--这里的标单的method 是get-->
-<FORM method=GET action="http://wen.lu/search">
+<FORM method=GET action="http://209.116.186.226/search">
 <INPUT TYPE=hidden name=ie value=UTF-8>
 <INPUT TYPE=hidden name=oe value=UTF-8>
 <INPUT TYPE=hidden name="hl" value="zh-CN">
