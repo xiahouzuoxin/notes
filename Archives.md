@@ -1,5 +1,6 @@
 # 2015-01
 
+- 2015-01-26 [分类算法中的ROC与PR指标](html/分类算法中的ROC与PR指标.html)
 - 2015-01-14 [OpenCV集成到Qt的尝试-zximage](html/OpenCV集成到Qt的尝试-zximage.html)
 
 # 2014-12

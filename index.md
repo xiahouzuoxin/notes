@@ -1,6 +1,7 @@
 
 # 最新文章
 
+- 2015-01-26 [分类算法中的ROC与PR指标](html/分类算法中的ROC与PR指标.html)
 - 2015-01-14 [OpenCV集成到Qt的尝试-zximage](html/OpenCV集成到Qt的尝试-zximage.html)
 - 2014-12-28 [《追风筝的人》读后简记](html/《追风筝的人》读后简记.html)
 - 2014-11-30 [读论文BinarizedNormedGradientsforObjectnessEstimationat300fps](html/读论文BinarizedNormedGradientsforObjectnessEstimationat300fps.html)

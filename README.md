@@ -1,5 +1,5 @@
 
-# 数字信号处理
+# 信号处理与机器学习
 
 - [Kalman滤波器从原理到实现](./essays/Kalman滤波器从原理到实现.md)
 - [功率谱的一点理解](./essays/功率谱的一点理解.md)
@@ -13,6 +13,8 @@
 - [矩阵特征值分解与奇异值分解含义解析及应用](./essays/矩阵特征值分解与奇异值分解含义解析及应用.md)
 - [自适应含噪信号过零率算法](./essays/自适应含噪信号过零率算法.md)
 - [基于谱减法的声音去噪](./essays/基于谱减法的声音去噪.md)
+- [读论文BinarizedNormedGradientsforObjectnessEstimationat300fps](essays/读论文BinarizedNormedGradientsforObjectnessEstimationat300fps.md)
+- [分类算法中的ROC与PR指标](./essays/分类算法中的ROC与PR指标.md)
 
 # OpenCV系列
 - [CentOS上编译安装OpenCV-2.3.1与ffmpeg-2.1.2](./essays/CentOS上编译安装OpenCV-2.3.1与ffmpeg-2.1.2.md)
@@ -125,5 +127,4 @@
 - [读塞缪尔《失实》](./essays/读塞缪尔《失实》.md)
 - [金庸武侠小说之我的见解](./essays/金庸武侠小说之我的见解.md)
 - [初读《围城》](./essays/初读《围城》.md)
-- [读论文BinarizedNormedGradientsforObjectnessEstimationat300fps](essays/读论文BinarizedNormedGradientsforObjectnessEstimationat300fps.md)
 - [《追风筝的人》读后简记](essays/《追风筝的人》读后简记.md)
