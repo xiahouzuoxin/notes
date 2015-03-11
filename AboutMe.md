@@ -1,7 +1,7 @@
 
 # 关于小站
 
-这是xiahouzuoxin的博客小站，建站时间时2014年3月，更早之前的博文在[CSDN](http://blog.csdn.net/xiahouzuoxin)。在这，我记录和分享自己的学习、工作、生活心得，“千淘万漉虽辛苦，吹尽狂沙始到金”，多思考多记录，回头方能恍然大悟。本站所有文章都通过我的[Github](https://github.com/xiahouzuoxin/notes)进行版本控制，如果你觉得本站的文章不错，很容易clone到本地：
+这是xiahouzuoxin的博客小站，建站时间时2014年3月，更早之前的博文在[CSDN](http://blog.csdn.net/xiahouzuoxin)。在这，我记录和分享自己的学习、工作、生活心得，“千淘万漉虽辛苦，吹尽狂沙始到金”，多思考多记录，回头方能恍然大悟。本站所有文章都通过我的[Github](https://github.com/xiahouzuoxin/notes)进行版本控制，如果你觉得本站的文章不错，欢迎[fork](https://github.com/xiahouzuoxin/notes)，也很容易clone到本地：
 
 ```
 $ git clone git@github.com:xiahouzuoxin/notes.git
@@ -16,7 +16,7 @@ $ git checkout -b gh-pages origin/gh-pages
 
 # 专长技能
 
-从大二(2010年)至今(2014年)，__4年嵌入式经验，2年图像及音频信号处理经验__。
+从大二(2010年)至今(2015年)，__4年嵌入式经验，3年图像及音频信号处理经验__。
 
 本人熟悉多种嵌入式平台，ARM系列包括STM32F103和STM32F405、DSP包括TMS320C6713、FPGA包括EP2C8系列，这些平台都有过相关项目或比赛经验。除此之外，掌握uCOS_ii、DSP/BIOS操作系统。现专注于数字信号处理（图像、音频）算法。热爱开源，熟练应用Linux环境，Windows下编程都习惯性使用Cygwin和VIM，做笔记Markdown是我的最爱。
 
@@ -56,7 +56,11 @@ $ git checkout -b gh-pages origin/gh-pages
 - 2010.07-2012.05　北京科技大学图书馆，助管
 - 2010.02-2011.05　《北科大青年》杂志，撰稿人
 
-# 联系邮箱（欢迎学习交流）
+# 联系（欢迎学习交流）
 
-- <xiahouzuoxin@163.com>
-- <g20138503@xs.ustb.edu.cn>
+- 邮箱： <xiahouzuoxin@163.com>
+
+![](images/MyQQ.jpg)
+![](images/MyWeixin.jpg)
+
+
