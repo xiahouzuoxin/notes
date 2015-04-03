@@ -1,0 +1,86 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="../stylesheets/Github.css" type="text/css" />
+  <title>复习找工作之排序算法</title>
+</head>
+<body>
+<div id="header"><center>
+    <p class="header_titleline">
+    <a href="../index.html" target="_self" title="主页">主页  </a><a href="../Search.html" target="_self" title="站内搜索">站内搜索  </a><a href="../Projects.html" target="_self" title="项目研究">项目研究  </a><a href="../Archives.html" target="_self" title="文章存档">文章存档  </a><a href="../README.html" target="_self" title="分类目录">分类目录 </a><a href="../AboutMe.html" target="_self" title="关于我">关于我  </a>
+    </p>
+</center></div>
+<h1>复习找工作之排序算法</h1>
+<h4>2015-04-03 / xiahouzuoxin</h4>
+转载请注明出处: <a href="http://xiahouzuoxin.github.io/notes/">http://xiahouzuoxin.github.io/notes/</a>
+<div id="TOC">
+<ul>
+<li><a href="#先看插入排序">先看插入排序</a></li>
+<li><a href="#堆排序">堆排序</a></li>
+<li><a href="#快速排序">快速排序</a></li>
+</ul>
+</div>
+<!---title:复习找工作之排序算法-->
+<!---keywaords:找工作-->
+<!---date:2015-04-03-->
+<p>前几天为了阿里的笔试，特意在项目之余抽出时间猛补数据结构和算法，本科本不是计算机专业出身的，自学数据结构。昨晚阿里笔试那个被虐的啊。。。。更惨的不是被虐，而是一不小心在笔试后修改职位，居然把笔试记录还给弄丢了（我一直觉得这是阿里招聘系统中好不人性化的一个Bug），和我阿里梦擦肩而过，找阿里客服还一个劲的安慰我，说“出现这种事实在很抱歉，加油加油”，真是忧郁莫过那晚了。。。。。。但庆幸自己的乐观，今天还是集中复习的排序算法整理了一下，主要是插入排序、堆排序和快速排序，也算为了加深理解吧，都手写的分析和代码，</p>
+<h2 id="先看插入排序">先看插入排序</h2>
+<div class="figure">
+<img src="../images/复习找工作之排序算法/插入排序.jpg" />
+</div>
+<h2 id="堆排序">堆排序</h2>
+<p><img src="../images/复习找工作之排序算法/堆排序.jpg" /> <img src="../images/复习找工作之排序算法/堆排序代码.jpg" /></p>
+<h2 id="快速排序">快速排序</h2>
+<p><img src="../images/复习找工作之排序算法/快速排序.jpg" /> <img src="../images/复习找工作之排序算法/快速排序分割策略.jpg" /> <img src="../images/复习找工作之排序算法/快速排序代码.jpg" /></p>
+<div class="ds-thread" data-thread-key="复习找工作之排序算法" data-title="复习找工作之排序算法" data-url="xiahouzuoxin.github.io/notes/html/复习找工作之排序算法.html"></div>
+<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"slide":{"type":"slide","bdImg":"5","bdPos":"right","bdTop":"300"},"image":{"viewList":["qzone","tsina","tqq","renren","weixin"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["qzone","tsina","tqq","renren","weixin"]}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"xiahouzuoxin"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- 多说公共JS代码 end -->
+
+<div id="footer">
+    <p class="footer_subline">联系邮箱: xiahouzuoxin@163.com</p>
+    <p class="footer_subline">声明: 本站所有文章如非特别说明均为原创，转载请注明出处！
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1253219218'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1253219218%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+    </p>
+</div>
+
+<!-- 回到顶部 -->
+<script>
+lastScrollY=0;
+function heartBeat(){
+var diffY;
+if (document.documentElement && document.documentElement.scrollTop)
+    diffY = document.documentElement.scrollTop;
+else if (document.body)
+    diffY = document.body.scrollTop
+else
+    {/*Netscape stuff*/}
+percent=.1*(diffY-lastScrollY);
+if(percent>0)percent=Math.ceil(percent);
+else percent=Math.floor(percent);
+document.getElementById("full").style.top=parseInt(document.getElementById("full").style.top)+percent+"px";
+lastScrollY=lastScrollY+percent;
+}
+suspendcode="<div id=\"full\" style='right:1px;POSITION:absolute;TOP:600px;z-index:100'><a onclick='window.scrollTo(0,0);'><img src='../images/top.png'></a><br></div>"
+document.write(suspendcode);
+window.setInterval("heartBeat()",1);
+</script>
+</body>
+</html>
