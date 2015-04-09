@@ -1,0 +1,332 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
+  </style>
+  <link rel="stylesheet" href="../stylesheets/Github.css" type="text/css" />
+  <title>Stanford机器学习课程笔记1-监督学习</title>
+</head>
+<body>
+<div id="header"><center>
+    <p class="header_titleline">
+    <a href="../index.html" target="_self" title="主页">主页  </a><a href="../Search.html" target="_self" title="站内搜索">站内搜索  </a><a href="../Projects.html" target="_self" title="项目研究">项目研究  </a><a href="../Archives.html" target="_self" title="文章存档">文章存档  </a><a href="../README.html" target="_self" title="分类目录">分类目录 </a><a href="../AboutMe.html" target="_self" title="关于我">关于我  </a>
+    </p>
+</center></div>
+<h1>Stanford机器学习课程笔记1-监督学习</h1>
+<h4>2015-04-08 / xiahouzuoxin</h4>
+<h4>Tags: Maching Learning</h4>
+转载请注明出处: <a href="http://xiahouzuoxin.github.io/notes/">http://xiahouzuoxin.github.io/notes/</a>
+<div id="TOC">
+<ul>
+<li><a href="#课程计划">课程计划</a></li>
+<li><a href="#linear-regression与预测问题">Linear Regression与预测问题</a><ul>
+<li><a href="#locally-weighted-linear-regression">Locally Weighted Linear Regression</a></li>
+</ul></li>
+<li><a href="#logistic-regression与分类问题">Logistic Regression与分类问题</a></li>
+</ul>
+</div>
+<!---title:Stanford机器学习课程笔记1-监督学习-->
+<!---keywords:Maching Learning-->
+<!---date:2015-04-08-->
+<p>Stanford机器学习课程的主页是： <a href="http://cs229.stanford.edu/" class="uri">http://cs229.stanford.edu/</a></p>
+<h2 id="课程计划">课程计划</h2>
+<p>主讲人Andrew Ng是机器学习界的大牛，创办最大的公开课网站<a href="www.coursera.org">coursera</a>，前段时间还听说加入了百度。他讲的机器学习课程可谓每个学计算机的人必看。整个课程的大纲大致如下：</p>
+<ol style="list-style-type: decimal">
+<li>Introduction (1 class) Basic concepts.</li>
+<li>Supervised learning. (6 classes) Supervised learning setup. LMS. Logistic regression. Perceptron. Exponential family. Generative learning algorithms. Gaussian discriminant analysis.<br />Naive Bayes. Support vector machines. Model selection and feature selection. Ensemble methods: Bagging, boosting, ECOC.</li>
+<li>Learning theory. (3 classes) Bias/variance tradeoff. Union and Chernoff/Hoeffding bounds. VC dimension. Worst case (online) learning. Advice on using learning algorithms.</li>
+<li>Unsupervised learning. (5 classes) Clustering. K-means. EM. Mixture of Gaussians. Factor analysis. PCA. MDS. pPCA. Independent components analysis (ICA).<br /></li>
+<li>Reinforcement learning and control. (4 classes) MDPs. Bellman equations. Value iteration. Policy iteration. Linear quadratic regulation (LQR). LQG. Q-learning. Value function approximation. Policy search. Reinforce. POMDPs.</li>
+</ol>
+<p>本笔记主要是关于Linear Regression和Logistic Regression部分的学习实践记录。</p>
+<h2 id="linear-regression与预测问题">Linear Regression与预测问题</h2>
+<p>举了一个房价预测的例子，</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Area(feet^2)</th>
+<th align="left">#bedrooms</th>
+<th align="left">Price(1000$)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">2014</td>
+<td align="left">3</td>
+<td align="left">400</td>
+</tr>
+<tr class="even">
+<td align="left">1600</td>
+<td align="left">3</td>
+<td align="left">330</td>
+</tr>
+<tr class="odd">
+<td align="left">2400</td>
+<td align="left">3</td>
+<td align="left">369</td>
+</tr>
+<tr class="even">
+<td align="left">1416</td>
+<td align="left">2</td>
+<td align="left">232</td>
+</tr>
+<tr class="odd">
+<td align="left">3000</td>
+<td align="left">4</td>
+<td align="left">540</td>
+</tr>
+<tr class="even">
+<td align="left">3670</td>
+<td align="left">4</td>
+<td align="left">620</td>
+</tr>
+<tr class="odd">
+<td align="left">4500</td>
+<td align="left">5</td>
+<td align="left">800</td>
+</tr>
+</tbody>
+</table>
+<p>Assume：房价与“面积和卧室数量”是线性关系，用线性关系进行放假预测。因而给出线性模型， <span class="math"><em>h</em><sub><em>θ</em></sub>(<em>x</em>) = ∑<em>θ</em><sup><em>T</em></sup><em>x</em></span> ，其中 <span class="math"><em>x</em> = [<em>x</em><sub>1</sub>, <em>x</em><sub>2</sub>]</span> , 分别对应面积和卧室数量。 为得到预测模型，就应该根据表中已有的数据拟合得到参数 <span class="math"><em>θ</em></span> 的值。课程通过从概率角度进行解释（主要用到了大数定律即“线性拟合模型的误差满足高斯分布”的假设，通过最大似然求导就能得到下面的表达式）为什么应该求解如下的最小二乘表达式来达到求解参数的目的，</p>
+<p><img src="http://www.forkosh.com/mathtex.cgi? J(\theta)=\frac{1}{2}\sum_{i=1}^{m}(y_i-h_{\theta}(x_i))^2"></p>
+<p>上述 <span class="math"><em>J</em>(<em>θ</em>)</span> 称为cost function， 通过 <span class="math"><em>m</em><em>i</em><em>n</em><em>J</em>(<em>θ</em>)</span> 即可得到拟合模型的参数。</p>
+<p>解 <span class="math"><em>m</em><em>i</em><em>n</em><em>J</em>(<em>θ</em>)</span> 的方法有多种， 包括Gradient descent algorithm和Newton's method，这两种都是运筹学的数值计算方法，非常适合计算机运算，这两种算法不仅适合这里的线性回归模型，对于非线性模型如下面的Logistic模型也适用。除此之外，Andrew Ng还通过线性代数推导了最小均方的算法的闭合数学形式，</p>
+<p><img src="http://www.forkosh.com/mathtex.cgi? \theta=(X^TX)^{-1}X^T\bold{y}"></p>
+<p>Gradient descent algorithm执行过程中又分两种方法：batch gradient descent和stochastic gradient descent。batch gradient descent每次更新 <span class="math"><em>θ</em></span> 都用到所有的样本数据，而stochastic gradient descent每次更新则都仅用单个的样本数据。两者更新过程如下：</p>
+<ol style="list-style-type: decimal">
+<li><p>batch gradient descent</p>
+<p><img src="http://www.forkosh.com/mathtex.cgi? \theta_j:=\theta_j+\alpha\sum_{i=1}^{m}(y^{(i)}-h_{\theta}(x^{(i)}))x_j^{(i)}"></p></li>
+<li><p>stochastic gradient descent</p>
+<p>for i=1 to m</p>
+<p><img src="http://www.forkosh.com/mathtex.cgi? \theta_j:=\theta_j+\alpha(y^{(i)}-h_{\theta}(x^{(i)}))x_j^{(i)}"></p></li>
+</ol>
+<p>两者只不过一个将样本放在了for循环上，一者放在了。事实证明，只要选择合适的学习率 <span class="math"><em>α</em></span> , Gradient descent algorithm总是能收敛到一个接近最优值的值。学习率选择过大可能造成cost function的发散，选择太小，收敛速度会变慢。</p>
+<p>关于收敛条件，Andrew Ng没有在课程中提到更多，我给出两种收敛准则：</p>
+<ol style="list-style-type: decimal">
+<li>J小于一定值收敛</li>
+<li>两次迭代之间的J差值，即|J-J_pre|&lt;一定值则收敛</li>
+</ol>
+<p>下面是使用batch gradient descent拟合上面房价问题的例子，</p>
+<pre class="sourceCode matlab"><code class="sourceCode matlab">clear all;
+clc
+
+<span class="co">%% 原数据</span>
+x = [<span class="fl">2014</span>, <span class="fl">1600</span>, <span class="fl">2400</span>, <span class="fl">1416</span>, <span class="fl">3000</span>, <span class="fl">3670</span>, <span class="fl">4500</span>;...
+    <span class="fl">3</span>,<span class="fl">3</span>,<span class="fl">3</span>,<span class="fl">2</span>,<span class="fl">4</span>,<span class="fl">4</span>,<span class="fl">5</span>;];
+y = [<span class="fl">400</span> <span class="fl">330</span> <span class="fl">369</span> <span class="fl">232</span> <span class="fl">540</span> <span class="fl">620</span> <span class="fl">800</span>];
+
+error = Inf;
+threshold = <span class="fl">4300</span>;
+alpha = <span class="fl">10</span>^(-<span class="fl">10</span>);
+x = [zeros(<span class="fl">1</span>,size(x,<span class="fl">2</span>)); x];  <span class="co">% x0 = 0，拟合常数项</span>
+theta = [<span class="fl">0</span>;<span class="fl">0</span>;<span class="fl">0</span>]; <span class="co">% 常数项为0</span>
+J = <span class="fl">1</span>/<span class="fl">2</span>*sum((y-theta&#39;*x).^<span class="fl">2</span>);
+costs = [];
+while error &gt; threshold
+    tmp = y-theta&#39;*x;
+    theta(<span class="fl">1</span>) = theta(<span class="fl">1</span>) + alpha*sum(tmp.*x(<span class="fl">1</span>,:));
+    theta(<span class="fl">2</span>) = theta(<span class="fl">2</span>) + alpha*sum(tmp.*x(<span class="fl">2</span>,:));
+    theta(<span class="fl">3</span>) = theta(<span class="fl">3</span>) + alpha*sum(tmp.*x(<span class="fl">3</span>,:));
+<span class="co">%     J_last = J;</span>
+    J = <span class="fl">1</span>/<span class="fl">2</span>*sum((y-theta&#39;*x).^<span class="fl">2</span>);
+<span class="co">%     error = abs(J-J_last);</span>
+    error = J;
+    costs =[costs, error];
+end
+
+<span class="co">%% 绘制</span>
+figure,
+subplot(<span class="fl">211</span>);
+plot3(x(<span class="fl">2</span>,:),x(<span class="fl">3</span>,:),y, <span class="st">&#39;*&#39;</span>);
+grid on;
+xlabel(<span class="st">&#39;Area&#39;</span>);
+ylabel(<span class="st">&#39;#bedrooms&#39;</span>);
+zlabel(<span class="st">&#39;Price(1000$)&#39;</span>);
+
+hold on;
+H = theta&#39;*x;
+plot3(x(<span class="fl">2</span>,:),x(<span class="fl">3</span>,:),H,<span class="st">&#39;r*&#39;</span>);
+
+hold on
+hx(<span class="fl">1</span>,:) = zeros(<span class="fl">1</span>,<span class="fl">20</span>);
+hx(<span class="fl">2</span>,:) = <span class="fl">1000</span>:<span class="fl">200</span>:<span class="fl">4800</span>;
+hx(<span class="fl">3</span>,:) = <span class="fl">1</span>:<span class="fl">20</span>;
+[X,Y] = meshgrid(hx(<span class="fl">2</span>,:), hx(<span class="fl">3</span>,:));
+H = theta(<span class="fl">2</span>:<span class="fl">3</span>)&#39;*[X(:)&#39;; Y(:)&#39;];
+H = reshape(H,[<span class="fl">20</span>,<span class="fl">20</span>]);
+mesh(X,Y,H);
+
+legend(<span class="st">&#39;原数据&#39;</span>, <span class="st">&#39;对原数据的拟合&#39;</span>, <span class="st">&#39;拟合平面&#39;</span>);
+
+subplot(<span class="fl">212</span>);
+plot(costs, <span class="st">&#39;.-&#39;</span>);
+grid on
+title(<span class="st">&#39;error=J(\theta)的迭代收敛过程&#39;</span>);
+xlabel(<span class="st">&#39;迭代次数&#39;</span>);
+ylabel(<span class="st">&#39;J(\theta)&#39;</span>);</code></pre>
+<p>拟合及收敛过程如下：</p>
+<div class="figure">
+<img src="../images/Stanford机器学习课程笔记1-监督学习/GradientDescentAlgorithm.png" />
+</div>
+<p>不管是梯度下降，还是线性回归模型，都是工具！！分析结果更重要，从上面的拟合平面可以看到，影响房价的主要因素是面积而非卧室数量。</p>
+<p>很多情况下，模型并不是线性的，比如股票随时间的涨跌过程。这种情况下， <span class="math"><em>h</em><sub><em>θ</em></sub>(<em>x</em>) = <em>θ</em><sup><em>T</em></sup><em>x</em></span> 的假设不再成立。此时，有两种方案：</p>
+<ol style="list-style-type: decimal">
+<li>建立一个非线性的模型，比如指数或者其它的符合数据变化的模型</li>
+<li>局部线性模型，对每段数据进行局部建立线性模型。Andrew Ng课堂上讲解了Locally Weighted Linear Regression，即局部加权的线性模型</li>
+</ol>
+<h3 id="locally-weighted-linear-regression">Locally Weighted Linear Regression</h3>
+<p><img src="http://www.forkosh.com/mathtex.cgi? J(\theta)=\frac{1}{2}\sum_{i=1}^{m}w^{(i)}(y^{(i)}-h_{\theta}(x^{(i)}))^2"></p>
+<p>其中权值的一种好的选择方式是：</p>
+<p><img src="http://www.forkosh.com/mathtex.cgi? w^{(i)}=\bold{exp}(-\frac{(x^{(i)}-x)^2}{2\tau^2})"></p>
+<h2 id="logistic-regression与分类问题">Logistic Regression与分类问题</h2>
+<p>Linear Regression解决的是连续的预测和拟合问题，而Logistic Regression解决的是离散的分类问题。两种方式，但本质殊途同归，两者都可以算是指数函数族的特例。</p>
+<p>在分类问题中，y取值在{0,1}之间，因此，上述的Liear Regression显然不适应。修改模型如下</p>
+<p><img src="http://www.forkosh.com/mathtex.cgi? h_{\theta}(x)=g(\theta^Tx)=\frac{1}{1+\bold{e}^{-\theta^Tx}}"></p>
+<p>该模型称为Logistic函数或Sigmoid函数。为什么选择该函数，我们看看这个函数的图形就知道了，</p>
+<div class="figure">
+<img src="../images/Stanford机器学习课程笔记1-监督学习/Sigmoid.png" />
+</div>
+<p>Sigmoid函数范围在[0,1]之间，参数 <span class="math"><em>θ</em></span> 只不过控制曲线的陡峭程度。以0.5为截点，&gt;0.5则y值为1，&lt; 0.5则y值为0，这样就实现了两类分类的效果。</p>
+<p>假设 <span class="math"><em>P</em>(<em>y</em> = 1|<em>x</em>; <em>θ</em>) = <em>h</em><sub><em>θ</em></sub>(<em>x</em>)</span> ， <span class="math"><em>P</em>(<em>y</em> = 0|<em>x</em>; <em>θ</em>) = 1 − <em>h</em><sub><em>θ</em></sub>(<em>x</em>)</span> , 写得更紧凑一些，</p>
+<p><img src="http://www.forkosh.com/mathtex.cgi? P(y|x;\theta)=(h_{\theta}(x))^y(1-h_{\theta}(x))^{1-y}"></p>
+<p>对m个训练样本，使其似然函数最大，则有</p>
+<p><img src="http://www.forkosh.com/mathtex.cgi? \bold{max}L(\theta)=\bold{max}\prod_{i=1}{m}(h_{\theta}(x^{(i)}))^y^{(i)}(1-h_{\theta}(x^{(i)}))^{1-y^{(i)}}"></p>
+<p>同样的可以用梯度下降法求解上述的最大值问题，只要将最大值求解转化为求最小值，则迭代公式一模一样，</p>
+<p><img src="http://www.forkosh.com/mathtex.cgi? \bold{min}J(\theta)=\bold{min}\{-\bold{L}(\theta)\}"></p>
+<p>最后的梯度下降方式和Linear Regression一致。我做了个例子（<a href="../enclosure/Stanford机器学习课程笔记1-监督学习/LogisticInput.txt">数据集链接</a>），下面是Logistic的Matlab代码，</p>
+<pre><code>function Logistic
+
+clear all;
+close all
+clc
+
+data = load(&#39;LogisticInput.txt&#39;);
+x = data(:,1:2);
+y = data(:,3);
+
+% Plot Original Data
+figure,
+positive = find(y==1);
+negtive = find(y==0);
+hold on
+plot(x(positive,1), x(positive,2), &#39;k+&#39;, &#39;LineWidth&#39;,2, &#39;MarkerSize&#39;, 7);
+plot(x(negtive,1), x(negtive,2), &#39;bo&#39;, &#39;LineWidth&#39;,2, &#39;MarkerSize&#39;, 7);
+
+% Compute Likelihood(Cost) Function
+[m,n] = size(x);
+x = [ones(m,1) x];
+theta = zeros(n+1, 1);
+[cost, grad] = cost_func(theta, x, y);
+threshold = 0.1;
+alpha = 10^(-1);
+costs = [];
+while cost &gt; threshold
+    theta = theta + alpha * grad;
+    [cost, grad] = cost_func(theta, x, y);
+    costs = [costs cost];
+end
+
+% Plot Decision Boundary 
+hold on
+plot_x = [min(x(:,2))-2,max(x(:,2))+2];
+plot_y = (-1./theta(3)).*(theta(2).*plot_x + theta(1));
+plot(plot_x, plot_y, &#39;r-&#39;);
+legend(&#39;Positive&#39;, &#39;Negtive&#39;, &#39;Decision Boundary&#39;)
+xlabel(&#39;Feature Dim1&#39;);
+ylabel(&#39;Feature Dim2&#39;);
+title(&#39;Classifaction Using Logistic Regression&#39;);
+
+% Plot Costs Iteration
+figure,
+plot(costs, &#39;*&#39;);
+title(&#39;Cost Function Iteration&#39;);
+xlabel(&#39;Iterations&#39;);
+ylabel(&#39;Cost Fucntion Value&#39;);
+
+end
+
+function g=sigmoid(z)
+g = 1.0 ./ (1.0+exp(-z));
+end
+
+function [J,grad] = cost_func(theta, X, y)
+% Computer Likelihood Function and Gradient
+m = length(y); % training examples
+hx = sigmoid(X*theta);
+J = (1./m)*sum(-y.*log(hx)-(1.0-y).*log(1.0-hx));
+grad = (1./m) .* X&#39; * (y-hx);
+end</code></pre>
+<div class="figure">
+<img src="../images/Stanford机器学习课程笔记1-监督学习/LogisticRegression.png" />
+</div>
+<p>判决边界(Decesion Boundary)的计算是令h(x)=0.5得到的。当输入新的数据，计算h(x)：h(x)&gt;0.5为正样本所属的类，h(x)&lt; 0.5 为负样本所属的类。</p>
+<p>我们再回过头来看Logistic问题：对于非线性的问题，只不过使用了一个叫Sigmoid的非线性映射成一个线性问题。那么，除了Sigmoid函数，还有其它的函数可用吗？Andrew Ng老师还讲了指数函数族。</p>
+<div class="ds-thread" data-thread-key="Stanford机器学习课程笔记1-监督学习" data-title="Stanford机器学习课程笔记1-监督学习" data-url="xiahouzuoxin.github.io/notes/html/Stanford机器学习课程笔记1-监督学习.html"></div>
+<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"slide":{"type":"slide","bdImg":"5","bdPos":"right","bdTop":"300"},"image":{"viewList":["qzone","tsina","tqq","renren","weixin"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["qzone","tsina","tqq","renren","weixin"]}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"xiahouzuoxin"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- 多说公共JS代码 end -->
+
+<div id="footer">
+    <p class="footer_subline">联系邮箱: xiahouzuoxin@163.com</p>
+    <p class="footer_subline">声明: 本站所有文章如非特别说明均为原创，转载请注明出处！
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1253219218'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1253219218%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+    </p>
+</div>
+
+<!-- 回到顶部 -->
+<script>
+lastScrollY=0;
+function heartBeat(){
+var diffY;
+if (document.documentElement && document.documentElement.scrollTop)
+    diffY = document.documentElement.scrollTop;
+else if (document.body)
+    diffY = document.body.scrollTop
+else
+    {/*Netscape stuff*/}
+percent=.1*(diffY-lastScrollY);
+if(percent>0)percent=Math.ceil(percent);
+else percent=Math.floor(percent);
+document.getElementById("full").style.top=parseInt(document.getElementById("full").style.top)+percent+"px";
+lastScrollY=lastScrollY+percent;
+}
+suspendcode="<div id=\"full\" style='right:1px;POSITION:absolute;TOP:600px;z-index:100'><a onclick='window.scrollTo(0,0);'><img src='../images/top.png'></a><br></div>"
+document.write(suspendcode);
+window.setInterval("heartBeat()",1);
+</script>
+</body>
+</html>
