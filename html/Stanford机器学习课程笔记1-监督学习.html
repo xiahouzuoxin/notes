@@ -44,7 +44,9 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <li><a href="#linear-regression与预测问题">Linear Regression与预测问题</a><ul>
 <li><a href="#locally-weighted-linear-regression">Locally Weighted Linear Regression</a></li>
 </ul></li>
-<li><a href="#logistic-regression与分类问题">Logistic Regression与分类问题</a></li>
+<li><a href="#logistic-regression与分类问题">Logistic Regression与分类问题</a><ul>
+<li><a href="#特征映射与过拟合over-fitting">特征映射与过拟合(over-fitting)</a></li>
+</ul></li>
 </ul>
 </div>
 <!---title:Stanford机器学习课程笔记1-监督学习-->
@@ -110,17 +112,17 @@ code > span.er { color: #ff0000; font-weight: bold; }
 </tbody>
 </table>
 <p>Assume：房价与“面积和卧室数量”是线性关系，用线性关系进行放假预测。因而给出线性模型， <span class="math"><em>h</em><sub><em>θ</em></sub>(<em>x</em>) = ∑<em>θ</em><sup><em>T</em></sup><em>x</em></span> ，其中 <span class="math"><em>x</em> = [<em>x</em><sub>1</sub>, <em>x</em><sub>2</sub>]</span> , 分别对应面积和卧室数量。 为得到预测模型，就应该根据表中已有的数据拟合得到参数 <span class="math"><em>θ</em></span> 的值。课程通过从概率角度进行解释（主要用到了大数定律即“线性拟合模型的误差满足高斯分布”的假设，通过最大似然求导就能得到下面的表达式）为什么应该求解如下的最小二乘表达式来达到求解参数的目的，</p>
-<p><img src="http://www.forkosh.com/mathtex.cgi? J(\theta)=\frac{1}{2}\sum_{i=1}^{m}(y_i-h_{\theta}(x_i))^2"></p>
+<p><img src="http://latex.codecogs.com/gif.latex? J(\theta)=\frac{1}{2}\sum_{i=1}^{m}(y_i-h_{\theta}(x_i))^2"></p>
 <p>上述 <span class="math"><em>J</em>(<em>θ</em>)</span> 称为cost function， 通过 <span class="math"><em>m</em><em>i</em><em>n</em><em>J</em>(<em>θ</em>)</span> 即可得到拟合模型的参数。</p>
 <p>解 <span class="math"><em>m</em><em>i</em><em>n</em><em>J</em>(<em>θ</em>)</span> 的方法有多种， 包括Gradient descent algorithm和Newton's method，这两种都是运筹学的数值计算方法，非常适合计算机运算，这两种算法不仅适合这里的线性回归模型，对于非线性模型如下面的Logistic模型也适用。除此之外，Andrew Ng还通过线性代数推导了最小均方的算法的闭合数学形式，</p>
-<p><img src="http://www.forkosh.com/mathtex.cgi? \theta=(X^TX)^{-1}X^T\bold{y}"></p>
+<p><img src="http://latex.codecogs.com/gif.latex? \theta=(X^TX)^{-1}X^T\bold{y}"></p>
 <p>Gradient descent algorithm执行过程中又分两种方法：batch gradient descent和stochastic gradient descent。batch gradient descent每次更新 <span class="math"><em>θ</em></span> 都用到所有的样本数据，而stochastic gradient descent每次更新则都仅用单个的样本数据。两者更新过程如下：</p>
 <ol style="list-style-type: decimal">
 <li><p>batch gradient descent</p>
-<p><img src="http://www.forkosh.com/mathtex.cgi? \theta_j:=\theta_j+\alpha\sum_{i=1}^{m}(y^{(i)}-h_{\theta}(x^{(i)}))x_j^{(i)}"></p></li>
+<p><img src="http://latex.codecogs.com/gif.latex? \theta_j:=\theta_j+\alpha\sum_{i=1}^{m}(y^{(i)}-h_{\theta}(x^{(i)}))x_j^{(i)}"></p></li>
 <li><p>stochastic gradient descent</p>
 <p>for i=1 to m</p>
-<p><img src="http://www.forkosh.com/mathtex.cgi? \theta_j:=\theta_j+\alpha(y^{(i)}-h_{\theta}(x^{(i)}))x_j^{(i)}"></p></li>
+<p><img src="http://latex.codecogs.com/gif.latex? \theta_j:=\theta_j+\alpha(y^{(i)}-h_{\theta}(x^{(i)}))x_j^{(i)}"></p></li>
 </ol>
 <p>两者只不过一个将样本放在了for循环上，一者放在了。事实证明，只要选择合适的学习率 <span class="math"><em>α</em></span> , Gradient descent algorithm总是能收敛到一个接近最优值的值。学习率选择过大可能造成cost function的发散，选择太小，收敛速度会变慢。</p>
 <p>关于收敛条件，Andrew Ng没有在课程中提到更多，我给出两种收敛准则：</p>
@@ -197,24 +199,24 @@ ylabel(<span class="st">&#39;J(\theta)&#39;</span>);</code></pre>
 <li>局部线性模型，对每段数据进行局部建立线性模型。Andrew Ng课堂上讲解了Locally Weighted Linear Regression，即局部加权的线性模型</li>
 </ol>
 <h3 id="locally-weighted-linear-regression">Locally Weighted Linear Regression</h3>
-<p><img src="http://www.forkosh.com/mathtex.cgi? J(\theta)=\frac{1}{2}\sum_{i=1}^{m}w^{(i)}(y^{(i)}-h_{\theta}(x^{(i)}))^2"></p>
+<p><img src="http://latex.codecogs.com/gif.latex? J(\theta)=\frac{1}{2}\sum_{i=1}^{m}w^{(i)}(y^{(i)}-h_{\theta}(x^{(i)}))^2"></p>
 <p>其中权值的一种好的选择方式是：</p>
-<p><img src="http://www.forkosh.com/mathtex.cgi? w^{(i)}=\bold{exp}(-\frac{(x^{(i)}-x)^2}{2\tau^2})"></p>
+<p><img src="http://latex.codecogs.com/gif.latex? w^{(i)}=\bold{exp}(-\frac{(x^{(i)}-x)^2}{2\tau^2})"></p>
 <h2 id="logistic-regression与分类问题">Logistic Regression与分类问题</h2>
 <p>Linear Regression解决的是连续的预测和拟合问题，而Logistic Regression解决的是离散的分类问题。两种方式，但本质殊途同归，两者都可以算是指数函数族的特例。</p>
 <p>在分类问题中，y取值在{0,1}之间，因此，上述的Liear Regression显然不适应。修改模型如下</p>
-<p><img src="http://www.forkosh.com/mathtex.cgi? h_{\theta}(x)=g(\theta^Tx)=\frac{1}{1+\bold{e}^{-\theta^Tx}}"></p>
+<p><img src="http://latex.codecogs.com/gif.latex? h_{\theta}(x)=g(\theta^Tx)=\frac{1}{1+\bold{e}^{-\theta^Tx}}"></p>
 <p>该模型称为Logistic函数或Sigmoid函数。为什么选择该函数，我们看看这个函数的图形就知道了，</p>
 <div class="figure">
 <img src="../images/Stanford机器学习课程笔记1-监督学习/Sigmoid.png" />
 </div>
 <p>Sigmoid函数范围在[0,1]之间，参数 <span class="math"><em>θ</em></span> 只不过控制曲线的陡峭程度。以0.5为截点，&gt;0.5则y值为1，&lt; 0.5则y值为0，这样就实现了两类分类的效果。</p>
 <p>假设 <span class="math"><em>P</em>(<em>y</em> = 1|<em>x</em>; <em>θ</em>) = <em>h</em><sub><em>θ</em></sub>(<em>x</em>)</span> ， <span class="math"><em>P</em>(<em>y</em> = 0|<em>x</em>; <em>θ</em>) = 1 − <em>h</em><sub><em>θ</em></sub>(<em>x</em>)</span> , 写得更紧凑一些，</p>
-<p><img src="http://www.forkosh.com/mathtex.cgi? P(y|x;\theta)=(h_{\theta}(x))^y(1-h_{\theta}(x))^{1-y}"></p>
+<p><img src="http://latex.codecogs.com/gif.latex? P(y|x;\theta)=(h_{\theta}(x))^y(1-h_{\theta}(x))^{1-y}"></p>
 <p>对m个训练样本，使其似然函数最大，则有</p>
-<p><img src="http://www.forkosh.com/mathtex.cgi? \bold{max}L(\theta)=\bold{max}\prod_{i=1}{m}(h_{\theta}(x^{(i)}))^y^{(i)}(1-h_{\theta}(x^{(i)}))^{1-y^{(i)}}"></p>
+<p><img src="http://latex.codecogs.com/gif.latex? \bold{max}L(\theta)=\bold{max}\prod_{i=1}{m}(h_{\theta}(x^{(i)}))^y^{(i)}(1-h_{\theta}(x^{(i)}))^{1-y^{(i)}}"></p>
 <p>同样的可以用梯度下降法求解上述的最大值问题，只要将最大值求解转化为求最小值，则迭代公式一模一样，</p>
-<p><img src="http://www.forkosh.com/mathtex.cgi? \bold{min}J(\theta)=\bold{min}\{-\bold{L}(\theta)\}"></p>
+<p><img src="http://latex.codecogs.com/gif.latex? \bold{min}J(\theta)=\bold{min}\{-\log\bold{L}(\theta)\}"></p>
 <p>最后的梯度下降方式和Linear Regression一致。我做了个例子（<a href="../enclosure/Stanford机器学习课程笔记1-监督学习/LogisticInput.txt">数据集链接</a>），下面是Logistic的Matlab代码，</p>
 <pre><code>function Logistic
 
@@ -282,6 +284,142 @@ end</code></pre>
 <img src="../images/Stanford机器学习课程笔记1-监督学习/LogisticRegression.png" />
 </div>
 <p>判决边界(Decesion Boundary)的计算是令h(x)=0.5得到的。当输入新的数据，计算h(x)：h(x)&gt;0.5为正样本所属的类，h(x)&lt; 0.5 为负样本所属的类。</p>
+<h3 id="特征映射与过拟合over-fitting">特征映射与过拟合(over-fitting)</h3>
+<p>这部分在Andrew Ng课堂上没有讲，参考了网络上的资料。</p>
+<p>上面的数据可以通过直线进行划分，但实际中存在那么种情况，无法直接使用直线判决边界(看后面的例子)。</p>
+<p>为解决上述问题，必须将特征映射到高维，然后通过非直线判决界面进行划分。特征映射的方法将已有的特征进行多项式组合，形成更多特征，</p>
+<p><img src="http://latex.codecogs.com/gif.latex? mapFeature=\left[\begin{array}{c}1 \\ x_1 \\ x_2 \\ x_1^2 \\ x_1x_2 \\ x_2^2 \end{array}\right]"></p>
+<p>上面将二维特征映射到了2阶（还可以映射到更高阶），这便于形成非线性的判决边界。</p>
+<p>但还存在问题，尽管上面方法便于对非线性的数据进行划分，但也容易由于高维特性造成过拟合。因此，引入泛化项应对过拟合问题。似然函数添加泛化项后变成，</p>
+<p><img src="http://latex.codecogs.com/gif.latex? J(\theta)=\sum_{i=1}^{m}[-y^{(i)}\log h(x^{(i)})-(1-y^{(i)})\log(1-h(x^{(i)}))]+\frac{\lambda}{2}\sum_{j=1}^n\theta_j"></p>
+<p>此时梯度下降算法发生改变，</p>
+<p><img src="http://latex.codecogs.com/gif.latex? \theta_j=\theta_j+\alpha\left[\sum_{i=1}^{m}(y^{(i)}-h_{\theta}(x^{(i)}))x_j^{(i)}-\lambda\theta_j\right]"></p>
+<p>最后来个例子，<a href="../enclosure/Stanford机器学习课程笔记1-监督学习/ex2data2.txt">样本数据链接</a>，对应的含泛化项和特征映射的matlab分类代码如下：</p>
+<pre class="sourceCode matlab"><code class="sourceCode matlab">function LogisticEx2
+
+clear all;
+close all
+clc
+
+data = load(<span class="st">&#39;ex2data2.txt&#39;</span>);
+x = data(:,<span class="fl">1</span>:<span class="fl">2</span>);
+y = data(:,<span class="fl">3</span>);
+
+<span class="co">% Plot Original Data</span>
+figure,
+positive = find(y==<span class="fl">1</span>);
+negtive = find(y==<span class="fl">0</span>);
+subplot(<span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">1</span>);
+hold on
+plot(x(positive,<span class="fl">1</span>), x(positive,<span class="fl">2</span>), <span class="st">&#39;k+&#39;</span>, <span class="st">&#39;LineWidth&#39;</span>,<span class="fl">2</span>, <span class="st">&#39;MarkerSize&#39;</span>, <span class="fl">7</span>);
+plot(x(negtive,<span class="fl">1</span>), x(negtive,<span class="fl">2</span>), <span class="st">&#39;bo&#39;</span>, <span class="st">&#39;LineWidth&#39;</span>,<span class="fl">2</span>, <span class="st">&#39;MarkerSize&#39;</span>, <span class="fl">7</span>);
+
+<span class="co">% Compute Likelihood(Cost) Function</span>
+[m,n] = size(x);
+x = mapFeature(x);
+theta = zeros(size(x,<span class="fl">2</span>), <span class="fl">1</span>);
+lambda = <span class="fl">1</span>;
+[cost, grad] = cost_func(theta, x, y, lambda);
+threshold = <span class="fl">0.53</span>;
+alpha = <span class="fl">10</span>^(-<span class="fl">1</span>);
+costs = [];
+while cost &gt; threshold
+    theta = theta + alpha * grad;
+    [cost, grad] = cost_func(theta, x, y, lambda);
+    costs = [costs cost];
+end
+
+<span class="co">% Plot Decision Boundary </span>
+hold on
+plotDecisionBoundary(theta, x, y);
+legend(<span class="st">&#39;Positive&#39;</span>, <span class="st">&#39;Negtive&#39;</span>, <span class="st">&#39;Decision Boundary&#39;</span>)
+xlabel(<span class="st">&#39;Feature Dim1&#39;</span>);
+ylabel(<span class="st">&#39;Feature Dim2&#39;</span>);
+title(<span class="st">&#39;Classifaction Using Logistic Regression&#39;</span>);
+
+<span class="co">% Plot Costs Iteration</span>
+<span class="co">% figure,</span>
+subplot(<span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">2</span>);plot(costs, <span class="st">&#39;*&#39;</span>);
+title(<span class="st">&#39;Cost Function Iteration&#39;</span>);
+xlabel(<span class="st">&#39;Iterations&#39;</span>);
+ylabel(<span class="st">&#39;Cost Fucntion Value&#39;</span>);
+
+end
+
+function f=mapFeature(x)
+<span class="co">% Map features to high dimension</span>
+degree = <span class="fl">6</span>;
+f = ones(size(x(:,<span class="fl">1</span>)));  
+for i = <span class="fl">1</span>:degree  
+    for j = <span class="fl">0</span>:i  
+        f(:, end+<span class="fl">1</span>) = (x(:,<span class="fl">1</span>).^(i-j)).*(x(:,<span class="fl">2</span>).^j);
+    end  
+end
+end
+
+function g=sigmoid(z)
+g = <span class="fl">1.0</span> ./ (<span class="fl">1.0</span>+exp(-z));
+end
+
+function [J,grad] = cost_func(theta, X, y, lambda)
+<span class="co">% Computer Likelihood Function and Gradient</span>
+m = length(y); <span class="co">% training examples</span>
+hx = sigmoid(X*theta);
+J = (<span class="fl">1</span>./m)*sum(-y.*log(hx)-(<span class="fl">1.0</span>-y).*log(<span class="fl">1.0</span>-hx)) + (lambda./(<span class="fl">2</span>*m)*norm(theta(<span class="fl">2</span>:end))^<span class="fl">2</span>);
+regularize = (lambda/m).*theta;
+regularize(<span class="fl">1</span>) = <span class="fl">0</span>;
+grad = (<span class="fl">1</span>./m) .* X&#39; * (y-hx) - regularize;
+end
+
+function plotDecisionBoundary(theta, X, y)
+<span class="co">%PLOTDECISIONBOUNDARY Plots the data points X and y into a new figure with</span>
+<span class="co">%the decision boundary defined by theta</span>
+<span class="co">%   PLOTDECISIONBOUNDARY(theta, X,y) plots the data points with + for the </span>
+<span class="co">%   positive examples and o for the negative examples. X is assumed to be </span>
+<span class="co">%   a either </span>
+<span class="co">%   1) Mx3 matrix, where the first column is an all-ones column for the </span>
+<span class="co">%      intercept.</span>
+<span class="co">%   2) MxN, N&gt;3 matrix, where the first column is all-ones</span>
+
+<span class="co">% Plot Data</span>
+<span class="co">% plotData(X(:,2:3), y);</span>
+hold on
+
+if size(X, <span class="fl">2</span>) &lt;= <span class="fl">3</span>
+    <span class="co">% Only need 2 points to define a line, so choose two endpoints</span>
+    plot_x = [min(X(:,<span class="fl">2</span>))-<span class="fl">2</span>,  max(X(:,<span class="fl">2</span>))+<span class="fl">2</span>];
+
+    <span class="co">% Calculate the decision boundary line</span>
+    plot_y = (-<span class="fl">1</span>./theta(<span class="fl">3</span>)).*(theta(<span class="fl">2</span>).*plot_x + theta(<span class="fl">1</span>));
+
+    <span class="co">% Plot, and adjust axes for better viewing</span>
+    plot(plot_x, plot_y)
+    
+    <span class="co">% Legend, specific for the exercise</span>
+    legend(<span class="st">&#39;Admitted&#39;</span>, <span class="st">&#39;Not admitted&#39;</span>, <span class="st">&#39;Decision Boundary&#39;</span>)
+    axis([<span class="fl">30</span>, <span class="fl">100</span>, <span class="fl">30</span>, <span class="fl">100</span>])
+else
+    <span class="co">% Here is the grid range</span>
+    u = linspace(-<span class="fl">1</span>, <span class="fl">1.5</span>, <span class="fl">50</span>);
+    v = linspace(-<span class="fl">1</span>, <span class="fl">1.5</span>, <span class="fl">50</span>);
+
+    z = zeros(length(u), length(v));
+    <span class="co">% Evaluate z = theta*x over the grid</span>
+    for i = <span class="fl">1</span>:length(u)
+        for j = <span class="fl">1</span>:length(v)
+            z(i,j) = mapFeature([u(i), v(j)])*theta;
+        end
+    end
+    z = z&#39;; <span class="co">% important to transpose z before calling contour</span>
+
+    <span class="co">% Plot z = 0</span>
+    <span class="co">% Notice you need to specify the range [0, 0]</span>
+    contour(u, v, z, [<span class="fl">0</span>, <span class="fl">0</span>], <span class="st">&#39;LineWidth&#39;</span>, <span class="fl">2</span>)
+end
+end</code></pre>
+<div class="figure">
+<img src="../images/Stanford机器学习课程笔记1-监督学习/NonlinearLogistic.png" />
+</div>
 <p>我们再回过头来看Logistic问题：对于非线性的问题，只不过使用了一个叫Sigmoid的非线性映射成一个线性问题。那么，除了Sigmoid函数，还有其它的函数可用吗？Andrew Ng老师还讲了指数函数族。</p>
 <div class="ds-thread" data-thread-key="Stanford机器学习课程笔记1-监督学习" data-title="Stanford机器学习课程笔记1-监督学习" data-url="xiahouzuoxin.github.io/notes/html/Stanford机器学习课程笔记1-监督学习.html"></div>
 <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"slide":{"type":"slide","bdImg":"5","bdPos":"right","bdTop":"300"},"image":{"viewList":["qzone","tsina","tqq","renren","weixin"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["qzone","tsina","tqq","renren","weixin"]}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
