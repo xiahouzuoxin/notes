@@ -52,25 +52,25 @@ Stanford机器学习课程的主页是： <http://cs229.stanford.edu/>
 
 Assume：房价与“面积和卧室数量”是线性关系，用线性关系进行放假预测。因而给出线性模型， $h_{\theta}(x)=\sum{\theta^Tx}$ ，其中 $x=[x_1,x_2]$ , 分别对应面积和卧室数量。 为得到预测模型，就应该根据表中已有的数据拟合得到参数 $\theta$ 的值。课程通过从概率角度进行解释（主要用到了大数定律即“线性拟合模型的误差满足高斯分布”的假设，通过最大似然求导就能得到下面的表达式）为什么应该求解如下的最小二乘表达式来达到求解参数的目的，
 
-<img src="http://www.forkosh.com/mathtex.cgi? J(\theta)=\frac{1}{2}\sum_{i=1}^{m}(y_i-h_{\theta}(x_i))^2">
+<img src="http://latex.codecogs.com/gif.latex? J(\theta)=\frac{1}{2}\sum_{i=1}^{m}(y_i-h_{\theta}(x_i))^2">
 
 上述 $J(\theta)$ 称为cost function， 通过 $minJ(\theta)$ 即可得到拟合模型的参数。
 
 解 $minJ(\theta)$ 的方法有多种， 包括Gradient descent algorithm和Newton's method，这两种都是运筹学的数值计算方法，非常适合计算机运算，这两种算法不仅适合这里的线性回归模型，对于非线性模型如下面的Logistic模型也适用。除此之外，Andrew Ng还通过线性代数推导了最小均方的算法的闭合数学形式，
 
-<img src="http://www.forkosh.com/mathtex.cgi? \theta=(X^TX)^{-1}X^T\bold{y}"> 
+<img src="http://latex.codecogs.com/gif.latex? \theta=(X^TX)^{-1}X^T\bold{y}"> 
 
 Gradient descent algorithm执行过程中又分两种方法：batch gradient descent和stochastic gradient descent。batch gradient descent每次更新 $\theta$ 都用到所有的样本数据，而stochastic gradient descent每次更新则都仅用单个的样本数据。两者更新过程如下：
 
 1. batch gradient descent
 
-	<img src="http://www.forkosh.com/mathtex.cgi? \theta_j:=\theta_j+\alpha\sum_{i=1}^{m}(y^{(i)}-h_{\theta}(x^{(i)}))x_j^{(i)}">
+	<img src="http://latex.codecogs.com/gif.latex? \theta_j:=\theta_j+\alpha\sum_{i=1}^{m}(y^{(i)}-h_{\theta}(x^{(i)}))x_j^{(i)}">
 
 2. stochastic gradient descent 
 
 	for i=1 to m
 	
-	<img src="http://www.forkosh.com/mathtex.cgi? \theta_j:=\theta_j+\alpha(y^{(i)}-h_{\theta}(x^{(i)}))x_j^{(i)}">
+	<img src="http://latex.codecogs.com/gif.latex? \theta_j:=\theta_j+\alpha(y^{(i)}-h_{\theta}(x^{(i)}))x_j^{(i)}">
 
 两者只不过一个将样本放在了for循环上，一者放在了\sum上求和。事实证明，只要选择合适的学习率 $\alpha$ , Gradient descent algorithm总是能收敛到一个接近最优值的值。学习率选择过大可能造成cost function的发散，选择太小，收敛速度会变慢。
 
@@ -154,11 +154,11 @@ ylabel('J(\theta)');
 
 ### Locally Weighted Linear Regression
 
-<img src="http://www.forkosh.com/mathtex.cgi? J(\theta)=\frac{1}{2}\sum_{i=1}^{m}w^{(i)}(y^{(i)}-h_{\theta}(x^{(i)}))^2">
+<img src="http://latex.codecogs.com/gif.latex? J(\theta)=\frac{1}{2}\sum_{i=1}^{m}w^{(i)}(y^{(i)}-h_{\theta}(x^{(i)}))^2">
 
 其中权值的一种好的选择方式是：
 
-<img src="http://www.forkosh.com/mathtex.cgi? w^{(i)}=\bold{exp}(-\frac{(x^{(i)}-x)^2}{2\tau^2})">
+<img src="http://latex.codecogs.com/gif.latex? w^{(i)}=\bold{exp}(-\frac{(x^{(i)}-x)^2}{2\tau^2})">
 
 ## Logistic Regression与分类问题
 
@@ -166,7 +166,7 @@ Linear Regression解决的是连续的预测和拟合问题，而Logistic Regres
 
 在分类问题中，y取值在{0,1}之间，因此，上述的Liear Regression显然不适应。修改模型如下
 
-<img src="http://www.forkosh.com/mathtex.cgi? h_{\theta}(x)=g(\theta^Tx)=\frac{1}{1+\bold{e}^{-\theta^Tx}}">
+<img src="http://latex.codecogs.com/gif.latex? h_{\theta}(x)=g(\theta^Tx)=\frac{1}{1+\bold{e}^{-\theta^Tx}}">
 
 该模型称为Logistic函数或Sigmoid函数。为什么选择该函数，我们看看这个函数的图形就知道了，
 
@@ -176,15 +176,15 @@ Sigmoid函数范围在[0,1]之间，参数 $\theta$ 只不过控制曲线的陡�
 
 假设 $P(y=1|x;\theta)=h_{\theta}(x)$ ， $P(y=0|x;\theta)=1-h_{\theta}(x)$ , 写得更紧凑一些，
 
-<img src="http://www.forkosh.com/mathtex.cgi? P(y|x;\theta)=(h_{\theta}(x))^y(1-h_{\theta}(x))^{1-y}">
+<img src="http://latex.codecogs.com/gif.latex? P(y|x;\theta)=(h_{\theta}(x))^y(1-h_{\theta}(x))^{1-y}">
 
 对m个训练样本，使其似然函数最大，则有
 
-<img src="http://www.forkosh.com/mathtex.cgi? \bold{max}L(\theta)=\bold{max}\prod_{i=1}{m}(h_{\theta}(x^{(i)}))^y^{(i)}(1-h_{\theta}(x^{(i)}))^{1-y^{(i)}}">
+<img src="http://latex.codecogs.com/gif.latex? \bold{max}L(\theta)=\bold{max}\prod_{i=1}{m}(h_{\theta}(x^{(i)}))^y^{(i)}(1-h_{\theta}(x^{(i)}))^{1-y^{(i)}}">
 
 同样的可以用梯度下降法求解上述的最大值问题，只要将最大值求解转化为求最小值，则迭代公式一模一样，
 
-<img src="http://www.forkosh.com/mathtex.cgi? \bold{min}J(\theta)=\bold{min}\{-\bold{L}(\theta)\}">
+<img src="http://latex.codecogs.com/gif.latex? \bold{min}J(\theta)=\bold{min}\{-\log\bold{L}(\theta)\}">
 
 最后的梯度下降方式和Linear Regression一致。我做了个例子（[数据集链接](../enclosure/Stanford机器学习课程笔记1-监督学习/LogisticInput.txt)），下面是Logistic的Matlab代码，
 
@@ -255,6 +255,155 @@ end
 ![](../images/Stanford机器学习课程笔记1-监督学习/LogisticRegression.png)
 
 判决边界(Decesion Boundary)的计算是令h(x)=0.5得到的。当输入新的数据，计算h(x)：h(x)>0.5为正样本所属的类，h(x)< 0.5 为负样本所属的类。
+
+### 特征映射与过拟合(over-fitting)
+
+这部分在Andrew Ng课堂上没有讲，参考了网络上的资料。
+
+上面的数据可以通过直线进行划分，但实际中存在那么种情况，无法直接使用直线判决边界(看后面的例子)。
+
+为解决上述问题，必须将特征映射到高维，然后通过非直线判决界面进行划分。特征映射的方法将已有的特征进行多项式组合，形成更多特征，
+
+<img src="http://latex.codecogs.com/gif.latex? mapFeature=\left[\begin{array}{c}1 \\ x_1 \\ x_2 \\ x_1^2 \\ x_1x_2 \\ x_2^2 \end{array}\right]">
+
+上面将二维特征映射到了2阶（还可以映射到更高阶），这便于形成非线性的判决边界。
+
+但还存在问题，尽管上面方法便于对非线性的数据进行划分，但也容易由于高维特性造成过拟合。因此，引入泛化项应对过拟合问题。似然函数添加泛化项后变成，
+
+<img src="http://latex.codecogs.com/gif.latex? J(\theta)=\sum_{i=1}^{m}[-y^{(i)}\log h(x^{(i)})-(1-y^{(i)})\log(1-h(x^{(i)}))]+\frac{\lambda}{2}\sum_{j=1}^n\theta_j">
+
+此时梯度下降算法发生改变，
+
+<img src="http://latex.codecogs.com/gif.latex? \theta_j=\theta_j+\alpha\left[\sum_{i=1}^{m}(y^{(i)}-h_{\theta}(x^{(i)}))x_j^{(i)}-\lambda\theta_j\right]">
+
+最后来个例子，[样本数据链接](../enclosure/Stanford机器学习课程笔记1-监督学习/ex2data2.txt)，对应的含泛化项和特征映射的matlab分类代码如下：
+
+```matlab
+function LogisticEx2
+
+clear all;
+close all
+clc
+
+data = load('ex2data2.txt');
+x = data(:,1:2);
+y = data(:,3);
+
+% Plot Original Data
+figure,
+positive = find(y==1);
+negtive = find(y==0);
+subplot(1,2,1);
+hold on
+plot(x(positive,1), x(positive,2), 'k+', 'LineWidth',2, 'MarkerSize', 7);
+plot(x(negtive,1), x(negtive,2), 'bo', 'LineWidth',2, 'MarkerSize', 7);
+
+% Compute Likelihood(Cost) Function
+[m,n] = size(x);
+x = mapFeature(x);
+theta = zeros(size(x,2), 1);
+lambda = 1;
+[cost, grad] = cost_func(theta, x, y, lambda);
+threshold = 0.53;
+alpha = 10^(-1);
+costs = [];
+while cost > threshold
+    theta = theta + alpha * grad;
+    [cost, grad] = cost_func(theta, x, y, lambda);
+    costs = [costs cost];
+end
+
+% Plot Decision Boundary 
+hold on
+plotDecisionBoundary(theta, x, y);
+legend('Positive', 'Negtive', 'Decision Boundary')
+xlabel('Feature Dim1');
+ylabel('Feature Dim2');
+title('Classifaction Using Logistic Regression');
+
+% Plot Costs Iteration
+% figure,
+subplot(1,2,2);plot(costs, '*');
+title('Cost Function Iteration');
+xlabel('Iterations');
+ylabel('Cost Fucntion Value');
+
+end
+
+function f=mapFeature(x)
+% Map features to high dimension
+degree = 6;
+f = ones(size(x(:,1)));  
+for i = 1:degree  
+    for j = 0:i  
+        f(:, end+1) = (x(:,1).^(i-j)).*(x(:,2).^j);
+    end  
+end
+end
+
+function g=sigmoid(z)
+g = 1.0 ./ (1.0+exp(-z));
+end
+
+function [J,grad] = cost_func(theta, X, y, lambda)
+% Computer Likelihood Function and Gradient
+m = length(y); % training examples
+hx = sigmoid(X*theta);
+J = (1./m)*sum(-y.*log(hx)-(1.0-y).*log(1.0-hx)) + (lambda./(2*m)*norm(theta(2:end))^2);
+regularize = (lambda/m).*theta;
+regularize(1) = 0;
+grad = (1./m) .* X' * (y-hx) - regularize;
+end
+
+function plotDecisionBoundary(theta, X, y)
+%PLOTDECISIONBOUNDARY Plots the data points X and y into a new figure with
+%the decision boundary defined by theta
+%   PLOTDECISIONBOUNDARY(theta, X,y) plots the data points with + for the 
+%   positive examples and o for the negative examples. X is assumed to be 
+%   a either 
+%   1) Mx3 matrix, where the first column is an all-ones column for the 
+%      intercept.
+%   2) MxN, N>3 matrix, where the first column is all-ones
+
+% Plot Data
+% plotData(X(:,2:3), y);
+hold on
+
+if size(X, 2) <= 3
+    % Only need 2 points to define a line, so choose two endpoints
+    plot_x = [min(X(:,2))-2,  max(X(:,2))+2];
+
+    % Calculate the decision boundary line
+    plot_y = (-1./theta(3)).*(theta(2).*plot_x + theta(1));
+
+    % Plot, and adjust axes for better viewing
+    plot(plot_x, plot_y)
+    
+    % Legend, specific for the exercise
+    legend('Admitted', 'Not admitted', 'Decision Boundary')
+    axis([30, 100, 30, 100])
+else
+    % Here is the grid range
+    u = linspace(-1, 1.5, 50);
+    v = linspace(-1, 1.5, 50);
+
+    z = zeros(length(u), length(v));
+    % Evaluate z = theta*x over the grid
+    for i = 1:length(u)
+        for j = 1:length(v)
+            z(i,j) = mapFeature([u(i), v(j)])*theta;
+        end
+    end
+    z = z'; % important to transpose z before calling contour
+
+    % Plot z = 0
+    % Notice you need to specify the range [0, 0]
+    contour(u, v, z, [0, 0], 'LineWidth', 2)
+end
+end
+```
+
+![](../images/Stanford机器学习课程笔记1-监督学习/NonlinearLogistic.png)
 
 我们再回过头来看Logistic问题：对于非线性的问题，只不过使用了一个叫Sigmoid的非线性映射成一个线性问题。那么，除了Sigmoid函数，还有其它的函数可用吗？Andrew Ng老师还讲了指数函数族。
 
