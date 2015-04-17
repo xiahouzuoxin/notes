@@ -18,88 +18,9 @@
 <p>这是xiahouzuoxin的博客小站，建站时间时2014年3月，更早之前的博文在<a href="http://blog.csdn.net/xiahouzuoxin">CSDN</a>。在这，我记录和分享自己的学习、工作、生活心得，“千淘万漉虽辛苦，吹尽狂沙始到金”，多思考多记录，回头方能恍然大悟。本站所有文章都通过我的<a href="https://github.com/xiahouzuoxin/notes">Github</a>进行版本控制，如果你觉得本站的文章不错，欢迎<a href="https://github.com/xiahouzuoxin/notes">fork</a>，也很容易clone到本地：</p>
 <pre><code>$ git clone git@github.com:xiahouzuoxin/notes.git
 $ git checkout -b gh-pages origin/gh-pages</code></pre>
-<h1 id="学习经历">学习经历</h1>
-<ul>
-<li>2013级硕士 北京科技大学，计算机技术专业（保送）</li>
-<li>2009级本科 北京科技大学，电子信息工程专业</li>
-<li>2006级高中 江西省吉安市第一中学，宏志班</li>
-</ul>
-<h1 id="专长技能">专长技能</h1>
-<p>从大二(2010年)至今(2015年)，<strong>4年嵌入式经验，3年图像及音频信号处理经验</strong>。</p>
-<p>本人熟悉多种嵌入式平台，ARM系列包括STM32F103和STM32F405、DSP包括TMS320C6713、FPGA包括EP2C8系列，这些平台都有过相关项目或比赛经验。除此之外，掌握uCOS_ii、DSP/BIOS操作系统。现专注于数字信号处理（图像、音频）算法。热爱开源，熟练应用Linux环境，Windows下编程都习惯性使用Cygwin和VIM，做笔记Markdown是我的最爱。</p>
-<table>
-<thead>
-<tr class="header">
-<th align="left">程序设计</th>
-<th align="left">嵌入式平台</th>
-<th align="left">操作系统</th>
-<th align="left">信号处理</th>
-<th align="left">硬件设计</th>
-<th align="left">文档组织</th>
-<th align="left">英语能力</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">C/C++</td>
-<td align="left">TMS320C6713</td>
-<td align="left">Linux 2.6</td>
-<td align="left">图像处理</td>
-<td align="left">Cadence</td>
-<td align="left">VIM</td>
-<td align="left">CET-6</td>
-</tr>
-<tr class="even">
-<td align="left">Matlab</td>
-<td align="left">Cortex-M3/M4</td>
-<td align="left">uCOS ii</td>
-<td align="left">音频处理</td>
-<td align="left">Verilog</td>
-<td align="left">Markdown</td>
-<td align="left"></td>
-</tr>
-<tr class="odd">
-<td align="left">OpenCV</td>
-<td align="left">EP2C8</td>
-<td align="left"></td>
-<td align="left">机器学习</td>
-<td align="left"></td>
-<td align="left">Git</td>
-<td align="left"></td>
-</tr>
-</tbody>
-</table>
-<h1 id="学术">学术</h1>
-<h3 id="发表sci论文">发表SCI论文</h3>
-<p>Zuoxin Xiahou and Xiaotong Zhang, “<a href="http://downloads.hindawi.com/journals/ijdsn/aa/438638.pdf">Adaptive Localization in Wireless Sensor Network through Bayesian Compressive Sensing</a>,” International Journal of Distributed Sensor Networks, Article ID 438638, in press.</p>
-<h1 id="项目获奖实习">项目/获奖/实习</h1>
-<h3 id="基于无线传感网的声测向及声目标识别系统项目组长">2013.08-,基于无线传感网的声测向及声目标识别系统，项目组长</h3>
-<p>要求根据声音信号对目标进行测向(精度5°)和识别(&gt;85%)，将测向结果通过组网的嵌入式节点（&gt;100个）上传控制台。</p>
-<p>本人跟踪整个项目，前期独立负责了项目技术策划书中声测向和声识别部分的撰写，并以此获得 <strong>55万项目总经费</strong>；项目实施阶段，负责了 1.声测向声识别算法验证和实现 2.声识别算法验证 3.硬件设计（DSP+FPGA+STM32）和驱动设计。</p>
-<p>由于缺乏声信号处理经验，为完成项目，向中科院声学所、中科院电子所、中国兵器研究院等单位做过技术咨询，顺利通过中期验收。</p>
-<h3 id="支持向量机结合条件随机场的图像目标识别结果比iccv09高6.7">2012.06-2013.05,支持向量机结合条件随机场的图像目标识别，结果比ICCV09高6.7%</h3>
-<p>Matlab平台，用到VLFeat和LibSVM工具包。利用SLIC分割超像素，提取SIFT、Textons纹理特征，使用K-Means形成特征包，支持向量机(SVM)分类特征包(前景or背景)，条件随机场的加入利于平滑分割边界。</p>
-<p>在超像素分割时，对比SLIC和QuickShift的分割结果；为提高聚类效率，将浮点K-Means改进为使用HIKM（层次整数Kmeans聚类）;加入PCA降维和SVM参数寻优过程。</p>
-<p>对graz-02数据库中cars的目标识别精度达到 <strong>78.9%</strong> ，而ICCV2009论文&quot;Class Segmentation and Object Localization with Superpixel Neighborhoods&quot;仅达到 <strong>72.2%</strong> 。</p>
-<h3 id="sbc子带音频编码算法ck610平台实现亿阳通讯实习">2012.08-2012.10,sbc子带音频编码算法CK610平台实现，亿阳通讯实习</h3>
-<p>sbc(Subband Codec)是蓝牙音频传输中常见的编码算法，该编码算法是用于耳机中。本人负责sbc开源代码的移植和调试，写demo的程序。当中得学C-SKY平台使用，软件优化。到离职时(因保研事项)已完成sbc代码的调试和移植。</p>
-<h3 id="移动垃圾篓组员">2012.06-2012.10,移动垃圾篓，组员</h3>
-<p>项目组3人，通过无线蓝牙模块，在手机端或PC端控制垃圾篓的朝目标移动。本人负责了通信命令的设计、软件实现。本设计参与2012年美新杯物联网创新创业大赛获 <strong>北京市三等奖</strong> 。</p>
-<h3 id="电脑鼠制作骨干2012年全国比赛第3名2013年负责人">2010.09-2013.09,电脑鼠制作，骨干、2012年全国比赛第3名、2013年负责人</h3>
-<p>电脑鼠是无人控制自主走迷宫机器人，前后共制作过4版，团队成员7人，2011年为北京科技大学计通学院暑期实习 <strong>提供产品78套</strong> ，4支机器人在参加2012年计算机学会主办的全国电脑鼠走迷宫竞赛中分获 <strong>1特等奖，2一等奖，1二等奖</strong>。</p>
-<p>作为项目骨干、主车手，我负责了2/3版PCB设计( <strong>Cortex-M3:STM32F103RET/Cortex-M4:STM32F405RG</strong> )，编码器驱动及计数、电机驱动及PID调节等，并凭借团队内唯一的连续转弯方案，本人调试电脑鼠获 <strong>2012年全国比赛第3名</strong> 。以队长身份组织参加北京科技大学 <strong>摇篮杯(挑战杯预选赛)获三等奖</strong> 。</p>
-<h3 id="智能车制作组员">2011.10-2011.12,智能车制作，组员</h3>
-<p>参赛组员4人，负责部分调试工作，设计急刹车方案（决赛时仅有3/16支队伍做到），为比赛争取到奖励时间。最终参与北京科技大学智能车 <strong>校内赛获光电组第3名</strong>。</p>
-<h3 id="其它">2009.09-2015.03,其它</h3>
-<ul>
-<li>2012 校级三好学生，人民奖学金二等</li>
-<li>2012 中国航天科工集团2院25所实习，后勤：电子元器件登记</li>
-<li>2010-2011 人民奖学金四等/三等</li>
-<li>2009-2011 《北科大青年》第一届征文大赛三等奖、报刊撰稿人</li>
-<li>2010 北京地下室蚁族群体调研</li>
-<li>2010-2012 北京科技大学图书馆，助管</li>
-</ul>
-<h1 id="联系欢迎学习交流求职中简历">联系（欢迎学习交流），求职中(<a href="./pdf/resume.pdf">简历</a>)</h1>
+<h1 id="求职中">求职中……</h1>
+<p>本人北京科技大学计算机技术小硕一枚，期望工作方向是信号处理、机器学习，附上<a href="pdf/resume.html">简历</a>。</p>
+<h1 id="联系欢迎学习交流">联系（欢迎学习交流）</h1>
 <ul>
 <li>邮箱： <script type="text/javascript">
 <!--
