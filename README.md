@@ -15,7 +15,8 @@
 - [基于谱减法的声音去噪](./essays/基于谱减法的声音去噪.md)
 - [读论文BinarizedNormedGradientsforObjectnessEstimationat300fps](essays/读论文BinarizedNormedGradientsforObjectnessEstimationat300fps.md)
 - [分类算法中的ROC与PR指标](./essays/分类算法中的ROC与PR指标.md)
-- [Stanford机器学习课程笔记1-监督学习](./essays/Stanford机器学习课程笔记1-监督学习.md)
+- [Stanford机器学习课程笔记1-线性回归和逻辑回归](./essays/Stanford机器学习课程笔记1-监督学习.md)
+- [Stanford机器学习课程笔记2-高斯判别分析与朴素贝叶斯](./essays/Stanford机器学习课程笔记2-高斯判别分析与朴素贝叶斯.md)
 
 # OpenCV系列
 - [CentOS上编译安装OpenCV-2.3.1与ffmpeg-2.1.2](./essays/CentOS上编译安装OpenCV-2.3.1与ffmpeg-2.1.2.md)
