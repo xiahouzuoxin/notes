@@ -1,0 +1,344 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
+  </style>
+  <link rel="stylesheet" href="../stylesheets/Github.css" type="text/css" />
+  <title>Stanford机器学习课程笔记2-高斯判别分析与朴素贝叶斯</title>
+</head>
+<body>
+<div id="header"><center>
+    <p class="header_titleline">
+    <a href="../index.html" target="_self" title="主页">主页  </a><a href="../Search.html" target="_self" title="站内搜索">站内搜索  </a><a href="../Projects.html" target="_self" title="项目研究">项目研究  </a><a href="../Archives.html" target="_self" title="文章存档">文章存档  </a><a href="../README.html" target="_self" title="分类目录">分类目录 </a><a href="../AboutMe.html" target="_self" title="关于我">关于我  </a>
+    </p>
+</center></div>
+<h1>Stanford机器学习课程笔记2-高斯判别分析与朴素贝叶斯</h1>
+<h4>2015-04-16 / xiahouzuoxin</h4>
+<h4>Tags: Maching Learning</h4>
+转载请注明出处: <a href="http://xiahouzuoxin.github.io/notes/">http://xiahouzuoxin.github.io/notes/</a>
+<div id="TOC">
+<ul>
+<li><a href="#判别学习算法和生成学习算法">判别学习算法和生成学习算法</a></li>
+<li><a href="#高斯判别分析gaussian-discriminant-analysis">高斯判别分析（Gaussian Discriminant Analysis）</a></li>
+<li><a href="#朴素贝叶斯算法naive-bayesian">朴素贝叶斯算法(Naive Bayesian)</a><ul>
+<li><a href="#拉普拉斯平滑laplace-smoothing">拉普拉斯平滑（Laplace smoothing)</a></li>
+</ul></li>
+</ul>
+</div>
+<!---title:Stanford机器学习课程笔记2-高斯判别分析与朴素贝叶斯-->
+<!---keywords:Maching Learning-->
+<!---date:2015-04-16-->
+<h2 id="判别学习算法和生成学习算法">判别学习算法和生成学习算法</h2>
+<ul>
+<li><p>判别学习算法：直接学习p(y|x)，即直接通过输入特征空间x去确定目标类型{0,1}，比如Logistic Regression和Linear Regression以及感知学习算法都是判别学习算法。</p></li>
+<li><p>生成学习算法：不直接对p(y|x)建模，而是通过对p(x|y)和p(y)建模。比如，y表示目标是dog(0)还是elephant(1)，则p(x|y=1)表示大象的特征分布，p(x|y=0)表示狗的特征分布。下面的高斯判别分析和朴素贝叶斯算法都是生成学习算法。</p></li>
+</ul>
+<p>生成学习算法通过学习p(y|x)和p(y)，一般都要通过贝叶斯公式转化为p(x|y)来进行预测。</p>
+<p><img src="http://latex.codecogs.com/gif.latex? p(y|x)=\frac{p(x|y)p(y)}{p(x)}"></p>
+<p>最大释然估计也可以转换为联合概率的最值。</p>
+<p><img src="http://latex.codecogs.com/gif.latex? \max_y p(y|x)=\arg \max_y \frac{p(x|y)p(y)}{p(x)}=\arg \max_y p(x|y)p(y)"></p>
+<h2 id="高斯判别分析gaussian-discriminant-analysis">高斯判别分析（Gaussian Discriminant Analysis）</h2>
+<p>对于输入特征x是连续值的随机变量，使用高斯判别分析模型非常有效，它对p(x|y)使用高斯分布建模。</p>
+<p><img src="http://latex.codecogs.com/gif.latex? y \sim Bernoulli(\phi)=p^{\phi}p^{1-\phi}">，其中p为先验概率</p>
+<p><img src="http://latex.codecogs.com/gif.latex? x|y=0 \sim N(\mu_0,\Sigma)"></p>
+<p><img src="http://latex.codecogs.com/gif.latex? x|y=1 \sim N(\mu_1,\Sigma)"></p>
+<p>依据前面对生成学习算法的分析，求联合概率的最大似然估计，</p>
+<p><img src="http://latex.codecogs.com/gif.latex? l(\phi,\mu_0,\mu_1,\Sigma)=\log\prod_{i=1}^{m}p(x^{(i)}|y^{(i)};\mu_0,\mu_1,\Sigma)*p(y^{(i)};\phi)"></p>
+<p>求得4个参数值及其直观解释为：</p>
+<p><img src="http://latex.codecogs.com/gif.latex? \phi=\frac{1}{m}\sum_{i=1}^{m}1\{y^{(i)}=1\}"></p>
+<p>直观含义：类目1的样本数占总样本数的比例，即先验概率，类目0的先验概率刚好是 <span class="math">1 − <em>ϕ</em></span></p>
+<p><img src="http://latex.codecogs.com/gif.latex? \mu_0=\frac{\sum_{i=1}^{m}1\{y^{(i)}=0\}x^{(i)}}{\sum_{i=1}^{m}1\{y^{(i)}=0\}}"></p>
+<p>直观含义：类目0每个维度特征的均值，结果是nx1的向量，n为特征维度</p>
+<p><img src="http://latex.codecogs.com/gif.latex? \mu_1=\frac{\sum_{i=1}^{m}1\{y^{(i)}=1\}x^{(i)}}{\sum_{i=1}^{m}1\{y^{(i)}=1\}}"></p>
+<p>直观含义：类目1每个维度特征的均值，结果是nx1的向量</p>
+<p><img src="http://latex.codecogs.com/gif.latex? \Sigma=\frac{1}{m}\sum_{i=1}^{m}{(x^{(i)}-\mu_{y^{(i)}})}{(x^{(i)}-\mu_{y^{(i)}})^T}"></p>
+<p>下面随机产生2类高斯分布的数据，使用高斯判别分析得到的分界线。分界线的确定：P(y=1|x)=p(y=0|x)=0.5</p>
+<pre class="sourceCode matlab"><code class="sourceCode matlab"><span class="co">% Gaussian Discriminate Analysis</span>
+clc; clf;
+clear all
+
+<span class="co">% 随机产生2类高斯分布样本</span>
+mu = [<span class="fl">2</span> <span class="fl">3</span>];
+SIGMA = [<span class="fl">1</span> <span class="fl">0</span>; <span class="fl">0</span> <span class="fl">2</span>];
+x0 = mvnrnd(mu,SIGMA,<span class="fl">500</span>);
+y0 = zeros(length(x0),<span class="fl">1</span>);
+plot(x0(:,<span class="fl">1</span>),x0(:,<span class="fl">2</span>),<span class="st">&#39;k+&#39;</span>, <span class="st">&#39;LineWidth&#39;</span>,<span class="fl">1.5</span>, <span class="st">&#39;MarkerSize&#39;</span>, <span class="fl">7</span>);
+hold on;
+mu = [<span class="fl">7</span> <span class="fl">8</span>];
+SIGMA = [ <span class="fl">1</span> <span class="fl">0</span>; <span class="fl">0</span> <span class="fl">2</span>];
+x1 = mvnrnd(mu,SIGMA,<span class="fl">200</span>);
+y1 = ones(length(x1),<span class="fl">1</span>);
+plot(x1(:,<span class="fl">1</span>),x1(:,<span class="fl">2</span>),<span class="st">&#39;ro&#39;</span>, <span class="st">&#39;LineWidth&#39;</span>,<span class="fl">1.5</span>, <span class="st">&#39;MarkerSize&#39;</span>, <span class="fl">7</span>)
+
+x = [x0;x1];
+y = [y0;y1];
+m = length(x);
+
+<span class="co">% 计算参数: \phi,\u0,\u1,\Sigma</span>
+phi = (<span class="fl">1</span>/m)*sum(y==<span class="fl">1</span>);
+u0 = mean(x0,<span class="fl">1</span>);
+u1 = mean(x1,<span class="fl">1</span>);
+x0_sub_u0 = x0 - u0(ones(length(x0),<span class="fl">1</span>), :);
+x1_sub_u1 = x1 - u1(ones(length(x1),<span class="fl">1</span>), :);
+x_sub_u = [x0_sub_u0; x1_sub_u1];
+sigma = (<span class="fl">1</span>/m)*(x_sub_u&#39;*x_sub_u);
+
+<span class="co">%% Plot Result</span>
+<span class="co">% 画分界线,Ax+By=C</span>
+u0 = u0&#39;;
+u1 = u1&#39;;
+a=sigma&#39;*u1-sigma&#39;*u0;  
+b=u1&#39;*sigma&#39;-u0&#39;*sigma&#39;;  
+c=u1&#39;*sigma&#39;*u1-u0&#39;*sigma&#39;*u0;  
+A=a(<span class="fl">1</span>)+b(<span class="fl">1</span>);
+B=a(<span class="fl">2</span>)+b(<span class="fl">2</span>);  
+C=c;  
+x=-<span class="fl">2</span>:<span class="fl">10</span>;  
+y=-(A.*x-C)/B;  
+hold on;  
+plot(x,y,<span class="st">&#39;LineWidth&#39;</span>,<span class="fl">2</span>);
+
+<span class="co">% 画等高线</span>
+alpha = <span class="fl">0</span>:pi/<span class="fl">30</span>:<span class="fl">2</span>*pi;
+R = <span class="fl">3.3</span>;
+cx = u0(<span class="fl">1</span>)+R*cos(alpha);
+cy = u0(<span class="fl">2</span>)+R*sin(alpha);
+hold on;plot(cx,cy,<span class="st">&#39;b-&#39;</span>);
+cx = u1(<span class="fl">1</span>)+R*cos(alpha);
+cy = u1(<span class="fl">2</span>)+R*sin(alpha);
+plot(cx,cy,<span class="st">&#39;b-&#39;</span>);
+
+<span class="co">% 加注释</span>
+title(<span class="st">&#39;Gaussian Discriminate Analysis(GDA)&#39;</span>);
+xlabel(<span class="st">&#39;Feature Dimension (One)&#39;</span>);
+ylabel(<span class="st">&#39;Feature Dimension (Two)&#39;</span>);
+legend(<span class="st">&#39;Class 1&#39;</span>, <span class="st">&#39;Class 2&#39;</span>, <span class="st">&#39;Discriminate Boundary&#39;</span>);</code></pre>
+<div class="figure">
+<img src="../images/Stanford机器学习课程笔记2-高斯判别分析与朴素贝叶斯/GDA.png" />
+</div>
+<h2 id="朴素贝叶斯算法naive-bayesian">朴素贝叶斯算法(Naive Bayesian)</h2>
+<p>相较于高斯判别分析，朴素贝叶斯方法的假设特征之间条件条件，即有：</p>
+<p><img src="http://latex.codecogs.com/gif.latex? p(x_1,x_2,...,x_{5000}|y)=\prod_{i=1}^{n}p(x_i|y)"></p>
+<p>特别注意：特征之间条件独立是强假设。比如文本上下文的词汇之间必然存在关联（比如出现'qq'和'腾讯'这两个词就存在关联），只是我们的假设不考虑这种关联，即使如此，有时候Bayesian的效果还是非常棒，朴素贝叶斯常用语文本分类（比如最常见的垃圾邮件的检测）。下面是一份非常直观的以实例的方式介绍贝叶斯分类器的文档（如果显示不出来请换用Chrome浏览器，我后面的python代码也将用文档中的数据做example），</p>
+<embed width="800" height="600" src="../enclosure/Stanford机器学习课程笔记2-高斯判别分析与朴素贝叶斯/Bayesian Classification withInsect_examples.pdf">
+</embed>
+<p>看完上面的文稿，我们再来说明理论点的建模。Naive Bayesian对先验概率和似然概率进行建模，不妨设 <span class="math"><em>ϕ</em><sub><em>i</em>|<em>y</em> = 1</sub> = <em>p</em>(<em>x</em><sub><em>i</em></sub> = 1|<em>y</em> = 1)</span> ， <span class="math"><em>ϕ</em><sub><em>i</em>|<em>y</em> = 0</sub> = <em>p</em>(<em>x</em><sub><em>i</em></sub> = 1|<em>y</em> = 0)</span> ， <span class="math"><em>ϕ</em><sub><em>y</em></sub> = <em>p</em>(<em>y</em> = 1)</span> , 则又联合概率的似然函数最大，</p>
+<p><img src="http://latex.codecogs.com/gif.latex? l(\phi_{i|y=1},\phi_{i|y=0},\phi_{y})=\prod_{i=1}^{m}p(x^{(i)},y^{(i)})"></p>
+<p>求解得到先验概率和似然概率：</p>
+<p><img src="http://latex.codecogs.com/gif.latex? \phi_{j|y=1}=\frac{ \sum_{i=1}^{m}1\{x_j^{(i)}=1 \cap y^{(i)}=1\} }{ \sum_{i=1}^{m}1\{y^{(i)}=1\} }"></p>
+<p>直观含义：类目1中出现特征xj的频率，实际实现时只要通过频次进行计数即可</p>
+<p><img src="http://latex.codecogs.com/gif.latex? \phi_{j|y=1}=\frac{ \sum_{i=1}^{m}1\{x_j^{(i)}=1 \cap y^{(i)}=0\} }{ \sum_{i=1}^{m}1\{y^{(i)}=0\} }"></p>
+<p>直观含义：类目0中出现特征xj的频率，实际实现时只要通过频次进行计数即可</p>
+<p><img src="http://latex.codecogs.com/gif.latex? \phi_y=\frac{1}{m}\sum_{i=1}^{m}1\{y^{(i)}=1\}"></p>
+<p>直观含义：类目1的样本数占总样本数的比例，即先验概率，类目0的先验概率刚好是 <span class="math">1 − <em>ϕ</em></span> ，这个和GDA的结果是相同的。</p>
+<p>这里有个Trick，为什么不要对“证据因子”p(x)建模呢，（1）首先，p(x)可以通过似然概率和先验概率求得；（2）其次，p(x)的作用主要是起到概率归一化的效果，我们可以直接在程序中对最后的p(x,y)进行归一化就得到了p(y|x)。有了上面的结论，即已知先验概率和似然概率，很容易求的p(y=1|x)和p(y=0|x)。比较p(y=1|x)与p(y=0|x)的大小，若p(y=1|x)&gt;p(y=0|x)则分类到类目1，p(y=0|x)&gt;p(y=1|x)则分类为类目0。下面是我用python实现的Naive Bayesian（今后还是少用Matlab，多用python吧，毕竟Matlab只适合研究不能成产品。。。），</p>
+<pre class="sourceCode python"><code class="sourceCode python"><span class="co">#!/usr/bin/env python</span>
+<span class="co"># *-* coding=utf-8 *-*</span>
+
+<span class="co">&#39;Bayesian Classification&#39;</span>
+
+__author__=<span class="st">&#39;xiahouzuoxin&#39;</span>
+
+<span class="ch">import</span> logging
+logging.basicConfig(level=logging.INFO)
+
+<span class="kw">class</span> NaiveBayesian(<span class="dt">object</span>):
+
+    <span class="kw">def</span> <span class="ot">__init__</span>(<span class="ot">self</span>, train_data, train_label, predict_data=<span class="ot">None</span>, predict_label=<span class="ot">None</span>):
+        <span class="ot">self</span>.train_data = train_data
+        <span class="ot">self</span>.train_label = train_label
+        <span class="ot">self</span>.m = <span class="dt">len</span>(<span class="ot">self</span>.train_label)  <span class="co"># 样本数目</span>
+        <span class="ot">self</span>.n = <span class="dt">len</span>(train_data[<span class="dv">1</span>]);  <span class="co"># 特征数目，假设特征维度一样</span>
+        <span class="ot">self</span>.cls = <span class="dt">list</span>(<span class="dt">set</span>(train_label));
+        <span class="ot">self</span>.predict_data = predict_data
+        <span class="ot">self</span>.predict_label = predict_label
+        <span class="ot">self</span>.__prio_p = {}
+        <span class="ot">self</span>.__likelihood_p = {}
+        <span class="ot">self</span>.__evidence_p = <span class="dv">1</span>
+        <span class="ot">self</span>.__predict_p = [];
+
+    <span class="kw">def</span> train(<span class="ot">self</span>):
+        <span class="co"># 统计目标出现概率：先验概率</span>
+        p_lb = {}
+        <span class="kw">for</span> lb in <span class="ot">self</span>.train_label:
+            <span class="kw">if</span> lb in p_lb:  
+                p_lb[lb] = p_lb[lb] + <span class="dv">1</span>
+            <span class="kw">else</span>:
+                p_lb[lb] = <span class="dv">1+1</span>  <span class="co"># Laplace smoothing，初始为1，计数+1</span>
+        <span class="kw">for</span> lb in p_lb.keys():
+            p_lb[lb] = <span class="dt">float</span>(p_lb[lb]) / (<span class="ot">self</span>.m+<span class="dt">len</span>(<span class="ot">self</span>.cls))
+        <span class="ot">self</span>.__prio_p = p_lb
+
+        <span class="co"># 统计都有啥特征</span>
+        p_v = {}
+        feat_key = [];
+        <span class="kw">for</span> sample in <span class="ot">self</span>.train_data:
+            <span class="co">#print sample</span>
+            <span class="kw">for</span> k,v in sample.iteritems():
+                feat_key.append((k,v))
+                <span class="kw">if</span> (k,v) in p_v:
+                    p_v[(k,v)] = p_v[(k,v)] + <span class="dv">1</span>
+                <span class="kw">else</span>:
+                    p_v[(k,v)] = <span class="dv">1+1</span>  <span class="co"># Laplace smoothing</span>
+        <span class="kw">for</span> v in p_v:
+            p_v[v] = <span class="dt">float</span>(p_v[v]) / (<span class="ot">self</span>.m+p_v[v])
+            <span class="ot">self</span>.__evidence_p *= p_v[v]  <span class="co"># 条件独立假设</span>
+        
+        <span class="co"># 统计似然概率</span>
+        keys = [(x,y) <span class="kw">for</span> x in <span class="ot">self</span>.cls <span class="kw">for</span> y in feat_key]
+        keys = <span class="dt">set</span>(keys)
+        p_likelihood = {};
+        <span class="kw">for</span> val in keys:
+            p_likelihood[val]=<span class="dv">1</span>    <span class="co"># Laplace smoothing, 初始计数为1</span>
+        <span class="kw">for</span> idx in <span class="dt">range</span>(<span class="ot">self</span>.m):  <span class="co"># 统计频次</span>
+            p_likelihood[(<span class="ot">self</span>.train_label[idx],feat_key[idx])] = p_likelihood[(<span class="ot">self</span>.train_label[idx],feat_key[idx])] + <span class="dv">1</span>
+        <span class="kw">for</span> k in p_likelihood:  <span class="co"># 求概率</span>
+            <span class="kw">if</span> <span class="ot">self</span>.cls[<span class="dv">0</span>] in k:
+                p_likelihood[k] = <span class="dt">float</span>(p_likelihood[k]) / (<span class="ot">self</span>.m*<span class="ot">self</span>.__prio_p[<span class="ot">self</span>.cls[<span class="dv">0</span>]]+<span class="dv">2</span>)
+            <span class="kw">else</span>:
+                p_likelihood[k] = <span class="dt">float</span>(p_likelihood[k]) / (<span class="ot">self</span>.m*<span class="ot">self</span>.__prio_p[<span class="ot">self</span>.cls[<span class="dv">1</span>]]+<span class="dv">2</span>)
+        <span class="ot">self</span>.__likelihood_p = p_likelihood
+    
+    <span class="kw">def</span> predict(<span class="ot">self</span>):
+        label = [];
+        <span class="kw">for</span> x_dict in <span class="ot">self</span>.predict_data:  <span class="co"># 可以处理多维特征的情况</span>
+            likeli_p = [<span class="dv">1</span>,<span class="dv">1</span>];
+            <span class="kw">for</span> key,val in x_dict.iteritems():  
+                likeli_p[<span class="dv">0</span>] = likeli_p[<span class="dv">0</span>] * <span class="ot">self</span>.__likelihood_p[(<span class="ot">self</span>.cls[<span class="dv">0</span>], (key,val))]  <span class="co"># 条件独立假设</span>
+                likeli_p[<span class="dv">1</span>] = likeli_p[<span class="dv">1</span>] * <span class="ot">self</span>.__likelihood_p[(<span class="ot">self</span>.cls[<span class="dv">1</span>], (key,val))]
+
+            p_predict_cls0 = likeli_p[<span class="dv">0</span>] * <span class="ot">self</span>.__prio_p[<span class="ot">self</span>.cls[<span class="dv">0</span>]] / <span class="ot">self</span>.__evidence_p
+            p_predict_cls1 = likeli_p[<span class="dv">1</span>] * <span class="ot">self</span>.__prio_p[<span class="ot">self</span>.cls[<span class="dv">1</span>]] / <span class="ot">self</span>.__evidence_p
+            norm = p_predict_cls0 + p_predict_cls1
+            p_predict_cls0 = p_predict_cls0/norm
+            p_predict_cls1 = p_predict_cls1/norm
+            <span class="ot">self</span>.__predict_p.append({<span class="ot">self</span>.cls[<span class="dv">0</span>]:p_predict_cls0})
+            <span class="ot">self</span>.__predict_p.append({<span class="ot">self</span>.cls[<span class="dv">1</span>]:p_predict_cls1})
+            <span class="kw">if</span> p_predict_cls1 &gt; p_predict_cls0:
+                label.append(<span class="ot">self</span>.cls[<span class="dv">1</span>])
+            <span class="kw">else</span>:
+                label.append(<span class="ot">self</span>.cls[<span class="dv">0</span>])
+
+        <span class="kw">return</span> label,<span class="ot">self</span>.__predict_p
+
+    <span class="kw">def</span> get_prio(<span class="ot">self</span>):
+        <span class="kw">return</span> <span class="ot">self</span>.__prio_p
+
+    <span class="kw">def</span> get_likelyhood(<span class="ot">self</span>):
+        <span class="kw">return</span> <span class="ot">self</span>.__likelihood_p</code></pre>
+<p>我们将上面的python代码保存为<code>bayesian.py</code>文件，下面是python代码的Example测试实例（example.py）：</p>
+<pre><code>#!/usr/bin/env python
+# *-* coding=utf-8 *-*
+
+__author__=&#39;xiahouzuoxin&#39;
+
+import bayesian
+
+# 一维特征情况
+# train_data = [ {&#39;Name&#39;:&#39;Drew&#39;},
+#         {&#39;Name&#39;:&#39;Claudia&#39;},
+#         {&#39;Name&#39;:&#39;Drew&#39;},
+#         {&#39;Name&#39;:&#39;Drew&#39;},
+#         {&#39;Name&#39;:&#39;Alberto&#39;},
+#         {&#39;Name&#39;:&#39;Karin&#39;}, 
+#         {&#39;Name&#39;:&#39;Nina&#39;},
+#         {&#39;Name&#39;:&#39;Sergio&#39;} ]
+# train_label = [&#39;Male&#39;,&#39;Female&#39;,&#39;Female&#39;,&#39;Female&#39;,&#39;Male&#39;,&#39;Female&#39;,&#39;Female&#39;,&#39;Male&#39;]
+# predict_data = [{&#39;Name&#39;:&#39;Drew&#39;}]
+# predict_label = None;
+
+# 多维特征的情况
+train_data = [ {&#39;Name&#39;:&#39;Drew&#39;,&#39;Over170&#39;:&#39;No&#39;,&#39;Eye&#39;:&#39;Blue&#39;,&#39;Hair&#39;:&#39;Short&#39;},
+        {&#39;Name&#39;:&#39;Claudia&#39;,&#39;Over170&#39;:&#39;Yes&#39;,&#39;Eye&#39;:&#39;Brown&#39;,&#39;Hair&#39;:&#39;Long&#39;},
+        {&#39;Name&#39;:&#39;Drew&#39;,&#39;Over170&#39;:&#39;No&#39;,&#39;Eye&#39;:&#39;Blue&#39;,&#39;Hair&#39;:&#39;Long&#39;},
+        {&#39;Name&#39;:&#39;Drew&#39;,&#39;Over170&#39;:&#39;No&#39;,&#39;Eye&#39;:&#39;Blue&#39;,&#39;Hair&#39;:&#39;Long&#39;},
+        {&#39;Name&#39;:&#39;Alberto&#39;,&#39;Over170&#39;:&#39;Yes&#39;,&#39;Eye&#39;:&#39;Brown&#39;,&#39;Hair&#39;:&#39;Short&#39;},
+        {&#39;Name&#39;:&#39;Karin&#39;,&#39;Over170&#39;:&#39;No&#39;,&#39;Eye&#39;:&#39;Blue&#39;,&#39;Hair&#39;:&#39;Long&#39;}, 
+        {&#39;Name&#39;:&#39;Nina&#39;,&#39;Over170&#39;:&#39;Yes&#39;,&#39;Eye&#39;:&#39;Brown&#39;,&#39;Hair&#39;:&#39;Short&#39;},
+        {&#39;Name&#39;:&#39;Sergio&#39;,&#39;Over170&#39;:&#39;Yes&#39;,&#39;Eye&#39;:&#39;Blue&#39;,&#39;Hair&#39;:&#39;Long&#39;} ]
+train_label = [&#39;Male&#39;,&#39;Female&#39;,&#39;Female&#39;,&#39;Female&#39;,&#39;Male&#39;,&#39;Female&#39;,&#39;Female&#39;,&#39;Male&#39;]
+predict_data = [{&#39;Name&#39;:&#39;Drew&#39;,&#39;Over170&#39;:&#39;Yes&#39;,&#39;Eye&#39;:&#39;Blue&#39;,&#39;Hair&#39;:&#39;Long&#39;}]
+predict_label = None;
+
+model = bayesian.NaiveBayesian(train_data, train_label, predict_data, predict_label)
+model.train()
+result = model.predict()
+print result</code></pre>
+<p>输出结果：</p>
+<div class="figure">
+<img src="../images/Stanford机器学习课程笔记2-高斯判别分析与朴素贝叶斯/BayesianResult.png" />
+</div>
+<h3 id="拉普拉斯平滑laplace-smoothing">拉普拉斯平滑（Laplace smoothing)</h3>
+<p>当某个特征未出现时，比如 <span class="math"><em>p</em>(<em>x</em><sub>1000</sub>|<em>y</em>) = 0</span> ， 则由于独立条件必然使 <span class="math"><em>p</em>(<em>x</em><sub>1</sub>, <em>x</em><sub>2</sub>, ..., <em>x</em><sub>5000</sub>) = 0</span> ， 这样就造成贝叶斯公式中的分子为0。我们不能因为某个特征（词汇）没在训练数据中出现过就认为目标出现这个特征的概率为0（正常情况没出现的概率应该是1/2才合理）。为了应对这种情况，拉普拉斯平滑就能应对这种贝叶斯推断中的0概率情况。</p>
+<p><img src="http://latex.codecogs.com/gif.latex? \phi_{j|y=1}=\frac{ \sum_{i=1}^{m}1\{x_j^{(i)}=1 \cap y^{(i)}=1\}+1 }{ \sum_{i=1}^{m}1\{y^{(i)}=1\}+2 }"></p>
+<p><img src="http://latex.codecogs.com/gif.latex? \phi_{j|y=1}=\frac{ \sum_{i=1}^{m}1\{x_j^{(i)}=1 \cap y^{(i)}=0\}+1 }{ \sum_{i=1}^{m}1\{y^{(i)}=0\}+2 }"></p>
+<p>上面的python源代码中就考虑了Laplace smoothing。</p>
+<div class="ds-thread" data-thread-key="Stanford机器学习课程笔记2-高斯判别分析与朴素贝叶斯" data-title="Stanford机器学习课程笔记2-高斯判别分析与朴素贝叶斯" data-url="xiahouzuoxin.github.io/notes/html/Stanford机器学习课程笔记2-高斯判别分析与朴素贝叶斯.html"></div>
+<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"slide":{"type":"slide","bdImg":"5","bdPos":"right","bdTop":"300"},"image":{"viewList":["qzone","tsina","tqq","renren","weixin"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["qzone","tsina","tqq","renren","weixin"]}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"xiahouzuoxin"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- 多说公共JS代码 end -->
+
+<div id="footer">
+    <p class="footer_subline">联系邮箱: xiahouzuoxin@163.com</p>
+    <p class="footer_subline">声明: 本站所有文章如非特别说明均为原创，转载请注明出处！
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1253219218'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1253219218%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+    </p>
+</div>
+
+<!-- 回到顶部 -->
+<script>
+lastScrollY=0;
+function heartBeat(){
+var diffY;
+if (document.documentElement && document.documentElement.scrollTop)
+    diffY = document.documentElement.scrollTop;
+else if (document.body)
+    diffY = document.body.scrollTop
+else
+    {/*Netscape stuff*/}
+percent=.1*(diffY-lastScrollY);
+if(percent>0)percent=Math.ceil(percent);
+else percent=Math.floor(percent);
+document.getElementById("full").style.top=parseInt(document.getElementById("full").style.top)+percent+"px";
+lastScrollY=lastScrollY+percent;
+}
+suspendcode="<div id=\"full\" style='right:1px;POSITION:absolute;TOP:600px;z-index:100'><a onclick='window.scrollTo(0,0);'><img src='../images/top.png'></a><br></div>"
+document.write(suspendcode);
+window.setInterval("heartBeat()",1);
+</script>
+</body>
+</html>
