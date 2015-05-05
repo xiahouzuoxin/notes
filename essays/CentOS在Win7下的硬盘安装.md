@@ -53,3 +53,12 @@ initrd (hd0,4)/initrd.img
 6\. 选择引导盘
 
 分完盘后会弹出安装引导程序框，记住将引导程序最好安装到系统硬盘上（我习惯直接安装到和Linux系统相同磁盘下）
+
+## 关于Fedora21硬盘安装注意
+
+Fedora21的安装相对于之前的版本有些区别，尝试使用PowerISO和LiveUSB制作启动U盘都无法成功，最后从官方找到答案：
+
+<https://docs.fedoraproject.org/en-US/Fedora/21/html/Installation_Guide/sect-preparing-boot-media.html>
+
+改用SUSE Studio ImageWriter或[Rawrite32](http://www.netbsd.org/~martin/rawrite32/)U盘制作工具即可。
+

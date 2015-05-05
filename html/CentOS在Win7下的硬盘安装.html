@@ -23,6 +23,7 @@
 <ul>
 <li><a href="#准备">准备</a></li>
 <li><a href="#硬盘安装步骤">硬盘安装步骤</a></li>
+<li><a href="#关于fedora21硬盘安装注意">关于Fedora21硬盘安装注意</a></li>
 </ul>
 </div>
 <!---title:CentOS在Win7下的硬盘安装-->
@@ -64,6 +65,10 @@ initrd (hd0,4)/initrd.img
 <p>/boot和/swap一般是必需的，一般用户，根据需要，可能还会划分/home（如果你把大部分资料放在home中的话，/home最好大一些）</p>
 <p>6. 选择引导盘</p>
 <p>分完盘后会弹出安装引导程序框，记住将引导程序最好安装到系统硬盘上（我习惯直接安装到和Linux系统相同磁盘下）</p>
+<h2 id="关于fedora21硬盘安装注意">关于Fedora21硬盘安装注意</h2>
+<p>Fedora21的安装相对于之前的版本有些区别，尝试使用PowerISO和LiveUSB制作启动U盘都无法成功，最后从官方找到答案：</p>
+<p><a href="https://docs.fedoraproject.org/en-US/Fedora/21/html/Installation_Guide/sect-preparing-boot-media.html" class="uri">https://docs.fedoraproject.org/en-US/Fedora/21/html/Installation_Guide/sect-preparing-boot-media.html</a></p>
+<p>改用SUSE Studio ImageWriter或<a href="http://www.netbsd.org/~martin/rawrite32/">Rawrite32</a>U盘制作工具即可。</p>
 <div class="ds-thread" data-thread-key="CentOS在Win7下的硬盘安装" data-title="CentOS在Win7下的硬盘安装" data-url="xiahouzuoxin.github.io/notes/html/CentOS在Win7下的硬盘安装.html"></div>
 <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"slide":{"type":"slide","bdImg":"5","bdPos":"right","bdTop":"300"},"image":{"viewList":["qzone","tsina","tqq","renren","weixin"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["qzone","tsina","tqq","renren","weixin"]}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
 
