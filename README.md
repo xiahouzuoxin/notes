@@ -18,6 +18,7 @@
 - [Stanford机器学习课程笔记1-线性回归和逻辑回归](./essays/Stanford机器学习课程笔记1-监督学习.md)
 - [Stanford机器学习课程笔记2-高斯判别分析与朴素贝叶斯](./essays/Stanford机器学习课程笔记2-高斯判别分析与朴素贝叶斯.md)
 - [Stanford机器学习课程笔记3-学习理论部分](./essays/Stanford机器学习课程笔记3-学习理论部分.md)
+- [Stanford机器学习课程笔记4-Kmeans与高斯混合模型](./essays/Stanford机器学习课程笔记4-Kmeans与高斯混合模型.md)
 
 # OpenCV系列
 - [CentOS上编译安装OpenCV-2.3.1与ffmpeg-2.1.2](./essays/CentOS上编译安装OpenCV-2.3.1与ffmpeg-2.1.2.md)

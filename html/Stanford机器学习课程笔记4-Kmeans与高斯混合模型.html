@@ -1,0 +1,253 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
+  </style>
+  <link rel="stylesheet" href="../stylesheets/Github.css" type="text/css" />
+  <title>Stanford机器学习课程笔记4-Kmeans与高斯混合模型</title>
+</head>
+<body>
+<div id="header"><center>
+    <p class="header_titleline">
+    <a href="../index.html" target="_self" title="主页">主页  </a><a href="../Search.html" target="_self" title="站内搜索">站内搜索  </a><a href="../Projects.html" target="_self" title="项目研究">项目研究  </a><a href="../Archives.html" target="_self" title="文章存档">文章存档  </a><a href="../README.html" target="_self" title="分类目录">分类目录 </a><a href="../AboutMe.html" target="_self" title="关于我">关于我  </a>
+    </p>
+</center></div>
+<h1>Stanford机器学习课程笔记4-Kmeans与高斯混合模型</h1>
+<h4>2014-05-15 / xiahouzuoxin</h4>
+<h4>Tags: 机器学习</h4>
+<div id="TOC">
+<ul>
+<li><a href="#kmeans聚类">Kmeans聚类</a></li>
+<li><a href="#混合高斯模型mixture-of-gaussian">混合高斯模型（Mixture of Gaussian）</a></li>
+<li><a href="#参考">参考</a></li>
+</ul>
+</div>
+<!---title:Stanford机器学习课程笔记4-Kmeans与高斯混合模型-->
+<!---keywords:机器学习-->
+<!---date:2014-05-15-->
+<p>这一部分属于无监督学习的内容，无监督学习内容主要包括：Kmeans聚类算法、高斯混合模型及EM算法、Factor Analysis、PCA、ICA等。本文是Kmeans聚类算法、高斯混合模型的笔记，EM算法是适用于存在latent/hidden变量的通用算法，高斯混合模型仅仅是EM算法的一种特殊情况，关于EM算法的推到参见Andrew Ng讲义。由于公式太多，最近时间又忙实习的事就简单写一些，回头看时还得参考Ng的笔记和自己的打印Notes上的笔记，这里的程序对理解可能能提供另外的一些帮助。</p>
+<h2 id="kmeans聚类">Kmeans聚类</h2>
+<p>其实聚类算法除了Kmeans，还有其它的聚类方式，记得曾经接触到的就有层次聚类、基于模糊等价关系的<a href="http://blog.csdn.net/xiahouzuoxin/article/details/7748823">模糊聚类</a>。Kmeans只不过是这些聚类算法中最为常见的一中，也是我用得最多的一种。Kmeans本身的复杂度也高（O(N^3)），因此Kmeans有很多其它的变种：</p>
+<ol style="list-style-type: decimal">
+<li>针对浮点型数据的运算，为提高运算效率，将浮点型Round成整形（我操作的话一般先乘一个系数，以使数据分布在整个整数空间，降低Round的数据损失）</li>
+<li>层次化的Kmeans聚类(HIKM)</li>
+</ol>
+<p>这两种改进都能在<a href="http://www.vlfeat.org/">VLFeat</a>里见到C代码实现。作为完善基础知识，我还是愿意先来复习下最基本的Kmeans聚类，后面再根据自己的经验补充点HIKM的东西。这是Stanford机器学习课程中第一个非监督学习算法，为严谨一些，先给出一般Kmeans聚类问题的描述：</p>
+<ol style="list-style-type: decimal">
+<li>给定数据集: <img src="http://latex.codecogs.com/gif.latex? {x^{(1)},x^{(2)},...,x^{(m)}}"></li>
+<li>将数据group成K个clusters</li>
+</ol>
+<p>请注意：相对于监督学习算法，Kmeans虽然没有label信息，但聚类数K却是已知的，也就是说：使用Kmeans我们得计划好要聚成多少个cluster。当然也有一些Kmeans基础上的改进方法可以通过阈值直接判断聚类数目，这里不讨论。Kmeans算法的流程是：</p>
+<div class="figure">
+<img src="../images/Stanford机器学习课程笔记4-Kmeans与高斯混合模型/KmeansAlgorithm.png" />
+
+</div>
+<p>先随机初始化K个聚类中心，计算样本数据到聚类中心的距离，用聚类结果计算新的中心，如此迭代。提出两个问题：</p>
+<ol style="list-style-type: decimal">
+<li>随机初始化聚类中心怎么个随机法：这K个点是数据点还是非数据点。其实除了一般的随机，还有一种叫K-means++(参考2)的初始化方式</li>
+<li><p>凡是迭代算法都有一个问题值得讨论：收敛准则。白话描述Kmeans收敛准则就是：聚类中心u稳定，不再发生太大的变化。严谨一些，定义Distortion Function：</p>
+<p><img src="http://latex.codecogs.com/gif.latex? J(c,\mu)=\sum_{i=1}^m||x^{(i)}-\mu_{C^{i}}||^2"></p>
+<p>J表示每个训练样本到被分配到的聚类中心的距离之和。当J最小时则Kmeans算法收敛。然而，由于J是非凸函数，利用坐标下降算法无法保证能收敛到全局最优解(坐标下降算法在Andrew Ng在SVM讲义部分中有讨论，是梯度下降算法的多维情况：先固定A变量，B变量用梯度下降迭代；再固定B变量，A变量用梯度下降迭代)。然而，在实际应用中，对譬如（1）存在多个局部最有之间波动的情况很少见（2）即使收敛到局部最有Kmeans算法，对于实际问题这个局部最优解也一般能够接受。所以Kmeans依然是使用最广泛的无监督聚类算法。</p></li>
+</ol>
+<p>Matlab的Statistics and Machine Learning Toolbox自带kmeans算法，更多内容可以参考一下Matlab中的<code>doc kmeans</code>或者 <a href="http://cn.mathworks.com/help/stats/kmeans.html" class="uri">http://cn.mathworks.com/help/stats/kmeans.html</a> 。</p>
+<h2 id="混合高斯模型mixture-of-gaussian">混合高斯模型（Mixture of Gaussian）</h2>
+<p>尖子班和普通班的成绩混在一起了，要把这两个班的成绩分开。只知道2个班的成绩都满足高斯分布，但不知道每个班的高斯分布的平均分和方差波动。如何通过无监督聚类的方法将这两个班的数据分开？上面的例子就是高斯混合模型的一个例子。</p>
+<p>回想GDA（高斯判别分析）的生成模型，当时建立的模型是：p(y)服从伯努利实验，p(x|y)服从高斯分布，即隐藏在数据背后的高斯模型差生了训练数据，通过极大似然法使联合概率p(x,y)最大，求解得到伯努利参数phi，高斯分布参数u,sigma。混合高斯模型由于是无监督的数据，没有y，所以建模时假定一个latent/hidden(隐藏)变量z（等价GDA中的y），利用GDA的完全一样的极大似然法求解phi(z)、u(z)、sigma(z)，但此时的pht、u、sigma都是和latent变量z有关的不确定的数。这就需要一种迭代算法：先估计z，更确切的说，这里是要来估计z的概率；再用z的估计值计算phi、u和sigma；更新z的估计，再迭代。。。。</p>
+<p>高斯混合模型是EM算法的一个特例，迭代算法分为E-Step（估计z的概率）和M-Step（似然函数最大化），</p>
+<div class="figure">
+<img src="../images/Stanford机器学习课程笔记4-Kmeans与高斯混合模型/MixtureofGaussian.png" />
+
+</div>
+<p>在E-Step中，估计的是z的后验概率，可以先通过初始化的phi、u、sigma计算似然概率和先验概率，再用Bayes Rule得到z的后验估计。EM算法与Kmeans算法一样可能收敛到局部最优，有点不同的是EM算法的聚类中心数是可以自动决定的而Kmeans是预先给定的。下面是从 <a href="http://www.mathworks.com/matlabcentral/fileexchange/26184-em-algorithm-for-gaussian-mixture-model" class="uri">http://www.mathworks.com/matlabcentral/fileexchange/26184-em-algorithm-for-gaussian-mixture-model</a> 找到的一份高斯混合模型的EM代码，也可以下载完整的<a href="https:/xiahouozuoxin.github.io/notes/codes/StandfordMachineLearning/EM.zip">EM Example</a>在Matlab上运行</p>
+<pre class="sourceCode matlab"><code class="sourceCode matlab">function [label, model, llh] = emgm(X, init)
+<span class="co">% Perform EM algorithm for fitting the Gaussian mixture model.</span>
+<span class="co">%   X: d x n data matrix</span>
+<span class="co">%   init: k (1 x 1) or label (1 x n, 1&lt;=label(i)&lt;=k) or center (d x k)</span>
+<span class="co">% Written by Michael Chen (sth4nth@gmail.com).</span>
+<span class="co">%% initialization</span>
+fprintf(<span class="st">&#39;EM for Gaussian mixture: running ... \n&#39;</span>);
+R = initialization(X,init);
+[~,label(<span class="fl">1</span>,:)] = max(R,[],<span class="fl">2</span>);
+R = R(:,unique(label));
+
+tol = <span class="fl">1e-10</span>;
+maxiter = <span class="fl">500</span>;
+llh = -inf(<span class="fl">1</span>,maxiter);
+converged = false;
+t = <span class="fl">1</span>;
+while ~converged &amp;&amp; t &lt; maxiter
+    t = t+<span class="fl">1</span>;
+    model = maximization(X,R);
+    [R, llh(t)] = expectation(X,model);
+   
+    [~,label(:)] = max(R,[],<span class="fl">2</span>);
+    u = unique(label);   <span class="co">% non-empty components</span>
+    if size(R,<span class="fl">2</span>) ~= size(u,<span class="fl">2</span>)
+        R = R(:,u);   <span class="co">% remove empty components</span>
+    else
+        converged = llh(t)-llh(t-<span class="fl">1</span>) &lt; tol*abs(llh(t));
+    end
+
+end
+llh = llh(<span class="fl">2</span>:t);
+if converged
+    fprintf(<span class="st">&#39;Converged in %d steps.\n&#39;</span>,t-<span class="fl">1</span>);
+else
+    fprintf(<span class="st">&#39;Not converged in %d steps.\n&#39;</span>,maxiter);
+end
+
+function R = initialization(X, init)
+[d,n] = size(X);
+if isstruct(init)  <span class="co">% initialize with a model</span>
+    R  = expectation(X,init);
+elseif length(init) == <span class="fl">1</span>  <span class="co">% random initialization</span>
+    k = init;
+    idx = randsample(n,k);
+    m = X(:,idx);
+    [~,label] = max(bsxfun(@minus,m&#39;*X,dot(m,m,<span class="fl">1</span>)&#39;/<span class="fl">2</span>),[],<span class="fl">1</span>);
+    [u,~,label] = unique(label);
+    while k ~= length(u)
+        idx = randsample(n,k);
+        m = X(:,idx);
+        [~,label] = max(bsxfun(@minus,m&#39;*X,dot(m,m,<span class="fl">1</span>)&#39;/<span class="fl">2</span>),[],<span class="fl">1</span>);
+        [u,~,label] = unique(label);
+    end
+    R = full(sparse(<span class="fl">1</span>:n,label,<span class="fl">1</span>,n,k,n));
+elseif size(init,<span class="fl">1</span>) == <span class="fl">1</span> &amp;&amp; size(init,<span class="fl">2</span>) == n  <span class="co">% initialize with labels</span>
+    label = init;
+    k = max(label);
+    R = full(sparse(<span class="fl">1</span>:n,label,<span class="fl">1</span>,n,k,n));
+elseif size(init,<span class="fl">1</span>) == d  <span class="co">%initialize with only centers</span>
+    k = size(init,<span class="fl">2</span>);
+    m = init;
+    [~,label] = max(bsxfun(@minus,m&#39;*X,dot(m,m,<span class="fl">1</span>)&#39;/<span class="fl">2</span>),[],<span class="fl">1</span>);
+    R = full(sparse(<span class="fl">1</span>:n,label,<span class="fl">1</span>,n,k,n));
+else
+    error(<span class="st">&#39;ERROR: init is not valid.&#39;</span>);
+end
+
+function [R, llh] = expectation(X, model)
+mu = model.mu;
+Sigma = model.Sigma;
+w = model.weight;
+
+n = size(X,<span class="fl">2</span>);
+k = size(mu,<span class="fl">2</span>);
+logRho = zeros(n,k);
+
+for i = <span class="fl">1</span>:k
+    logRho(:,i) = loggausspdf(X,mu(:,i),Sigma(:,:,i));
+end
+logRho = bsxfun(@plus,logRho,log(w));
+T = logsumexp(logRho,<span class="fl">2</span>);
+llh = sum(T)/n; <span class="co">% loglikelihood</span>
+logR = bsxfun(@minus,logRho,T);
+R = exp(logR);
+
+
+function model = maximization(X, R)
+[d,n] = size(X);
+k = size(R,<span class="fl">2</span>);
+
+nk = sum(R,<span class="fl">1</span>);
+w = nk/n;
+mu = bsxfun(@times, X*R, <span class="fl">1</span>./nk);
+
+Sigma = zeros(d,d,k);
+sqrtR = sqrt(R);
+for i = <span class="fl">1</span>:k
+    Xo = bsxfun(@minus,X,mu(:,i));
+    Xo = bsxfun(@times,Xo,sqrtR(:,i)&#39;);
+    Sigma(:,:,i) = Xo*Xo&#39;/nk(i);
+    Sigma(:,:,i) = Sigma(:,:,i)+eye(d)*(<span class="fl">1e-6</span>); <span class="co">% add a prior for numerical stability</span>
+end
+
+model.mu = mu;
+model.Sigma = Sigma;
+model.weight = w;
+
+function y = loggausspdf(X, mu, Sigma)
+d = size(X,<span class="fl">1</span>);
+X = bsxfun(@minus,X,mu);
+[U,p]= chol(Sigma);
+if p ~= <span class="fl">0</span>
+    error(<span class="st">&#39;ERROR: Sigma is not PD.&#39;</span>);
+end
+Q = U&#39;\X;
+q = dot(Q,Q,<span class="fl">1</span>);  <span class="co">% quadratic term (M distance)</span>
+c = d*log(<span class="fl">2</span>*pi)+<span class="fl">2</span>*sum(log(diag(U)));   <span class="co">% normalization constant</span>
+y = -(c+q)/<span class="fl">2</span>;</code></pre>
+<h2 id="参考">参考</h2>
+<ol style="list-style-type: decimal">
+<li>Andrew Ng Lecture Notes.</li>
+<li>D. Arthur and S. Vassilvitskii. k-means++: The advantages of careful seeding. In Proc. ACM-SIAM Symp. on Discrete Algorithms, 2007.</li>
+</ol>
+
+<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"slide":{"type":"slide","bdImg":"5","bdPos":"right","bdTop":"300"},"image":{"viewList":["qzone","tsina","tqq","renren","weixin"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["qzone","tsina","tqq","renren","weixin"]}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"xiahouzuoxin"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- 多说公共JS代码 end -->
+
+<div id="footer">
+    <p class="footer_subline">联系邮箱: xiahouzuoxin@163.com</p>
+    <p class="footer_subline">声明: 本站所有文章如非特别说明均为原创，转载请注明出处！
+<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1253219218'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1253219218%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>
+    </p>
+</div>
+
+<!-- 回到顶部 -->
+<script>
+lastScrollY=0;
+function heartBeat(){
+var diffY;
+if (document.documentElement && document.documentElement.scrollTop)
+    diffY = document.documentElement.scrollTop;
+else if (document.body)
+    diffY = document.body.scrollTop
+else
+    {/*Netscape stuff*/}
+percent=.1*(diffY-lastScrollY);
+if(percent>0)percent=Math.ceil(percent);
+else percent=Math.floor(percent);
+document.getElementById("full").style.top=parseInt(document.getElementById("full").style.top)+percent+"px";
+lastScrollY=lastScrollY+percent;
+}
+suspendcode="<div id=\"full\" style='right:1px;POSITION:absolute;TOP:600px;z-index:100'><a onclick='window.scrollTo(0,0);'><img src='../images/top.png'></a><br></div>"
+document.write(suspendcode);
+window.setInterval("heartBeat()",1);
+</script>
+</body>
+</html>
