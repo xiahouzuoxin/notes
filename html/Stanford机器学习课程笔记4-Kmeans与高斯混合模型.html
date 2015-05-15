@@ -37,6 +37,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <h1>Stanford机器学习课程笔记4-Kmeans与高斯混合模型</h1>
 <h4>2014-05-15 / xiahouzuoxin</h4>
 <h4>Tags: 机器学习</h4>
+转载请注明出处: <a href="http://xiahouzuoxin.github.io/notes/">http://xiahouzuoxin.github.io/notes/</a>
 <div id="TOC">
 <ul>
 <li><a href="#kmeans聚类">Kmeans聚类</a></li>
@@ -80,7 +81,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <img src="../images/Stanford机器学习课程笔记4-Kmeans与高斯混合模型/MixtureofGaussian.png" />
 
 </div>
-<p>在E-Step中，估计的是z的后验概率，可以先通过初始化的phi、u、sigma计算似然概率和先验概率，再用Bayes Rule得到z的后验估计。EM算法与Kmeans算法一样可能收敛到局部最优，有点不同的是EM算法的聚类中心数是可以自动决定的而Kmeans是预先给定的。下面是从 <a href="http://www.mathworks.com/matlabcentral/fileexchange/26184-em-algorithm-for-gaussian-mixture-model" class="uri">http://www.mathworks.com/matlabcentral/fileexchange/26184-em-algorithm-for-gaussian-mixture-model</a> 找到的一份高斯混合模型的EM代码，也可以下载完整的<a href="https:/xiahouozuoxin.github.io/notes/codes/StandfordMachineLearning/EM.zip">EM Example</a>在Matlab上运行</p>
+<p>在E-Step中，估计的是z的后验概率，可以先通过初始化的phi、u、sigma计算似然概率和先验概率，再用Bayes Rule得到z的后验估计。EM算法与Kmeans算法一样可能收敛到局部最优，有点不同的是EM算法的聚类中心数是可以自动决定的而Kmeans是预先给定的。下面是从 <a href="http://www.mathworks.com/matlabcentral/fileexchange/26184-em-algorithm-for-gaussian-mixture-model" class="uri">http://www.mathworks.com/matlabcentral/fileexchange/26184-em-algorithm-for-gaussian-mixture-model</a> 找到的一份高斯混合模型的EM代码，也可以下载完整的<a href="https:/xiahouzuoxin.github.io/notes/codes/StandfordMachineLearning/EM.zip">EM Example</a>在Matlab上运行</p>
 <pre class="sourceCode matlab"><code class="sourceCode matlab">function [label, model, llh] = emgm(X, init)
 <span class="co">% Perform EM algorithm for fitting the Gaussian mixture model.</span>
 <span class="co">%   X: d x n data matrix</span>
@@ -204,7 +205,7 @@ y = -(c+q)/<span class="fl">2</span>;</code></pre>
 <li>Andrew Ng Lecture Notes.</li>
 <li>D. Arthur and S. Vassilvitskii. k-means++: The advantages of careful seeding. In Proc. ACM-SIAM Symp. on Discrete Algorithms, 2007.</li>
 </ol>
-
+<div class="ds-thread" data-thread-key="Stanford机器学习课程笔记4-Kmeans与高斯混合模型" data-title="Stanford机器学习课程笔记4-Kmeans与高斯混合模型" data-url="xiahouzuoxin.github.io/notes/html/Stanford机器学习课程笔记4-Kmeans与高斯混合模型.html"></div>
 <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"slide":{"type":"slide","bdImg":"5","bdPos":"right","bdTop":"300"},"image":{"viewList":["qzone","tsina","tqq","renren","weixin"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["qzone","tsina","tqq","renren","weixin"]}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
 
 <!-- 多说公共JS代码 start (一个网页只需插入一次) -->

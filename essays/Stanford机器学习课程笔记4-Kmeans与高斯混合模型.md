@@ -41,7 +41,7 @@ Matlab的Statistics and Machine Learning Toolbox自带kmeans算法，更多内�
 
 ![](../images/Stanford机器学习课程笔记4-Kmeans与高斯混合模型/MixtureofGaussian.png)
 
-在E-Step中，估计的是z的后验概率，可以先通过初始化的phi、u、sigma计算似然概率和先验概率，再用Bayes Rule得到z的后验估计。EM算法与Kmeans算法一样可能收敛到局部最优，有点不同的是EM算法的聚类中心数是可以自动决定的而Kmeans是预先给定的。下面是从 <http://www.mathworks.com/matlabcentral/fileexchange/26184-em-algorithm-for-gaussian-mixture-model> 找到的一份高斯混合模型的EM代码，也可以下载完整的[EM Example](https:/xiahouozuoxin.github.io/notes/codes/StandfordMachineLearning/EM.zip)在Matlab上运行
+在E-Step中，估计的是z的后验概率，可以先通过初始化的phi、u、sigma计算似然概率和先验概率，再用Bayes Rule得到z的后验估计。EM算法与Kmeans算法一样可能收敛到局部最优，有点不同的是EM算法的聚类中心数是可以自动决定的而Kmeans是预先给定的。下面是从 <http://www.mathworks.com/matlabcentral/fileexchange/26184-em-algorithm-for-gaussian-mixture-model> 找到的一份高斯混合模型的EM代码，也可以下载完整的[EM Example](https:/xiahouzuoxin.github.io/notes/codes/StandfordMachineLearning/EM.zip)在Matlab上运行
 
 ```matlab 
 function [label, model, llh] = emgm(X, init)
