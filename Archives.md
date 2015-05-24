@@ -68,3 +68,4 @@
 - [基于计算机LabVIEW终端的温度监控系统](pdf/基于计算机LabVIEW终端的温度监控系统.pdf)
 - [轻轻松松明白快速排序](pdf/轻轻松松明白快速排序.pdf)
 - [WIN7下硬盘安装Ubuntu_12.04_LTS](pdf/WIN7下硬盘安装Ubuntu_12.04_LTS.pdf)
+- [Books](http://pan.baidu.com/s/1hq5ZXZI)
