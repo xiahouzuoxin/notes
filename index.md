@@ -1,6 +1,7 @@
 
 # 最新文章
 
+- 2015-06-08 [拾掇起来的年华3](html/拾掇起来的年华3.html)
 - 2015-05-15 [Stanford机器学习课程笔记4-Kmeans与高斯混合模型](html/Stanford机器学习课程笔记4-Kmeans与高斯混合模型.html)
 - 2015-05-05 [Stanford机器学习课程笔记3-学习理论部分](html/Stanford机器学习课程笔记3-学习理论部分.html)
 - 2015-04-23 [Stanford机器学习课程笔记2-高斯判别分析与朴素贝叶斯](html/Stanford机器学习课程笔记2-高斯判别分析与朴素贝叶斯.html)
