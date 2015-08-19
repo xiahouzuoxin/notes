@@ -10,11 +10,11 @@ $ git checkout -b gh-pages origin/gh-pages
 
 # 求职中……
 
-本人北京科技大学计算机技术小硕一枚，期望工作方向是信号处理、机器学习，附上[简历](pdf/resume.html)。
+本人北京科技大学计算机技术小硕一枚，期望工作方向是图像、机器学习。[简历](../pdf/resume.html)。
 
 # 联系（欢迎学习交流）
 
-- 邮箱： <xiahouzuoxin@163.com>
+- 邮箱： <xiahouzuoxin#163.com> #替换成@
 
 ![](images/MyQQ.jpg)
 ![](images/MyWeixin.jpg)
