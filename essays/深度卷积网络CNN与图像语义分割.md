@@ -63,7 +63,7 @@ DL只是一个概念而已。对于做图像和视觉的就该一头扎到CNN(Co
 1. [FCN for Sematic Segmentation.pptx](http://xiahouzuoxin.github.io/notes/enclosure/FCN for Sematic Segmentation.pptx)
 2. [Semantic Image Segmentation With Deep Convolutional Nets and Fully Connected CRFs.ppt](http://xiahouzuoxin.github.io/notes/enclosure/Semantic Image Segmentation With Deep Convolutional Nets and Fully Connected CRFs.pptx)
 
-## 级别3：Demo跑起来
+## 级别4：Demo跑起来
 
 ### 读一些源码玩玩
 
@@ -90,7 +90,7 @@ Caffe提供了好用的接口，包括matlab、C++、Python！由于特殊原因
 
 ### 分析各层Layer输出特征
 
-我一开始以为看看各层Layer的输出，能帮助我改进Net，可却发现错了，除了前几层还能看出点明亮或边缘信息外，网络后端Layer的输出压根就没办法理解。[extract_featmat.cpp](http://xiahouzuoxin.github.io/notes/enclosure/extract_featmat.cpp)是我基于extract_features.cpp改的一个Caffe tool，放到tools目录下编译就好了，使用方法看help：
+我一开始以为看看各层Layer的输出，能帮助我改进Net，可却发现错了，除了前几层还能看出点明亮或边缘信息外，网络后端Layer的输出压根就没办法理解。[extract_featmat.cpp](http://xiahouzuoxin.github.io/notes/enclosure/深度卷积网络CNN与图像语义分割/extract_featmat.cpp)是我基于extract_features.cpp改的一个Caffe tool，放到tools目录下编译就好了，使用方法看help：
 
 ```cpp
   void print_help(void) {
@@ -119,7 +119,7 @@ Caffe提供了好用的接口，包括matlab、C++、Python！由于特殊原因
 
 ![深层Layer](../images/深度卷积网络CNN与图像语义分割/layer4.png)
 
-## 级别4：何不自己搭个CNN玩玩
+## 级别5：何不自己搭个CNN玩玩
 
 虽然还是个新手，关于搭建CNN，还在慢慢在找感觉。我觉得从两方面：
 
@@ -141,7 +141,7 @@ Caffe提供了好用的接口，包括matlab、C++、Python！由于特殊原因
 
 就我现在的水平，最多也就修炼到这一级了。这一级还要多花功夫，读paper，多思考，继续练。。。
 
-## 级别5：加速吧，GPU编程
+## 级别6：加速吧，GPU编程
 
 呃，这个实在还没开始着手去做，但迟早是要做的，说了“大数据是燃料，GPU是引擎”的，怎么能不懂引擎呢……
 

@@ -43,13 +43,13 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <li><a href="#级别1dl快速上手">级别1：DL快速上手</a></li>
 <li><a href="#级别2从caffe着手实践">级别2：从Caffe着手实践</a></li>
 <li><a href="#级别3读paper网络train起来">级别3：读paper，网络Train起来</a></li>
-<li><a href="#级别3demo跑起来">级别3：Demo跑起来</a><ul>
+<li><a href="#级别4demo跑起来">级别4：Demo跑起来</a><ul>
 <li><a href="#读一些源码玩玩">读一些源码玩玩</a></li>
 <li><a href="#熟悉caffe接口写demo这是硬功夫">熟悉Caffe接口，写Demo这是硬功夫</a></li>
 <li><a href="#分析各层layer输出特征">分析各层Layer输出特征</a></li>
 </ul></li>
-<li><a href="#级别4何不自己搭个cnn玩玩">级别4：何不自己搭个CNN玩玩</a></li>
-<li><a href="#级别5加速吧gpu编程">级别5：加速吧，GPU编程</a></li>
+<li><a href="#级别5何不自己搭个cnn玩玩">级别5：何不自己搭个CNN玩玩</a></li>
+<li><a href="#级别6加速吧gpu编程">级别6：加速吧，GPU编程</a></li>
 <li><a href="#关于语义分割的一些其它工作">关于语义分割的一些其它工作</a></li>
 </ul>
 </div>
@@ -105,7 +105,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <li><a href="http://xiahouzuoxin.github.io/notes/enclosure/FCN%20for%20Sematic%20Segmentation.pptx">FCN for Sematic Segmentation.pptx</a></li>
 <li><a href="http://xiahouzuoxin.github.io/notes/enclosure/Semantic%20Image%20Segmentation%20With%20Deep%20Convolutional%20Nets%20and%20Fully%20Connected%20CRFs.pptx">Semantic Image Segmentation With Deep Convolutional Nets and Fully Connected CRFs.ppt</a></li>
 </ol>
-<h2 id="级别3demo跑起来">级别3：Demo跑起来</h2>
+<h2 id="级别4demo跑起来">级别4：Demo跑起来</h2>
 <h3 id="读一些源码玩玩">读一些源码玩玩</h3>
 <ol style="list-style-type: decimal">
 <li><p>caffe.proto</p></li>
@@ -121,7 +121,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <iframe height="498" width="510" src="http://xiahouzuoxin.github.io/notes/images/深度卷积网络CNN与图像语义分割/TG.mp4" frameborder="0" allowfullscreen>
 </iframe>
 <h3 id="分析各层layer输出特征">分析各层Layer输出特征</h3>
-<p>我一开始以为看看各层Layer的输出，能帮助我改进Net，可却发现错了，除了前几层还能看出点明亮或边缘信息外，网络后端Layer的输出压根就没办法理解。<a href="http://xiahouzuoxin.github.io/notes/enclosure/extract_featmat.cpp">extract_featmat.cpp</a>是我基于extract_features.cpp改的一个Caffe tool，放到tools目录下编译就好了，使用方法看help：</p>
+<p>我一开始以为看看各层Layer的输出，能帮助我改进Net，可却发现错了，除了前几层还能看出点明亮或边缘信息外，网络后端Layer的输出压根就没办法理解。<a href="http://xiahouzuoxin.github.io/notes/enclosure/深度卷积网络CNN与图像语义分割/extract_featmat.cpp">extract_featmat.cpp</a>是我基于extract_features.cpp改的一个Caffe tool，放到tools目录下编译就好了，使用方法看help：</p>
 <pre class="sourceCode cpp"><code class="sourceCode cpp">  <span class="dt">void</span> print_help(<span class="dt">void</span>) {
     LOG(ERROR)&lt;&lt;
     <span class="st">&quot;This program takes in a trained network and an input image, and then</span><span class="ch">\n</span><span class="st">&quot;</span>
@@ -153,7 +153,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <img src="../images/深度卷积网络CNN与图像语义分割/layer4.png" alt="深层Layer" />
 <p class="caption">深层Layer</p>
 </div>
-<h2 id="级别4何不自己搭个cnn玩玩">级别4：何不自己搭个CNN玩玩</h2>
+<h2 id="级别5何不自己搭个cnn玩玩">级别5：何不自己搭个CNN玩玩</h2>
 <p>虽然还是个新手，关于搭建CNN，还在慢慢在找感觉。我觉得从两方面：</p>
 <ol style="list-style-type: decimal">
 <li><p>利用已有的网络，使劲浑身解数找它们的缺点，改进它们</p>
@@ -171,7 +171,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <p>先搭一个简单的，比如说就3层：卷积-Pooling-卷积-Pooling-卷积-Pooling，先把这个简单的网络训练以来，效果不好没关系，我们接着往上加，直到满意为止。但是这里面有一个finetune的技巧，那就是用浅层的网络训练weight结果去初始化或finetune深层网络。这也是为什么不直接一开始就搭建深层网络的原因，级别1里就说过，深度网络的Train是个非凸问题，是个至今难解决的大问题，网络初始化对其收敛结果影响很大，finetune就这样作为Deep Network中一项重要的tricks而存在了。 finetune除了由浅至深逐级初始化帮助收敛外，还有一个作用：将自己的网络在一个非常非常大的数据集上(现在最大的ImageNet)进行Train，这个Train的结果再拿去作为实际要解决的问题中用于初始化，这样能增加网络的泛化能力。 然而，当Net遇到问题时，如何去改进？这是个大问题，不说现在没太多经验，有也是盲人摸象的感觉，暂且搁下不提，待后期多做实验分析整理，希望能有所收获。</p></li>
 </ol>
 <p>就我现在的水平，最多也就修炼到这一级了。这一级还要多花功夫，读paper，多思考，继续练。。。</p>
-<h2 id="级别5加速吧gpu编程">级别5：加速吧，GPU编程</h2>
+<h2 id="级别6加速吧gpu编程">级别6：加速吧，GPU编程</h2>
 <p>呃，这个实在还没开始着手去做，但迟早是要做的，说了“大数据是燃料，GPU是引擎”的，怎么能不懂引擎呢……</p>
 <h2 id="关于语义分割的一些其它工作">关于语义分割的一些其它工作</h2>
 <ol style="list-style-type: decimal">
