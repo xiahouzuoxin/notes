@@ -48,7 +48,9 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <li><a href="#熟悉caffe接口写demo这是硬功夫">熟悉Caffe接口，写Demo这是硬功夫</a></li>
 <li><a href="#分析各层layer输出特征">分析各层Layer输出特征</a></li>
 </ul></li>
-<li><a href="#级别5何不自己搭个cnn玩玩">级别5：何不自己搭个CNN玩玩</a></li>
+<li><a href="#级别5何不自己搭个cnn玩玩">级别5：何不自己搭个CNN玩玩</a><ul>
+<li><a href="#train-cnn时关于数据集的一些注意事项">Train CNN时关于数据集的一些注意事项</a></li>
+</ul></li>
 <li><a href="#级别6加速吧gpu编程">级别6：加速吧，GPU编程</a></li>
 <li><a href="#关于语义分割的一些其它工作">关于语义分割的一些其它工作</a></li>
 </ul>
@@ -56,7 +58,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <!---title:深度卷积网络CNN与图像语义分割-->
 <!---keywords:CNN-->
 <!---date:2015-08-16-->
-<p>说好的要笔耕不缀，这开始一边实习一边找工作，还摊上了自己的一点私事困扰，这几个月的东西都没来得及总结一下。这就来记录一下关于CNN、Caffe、Image Sematic Segmentation相关的工作，由于公司技术保密的问题，很多东西没办法和大家详说只能抱歉了。在5月份前，我也是一个DL和CNN的门外汉，自己试着看tutorials、papers、搭Caffe平台、测试CNN Net，现在至少也能改改Caffe源码（Add/Modify Layer）、基于Caffe写个Demo。这里希望把学习的过程分享给那些在门口徘徊的朋友。没法事无巨细，但希望能起到提点的作用！</p>
+<p>说好的要笔耕不缀，这开始一边实习一边找工作，还摊上了自己的一点私事困扰，这几个月的东西都没来得及总结一下。这就来记录一下关于CNN、Caffe、Image Sematic Segmentation相关的工作，由于公司技术保密的问题，很多东西没办法和大家详说只能抱歉了。在5月份前，我也是一个DL和CNN的门外汉，自己试着看tutorials、papers、搭Caffe平台、测试CNN Net，现在至少也能改改Caffe源码（Add/Modify Layer）、基于Caffe写个Demo。这里希望把学习的过程分享给那些在门口徘徊的朋友。没法事无巨细，但希望能起到提点的作用！“乍可刺你眼，不可隐我脚”。</p>
 <h2 id="级别1dl快速上手">级别1：DL快速上手</h2>
 <ol style="list-style-type: decimal">
 <li><p>UFLDL： <a href="http://deeplearning.stanford.edu/tutorial/" class="uri">http://deeplearning.stanford.edu/tutorial/</a></p>
@@ -78,7 +80,12 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <p>先看看这个热个身：<a href="http://www.csdn.net/article/2015-07-07/2825150">贾扬清：希望Caffe成为深度学习领域的Hadoop</a>，增加点学习的欲望，毕竟现在多少人靠着Hadoop那玩意儿挣着大钱。</p>
 <p>接着请认准Caffe官方文档： <a href="http://caffe.berkeleyvision.org/" class="uri">http://caffe.berkeleyvision.org/</a> 和Github源码： <a href="https://github.com/BVLC/caffe" class="uri">https://github.com/BVLC/caffe</a> 。毫不犹豫fork一份到自己的Github。然后就是照着<a href="http://caffe.berkeleyvision.org/installation.html">INSTALL</a>来Complie和Config Caffe了，值得注意的是，安装OpenCV的时候推荐使用源码安装。</p>
 <p>先自己熟悉Caffe的架构，主要参考资料就是官网文档，我自己刚开始的时候也写了个小的ppt笔记：<a href="http://xiahouzuoxin.github.io/notes/enclosure/Diving%20into%20Caffe.pptx">Diving into Caffe.pptx</a></p>
-<p>接着就是实实在在地分析一个CNN，比如LeNet、AlexNet，自己在纸上画一画，下面那样</p>
+<p>还有两份不错的Caffe tutorials：</p>
+<ol style="list-style-type: decimal">
+<li>Standford CS231课程的<a href="http://vision.stanford.edu/teaching/cs231n/slides/caffe_tutorial.pdf">Caffe tutorial</a></li>
+<li>Oxford的<a href="http://vision.princeton.edu/courses/COS598/2015sp/slides/Caffe/caffe_tutorial.pdf">Caffe tutorial</a></li>
+</ol>
+<p>接着就是要自己动手，实打实地分析一个CNN，比如LeNet、AlexNet，自己在纸上画一画，像下面那样</p>
 <div class="figure">
 <img src="../images/深度卷积网络CNN与图像语义分割/LeNet.jpg" alt="LeNet" />
 <p class="caption">LeNet</p>
@@ -87,13 +94,25 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <img src="../images/深度卷积网络CNN与图像语义分割/AlexNet.jpg" alt="AlexNet" />
 <p class="caption">AlexNet</p>
 </div>
-<h2 id="级别3读paper网络train起来">级别3：读paper，网络Train起来</h2>
-<p>当去搜索ICRL、CVPR、ICCV这些最前沿的计算机视觉、机器学习会议的时候，只要是涉及图像相关的深度学习实验，大都是基于Caffe来做的。所以，只要抓住1~2篇popular的paper深入，把论文中的CNN在Caffe上复现了，就能找到一些感觉了。在这期间，下面一些论文是至少要读的：</p>
+<p>搞明白下面这些玩意的作用，没见过的就google一个个的查：</p>
 <ol style="list-style-type: decimal">
-<li>LeNet-5: <a href="http://yann.lecun.com/exdb/publis/pdf/lecun-98.pdf">Gradient-Based Learning Applied to Document Recognition</a> CNN首篇paper，虽然是1998年的文章，但依然值得仔细一读。</li>
-<li>AlexNet: <a href="http://www.cs.toronto.edu/~fritz/absps/imagenet.pdf">ImageNet Classification with Deep Convolutional Neural Networks</a> 自我感觉是促进CNN的扛鼎之作，似乎很多所谓的Tricks在这篇文章中能找到，看这篇文章就是来学Tricks的。</li>
-<li>Googlenet: <a href="http://www.cv-foundation.org/openaccess/content_cvpr_2015/papers/Szegedy_Going_Deeper_With_2015_CVPR_paper.pdf">Going Deeper with Convolutions</a> ImageNet竞赛Number1，有效的Inception结构构建深层网络</li>
-<li>VGGNet: <a href="http://arxiv.org/abs/1409.1556">Very Deep Convolutional Networks for Large-Scale Image Recognition</a> ImageNet竞赛Number2，典型的卷积+Pooling方式构建深层网络，但是由于没有Googlenet中Inception的1x1的convolution用于减小网络厚度，世间上要比Googlenet慢一些。</li>
+<li>Convolution</li>
+<li>Pooling</li>
+<li>ReLU： Rectified Linear Units</li>
+<li>LRN: Local Response Normalization</li>
+<li>finetune</li>
+<li>dropout</li>
+</ol>
+<p>搞明白SGD中weight的更新方法，可以参考Caffe网站上tutorial的Solver部分： <a href="http://caffe.berkeleyvision.org/tutorial/solver.html" class="uri">http://caffe.berkeleyvision.org/tutorial/solver.html</a> 。</p>
+<p>好了，现在试着去跑跑<code>${CAFFE_ROOT}/example</code>下LeNet的example吧。</p>
+<h2 id="级别3读paper网络train起来">级别3：读paper，网络Train起来</h2>
+<p>当去搜索ICRL、CVPR、ICCV这些最前沿的计算机视觉、机器学习会议的时候，只要是涉及图像相关的深度学习实验，大都是基于Caffe来做的。所以，只要抓住1~2篇popular的paper深入，把论文中的CNN在Caffe上复现了，就能找到一些感觉了。在这期间，下面一些经典论文是至少要读一读的：</p>
+<ol style="list-style-type: decimal">
+<li>LeNet-5: <a href="http://yann.lecun.com/exdb/publis/pdf/lecun-98.pdf">Gradient-Based Learning Applied to Document Recognition</a> CNN首篇paper，虽然是1998年的文章，但依然值得仔细一读，熟悉下CNN这玩意儿。</li>
+<li>AlexNet: <a href="http://www.cs.toronto.edu/~fritz/absps/imagenet.pdf">ImageNet Classification with Deep Convolutional Neural Networks</a> 自我感觉是促进CNN的扛鼎之作，似乎很多所谓的Tricks在这篇文章中能找到，看这篇文章就是来学Tricks的。你在这里能看到诸如Overlap Pooling、LRN、带momentum的SGD等等。</li>
+<li>Googlenet: <a href="http://www.cv-foundation.org/openaccess/content_cvpr_2015/papers/Szegedy_Going_Deeper_With_2015_CVPR_paper.pdf">Going Deeper with Convolutions</a> ImageNet竞赛Number1，有效的Inception结构给我映像深刻。</li>
+<li>VGGNet: <a href="http://arxiv.org/abs/1409.1556">Very Deep Convolutional Networks for Large-Scale Image Recognition</a> ImageNet竞赛Number2，典型的卷积+Pooling方式构建深层网络，但是由于没有Googlenet中Inception的1x1的convolution用于减小网络厚度，时间上要比Googlenet慢一些。论文中从A-E由浅到深训练深度网络的方法值得在搭建自己的网络时学习，这个后面再表。</li>
+<li><a href="http://arxiv.org/abs/1312.6229">OverFeat: Integrated Recognition, Localization and Detection using Convolutional Networks</a> 这篇paper至少告诉我一件事，深度网络提取的特征对图片Classification、Detection、Segmentation等都有效。也就是说，我拿一个Net到ImageNet去Train一个1000类的分类model出来，我又要把这个Net用于图片Detection，这篇paper告诉你：好了，不用再Train一个Detection model了，我的Classification model直接给你用，你除了需要把后端的Softmax改一改之外，其它啥都不用改，这个Net照样跑得和Classification任务中一样的好。</li>
 </ol>
 <p>具体到用CNN做Sematic Segmentation，利用到全卷积网络，对下面两篇进行了精读，并且都Caffe上复现过并用于分割任务，</p>
 <ol style="list-style-type: decimal">
@@ -105,18 +124,36 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <li><a href="http://xiahouzuoxin.github.io/notes/enclosure/FCN%20for%20Sematic%20Segmentation.pptx">FCN for Sematic Segmentation.pptx</a></li>
 <li><a href="http://xiahouzuoxin.github.io/notes/enclosure/Semantic%20Image%20Segmentation%20With%20Deep%20Convolutional%20Nets%20and%20Fully%20Connected%20CRFs.pptx">Semantic Image Segmentation With Deep Convolutional Nets and Fully Connected CRFs.ppt</a></li>
 </ol>
+<p>这两篇paper有一个共同点，都用到了multiscale的信息（也就是将High Layer的输出与Low Layer的输出进行结合），这对促进分割效果有很大的作用。值得一提的是，在Train multiscale的model时，由于存在反卷积或上采样的操作，Layer相对复杂，很难一大锅扔进去还Trian得很好，所以通常会先Train一个无multiscale的model，再用该model去finetune含multiscale的Net。</p>
 <h2 id="级别4demo跑起来">级别4：Demo跑起来</h2>
 <h3 id="读一些源码玩玩">读一些源码玩玩</h3>
 <ol style="list-style-type: decimal">
 <li><p>caffe.proto</p></li>
-<li><p>Convolution Layer</p></li>
-<li><p>SoftmaxLossLayer</p></li>
+<li><p>Convolution Layer</p>
+<p>CNN里面最重要的运算就是卷积，要知道Caffe是怎么做卷积的，就看看<code>src/caffe/layers/conv_layer.cpp</code>。Caffe里的卷积计算：</p>
+<div class="figure">
+<img src="../images/深度卷积网络CNN与图像语义分割/CNN_Conv.jpg" alt="Caffe里的卷积操作" />
+<p class="caption">Caffe里的卷积操作</p>
+</div>
+<p>Caffe计算卷积时先将图片中用于卷积的每个patch拉成一个行向量，若stride=1，则卷积的patch个数刚好是W*H，则将原图片保存成一个[WxH,KxKxD]矩阵，同理，滤波器也存成一个[M,KxKxD]矩阵，卷积计算只要计算这两个矩阵的乘积，矩阵乘积的工作刚好可以交给BLAS来进行优化，也就是为了用BLAS优化而进行这种转化，从中可以看出，Caffe里的卷积还是挺耗内存空间的！</p></li>
+<li><p>SoftmaxLossLayer</p>
+<p>所谓的输出的Loss计算使用的一般是Softmax或Sigmoid的交叉谱，具体可看<a href="http://caffe.berkeleyvision.org/doxygen/classcaffe_1_1SoftmaxWithLossLayer.html">这里SoftmaxWithLossLayer</a></p></li>
 <li><p>DataLayer</p></li>
-<li><p>自己实现个IoULayer</p></li>
+<li>自己添加一个Layer（比如Segmentation中常用的精度指标是IoU而不是简单的Accuracy）
+<ul>
+<li>在caffe.proto中的message LayerParameter部分增加<code>Layer Type</code>和<code>layerParameter</code>，并在caffe.proto中声明该message LayerParameter（protobuf里的message类似C里的struct）</li>
+<li>在include的某个头文件中声明LayerClass</li>
+<li>在src/caffe/layers/中新建一个.cpp，实现LayerSetup、Shape、Forward_cpu以及Backward_cpu</li>
+<li>为建立LayerClass与proto中Layer声明的关联，在上面的.cpp中还要使用INSTALL_CLASS(...)和REGISTER_LAYER_CLASS(...)</li>
+</ul>
+<p>上面仅仅是我随手写在草稿纸上的随笔，其实自己看看源码，依葫芦画瓢写一个简单的Layer就知道了。</p></li>
 </ol>
 <h3 id="熟悉caffe接口写demo这是硬功夫">熟悉Caffe接口，写Demo这是硬功夫</h3>
 <p>Caffe提供了好用的接口，包括matlab、C++、Python！由于特殊原因，我不能公开我C++和matlab的Demo源码以及其中的一些后处理技术，暂且只能给大家看一些分割的结果：</p>
-<p><img src="../images/深度卷积网络CNN与图像语义分割/Result1.png" alt="Sematic Segmentation结果" /> <img src="../images/深度卷积网络CNN与图像语义分割/Result2.png" alt="Sematic Segmentation结果" /></p>
+<div class="figure">
+<img src="../images/深度卷积网络CNN与图像语义分割/Result1.png" alt="Sematic Segmentation Result" />
+<p class="caption">Sematic Segmentation Result</p>
+</div>
 <p>还有一个视频语义分割的结果，大家看看，热闹热闹就好，</p>
 <iframe height="498" width="510" src="http://xiahouzuoxin.github.io/notes/images/深度卷积网络CNN与图像语义分割/TG.mp4" frameborder="0" allowfullscreen>
 </iframe>
@@ -138,20 +175,8 @@ code > span.er { color: #ff0000; font-weight: bold; }
   }</code></pre>
 <p>下面图是一些Layer的输出blob，从结果可以看出，前面的layer还能看到一些边缘信息，后面的layer就完全看不出原图像相关的信息了，</p>
 <div class="figure">
-<img src="../images/深度卷积网络CNN与图像语义分割/layer1.png" alt="浅层Layer1" />
-<p class="caption">浅层Layer1</p>
-</div>
-<div class="figure">
-<img src="../images/深度卷积网络CNN与图像语义分割/layer2.png" alt="浅层Layer2" />
-<p class="caption">浅层Layer2</p>
-</div>
-<div class="figure">
-<img src="../images/深度卷积网络CNN与图像语义分割/layer3.png" alt="浅层Layer3" />
-<p class="caption">浅层Layer3</p>
-</div>
-<div class="figure">
-<img src="../images/深度卷积网络CNN与图像语义分割/layer4.png" alt="深层Layer" />
-<p class="caption">深层Layer</p>
+<img src="../images/深度卷积网络CNN与图像语义分割/features.png" alt="不同Layers的Feature变化" />
+<p class="caption">不同Layers的Feature变化</p>
 </div>
 <h2 id="级别5何不自己搭个cnn玩玩">级别5：何不自己搭个CNN玩玩</h2>
 <p>虽然还是个新手，关于搭建CNN，还在慢慢在找感觉。我觉得从两方面：</p>
@@ -168,11 +193,132 @@ code > span.er { color: #ff0000; font-weight: bold; }
 </div>
 <p>VGG不是Weight Filter不是非常厚么，卷积操作复杂度就高。而Googlenet通过Inception中1x1的Convolution刚好是为了减少Weight Filter的厚度，我最近一段时间在尝试做的事就是将VGG中的Layer用Googlenet中的Inception的方式去替代，希望至少在时间上有所改进。</p></li>
 <li><p>从头搭建一个CNN用于解决实际问题。一个词：搭积木。</p>
-<p>先搭一个简单的，比如说就3层：卷积-Pooling-卷积-Pooling-卷积-Pooling，先把这个简单的网络训练以来，效果不好没关系，我们接着往上加，直到满意为止。但是这里面有一个finetune的技巧，那就是用浅层的网络训练weight结果去初始化或finetune深层网络。这也是为什么不直接一开始就搭建深层网络的原因，级别1里就说过，深度网络的Train是个非凸问题，是个至今难解决的大问题，网络初始化对其收敛结果影响很大，finetune就这样作为Deep Network中一项重要的tricks而存在了。 finetune除了由浅至深逐级初始化帮助收敛外，还有一个作用：将自己的网络在一个非常非常大的数据集上(现在最大的ImageNet)进行Train，这个Train的结果再拿去作为实际要解决的问题中用于初始化，这样能增加网络的泛化能力。 然而，当Net遇到问题时，如何去改进？这是个大问题，不说现在没太多经验，有也是盲人摸象的感觉，暂且搁下不提，待后期多做实验分析整理，希望能有所收获。</p></li>
+<p>先搭一个简单的，比如说就3层：卷积-Pooling-卷积-Pooling-卷积-Pooling，先把这个简单的网络训练以来，效果不好没关系，我们接着往上加，直到满意为止。不明白的看看上面的VGG Net，先在ImageNet上Train出一个A网络，然后增加A的深度(粗体的部分)变成B，再用A去初始化B网络，就逐级增加网络深度。 这里面有一个finetune的技巧，那就是用浅层的网络训练weight结果去初始化或finetune深层网络。这也是为什么不直接一开始就搭建深层网络的原因，前面说过，深度网络的Train是个非凸问题，是个至今难解决的大问题，网络初始化对其收敛结果影响很大，finetune就这样作为Deep Network中一项最重要的tricks而存在了。finetune除了由浅至深逐级初始化帮助收敛外，还有一个作用：将自己的网络在一个非常非常大的数据集上(现在最大的ImageNet)进行Train，这个Train的结果再拿去作为实际要解决的问题中用于初始化，这样能增加网络的泛化能力。 关于更多的问题，现在也是盲人摸象，暂且搁下不提。</p></li>
 </ol>
-<p>就我现在的水平，最多也就修炼到这一级了。这一级还要多花功夫，读paper，多思考，继续练。。。</p>
+<h3 id="train-cnn时关于数据集的一些注意事项">Train CNN时关于数据集的一些注意事项</h3>
+<ol style="list-style-type: decimal">
+<li>论数据集的重要性</li>
+</ol>
+<p>Train一个Net的经验也很重要，还是那句话，“数据是燃料”，CNN训练一定要保证足够的数据量（就我现在知道，Train一个深层的全卷积至少要4万张图片以上），否则很容易出现过拟合或者说泛化能力特别差，就像下面那样。下面分别是DatasetSize=4K与DatasetSize=40K同一Net Train出来的Prediction结果。 在训练时，仅从精度上来看，两个Net训练时得到的差距不大，IoU都在90%左右，但实际predict时，4K train出的model是如此的难看！</p>
+<div class="figure">
+<img src="../images/深度卷积网络CNN与图像语义分割/DatasetImportance.png" alt="论Train CNN数据集大小的重要性" />
+<p class="caption">论Train CNN数据集大小的重要性</p>
+</div>
+<ol start="2" style="list-style-type: decimal">
+<li>CNN对目标出现在图片的位置、大小、方向等信息非常敏感，为增加网络泛化能力，最好对数据进行先multiscale、mirror、crop等操作。比如下面就是我用来对图片进行scale的一段matlab代码（这段代码主要是通过resize、填白来scale，但不改变图片长宽比）。当然，scale的方式不局限于此，也可以直接resize，改变图片长宽比。</li>
+</ol>
+<pre class="sourceCode matlab"><code class="sourceCode matlab">function ImageScale(in_dir,out_dir)
+<span class="co">% Author: zuoxin,xiahou</span>
+if ~exist(out_dir,<span class="st">&#39;dir&#39;</span>)
+    mkdir(out_dir); 
+end
+ims = dir(fullfile(in_dir,<span class="st">&#39;*.jpg&#39;</span>));
+gts = dir(fullfile(in_dir,<span class="st">&#39;*.bmp&#39;</span>));
+N = length(ims);
+if N ~= length(gts)
+    error(<span class="st">&#39;NUM(Images)~=NUM(GroudTruth)&#39;</span>); 
+end
+for i=<span class="fl">1</span>:N
+    im = imread(fullfile(in_dir,ims(i).name));
+    gt = imread(fullfile(in_dir,gts(i).name));
+    <span class="co">% Check for size errors</span>
+    if ndims(im) &lt; <span class="fl">3</span>
+        [h,w] = size(im);
+        k=<span class="fl">1</span>;
+    else
+        [h,w,k] = size(im);
+    end
+    [h_gt,w_gt,k_gt] = size(gt);
+    if h~=h_gt || w~=w_gt
+        error(<span class="st">&#39;size(im)~=size(gt)&#39;</span>);
+    end
+    if h&gt;w
+        ts = h;
+    else
+        ts = w;
+    end
+    
+    SIZE = <span class="fl">500</span>;
+    if h&gt;w
+        im = imresize(im, [SIZE,w*SIZE/ts]);
+        gt = imresize(gt, [SIZE,w*SIZE/ts]);
+    else
+        im = imresize(im, [h*SIZE/ts,SIZE]);
+        gt = imresize(gt, [h*SIZE/ts,SIZE]);        
+    end
+    <span class="co">% Update Size</span>
+    if ndims(im) &lt; <span class="fl">3</span>
+        [h,w] = size(im);
+        k=<span class="fl">1</span>;
+    else
+        [h,w,k] = size(im);
+    end
+    [~,~,k_gt] = size(gt);
+    if h&gt;w <span class="co">% h&gt;w, padding width (bg:0 fg:1)</span>
+        pad_ = SIZE-w;
+        left_pad = floor(pad_/<span class="fl">2</span>);
+        right_pad = ceil(pad_/<span class="fl">2</span>);
+        scale_im = [<span class="fl">255</span>*ones(h,left_pad,k), im, <span class="fl">255</span>*ones(h,right_pad,k)];
+        scale_gt = [<span class="fl">255</span>*zeros(h,left_pad,k_gt), gt, <span class="fl">255</span>*zeros(h,right_pad,k_gt)];
+    else <span class="co">% h&lt;w, padding height</span>
+        pad_ = SIZE-h;
+        top_pad = floor(pad_/<span class="fl">2</span>);
+        bot_pad = ceil(pad_/<span class="fl">2</span>);
+        scale_im = [<span class="fl">255</span>*ones(top_pad,w,k); im; <span class="fl">255</span>*ones(bot_pad,w,k)];
+        scale_gt = [<span class="fl">255</span>*zeros(top_pad,w,k_gt); gt; <span class="fl">255</span>*zeros(bot_pad,w,k_gt)];
+    end    
+    <span class="co">% Other Scales</span>
+    ts = [<span class="fl">0.6</span>,<span class="fl">1</span>,<span class="fl">1.4</span>];
+    for s = <span class="fl">1</span>:numel(ts)
+        im = imresize(scale_im,ts(s));
+        gt = imresize(scale_gt,ts(s));
+        <span class="co">% padding/crop to SIZExSIZE</span>
+        if size(im,<span class="fl">1</span>) &lt; SIZE  <span class="co">% Padding</span>
+            right_pad = SIZE - size(im,<span class="fl">2</span>);
+            bot_pad = SIZE - size(im,<span class="fl">1</span>);
+            im = [im, <span class="fl">255</span>*ones(size(im,<span class="fl">1</span>),right_pad,k)];
+            im = [im; <span class="fl">255</span>*ones(bot_pad,size(im,<span class="fl">2</span>),k)];
+            gt = [gt, <span class="fl">255</span>*zeros(size(gt,<span class="fl">1</span>),right_pad,k_gt)];
+            gt = [gt; <span class="fl">255</span>*zeros(bot_pad,size(gt,<span class="fl">2</span>),k_gt)];
+        else  <span class="co">% Crop</span>
+            im = im(<span class="fl">1</span>:SIZE,<span class="fl">1</span>:SIZE,:);
+            gt = gt(<span class="fl">1</span>:SIZE,<span class="fl">1</span>:SIZE,:);
+        end   
+        gt(gt&gt;=<span class="fl">128</span>) = <span class="fl">255</span>;
+        gt(gt&lt;<span class="fl">128</span>)  = <span class="fl">0</span>;       
+        out_im = fullfile(out_dir,...
+            [ims(i).name(<span class="fl">1</span>:end-<span class="fl">4</span>),<span class="st">&#39;_&#39;</span>,num2str(ts(s)),<span class="st">&#39;.jpg&#39;</span>]);
+        out_gt = fullfile(out_dir,...
+            [ims(i).name(<span class="fl">1</span>:end-<span class="fl">4</span>),<span class="st">&#39;_&#39;</span>,num2str(ts(s)),<span class="st">&#39;.bmp&#39;</span>]);
+        imwrite(im,out_im);
+        imwrite(gt,out_gt);
+    end
+end
+end</code></pre>
+<p>下面是mirror图片的matlab脚本：</p>
+<pre class="sourceCode matlab"><code class="sourceCode matlab">function image_mirror(d)
+<span class="co">% mirror all images under @dir directory</span>
+<span class="co">% and store the mirrored images under @dir</span>
+
+files=dir(fullfile(d,<span class="st">&#39;*.jpg&#39;</span>));
+n=length(files);
+for i=<span class="fl">1</span>:n
+    src_file=fullfile(d,files(i).name);
+    out_file=fullfile(d,[files(i).name(<span class="fl">1</span>:end-<span class="fl">4</span>),<span class="st">&#39;_mr.jpg&#39;</span>]);
+    if ~exist(out_file,<span class="st">&#39;file&#39;</span>) &amp;&amp; ~(strcmp(src_file(end-<span class="fl">5</span>:end-<span class="fl">4</span>),<span class="st">&#39;mr&#39;</span>))
+        im = imread(src_file);
+        out=im(:,end:-<span class="fl">1</span>:<span class="fl">1</span>,:);
+        <span class="co">% imshow(out);</span>
+        imwrite(out, out_file);
+        fprintf(<span class="st">&#39;%s\n&#39;</span>,fullfile(d,files(i).name));
+    end
+end</code></pre>
+<ol start="3" style="list-style-type: decimal">
+<li>关于输入图片尺寸的问题</li>
+</ol>
+<p>对于非分割的问题，比如识别，我觉得在200x200 pixles左右就足够了（看大家都这么用的，这个自己没测试过）。但对于分割的问题，图片的size对分割结果影响还是很大的，用全卷积网络的测试结果：输入图片的size从500x500降低到300x300，IoU果断直接降了3个点，太恐怖了！！但size太大，卷积时间长，所以这就是一个精度和时间的折中问题了。</p>
 <h2 id="级别6加速吧gpu编程">级别6：加速吧，GPU编程</h2>
-<p>呃，这个实在还没开始着手去做，但迟早是要做的，说了“大数据是燃料，GPU是引擎”的，怎么能不懂引擎呢……</p>
+<p>呃，这一级还没练到，但迟早是要做的，说了“大数据是燃料，GPU是引擎”的，怎么能不懂引擎呢……</p>
 <h2 id="关于语义分割的一些其它工作">关于语义分割的一些其它工作</h2>
 <ol style="list-style-type: decimal">
 <li>CRF：CRF在图像分割中是最常见的refine后处理手段。在CNN中目标是做成end-2-end的CRF，实习这段时间也做过不少这部分的工作，Oxford有篇CRF-RNN的paper，将denseCRF重新解释成RNN来进行end-2-end的Training</li>
