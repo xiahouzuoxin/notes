@@ -32,7 +32,7 @@ DL只是一个概念而已。对于做图像和视觉的就该一头扎到CNN(Co
 
 接着请认准Caffe官方文档： <http://caffe.berkeleyvision.org/> 和Github源码： <https://github.com/BVLC/caffe> 。毫不犹豫fork一份到自己的Github。然后就是照着[INSTALL](http://caffe.berkeleyvision.org/installation.html)来Complie和Config Caffe了，值得注意的是，安装OpenCV的时候推荐使用源码安装。
 
-先自己熟悉Caffe的架构，主要参考资料就是官网文档，我自己刚开始的时候也写了个小的ppt笔记：[Diving into Caffe.pptx](http://xiahouzuoxin.github.io/notes/enclosure/Diving into Caffe.pptx)
+先自己熟悉Caffe的架构，主要参考资料就是官网文档，我自己刚开始的时候也写了个小的ppt笔记：[Diving into Caffe.pptx](http://xiahouzuoxin.github.io/notes/enclosure/深度卷积网络CNN与图像语义分割/Diving into Caffe.pptx)
 
 还有两份不错的Caffe tutorials：
 
@@ -80,8 +80,8 @@ DL只是一个概念而已。对于做图像和视觉的就该一头扎到CNN(Co
 
 下面是几个月前我看过这两篇paper后做得ppt：
 
-1. [FCN for Sematic Segmentation.pptx](http://xiahouzuoxin.github.io/notes/enclosure/FCN for Sematic Segmentation.pptx)
-2. [Semantic Image Segmentation With Deep Convolutional Nets and Fully Connected CRFs.ppt](http://xiahouzuoxin.github.io/notes/enclosure/Semantic Image Segmentation With Deep Convolutional Nets and Fully Connected CRFs.pptx)
+1. [FCN for Sematic Segmentation.pptx](http://xiahouzuoxin.github.io/notes/enclosure/深度卷积网络CNN与图像语义分割/FCN for Sematic Segmentation.pptx)
+2. [Semantic Image Segmentation With Deep Convolutional Nets and Fully Connected CRFs.ppt](http://xiahouzuoxin.github.io/notes/enclosure/深度卷积网络CNN与图像语义分割/Semantic Image Segmentation With Deep Convolutional Nets and Fully Connected CRFs.pptx)
 
 这两篇paper有一个共同点，都用到了multiscale的信息（也就是将High Layer的输出与Low Layer的输出进行结合），这对促进分割效果有很大的作用。值得一提的是，在Train multiscale的model时，由于存在反卷积或上采样的操作，Layer相对复杂，很难一大锅扔进去还Trian得很好，所以通常会先Train一个无multiscale的model，再用该model去finetune含multiscale的Net。
 
@@ -180,8 +180,9 @@ Train一个Net的经验也很重要，还是那句话，“数据是燃料”，
 2. CNN对目标出现在图片的位置、大小、方向等信息非常敏感，为增加网络泛化能力，最好对数据进行先multiscale、mirror、crop等操作。比如下面就是我用来对图片进行scale的一段matlab代码（这段代码主要是通过resize、填白来scale，但不改变图片长宽比）。当然，scale的方式不局限于此，也可以直接resize，改变图片长宽比。
 
 ```matlab
-function ImageScale(in_dir,out_dir)
+function ImageScale(in_dir,out_dir,SIZE)
 % Author: zuoxin,xiahou
+% SIZE: size when scale ratio=1.0
 if ~exist(out_dir,'dir')
     mkdir(out_dir); 
 end
@@ -211,7 +212,7 @@ for i=1:N
         ts = w;
     end
     
-    SIZE = 500;
+    % SIZE = 500;
     if h>w
         im = imresize(im, [SIZE,w*SIZE/ts]);
         gt = imresize(gt, [SIZE,w*SIZE/ts]);
@@ -295,6 +296,16 @@ end
 3. 关于输入图片尺寸的问题
 
 对于非分割的问题，比如识别，我觉得在200x200 pixles左右就足够了（看大家都这么用的，这个自己没测试过）。但对于分割的问题，图片的size对分割结果影响还是很大的，用全卷积网络的测试结果：输入图片的size从500x500降低到300x300，IoU果断直接降了3个点，太恐怖了！！但size太大，卷积时间长，所以这就是一个精度和时间的折中问题了。
+
+### 提升分割效果的一些方法
+
+1. MultiScale
+
+从CNN最后一层的输出结合前面一些浅层的输出，组成多尺度的信息，参考FCNN和Deeplab的上采样方式。
+
+2. 从数据标定上下功夫（这个只是猜测，还未经过验证）
+
+就如上面的人目标分割的问题，在标定的时候正常就是标定为2分类问题（前景：人，背景：其它）。现在换个角度思考，因为人脸和人体衣服的差异相对比较大，如果在标定的时候标定为同一类（前景），问题是简单了，但学习的时候，要把人脸和衣服框起来的model学鲁棒了感觉还是很困难。而如果将人脸和衣服在标定的时候就标定成不同的类，识别完了，考虑相对位置信息，再将这两类整合为同一类，效果是不是会更好呢？
 
 ## 级别6：加速吧，GPU编程
 

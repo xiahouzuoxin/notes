@@ -11,6 +11,8 @@ if [ "$1" == "README.md" ]; then
 	sed -e 's/essays/html/g;s/.md/.html/g' README.md > tmp_readme.md
 	pandoc tmp_readme.md --include-before-body header.html --include-after-body footer.html -o ${1%.*}".html" -c ./stylesheets/Github.css
 	rm tmp_readme.md
+elif [ "$1" == "resume.md" ]; then
+	pandoc $1 -o resume.html -c ./stylesheets/Clearness.css
 else
 	pandoc $1 --include-before-body header.html --include-after-body footer.html -o ${1%.*}".html" -c ./stylesheets/Github.css
 fi

@@ -8,15 +8,10 @@ $ git clone git@github.com:xiahouzuoxin/notes.git
 $ git checkout -b gh-pages origin/gh-pages
 ```
 
-# 求职中……
+# 关于[本人](./resume.html)
 
-本人北京科技大学计算机技术小硕一枚，期望工作方向是图像、机器学习。[简历](../pdf/resume.html)。
+北京科技大学计算机技术小硕一枚，研究过图像处理、机器学习、嵌入式、信号处理，搞得定硬件，写得了算法。欢迎微博交流！
 
-# 联系（欢迎学习交流）
-
-- 邮箱： <xiahouzuoxin#163.com> #替换成@
-
-![](images/MyQQ.jpg)
-![](images/MyWeixin.jpg)
+[ ![](images/MyWeibo.png) ](http://weibo.com/xiahouzuoxin)
 
 

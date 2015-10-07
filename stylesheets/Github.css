@@ -2,7 +2,7 @@
 
 *{margin:0;padding:0;}
 body {
-	font:13px Consolas,helvetica,sans-serif,arial,freesans,clean;
+	font:12px Consolas,helvetica,sans-serif,arial,freesans,clean;
 	font-weight:normal
 	font-style:normal
 	color: #333;
@@ -247,9 +247,10 @@ pre .chunk {
 
 .footer_subline {
     color: #0;
-    font-size: 12px;
+    font-size: 10px;
     text-align: center;
     text-vertical-align: top;
+    line-height:1px
 }
 
 #right_side {

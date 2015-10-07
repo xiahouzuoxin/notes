@@ -3,7 +3,6 @@
 
 - [Kalman滤波器从原理到实现](./essays/Kalman滤波器从原理到实现.md)
 - [功率谱的一点理解](./essays/功率谱的一点理解.md)
-- [图像牛人链接及数据库资源](./essays/图像牛人链接及数据库资源.md)
 - [基于AR谱特征的声目标识别](./essays/基于AR谱特征的声目标识别.md)
 - [循环的角度求均值](./essays/循环的角度求均值.md)
 - [数字信号处理中各种频率关系](./essays/数字信号处理中各种频率关系.md)
@@ -41,10 +40,9 @@
 - [OpenCV图像处理篇之Hough变换](./essays/OpenCV图像处理篇之Hough变换.md)
 - [OpenCV集成到Qt的尝试-zximage](./essays/OpenCV集成到Qt的尝试-zximage.md)
 
-# 嵌入式处理(DSP/FPGA/ARM)
+# 嵌入式(DSP/FPGA/ARM)软硬件
 
 - [AlteraFPGA功耗估计工具](./essays/AlteraFPGA功耗估计工具.md)
-- [CycloneII系列FPGA结构](./essays/CycloneII系列FPGA结构.md)
 - [DSP-BIOS使用之初窥门径——滴答时钟及烧写Flash](./essays/DSP-BIOS使用之初窥门径——滴答时钟及烧写Flash.md)
 - [DSP-BIOS使用入门](./essays/DSP-BIOS使用入门.md)
 - [DSP连接不上CCS3.3的问题讨论](./essays/DSP连接不上CCS3.3的问题讨论.md)
@@ -64,7 +62,17 @@
 - [基于SPI的双MCU通信](./essays/基于SPI的双MCU通信.md)
 - [导出CCS3.3数据及使用matlab处理的方法](./essays/导出CCS3.3数据及使用matlab处理的方法.md)
 - [烧写Flash后的DSP程序运行不正常的情况分析](./essays/烧写Flash后的DSP程序运行不正常的情况分析.md)
-
+- [PCB设计参考资料](./essays/PCB设计参考资料.md)
+- [DCDC纹波小实验](./essays/DCDC纹波小实验.md)
+- [三极管的电平转换及驱动电路分析](./essays/三极管的电平转换及驱动电路分析.md)
+- [低功耗模式下锂电池使用时长的估算](./essays/低功耗模式下锂电池使用时长的估算.md)
+- [使用Pspice进行电路仿真](./essays/使用Pspice进行电路仿真.md)
+- [地震传感器参数指标及使用事项](./essays/地震传感器参数指标及使用事项.md)
+- [有关超声探头阻抗的分析](./essays/有关超声探头阻抗的分析.md)
+- [模拟信号采样与AD转换](./essays/模拟信号采样与AD转换.md)
+- [设计DSP与FPGA数据采集硬件系统时遇到的一些问题整理](./essays/设计DSP与FPGA数据采集硬件系统时遇到的一些问题整理.md)
+- [运放参数解释及常用运放选型](./essays/运放参数解释及常用运放选型.md)
+- [高频总线上的串阻问题](./essays/高频总线上的串阻问题.md)
 
 # 程序设计
 
@@ -78,7 +86,6 @@
 - [找了几道研究生复试面试题](./essays/找了几道研究生复试面试题.md)
 - [复习找工作之排序算法](./essays/复习找工作之排序算法.md)
 
-
 # Linux 
 
 - [CentOS在Win7下的硬盘安装](./essays/CentOS在Win7下的硬盘安装.md)
@@ -91,20 +98,6 @@
 - [实例学习gcc+gdb+make](./essays/实例学习gcc+gdb+make.md)
 - [设置CentOS启动默认进入控制台而不是图形界面](./essays/设置CentOS启动默认进入控制台而不是图形界面.md)
 
-# 电路设计
-
-- [PCB设计参考资料](./essays/PCB设计参考资料.md)
-- [DCDC纹波小实验](./essays/DCDC纹波小实验.md)
-- [三极管的电平转换及驱动电路分析](./essays/三极管的电平转换及驱动电路分析.md)
-- [低功耗模式下锂电池使用时长的估算](./essays/低功耗模式下锂电池使用时长的估算.md)
-- [使用Pspice进行电路仿真](./essays/使用Pspice进行电路仿真.md)
-- [地震传感器参数指标及使用事项](./essays/地震传感器参数指标及使用事项.md)
-- [有关超声探头阻抗的分析](./essays/有关超声探头阻抗的分析.md)
-- [模拟信号采样与AD转换](./essays/模拟信号采样与AD转换.md)
-- [设计DSP与FPGA数据采集硬件系统时遇到的一些问题整理](./essays/设计DSP与FPGA数据采集硬件系统时遇到的一些问题整理.md)
-- [运放参数解释及常用运放选型](./essays/运放参数解释及常用运放选型.md)
-- [高频总线上的串阻问题](./essays/高频总线上的串阻问题.md)
-
 # 磨刀不误砍柴工
 
 - [Git使用补遗](./essays/Git使用补遗.md)
@@ -113,7 +106,6 @@
 - [Latex入门](./essays/Latex入门.md)
 - [Markdown中插入数学公式的方法](./essays/Markdown中插入数学公式的方法.md)
 - [使用Markdown书写](./essays/使用Markdown书写.md)
-- [我使用Everedit书写Markdown笔记的模板](./essays/我使用Everedit书写Markdown笔记的模板.md)
 - [推荐一个不错的代码搜索引擎](./essays/推荐一个不错的代码搜索引擎.md)
 - [插入视频测试](./essays/插入视频测试.md)
 
@@ -137,3 +129,4 @@
 - [《追风筝的人》读后简记](essays/《追风筝的人》读后简记.md)
 - [拾掇起来的年华3](essays/拾掇起来的年华3.md)
 - [那时端午](essays/那时端午.md)
+- [侃侃自己的IT面试经历](essays/侃侃自己的IT面试经历.md)
