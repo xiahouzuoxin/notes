@@ -105,12 +105,19 @@ core.quotepath设为false的话，就不会对0×80以上的字符进行quote。
 git config --global core.autocrlf true
 ```
 
+## 彩色显示git命令的结果
 
+```
+git config --global color.status auto  
+git config --global color.diff auto  
+git config --global color.branch auto  
+git config --global color.interactive auto 
+```
 
+## 一些错误的处理
 
+1. error: error setting certificate verify locations
 
-
-
-
-
-
+```
+git config --system http.sslverify false
+```

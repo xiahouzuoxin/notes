@@ -26,3 +26,14 @@ yum clean all && yum makecache && yum update -y          # yum更新
 ```
 
 网易613提供了yum源的CentOS-Base.repo文件，而上海交大和中科大的yum源可能需要自己写，相对来说，使用163的yum更新更方便些。
+
+## Fedora的更新源
+
+```
+cd /etc/yum.repos.d
+wget http://mirrors.163.com/.help/fedora-163.repo
+wget http://mirrors.163.com/.help/fedora-updates-163.repo
+wget http://mirrors.sohu.com/help/fedora-sohu.repo
+wget http://mirrors.sohu.com/help/fedora-updates-sohu.repo
+yum makecache
+```

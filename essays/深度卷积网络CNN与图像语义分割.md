@@ -32,7 +32,7 @@ DL只是一个概念而已。对于做图像和视觉的就该一头扎到CNN(Co
 
 接着请认准Caffe官方文档： <http://caffe.berkeleyvision.org/> 和Github源码： <https://github.com/BVLC/caffe> 。毫不犹豫fork一份到自己的Github。然后就是照着[INSTALL](http://caffe.berkeleyvision.org/installation.html)来Complie和Config Caffe了，值得注意的是，安装OpenCV的时候推荐使用源码安装。
 
-先自己熟悉Caffe的架构，主要参考资料就是官网文档，我自己刚开始的时候也写了个小的ppt笔记：[Diving into Caffe.pptx](http://xiahouzuoxin.github.io/notes/enclosure/深度卷积网络CNN与图像语义分割/Diving into Caffe.pptx)
+先自己熟悉Caffe的架构，主要参考资料就是官网文档，我自己刚开始的时候也写了个小的ppt笔记：[Diving into Caffe.pptx](https://xiahouzuoxin.github.io/notes/enclosure/深度卷积网络CNN与图像语义分割/Diving into Caffe.pptx)
 
 还有两份不错的Caffe tutorials：
 

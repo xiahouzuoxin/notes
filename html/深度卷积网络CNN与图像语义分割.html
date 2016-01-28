@@ -50,6 +50,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
 </ul></li>
 <li><a href="#级别5何不自己搭个cnn玩玩">级别5：何不自己搭个CNN玩玩</a><ul>
 <li><a href="#train-cnn时关于数据集的一些注意事项">Train CNN时关于数据集的一些注意事项</a></li>
+<li><a href="#提升分割效果的一些方法">提升分割效果的一些方法</a></li>
 </ul></li>
 <li><a href="#级别6加速吧gpu编程">级别6：加速吧，GPU编程</a></li>
 <li><a href="#关于语义分割的一些其它工作">关于语义分割的一些其它工作</a></li>
@@ -79,7 +80,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <h2 id="级别2从caffe着手实践">级别2：从Caffe着手实践</h2>
 <p>先看看这个热个身：<a href="http://www.csdn.net/article/2015-07-07/2825150">贾扬清：希望Caffe成为深度学习领域的Hadoop</a>，增加点学习的欲望，毕竟现在多少人靠着Hadoop那玩意儿挣着大钱。</p>
 <p>接着请认准Caffe官方文档： <a href="http://caffe.berkeleyvision.org/" class="uri">http://caffe.berkeleyvision.org/</a> 和Github源码： <a href="https://github.com/BVLC/caffe" class="uri">https://github.com/BVLC/caffe</a> 。毫不犹豫fork一份到自己的Github。然后就是照着<a href="http://caffe.berkeleyvision.org/installation.html">INSTALL</a>来Complie和Config Caffe了，值得注意的是，安装OpenCV的时候推荐使用源码安装。</p>
-<p>先自己熟悉Caffe的架构，主要参考资料就是官网文档，我自己刚开始的时候也写了个小的ppt笔记：<a href="http://xiahouzuoxin.github.io/notes/enclosure/Diving%20into%20Caffe.pptx">Diving into Caffe.pptx</a></p>
+<p>先自己熟悉Caffe的架构，主要参考资料就是官网文档，我自己刚开始的时候也写了个小的ppt笔记：<a href="https://xiahouzuoxin.github.io/notes/enclosure/深度卷积网络CNN与图像语义分割/Diving%20into%20Caffe.pptx">Diving into Caffe.pptx</a></p>
 <p>还有两份不错的Caffe tutorials：</p>
 <ol style="list-style-type: decimal">
 <li>Standford CS231课程的<a href="http://vision.stanford.edu/teaching/cs231n/slides/caffe_tutorial.pdf">Caffe tutorial</a></li>
@@ -121,8 +122,8 @@ code > span.er { color: #ff0000; font-weight: bold; }
 </ol>
 <p>下面是几个月前我看过这两篇paper后做得ppt：</p>
 <ol style="list-style-type: decimal">
-<li><a href="http://xiahouzuoxin.github.io/notes/enclosure/FCN%20for%20Sematic%20Segmentation.pptx">FCN for Sematic Segmentation.pptx</a></li>
-<li><a href="http://xiahouzuoxin.github.io/notes/enclosure/Semantic%20Image%20Segmentation%20With%20Deep%20Convolutional%20Nets%20and%20Fully%20Connected%20CRFs.pptx">Semantic Image Segmentation With Deep Convolutional Nets and Fully Connected CRFs.ppt</a></li>
+<li><a href="http://xiahouzuoxin.github.io/notes/enclosure/深度卷积网络CNN与图像语义分割/FCN%20for%20Sematic%20Segmentation.pptx">FCN for Sematic Segmentation.pptx</a></li>
+<li><a href="http://xiahouzuoxin.github.io/notes/enclosure/深度卷积网络CNN与图像语义分割/Semantic%20Image%20Segmentation%20With%20Deep%20Convolutional%20Nets%20and%20Fully%20Connected%20CRFs.pptx">Semantic Image Segmentation With Deep Convolutional Nets and Fully Connected CRFs.ppt</a></li>
 </ol>
 <p>这两篇paper有一个共同点，都用到了multiscale的信息（也就是将High Layer的输出与Low Layer的输出进行结合），这对促进分割效果有很大的作用。值得一提的是，在Train multiscale的model时，由于存在反卷积或上采样的操作，Layer相对复杂，很难一大锅扔进去还Trian得很好，所以通常会先Train一个无multiscale的model，再用该model去finetune含multiscale的Net。</p>
 <h2 id="级别4demo跑起来">级别4：Demo跑起来</h2>
@@ -207,8 +208,9 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <ol start="2" style="list-style-type: decimal">
 <li>CNN对目标出现在图片的位置、大小、方向等信息非常敏感，为增加网络泛化能力，最好对数据进行先multiscale、mirror、crop等操作。比如下面就是我用来对图片进行scale的一段matlab代码（这段代码主要是通过resize、填白来scale，但不改变图片长宽比）。当然，scale的方式不局限于此，也可以直接resize，改变图片长宽比。</li>
 </ol>
-<pre class="sourceCode matlab"><code class="sourceCode matlab">function ImageScale(in_dir,out_dir)
+<pre class="sourceCode matlab"><code class="sourceCode matlab">function ImageScale(in_dir,out_dir,SIZE)
 <span class="co">% Author: zuoxin,xiahou</span>
+<span class="co">% SIZE: size when scale ratio=1.0</span>
 if ~exist(out_dir,<span class="st">&#39;dir&#39;</span>)
     mkdir(out_dir); 
 end
@@ -238,7 +240,7 @@ for i=<span class="fl">1</span>:N
         ts = w;
     end
     
-    SIZE = <span class="fl">500</span>;
+    <span class="co">% SIZE = 500;</span>
     if h&gt;w
         im = imresize(im, [SIZE,w*SIZE/ts]);
         gt = imresize(gt, [SIZE,w*SIZE/ts]);
@@ -317,6 +319,15 @@ end</code></pre>
 <li>关于输入图片尺寸的问题</li>
 </ol>
 <p>对于非分割的问题，比如识别，我觉得在200x200 pixles左右就足够了（看大家都这么用的，这个自己没测试过）。但对于分割的问题，图片的size对分割结果影响还是很大的，用全卷积网络的测试结果：输入图片的size从500x500降低到300x300，IoU果断直接降了3个点，太恐怖了！！但size太大，卷积时间长，所以这就是一个精度和时间的折中问题了。</p>
+<h3 id="提升分割效果的一些方法">提升分割效果的一些方法</h3>
+<ol style="list-style-type: decimal">
+<li>MultiScale</li>
+</ol>
+<p>从CNN最后一层的输出结合前面一些浅层的输出，组成多尺度的信息，参考FCNN和Deeplab的上采样方式。</p>
+<ol start="2" style="list-style-type: decimal">
+<li>从数据标定上下功夫（这个只是猜测，还未经过验证）</li>
+</ol>
+<p>就如上面的人目标分割的问题，在标定的时候正常就是标定为2分类问题（前景：人，背景：其它）。现在换个角度思考，因为人脸和人体衣服的差异相对比较大，如果在标定的时候标定为同一类（前景），问题是简单了，但学习的时候，要把人脸和衣服框起来的model学鲁棒了感觉还是很困难。而如果将人脸和衣服在标定的时候就标定成不同的类，识别完了，考虑相对位置信息，再将这两类整合为同一类，效果是不是会更好呢？</p>
 <h2 id="级别6加速吧gpu编程">级别6：加速吧，GPU编程</h2>
 <p>呃，这一级还没练到，但迟早是要做的，说了“大数据是燃料，GPU是引擎”的，怎么能不懂引擎呢……</p>
 <h2 id="关于语义分割的一些其它工作">关于语义分割的一些其它工作</h2>
