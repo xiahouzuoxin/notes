@@ -16,11 +16,11 @@ y = pyulear(x, 256, 128);
 
 AR谱的计算有2个重要的参数：系数阶数、FFT反变换的点数。AR谱是一种递推模型，即用前p个时刻的时域值估计当前第n时刻的值：
 
-<img src="http://www.forkosh.com/mathtex.cgi? x(n)=-\sum_{k=1}^{p}a_kx(n-k)+u(n)">
+<img src="https://latex.codecogs.com/png.latex? x(n)=-\sum_{k=1}^{p}a_kx(n-k)+u(n)">
 
 其中u(n)是噪声输入，系数阶数就是上式中的p。牵扯到FFT，是因为功率谱的计算中可以使用FFT进行快速计算，因此就有离散FFT在单位圆上抽样点数的问题，功率谱的计算公式是：
 
-<img src="http://www.forkosh.com/mathtex.cgi? P_x(e^{jw})=\frac{\sigma^2}{|1+\sum_{k=1}^pa_ke^{-jwk}|^2}=\frac{\sigma^2}{|\sum_{k=0}^{N-1}a_ke^{-jwk}|^2}">
+<img src="https://latex.codecogs.com/png.latex? P_x(e^{jw})=\frac{\sigma^2}{|1+\sum_{k=1}^pa_ke^{-jwk}|^2}=\frac{\sigma^2}{|\sum_{k=0}^{N-1}a_ke^{-jwk}|^2}">
 
 上式中转化后有a0=1，将FFT计算扩充到N点后有a(p+1)...a(N-1)=0，FFT点数就是指的这里用于FFT计算的长度N。
 
@@ -34,7 +34,7 @@ AR谱的细节参见胡广书编著《数字信号处理》一书，其C实现�
 
 ### 1 短时平均能量(Short Time Energy, STE)
 
-<img src="http://www.forkosh.com/mathtex.cgi? STE=\sum_{n=1}^Nx(n)^2">
+<img src="https://latex.codecogs.com/png.latex? STE=\sum_{n=1}^Nx(n)^2">
 
 其中N表示一帧的长度。短时平均能量可用于判断静音帧，静音帧的短时能量小，这比直接通x(n)的最高幅值进行判断稳定性要高。对于静音帧，应该在后续的处理之前去除。通常，语音比音乐含有更多的静音（人说话没有音乐那样着腔带调），因此，语音的平均能量的变化要比音乐中大很多。
 
@@ -42,7 +42,7 @@ AR谱的细节参见胡广书编著《数字信号处理》一书，其C实现�
 
 短时过零率是在一个音频帧内，离散采样信号值由负到正或由正到负的变换次数。
 
-<img src="http://www.forkosh.com/mathtex.cgi? ZCR=\frac{1}{N}\sum_{m=0}^{N-1}|sgn[x_n(m+1)]-sgn[x_n(m)]|">
+<img src="https://latex.codecogs.com/png.latex? ZCR=\frac{1}{N}\sum_{m=0}^{N-1}|sgn[x_n(m+1)]-sgn[x_n(m)]|">
 
 从某种程序上讲，过零率表达了信号的跳变速度，是频率的一种简单度量。过零率与平均能量结合能用于语音端点检测。在博文[自适应含噪信号过零率算法](../html/自适应含噪信号过零率算法.html)中也曾尝试改进过零率用于震动信号的识别。
 
@@ -50,7 +50,7 @@ AR谱的细节参见胡广书编著《数字信号处理》一书，其C实现�
 
 子带能量用于描述主要能量的频域分布特征，其过程就是将频域等间隔划分成B个子带，在AR谱图上，对每个子带范围进行积分就可求出子带能量Ei，则子带能量比就是
 
-<img src="http://www.forkosh.com/mathtex.cgi? \frac{E_i}{E_{all}},i=1,...B">
+<img src="https://latex.codecogs.com/png.latex? \frac{E_i}{E_{all}},i=1,...B">
 
 不同音频信号的能量分布不同，通过子带能量能区分能量的主要分布频带。子带能量比是一个很好参数，用于识别频率能量分布不同的目标。当然类似的思想也可以用到FFT频谱图上。
 
@@ -58,7 +58,7 @@ AR谱的细节参见胡广书编著《数字信号处理》一书，其C实现�
 
 将AR谱的幅值看做权值w，则谱频率重心的计算是：
 
-<img src="http://www.forkosh.com/mathtex.cgi? SC=\frac{w_k*f_k}{\sum{w_k}},k=1,...N/2">
+<img src="https://latex.codecogs.com/png.latex? SC=\frac{w_k*f_k}{\sum{w_k}},k=1,...N/2">
 
 谱频率重心是通过谱峰统计的中心，并不会（当然也可能等于）等于AR谱主峰对应的频率。
 

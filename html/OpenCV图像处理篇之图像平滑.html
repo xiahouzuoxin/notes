@@ -49,7 +49,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <!---date:2014-09-18-->
 <h2 id="图像平滑算法">图像平滑算法</h2>
 <p>图像平滑与图像模糊是同一概念，主要用于图像的去噪。平滑要使用滤波器，为不改变图像的相位信息，一般使用线性滤波器，其统一形式如下：</p>
-<p><img src="http://www.forkosh.com/mathtex.cgi? \Large g(i,j)=\sum_{k,l}f(i+k,j+l)h(k,l)"></p>
+<p><img src="https://latex.codecogs.com/png.latex? \Large g(i,j)=\sum_{k,l}f(i+k,j+l)h(k,l)"></p>
 <p>其中h称为滤波器的核函数，说白了就是权值。不同的核函数代表不同的滤波器，有不同的用途。</p>
 <p>在图像处理中，常见的滤波器包括：</p>
 <ol style="list-style-type: decimal">
@@ -57,7 +57,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <p>也是__均值滤波器__，用输出像素点核窗口内的像素均值代替输出点像素值。</p></li>
 <li><p>高斯滤波器（Guassian blur）</p>
 <p>是实际中最常用的滤波器，高斯滤波是将输入数组的每一个像素点与 高斯内核 卷积将卷积和当作输出像素值。高斯核相当于对输出像素的邻域赋予不同的权值，输出像素点所在位置的权值最大（对应高斯函数的均值位置）。二维高斯函数为，</p>
-<p><img src="http://www.forkosh.com/mathtex.cgi? \Large G(x,y) = Ae^{\frac{-(x-u_x)^2}{2\delta_x^2}+\frac{-(y-y_x)^2}{2\delta_y^2}"></p></li>
+<p><img src="https://latex.codecogs.com/png.latex? \Large G(x,y) = Ae^{\frac{-(x-u_x)^2}{2\delta_x^2}+\frac{-(y-y_x)^2}{2\delta_y^2}"></p></li>
 <li><p>中值滤波器（median blur）</p>
 <p>中值滤波将图像的每个像素用邻域(以当前像素为中心的正方形区域)像素的中值代替。对椒盐噪声最有效的滤波器，去除跳变点非常有效。</p></li>
 <li><p>双边滤波器（Bilatrial blur）</p>

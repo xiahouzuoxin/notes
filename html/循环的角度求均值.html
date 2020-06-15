@@ -64,9 +64,9 @@ code > span.er { color: #ff0000; font-weight: bold; }
 </div>
 <p>如上图，当α<β时，当β-α > 180时，(α+β)/2不再是要求的结果；同理，α<β时，α-β > 180时不再是求算术平均值。</p>
 <p>综合这两种情况，当|α-β|&gt;180情况下不是求算术平均值。这种情况下期望的角度均值为（以α小于β为例）：</p>
-<p><img src="http://www.forkosh.com/mathtex.cgi? \Small \beta+\frac{360-\beta+\alpha}{2}=\frac{\alpha+\beta}{2}+180"></p>
+<p><img src="https://latex.codecogs.com/png.latex? \small \beta+\frac{360-\beta+\alpha}{2}=\frac{\alpha+\beta}{2}+180"></p>
 <p>同理，因为上面的表达式中的α与β对称，所以α大于β计算的结果也一样。因此可知，非算术平均值的情况只要在算术平均值的基础上加180就可以了，因此归纳如下：</p>
-<p><img src="http://www.forkosh.com/mathtex.cgi? \Small \left\{ |\alpha-\beta|>180, =+180 |-|&lt;180, = .&quot;&gt;</p>
+<p><img src="https://latex.codecogs.com/png.latex? \small \left\{ |\alpha-\beta|>180, =+180 |-|&lt;180, = .&quot;&gt;</p>
 <p>上面仅是两个角度值的平均，通过两个角度的差值做判别条件确定是否是算术均值，然而，多个的呢？</p>
 <p>多个的角度均值显得有些复杂，这需要用户对输入输出角度范围提供约束，这里不妨将命题变成：考虑到相邻角度在时间上的相关性，设相邻的两个输入角度值偏移值不会大于180度，在这种情况下，只要考虑0~360度的突变情况就可以了。</p>
 <p>直接看matlab程序吧（参考资料2），</p>
@@ -116,7 +116,7 @@ end</code></pre>
 <h2 id="文献综述">文献综述</h2>
 <p>维基百科角度出现循环的变量为圆周量，如上面的角度值、一天的24小时等。</p>
 <p>Wikipedia中计算平均角度的方法：</p>
-<p><img src="http://www.forkosh.com/mathtex.cgi? \Small \theta=atan2(\frac{1}{n}\sum_{j=1}^{n}sin(\alpha_j), \frac{1}{n}\sum_{j=1}^{n}cos(\alpha_j))"></p>
+<p><img src="https://latex.codecogs.com/png.latex? \small \theta=atan2(\frac{1}{n}\sum_{j=1}^{n}sin(\alpha_j), \frac{1}{n}\sum_{j=1}^{n}cos(\alpha_j))"></p>
 <p>参考文献1中给出了关于圆周变量更细致的数学分析与描述，是一份难得的资料，参考文献2是StackOverflow上关于圆周角度的探讨，作为对该问题的理解很有帮助。</p>
 <h2 id="参考">参考</h2>
 <ol style="list-style-type: decimal">

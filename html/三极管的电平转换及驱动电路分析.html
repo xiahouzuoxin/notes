@@ -39,7 +39,7 @@
 <li>假设没有R87，则当US_CH0的高电平直接加在三极管的BE上，&gt;0.7V的电压要到哪里去呢？</li>
 <li><p>假设没有R91，当US_CH0电平状态不确定时，默认是要Trig输出高电平还是低电平呢？因此R91起到固定电平的作用。同时，如果无R91，则只要输入&gt;0.7V就导通三极管，门槛电压太低了，R91有提升门槛电压的作用（可参见第二小节关于蜂鸣器的分析）。</p>
 <p>但是，加了R91又要注意了：R91如果太小，基极电压近似</p>
-<p><img src="http://www.forkosh.com/mathtex.cgi? \Small Vb = \frac{R_{91}}{R_{87}+R_{91}}*3.3V"></p>
+<p><img src="https://latex.codecogs.com/png.latex? \small Vb = \frac{R_{91}}{R_{87}+R_{91}}*3.3V"></p>
 <p>只有Vb&gt;0.7V时才能使US_CH0为高电平时导通，上图的Vb=1.36V</p></li>
 <li><p>假设没有R83，当输入US_CH0为高电平（三极管导通时），D5V0（5V高电平）直接加在三极管的CE级，而三极管的CE，三极管很容易就损坏了。</p></li>
 </ol>
@@ -57,11 +57,11 @@
 <p>上面是从周立功的iMX283开发板上载下的电路，既可以是有源也可以是无源蜂鸣器。来分析下：</p>
 <ol style="list-style-type: decimal">
 <li><p>计算下各处的电流（S9013的β=120，设蜂鸣器电流15mA）：</p>
-<p><img src="http://www.forkosh.com/mathtex.cgi? \Small I_{R2}=\frac{Vbe}{R2}=\frac{0.7V}{3.3K}=0.212mA"></p>
-<p><img src="http://www.forkosh.com/mathtex.cgi? \Small I_B=\frac{15mA}{\beta}=0.125mA"></p>
-<p><img src="http://www.forkosh.com/mathtex.cgi? \Small I_{R1}=I_{R2}+I_B=0.337mA"></p>
+<p><img src="https://latex.codecogs.com/png.latex? \small I_{R2}=\frac{Vbe}{R2}=\frac{0.7V}{3.3K}=0.212mA"></p>
+<p><img src="https://latex.codecogs.com/png.latex? \small I_B=\frac{15mA}{\beta}=0.125mA"></p>
+<p><img src="https://latex.codecogs.com/png.latex? \small I_{R1}=I_{R2}+I_B=0.337mA"></p>
 <p>输入为高电平的门槛电压计算为：</p>
-<p><img src="http://www.forkosh.com/mathtex.cgi? \Small V_H=I_{R1}*R1 + 0.7V=2.3V"></p>
+<p><img src="https://latex.codecogs.com/png.latex? \small V_H=I_{R1}*R1 + 0.7V=2.3V"></p>
 <p>R1起到了提供啊门槛电压的作用。</p></li>
 <li><p>有源蜂鸣器和无源蜂鸣器的驱动电路区别主要在于无源蜂鸣器本质上是一个感性元件，其电流不能瞬变，因此必须有一个续流二极管D1提供续流。否则，在蜂鸣器两端会有反向感应电动势，产生几十伏的尖峰电压，可能损坏驱动三极管，并干扰整个电路系统的其它部分。而如果电路中工作电压较大，要使用耐压值较大的二极管，而如果电路工作频率高，则要选用高速的二极管</p></li>
 <li><p>设计这种电路的基本路子是：确定负载（蜂鸣器10mA~80mA）电流和输入门槛电压。依据1中的方法计算获得R1与R2的值。</p></li>

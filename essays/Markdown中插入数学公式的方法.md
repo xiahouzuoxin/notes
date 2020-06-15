@@ -33,18 +33,18 @@ forkosh上提供了关于Latex公式的一份简短而很有用的帮助，参�
 使用forkosh插入公式的方法是
 
 ```
-<img src="http://www.forkosh.com/mathtex.cgi? 在此处插入Latex公式">
+<img src="https://latex.codecogs.com/png.latex? 在此处插入Latex公式">
 ```
 
 给个例子，
 
 ```
-<img src="http://www.forkosh.com/mathtex.cgi? \Large x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}">
+<img src="https://latex.codecogs.com/png.latex? \Large x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}">
 ```
 
 显示结果为：
 
-<img src="http://www.forkosh.com/mathtex.cgi? \Large x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}">
+<img src="https://latex.codecogs.com/png.latex? \Large x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}">
 
 
 因为网页插入公式的原理是调用“某某网站的服务器”动态生成的，所有保证公式正常显示的前提是该网址能一直存在着为我等小生做些小小的服务。forkosh我是用了快2年了，一直很好，推荐！
@@ -89,7 +89,7 @@ $$x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}$$
 @触发文本:Equation
 @代码片段:请在下一行开始输入内容!
 
-<img src="http://www.forkosh.com/mathtex.cgi? \Large x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}">
+<img src="https://latex.codecogs.com/png.latex? \Large x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}">
 
 ```
 

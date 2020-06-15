@@ -62,28 +62,28 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <img src="../images/基于AR谱特征的车辆识别/ARspectrum.jpg" alt="ARspectrum" /><p class="caption">ARspectrum</p>
 </div>
 <p>AR谱的计算有2个重要的参数：系数阶数、FFT反变换的点数。AR谱是一种递推模型，即用前p个时刻的时域值估计当前第n时刻的值：</p>
-<p><img src="http://www.forkosh.com/mathtex.cgi? x(n)=-\sum_{k=1}^{p}a_kx(n-k)+u(n)"></p>
+<p><img src="https://latex.codecogs.com/png.latex? x(n)=-\sum_{k=1}^{p}a_kx(n-k)+u(n)"></p>
 <p>其中u(n)是噪声输入，系数阶数就是上式中的p。牵扯到FFT，是因为功率谱的计算中可以使用FFT进行快速计算，因此就有离散FFT在单位圆上抽样点数的问题，功率谱的计算公式是：</p>
-<p><img src="http://www.forkosh.com/mathtex.cgi? P_x(e^{jw})=\frac{\sigma^2}{|1+\sum_{k=1}^pa_ke^{-jwk}|^2}=\frac{\sigma^2}{|\sum_{k=0}^{N-1}a_ke^{-jwk}|^2}"></p>
+<p><img src="https://latex.codecogs.com/png.latex? P_x(e^{jw})=\frac{\sigma^2}{|1+\sum_{k=1}^pa_ke^{-jwk}|^2}=\frac{\sigma^2}{|\sum_{k=0}^{N-1}a_ke^{-jwk}|^2}"></p>
 <p>上式中转化后有a0=1，将FFT计算扩充到N点后有a(p+1)...a(N-1)=0，FFT点数就是指的这里用于FFT计算的长度N。</p>
 <p>AR谱是一个什么样的概念呢，首先我对功率谱的理解就是：不同频率处的能量值的大小，这个大小并不一定是真实的能量值，但不同频率的能量谱值的相对大小关系却接近真实值，因此不同频率处功率谱值的相对关系比其真实的谱值更重要。比如，车辆在远处的时候能量相对较小，在近处的时候能量较大，但对于平稳的信号，虽然能量值不同，但都具有相似的谱包络，因此我们更关注的是谱在不同频率上的分布大小，就像概率一样，看在哪个频率值（或段）的功率谱大。</p>
 <p>通过观察AR谱，我们能清晰的知道：主要的能量都集中在什么频率段，从而对信号进行分析主要关注这些频率段就行了。</p>
 <p>AR谱的细节参见胡广书编著《数字信号处理》一书，其C实现参考我的<a href="https://github.com/xiahouzuoxin/ar_model">Github项目</a>，关于AR的基本理论参见之前的博文“<a href="http://blog.csdn.net/xiahouzuoxin/article/details/9904147">现代数字信号处理——AR模型</a>”</p>
 <h2 id="音频信号特征提取">音频信号特征提取</h2>
 <h3 id="短时平均能量short-time-energy-ste">1 短时平均能量(Short Time Energy, STE)</h3>
-<p><img src="http://www.forkosh.com/mathtex.cgi? STE=\sum_{n=1}^Nx(n)^2"></p>
+<p><img src="https://latex.codecogs.com/png.latex? STE=\sum_{n=1}^Nx(n)^2"></p>
 <p>其中N表示一帧的长度。短时平均能量可用于判断静音帧，静音帧的短时能量小，这比直接通x(n)的最高幅值进行判断稳定性要高。对于静音帧，应该在后续的处理之前去除。通常，语音比音乐含有更多的静音（人说话没有音乐那样着腔带调），因此，语音的平均能量的变化要比音乐中大很多。</p>
 <h3 id="短时过零率short-time-zero-corssing-rate-zcr">2 短时过零率(Short Time Zero-Corssing Rate, ZCR)</h3>
 <p>短时过零率是在一个音频帧内，离散采样信号值由负到正或由正到负的变换次数。</p>
-<p><img src="http://www.forkosh.com/mathtex.cgi? ZCR=\frac{1}{N}\sum_{m=0}^{N-1}|sgn[x_n(m+1)]-sgn[x_n(m)]|"></p>
+<p><img src="https://latex.codecogs.com/png.latex? ZCR=\frac{1}{N}\sum_{m=0}^{N-1}|sgn[x_n(m+1)]-sgn[x_n(m)]|"></p>
 <p>从某种程序上讲，过零率表达了信号的跳变速度，是频率的一种简单度量。过零率与平均能量结合能用于语音端点检测。在博文<a href="../html/自适应含噪信号过零率算法.html">自适应含噪信号过零率算法</a>中也曾尝试改进过零率用于震动信号的识别。</p>
 <h3 id="子带能量比sub-band-energy-ratio-ser">3 子带能量比（Sub-band energy ratio, SER)</h3>
 <p>子带能量用于描述主要能量的频域分布特征，其过程就是将频域等间隔划分成B个子带，在AR谱图上，对每个子带范围进行积分就可求出子带能量Ei，则子带能量比就是</p>
-<p><img src="http://www.forkosh.com/mathtex.cgi? \frac{E_i}{E_{all}},i=1,...B"></p>
+<p><img src="https://latex.codecogs.com/png.latex? \frac{E_i}{E_{all}},i=1,...B"></p>
 <p>不同音频信号的能量分布不同，通过子带能量能区分能量的主要分布频带。子带能量比是一个很好参数，用于识别频率能量分布不同的目标。当然类似的思想也可以用到FFT频谱图上。</p>
 <h3 id="谱频率重心spectrum-centroid-sc">4 谱频率重心（Spectrum Centroid, SC）</h3>
 <p>将AR谱的幅值看做权值w，则谱频率重心的计算是：</p>
-<p><img src="http://www.forkosh.com/mathtex.cgi? SC=\frac{w_k*f_k}{\sum{w_k}},k=1,...N/2"></p>
+<p><img src="https://latex.codecogs.com/png.latex? SC=\frac{w_k*f_k}{\sum{w_k}},k=1,...N/2"></p>
 <p>谱频率重心是通过谱峰统计的中心，并不会（当然也可能等于）等于AR谱主峰对应的频率。</p>
 <h3 id="带宽band-width-bw">5 带宽（Band Width, BW）</h3>
 <p>带宽指信号谱值下降到中心频率谱值的0.707处的高低频率差BW=fH-fL。</p>

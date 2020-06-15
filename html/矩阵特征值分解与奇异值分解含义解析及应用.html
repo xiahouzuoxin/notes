@@ -53,7 +53,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <!---date:old-->
 <h2 id="特征值与特征向量的几何意义">特征值与特征向量的几何意义</h2>
 <p>矩阵的乘法是什么，别只告诉我只是“前一个矩阵的行乘以后一个矩阵的列”，还会一点的可能还会说“前一个矩阵的列数等于后一个矩阵的行数才能相乘”，然而，这里却会和你说——那都是表象。</p>
-<p>矩阵乘法真正的含义是变换，我们学《线性代数》一开始就学行变换列变换，那才是线代的核心——别会了点猫腻就忘了本——对，矩阵乘法 <img src="http://www.forkosh.com/mathtex.cgi? \Small Y=AB">就是线性变换，若以其中一个向量A为中心，则B的作用主要是使A发生如下变化：</p>
+<p>矩阵乘法真正的含义是变换，我们学《线性代数》一开始就学行变换列变换，那才是线代的核心——别会了点猫腻就忘了本——对，矩阵乘法 <img src="https://latex.codecogs.com/png.latex? \small Y=AB">就是线性变换，若以其中一个向量A为中心，则B的作用主要是使A发生如下变化：</p>
 <ol style="list-style-type: decimal">
 <li><p>伸缩</p>
 <pre><code>clf;
@@ -118,7 +118,7 @@ grid on;axis([-1 3 -1 3]);</code></pre>
 </ol>
 <p>好，关于矩阵乘就这些了。那么，我们接着就进入主题了，对特定的向量，经过一种方阵变换，经过该变换后，向量的方向不变（或只是反向），而只是进行伸缩变化（伸缩值可以是负值，相当于向量的方向反向）？这个时候我们不妨将书上对特征向量的定义对照一遍：</p>
 <blockquote>
-<p>数学教材定义： 设A是n阶方阵，如果存在 <span class="math"><em>λ</em></span> 和n维非零向量X，使 <img src="http://www.forkosh.com/mathtex.cgi? Ax=\lambda{x}"> ，则 <span class="math"><em>λ</em></span> 称为方阵A的一个特征值，X为方阵A对应于或属于特征值 <span class="math"><em>λ</em></span> 的一个特征向量。</p>
+<p>数学教材定义： 设A是n阶方阵，如果存在 <span class="math"><em>λ</em></span> 和n维非零向量X，使 <img src="https://latex.codecogs.com/png.latex? Ax=\lambda{x}"> ，则 <span class="math"><em>λ</em></span> 称为方阵A的一个特征值，X为方阵A对应于或属于特征值 <span class="math"><em>λ</em></span> 的一个特征向量。</p>
 </blockquote>
 <p>上面特定的向量不就是特征向量吗？ <span class="math"><em>λ</em></span> 不就是那个伸缩的倍数吗？因此，特征向量的代数上含义是：将矩阵乘法转换为数乘操作；特征向量的几何含义是：特征向量通过方阵A变换只进行伸缩，而保持特征向量的方向不变。特征值表示的是这个特征到底有多重要，类似于权重，而特征向量在几何上就是一个点，从原点到该点的方向表示向量的方向。</p>
 <p>特征向量有一个重要的性质：同一特征值的任意多个特征向量的线性组合仍然是A属于同一特征值的特征向量。关于特征值，网上有一段关于“特征值是震动的谱”的解释：</p>
@@ -132,9 +132,9 @@ grid on;axis([-1 3 -1 3]);</code></pre>
 <p>更多关于特征向量及特征值的实际例子参见Wikipedia： <a href="http://zh.wikipedia.org/wiki/特征向量" class="uri">http://zh.wikipedia.org/wiki/特征向量</a> 。</p>
 <h2 id="特征值分解">特征值分解</h2>
 <p>设A有n个特征值及特征向量，则：</p>
-<p><img src="http://www.forkosh.com/mathtex.cgi? A*x_1=\lambda_1*x_1 \\ A*x_2=\lambda_2*x_2 \\ ... \\ A*x_n=\lambda_n*x_n"></p>
+<p><img src="https://latex.codecogs.com/png.latex? A*x_1=\lambda_1*x_1 \\ A*x_2=\lambda_2*x_2 \\ ... \\ A*x_n=\lambda_n*x_n"></p>
 <p>将上面的写到一起成矩阵形式：</p>
-<p><img src="http://www.forkosh.com/mathtex.cgi?  A*\begin{pmatrix}x_1 & x_2 & ... & x_n\end{pmatrix} = \begin{pmatrix}x_1 & x_2 & ... & x_n\end{pmatrix} * \begin{pmatrix}\lambda_1 & 0 & ... & 0 \\
+<p><img src="https://latex.codecogs.com/png.latex?  A*\begin{pmatrix}x_1 & x_2 & ... & x_n\end{pmatrix} = \begin{pmatrix}x_1 & x_2 & ... & x_n\end{pmatrix} * \begin{pmatrix}\lambda_1 & 0 & ... & 0 \\
 0 & \lambda_2 & ... & 0 \\
 ....................... \\
 0 & 0 & ... & \lambda_n
@@ -142,7 +142,7 @@ grid on;axis([-1 3 -1 3]);</code></pre>
 <p>若(x1,x2,...,xn)可逆，则左右两边都求逆，则方阵A可直接通过特征值和特征向量进行唯一的表示，令</p>
 <p>Q=(x1,x2,...,xn)</p>
 <p><span class="math">Σ = <em>d</em><em>i</em><em>a</em><em>g</em>(<em>λ</em><sub>1</sub>, <em>λ</em><sub>2</sub>, ..., <em>λ</em><sub><em>n</em></sub>)</span></p>
-<p>则 <img src="http://www.forkosh.com/mathtex.cgi?  A=Q\Sigma{Q^{-1}}"> ，该表达式称为方阵的特征值分解，这样方阵A就被特征值和特征向量唯一表示。</p>
+<p>则 <img src="https://latex.codecogs.com/png.latex?  A=Q\Sigma{Q^{-1}}"> ，该表达式称为方阵的特征值分解，这样方阵A就被特征值和特征向量唯一表示。</p>
 <p>一个变换方阵的所有特征向量组成了这个变换矩阵的一组基。所谓基，可以理解为坐标系的轴。我们平常用到的大多是直角坐标系，在线性代数中可以把这个坐标系扭曲、拉伸、旋转，称为基变换。我们可以按需求去设定基，但是基的轴之间必须是线性无关的，也就是保证坐标系的不同轴不要指向同一个方向或可以被别的轴组合而成，否则的话原来的空间就“撑”不起来了。从线性空间的角度看，在一个定义了内积的线性空间里，对一个N阶对称方阵进行特征分解，就是产生了该空间的N个标准正交基，然后把矩阵投影到这N个基上。N个特征向量就是N个标准正交基，而特征值的模则代表矩阵在每个基上的投影长度。特征值越大，说明矩阵在对应的特征向量上的方差越大，功率越大，信息量越多。不过，特征值分解也有很多的局限，比如说变换的矩阵必须是方阵。</p>
 <p>在机器学习特征提取中，意思就是最大特征值对应的特征向量方向上包含最多的信息量，如果某几个特征值很小，说明这几个方向信息量很小，可以用来降维，也就是删除小特征值对应方向的数据，只保留大特征值方向对应的数据，这样做以后数据量减小，但有用信息量变化不大，PCA降维就是基于这种思路。</p>
 <p>Matlab中通过eig函数就可求得特征值和特征向量矩阵。</p>
@@ -170,9 +170,9 @@ D =
 <p>D对角线的元素即为特征值（表示了伸缩的比例），D就是特征值分解公式中的Q，V的每一列与D没列对应，表示对应的特征向量，即特征值分解中的Σ。</p>
 <h2 id="奇异值分解">奇异值分解</h2>
 <p>特征值分解是一个提取矩阵特征很不错的方法，但是它只适用于方阵。而在现实的世界中，我们看到的大部分矩阵都不是方阵，比如说有M个学生，每个学生有N科成绩，这样形成的一个M * N的矩阵就可能不是方阵，我们怎样才能像描述特征值一样描述这样一般矩阵呢的重要特征呢？奇异值分解就是用来干这个事的，奇异值分解是一个能适用于任意的矩阵的一种分解的方法。我们有必要先说说特征值和奇异值之间的关系。</p>
-<p>对于特征值分解公式， <span class="math"><em>A</em><sup><em>T</em></sup><em>A</em></span> 是方阵，我们求 <span class="math"><em>A</em><sup><em>T</em></sup><em>A</em></span> 的特征值，即 <img src="http://www.forkosh.com/mathtex.cgi? (A^TA)x=\lambda{x}"> ，此时求得的特征值就对应奇异值的平方，求得的特征向量v称为右奇异向量，另外还可以得到：</p>
-<p><img src="http://www.forkosh.com/mathtex.cgi? \sigma_i=\sqrt{\lambda_i}"></p>
-<p><img src="http://www.forkosh.com/mathtex.cgi? u_i=\frac{Av_i}{\sigma_i}"></p>
+<p>对于特征值分解公式， <span class="math"><em>A</em><sup><em>T</em></sup><em>A</em></span> 是方阵，我们求 <span class="math"><em>A</em><sup><em>T</em></sup><em>A</em></span> 的特征值，即 <img src="https://latex.codecogs.com/png.latex? (A^TA)x=\lambda{x}"> ，此时求得的特征值就对应奇异值的平方，求得的特征向量v称为右奇异向量，另外还可以得到：</p>
+<p><img src="https://latex.codecogs.com/png.latex? \sigma_i=\sqrt{\lambda_i}"></p>
+<p><img src="https://latex.codecogs.com/png.latex? u_i=\frac{Av_i}{\sigma_i}"></p>
 <p>所求的ui就是左奇异向量， <span class="math"><em>σ</em><sub><em>i</em></sub></span> 就是奇异值。已有人对SVD的几何机理做了清晰的分析，非常受用，就不重复造轮子，下文为转载自 <a href="http://blog.sciencenet.cn/blog-696950-699432.html" class="uri">http://blog.sciencenet.cn/blog-696950-699432.html</a> 。</p>
 <div class="figure">
 <img src="../images/矩阵特征值分解与奇异值分解含义解析及应用/SVD分解.png" alt="SVD分解" /><p class="caption">SVD分解</p>

@@ -63,19 +63,19 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <p>好了，那么就来了解一下压缩感知的具体模型。</p>
 <h3 id="稀疏表示">1. 稀疏表示</h3>
 <p>使用压缩感知理论首先要求信号能表示为稀疏信号，如x=[1 0 0 0 1 0]，其中只有2个1，可认为是稀疏的。我们将信号通过一个矩阵映射到稀疏空间，</p>
-<p><img src="http://www.forkosh.com/mathtex.cgi? \Large x=\Psi{s}"></p>
-<p>设信号x为N维，即<img src="http://www.forkosh.com/mathtex.cgi? \small x=[x_1,x_2,...,x_N]^T">，则<img src="http://www.forkosh.com/mathtex.cgi? \small \Psi">为NxN维稀疏表达矩阵，s即是将x进行稀疏表示后的Nx1维向量，其中大部分元素值为0。稀疏表示的原理就是通过线性空间映射，将信号在稀疏空间进行表示。</p>
+<p><img src="https://latex.codecogs.com/png.latex? \Large x=\Psi{s}"></p>
+<p>设信号x为N维，即<img src="https://latex.codecogs.com/png.latex? \small x=[x_1,x_2,...,x_N]^T">，则<img src="https://latex.codecogs.com/png.latex? \small \Psi">为NxN维稀疏表达矩阵，s即是将x进行稀疏表示后的Nx1维向量，其中大部分元素值为0。稀疏表示的原理就是通过线性空间映射，将信号在稀疏空间进行表示。</p>
 <p>比如，信号</p>
-<p><img src="http://www.forkosh.com/mathtex.cgi? \small x=\cos(\frac{2\pi}{256}t)+\sin(\frac{2\pi}{128}t)"></p>
-<p>在时域是非稀疏的，但做傅里叶变换表示成频域后，只有少数几个点为非0（如下图）。则该信号的时域空间为非稀疏，频域空间为稀疏空间，<img src="http://www.forkosh.com/mathtex.cgi? \small \Psi=e^{jwt}">组成的矩阵。<img src="http://www.forkosh.com/mathtex.cgi? \small \Psi">一般为正交矩阵。</p>
+<p><img src="https://latex.codecogs.com/png.latex? \small x=\cos(\frac{2\pi}{256}t)+\sin(\frac{2\pi}{128}t)"></p>
+<p>在时域是非稀疏的，但做傅里叶变换表示成频域后，只有少数几个点为非0（如下图）。则该信号的时域空间为非稀疏，频域空间为稀疏空间，<img src="https://latex.codecogs.com/png.latex? \small \Psi=e^{jwt}">组成的矩阵。<img src="https://latex.codecogs.com/png.latex? \small \Psi">一般为正交矩阵。</p>
 <div class="figure">
 <img src="../images/白话压缩感知/example1.png" alt="example1" /><p class="caption">example1</p>
 </div>
 <p>若稀疏表示后的结果s中只有k个值不为0，则称x的稀疏表示为k-Sparse。上图对x的频域稀疏表示就是2-Sparse。</p>
 <h3 id="感知测量">2. 感知测量</h3>
 <p>压缩感知的目的是在采集信号时就对数据进行压缩，大牛们的思路集中到了数据采集上——既然要压缩，还不如就从大量的传感器中只使用其中很少的一部分传感器，采集少量的冗余度低的数据。这就是感知测量的通俗的说法，用表达式表示</p>
-<p><img src="http://www.forkosh.com/mathtex.cgi? \Large y=\Phi{x}"></p>
-<p>其中的x就是稀疏表示中的信号，<img src="http://www.forkosh.com/mathtex.cgi? \Phi">为MxN维的感知矩阵（M表示测量信号的维度），y则表示M（M远小于N才有意义）个传感器的直接测量，因此维度为Mx1。</p>
+<p><img src="https://latex.codecogs.com/png.latex? \Large y=\Phi{x}"></p>
+<p>其中的x就是稀疏表示中的信号，<img src="https://latex.codecogs.com/png.latex? \Phi">为MxN维的感知矩阵（M表示测量信号的维度），y则表示M（M远小于N才有意义）个传感器的直接测量，因此维度为Mx1。</p>
 <p>将稀疏表示过程和感知测量过程综合起来：</p>
 <div class="figure">
 <img src="../images/白话压缩感知/Sparse.png" alt="Sparse" /><p class="caption">Sparse</p>
@@ -92,7 +92,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
 </blockquote>
 <blockquote>
 <ol style="list-style-type: decimal">
-<li>测量值y，且<img src="http://www.forkosh.com/mathtex.cgi? \Small y=\Phi\Psi{s}+e=\Theta{s}+e">，其中e为噪声引入</li>
+<li>测量值y，且<img src="https://latex.codecogs.com/png.latex? \small y=\Phi\Psi{s}+e=\Theta{s}+e">，其中e为噪声引入</li>
 </ol>
 </blockquote>
 <blockquote>
@@ -101,16 +101,16 @@ code > span.er { color: #ff0000; font-weight: bold; }
 </ol>
 </blockquote>
 <blockquote>
-<p>求解目标：k尽可能小的稀疏表示信号s及对应的<img src="http://www.forkosh.com/mathtex.cgi? \Small \Psi">。</p>
+<p>求解目标：k尽可能小的稀疏表示信号s及对应的<img src="https://latex.codecogs.com/png.latex? \small \Psi">。</p>
 </blockquote>
 <p>用数学形式描述为：</p>
-<p><img src="http://www.forkosh.com/mathtex.cgi? \Large \min||s||_0\ \ \ \ s.t. y=\Theta{s}+e"></p>
-<p><img src="http://www.forkosh.com/mathtex.cgi? \Large s:=argmin_{\{s:y=\Theta{s}+e\}}||s||_0"></p>
+<p><img src="https://latex.codecogs.com/png.latex? \Large \min||s||_0\ \ \ \ s.t. y=\Theta{s}+e"></p>
+<p><img src="https://latex.codecogs.com/png.latex? \Large s:=argmin_{\{s:y=\Theta{s}+e\}}||s||_0"></p>
 <p>e可以看成告诉随机噪声，e~N(0,δ2)。</p>
 <p>即是要求s使s的0范数（非0值的个数）最小，但0范数优化问题是很难求解的，于是一帮大牛就证明求解1范数也能逼近和上面相同的效果，而求解2范数及其更高的范数则结果相差越来越大（有些人在研究介于0范数与1范数之间的范数求解方法）。因此可转化为1范数求解：</p>
-<p><img src="http://www.forkosh.com/mathtex.cgi? \Large \min||s||_1\ \ \ \ s.t. y=\Theta{s}+e"></p>
+<p><img src="https://latex.codecogs.com/png.latex? \Large \min||s||_1\ \ \ \ s.t. y=\Theta{s}+e"></p>
 <p>由拉格朗日乘子法，上面的最优问题可转化成：</p>
-<p><img src="http://www.forkosh.com/mathtex.cgi? \Large \min_s\{||s||_1+\lamda||y-\Theta{s}||^2\}"></p>
+<p><img src="https://latex.codecogs.com/png.latex? \Large \min_s\{||s||_1+\lamda||y-\Theta{s}||^2\}"></p>
 <p>上面的最小值求解问题就可以直接通过凸优化解得结果了。</p>
 <h2 id="程序分析">程序分析</h2>
 <p>先下载CVX或spams工具箱，下面的matlab程序分别使用了时域稀疏信号和频域稀疏信号进行测试，两种不同在于时域稀疏信号不用稀疏表达矩阵（因此稀疏表达矩阵使用单位阵即可），而频域稀疏信号则需要先通过稀疏表达矩阵将信号在频域进行稀疏表示，再压缩感知后进行恢复时也要进行反FFT变换到时域。</p>

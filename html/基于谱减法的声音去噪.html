@@ -50,10 +50,10 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <!---date:2014-11-14-->
 <h2 id="谱减法模型">谱减法模型</h2>
 <p>实际听觉环境中，肯定是含有噪声的，那掺杂有噪声的声音信号中原声音信号和噪声信号是如何体现的呢？一种普遍被使用的方法是：采集到的声音信号永远都是原信号与噪声信号的叠加，即</p>
-<p><img src="http://www.forkosh.com/mathtex.cgi? y(n)=s(n)+d(n), n=1,...,N"></p>
+<p><img src="https://latex.codecogs.com/png.latex? y(n)=s(n)+d(n), n=1,...,N"></p>
 <p>模型是信号的直接叠加，这就要满足：原信号与噪声信号不相关。其实有些情况下这个条件是不满足的，所以依然有很多其他的模型，如有人认为原信号和噪声信号是卷积的关系。当然，这些都是模型，还没有明确的理论证明那种是对的，反正哪种好用我们就捡谁。谱减法就是基于噪声的加法模型。</p>
 <p>语音信号本身是非平稳过程，但假如取很短的一段（10~30ms），则具有短时平稳特性。因此，使用窗函数取含噪语音信号的一帧（N点）进行处理。信号叠加模型两边同时进行傅里叶变换，并取模，</p>
-<p><img src="http://www.forkosh.com/mathtex.cgi? |Y(k)|=|S(k)|+|N(k)|, n=1,...,N"></p>
+<p><img src="https://latex.codecogs.com/png.latex? |Y(k)|=|S(k)|+|N(k)|, n=1,...,N"></p>
 <p>则对原信号幅值的估计就可通过|S(k)|=|Y(k)|-|N(k)|求得，但仅这样存在2个问题：</p>
 <ol style="list-style-type: decimal">
 <li>|S(k)|可能为负值，语音信号的FFT谱幅值怎么可能为负值呢</li>
@@ -64,7 +64,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <img src="../images/基于谱减法的声音去噪/谱减法流程图.jpg" alt="图注：谱减法流程图" /><p class="caption">图注：谱减法流程图</p>
 </div>
 <p>在语音增强的应用中，由于人耳对相位信息的感知不敏感，信号恢复时仍使用的相位信息为带噪信号的相位，相位信息保存在哪里呢？我们知道FFT的结果是复数，</p>
-<p><img src="http://www.forkosh.com/mathtex.cgi? Y(K)=|Y(k)|e^{-j\phi(w)}"></p>
+<p><img src="https://latex.codecogs.com/png.latex? Y(K)=|Y(k)|e^{-j\phi(w)}"></p>
 <p><span class="math"><em>ϕ</em>(<em>w</em>)</span> 就是相位，具体一些，复数在直角坐标系上表示，</p>
 <div class="figure">
 <img src="../images/基于谱减法的声音去噪/关于保持相位不变.png" alt="图注：关于保持相位不变" /><p class="caption">图注：关于保持相位不变</p>

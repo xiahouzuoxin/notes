@@ -10,7 +10,7 @@
 
 对于二维的图像，梯度定义为一个向量，
 
-<img src="http://www.forkosh.com/mathtex.cgi? \nabla f(x,y)=\begin{pmatrix}G_x \\ G_y\end{pmatrix}=\begin{pmatrix} \frac{\partial f}{x} \\ \frac{\partial f}{y} \end{pmatrix}">
+<img src="https://latex.codecogs.com/png.latex? \nabla f(x,y)=\begin{pmatrix}G_x \\ G_y\end{pmatrix}=\begin{pmatrix} \frac{\partial f}{x} \\ \frac{\partial f}{y} \end{pmatrix}">
 
 Gx对于x方向的梯度，Gy对应y方向的梯度，向量的幅值本来是 $mag(f)=({G_x}^2+{G_y}^2)^{1/2}$，为简化计算，一般用mag(f)=|Gx|+|Gy|近似，幅值同时包含了x而后y方向的梯度信息。梯度的方向为 $\alpha=arctan(Gx/Gy)$ 。
 
@@ -29,11 +29,11 @@ Gx对于x方向的梯度，Gy对应y方向的梯度，向量的幅值本来是 $
 
 上面的一阶导数算子，是各向异性的，因此分x方向和y方向的梯度值，而高斯拉普拉斯算子是对图像求二阶导数，边缘对应二阶导数的过零点。
 
-<img src="http://www.forkosh.com/mathtex.cgi? \nabla^2f(x,y)=\frac{\partial^2f(x,y)}{\partial x^2}+\frac{\partial^2f(x,y)}{\partial y^2}">
+<img src="https://latex.codecogs.com/png.latex? \nabla^2f(x,y)=\frac{\partial^2f(x,y)}{\partial x^2}+\frac{\partial^2f(x,y)}{\partial y^2}">
 
 由上式可知，xy进行互换的结果是一样的，所以拉普拉斯算子没有x方向和y方向的区分，拉普拉斯算子对应图像中的差分运算是：
 
-<img src="http://www.forkosh.com/mathtex.cgi? \nabla^2f(x,y)=f(x+1,y)+f(x-1,y)+f(x,y+1)+f(x,y-1)-4f(x,y)">
+<img src="https://latex.codecogs.com/png.latex? \nabla^2f(x,y)=f(x+1,y)+f(x-1,y)+f(x,y+1)+f(x,y-1)-4f(x,y)">
 
 也可以通过卷积模板实现，
 
@@ -41,7 +41,7 @@ Gx对于x方向的梯度，Gy对应y方向的梯度，向量的幅值本来是 $
 
 相对于一阶导数，高斯拉普拉斯算子（Laplacian of Gaussian, LOG算子）由于求二阶导数，很容易将点噪声判别为边界，因此常在使用LOG算子前先用高斯平滑滤波器去除正态分布的噪声，二维高斯分布为：
 
-<img src="http://www.forkosh.com/mathtex.cgi? h(x,y)=\frac{1}{2\pi\sigma^2}e^{-\frac{x^2+y^2}{2\sigma^2}}">
+<img src="https://latex.codecogs.com/png.latex? h(x,y)=\frac{1}{2\pi\sigma^2}e^{-\frac{x^2+y^2}{2\sigma^2}}">
 
 其中 $\sigma$ 为高斯分布标准差，决定高斯滤波器的宽度，用该函数对图像平滑滤波，可以减少椒盐噪声对LOG算子的影响。
 
@@ -58,7 +58,7 @@ Canny算子力图在抗噪声干扰与精度之间寻求最佳方案，Canny算�
 1.	使用高斯滤波器平滑图像，卷积核尺度通过高斯滤波器的标准差确定
 2.	计算滤波后图像的梯度幅值和方向
 	可以使用Sobel算子计算Gx与Gy方向的梯度，则梯度幅值和梯度的方向依次为
-	<img src="http://www.forkosh.com/mathtex.cgi? G=\srqt{G_x^2+G_y^2}, \Theta=atan2(Gy,Gx)">
+	<img src="https://latex.codecogs.com/png.latex? G=\srqt{G_x^2+G_y^2}, \Theta=atan2(Gy,Gx)">
 	
 3.	使用非最大化抑制方法确定当前像素点是否比邻域像素点更可能属于边缘的像素，以得到细化的边缘
 	其实现是：将当前像素位置的梯度值与其梯度方向上相邻的的梯度方向的梯度值进行比较，如果周围存在梯度值大于当前像素的梯度值，则不认为查找到的当前像素点为边缘点。举例来说，Gx方向的3个梯度值依次为[2 4 3]，则在Gx梯度方向上4所在像素点就是边缘点，如果把改成[2 4 1]就不是边缘点。如果用全向的梯度方向作为非最大抑制的判断依据，则要求G(x,y)>所有4邻域的或8邻域的梯度值才被认为是边缘点。

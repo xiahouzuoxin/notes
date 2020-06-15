@@ -6,7 +6,7 @@
 
 对于图像中共线的点集{(x0,y0), (x1,y1), ...}都经过直线y=kx+b，先在我们换一个说法，“斜率为k，截距为b的直线y=kx+b包含了所有在该直线上的点”。一种强调的是图像中的点集，另一种强调的是直线的参数k和b，通过直线的点集去描述这条直线明显没有直接通过k,b两个参数去描述那样直接方便。而Hough变换就是将我们“点共线”的思维转化到参数空间{k,b}进行描述，图像空间中所有经过y=kx+b的点经过Hough变换后在参数空间都会相交于点(k,b)，这样，通过Hough变换，就可以将图像空间中直线的检测转化为参数空间中对点的检测。我们不妨将y=kx+b进行一下变形：
 
-<img src="http://www.forkosh.com/mathtex.cgi? b=-kx+y">
+<img src="https://latex.codecogs.com/png.latex? b=-kx+y">
 
 这就是Hough变换将图像空间坐标(x,y)转化为参数空间(k,b)的Hough变换式。
 
@@ -24,11 +24,11 @@ Hough变换的步骤（执行过程）：
 
 极坐标中的直线方程为
 
-<img src="http://www.forkosh.com/mathtex.cgi? y=-\frac{cos(\theta)}{sin(\theta)}x+\frac{r}{sin(\theta)}">
+<img src="https://latex.codecogs.com/png.latex? y=-\frac{cos(\theta)}{sin(\theta)}x+\frac{r}{sin(\theta)}">
 
 将其改写成Hough变换式，即自变量(x,y)到参数变量(r,$theta$)的映射：
 
-<img src="http://www.forkosh.com/mathtex.cgi? r=x\cos{\theta}+y\sin{\theta}">
+<img src="https://latex.codecogs.com/png.latex? r=x\cos{\theta}+y\sin{\theta}">
 
 使用极坐标参数空间，Hough变换的步骤不变，只不过将kbcnt替换成rthcnt，r范围是图像对角线的长度，th范围是0~2*pi。因为图像是离散的，所以r和th都有一个步进值dr和dth。
 

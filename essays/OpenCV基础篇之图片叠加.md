@@ -67,7 +67,7 @@ int main(int argc, char *argv[])
 
 这里的图像叠加指线性叠加，设图像A的像素为fA(x)，图像B的像素为fB(x)，叠加系数为α，则线性叠加操作为：
 
-<img src="http://www.forkosh.com/mathtex.cgi? \Large g(x)=\alpha f_A(x)+(1-\alpha)f_B(x)">
+<img src="https://latex.codecogs.com/png.latex? \Large g(x)=\alpha f_A(x)+(1-\alpha)f_B(x)">
 
 α为0-1之间的值，从上面也可以看出，叠加必需保证两幅输入图像的尺寸大小相同。程序中的
 

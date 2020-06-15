@@ -26,21 +26,21 @@ _结构元素_是形态学操作中最重要的概念，
 
 1.	腐蚀操作
 
-	<img src="http://www.forkosh.com/mathtex.cgi? \Large g(x,y)=erode[f(x,y),B]=\min{\{f(x+dx,y+dy)-B(dx,dy)|(dx,dy)\in{D_B}\}}">
+	<img src="https://latex.codecogs.com/png.latex? \Large g(x,y)=erode[f(x,y),B]=\min{\{f(x+dx,y+dy)-B(dx,dy)|(dx,dy)\in{D_B}\}}">
 
 	其中，g(x,y)为腐蚀后的灰度图像，f(x,y)为原灰度图像，B为结构元素。腐蚀运算是由结构元素确定的邻域块中选取图像值与结构元素值的差的最小值。
 
 2.	膨胀操作
 
-	<img src="http://www.forkosh.com/mathtex.cgi? \Large g(x,y)=dilate[f(x,y),B]=\min{\{f(x-dx,y-dy)+B(dx,dy)|(dx,dy)\in{D_B}\}}">
+	<img src="https://latex.codecogs.com/png.latex? \Large g(x,y)=dilate[f(x,y),B]=\min{\{f(x-dx,y-dy)+B(dx,dy)|(dx,dy)\in{D_B}\}}">
 
 	其中，g(x,y)为腐蚀后的灰度图像，f(x,y)为原灰度图像，B为结构元素。 膨胀运算是由结构元素确定的邻域块中选取图像值与结构元素值的和的最大值。
 
 在灰度图的形态学操作中，一般选择“平摊”的结构元素，即结构元素B的值为0，则上面对灰度图的形态学操作可简化如下：
 
-<img src="http://www.forkosh.com/mathtex.cgi? \Large g(x,y)=erode[f(x,y),B]=\min{\{f(x+dx,y+dy)|(dx,dy)\in{D_B}\}}">
+<img src="https://latex.codecogs.com/png.latex? \Large g(x,y)=erode[f(x,y),B]=\min{\{f(x+dx,y+dy)|(dx,dy)\in{D_B}\}}">
 
-<img src="http://www.forkosh.com/mathtex.cgi? \Large g(x,y)=dilate[f(x,y),B]=\min{\{f(x-dx,y-dy)|(dx,dy)\in{D_B}\}}">
+<img src="https://latex.codecogs.com/png.latex? \Large g(x,y)=dilate[f(x,y),B]=\min{\{f(x-dx,y-dy)|(dx,dy)\in{D_B}\}}">
 
 好了，这就是基本的形态学操作——腐蚀和膨胀，下面是使用OpenCV对图像进行腐蚀和膨胀的程序，还是秉承我们一贯的原则：搁下理论，先直观地感觉图像处理算法的效果，实际项目需要时再深入挖掘！
 

@@ -12,7 +12,7 @@
 
 窗口打分是通过一个线性模型来操作的（其实就是一个滤波器），
 
-<img src="http://www.forkosh.com/mathtex.cgi? s_l=\langle\mathbf{w},\mathbf{g_l}\rangle......(1)">
+<img src="https://latex.codecogs.com/png.latex? s_l=\langle\mathbf{w},\mathbf{g_l}\rangle......(1)">
 
 为获得权值w，则必须通过训练数据训练，作者采用了最简单的Linear SVM，大致过程应该是：对训练用数据，目标窗和背景窗分别给定不同的分数（从程序上看，目标窗是1，背景窗是-1），训练数据经过Linear SVM调整w使训练数据的误差最小，得到调整w向量就用于预测中的窗口打分，打分越接进1的窗口为目标窗，否则为背景窗。
 
@@ -20,17 +20,17 @@
 
 既然得到了w，就能直接根据(1)计算窗口的分数，确定预测目标了，但作者没有简单的按(1)式做，而是将(1)的操作转化为位运算，这也是为什么特征称为BING（B就是Binarized），直接采用硬件指令大幅度地提升速度。为使用二进制运算，必须将w和gl都转成二进制的模型。Algorithm1就是将w转成二进制模型的算法，我感觉原理大致就是：将w在投影到不同的正交向量上，如果还不理解Algorithm1，好好看看算法是怎么操作的，那不就是“__Gram-Schmidt正交化__”吗？只不过只取了包含大部分信息的前Nw个正交向量作为输出，目的也是为了降低计算量。NG特征gl转成二进制模型是
 
-<img src="http://www.forkosh.com/mathtex.cgi? g_l=\sum_{k=1}^{N_g}2^{8-k}\mathbf{b_{k,l}}....(2)">
+<img src="https://latex.codecogs.com/png.latex? g_l=\sum_{k=1}^{N_g}2^{8-k}\mathbf{b_{k,l}}....(2)">
 
 我觉得大概的意思好像是，比如一个十进制的数121D，转成二进制就是0111 1001B，也可以直接将低位截断（这时Ng=3），用0111 1000近似代替121D。不过这里还是有些不明白，b_kl不是8x8维的特征吗？就不明白这里是什么意思了，矩阵求sum会得到标量的gl？感觉这一段下表用得有些混乱，没解释太清楚。而为了计算64维的BING特征，要扫描64个点，作者用Algorithm2也是通过二进制的移位运算降低计算量，就如作者原文所说的——有些类似于积分图像的计算一样（with the integral image representation）。
 
 最后将算法1和2结合起来对窗口打分的操作由卷积运算变成了大部分是位运算操作，
 
-<img src="http://www.forkosh.com/mathtex.cgi? s_l=\sum_{j=1}^{N_w}\beta_j\sum_{k=1}^{N_g}C_{j,k}....(3)">
+<img src="https://latex.codecogs.com/png.latex? s_l=\sum_{j=1}^{N_w}\beta_j\sum_{k=1}^{N_g}C_{j,k}....(3)">
 
 其中C_j,k是
 
-<img src="http://www.forkosh.com/mathtex.cgi? C_{j,k}=2^{8-k}(2\langle{a_j}^+, \mathbf{b_{k,l}}\rangle-|\mathbf{b_{k,l}}|).....(4)">
+<img src="https://latex.codecogs.com/png.latex? C_{j,k}=2^{8-k}(2\langle{a_j}^+, \mathbf{b_{k,l}}\rangle-|\mathbf{b_{k,l}}|).....(4)">
 
 上面的计算很容易通过位运算和SSE指令（支持8x8=64bit）来完成快速运算。
 
@@ -60,6 +60,6 @@ StageI也就是训练w参数居然用了13s，StageII用了344s居然，单张�
 
 DR的计算是参考[The PASCAL Visual Object Classes (VOC) Challenge](http://pascallin.ecs.soton.ac.uk/challenges/VOC/pubs/everingham10.pdf)，目标检测任务中DR的计算的是true/false positive精度，将算法检测目标结果放到groud truth中，将“预测目标区域与groud truth区域的交集”除以“预测目标区域与groud truth区域的并集”作为DR：
 
-<img src="http://www.forkosh.com/mathtex.cgi? DR = \frac{area(B_p \bigcap B_{bg})}{area(B_p \bigcup B_{bg})}">
+<img src="https://latex.codecogs.com/png.latex? DR = \frac{area(B_p \bigcap B_{bg})}{area(B_p \bigcup B_{bg})}">
 
 DR自少在50%以上才算目标检测正确，其实，50%已经是很低的了，几乎不能做为检测结果，难怪那些个算法（BING这篇文章也是）随随便便都到95%以上了。

@@ -72,7 +72,7 @@ int main(int argc, char *argv[])
 
 	一般的灰度图像有256个灰度级，而有时我们并不需要这么精确的灰度级（严重影响运算时间），比如黑白图像。这意味着我们以一个新的输入值划分当前的颜色空间，比如灰度到黑白色，将0~127灰度值直接赋值0，128~255赋值1，最终得到较少的黑白两色。查找表就扮演着这种降低灰度级而提高运算速度的角色。量化前和量化后的灰度值可以用下面的表达式表示：
 	
-	<img src="http://www.forkosh.com/mathtex.cgi? \small I_{\text{new}}=\frac{I_{\text{old}}}{Q}*Q">
+	<img src="https://latex.codecogs.com/png.latex? \small I_{\text{new}}=\frac{I_{\text{old}}}{Q}*Q">
 
 	其中Q表示量化级别，如取10，表示：灰度值1-10用灰度值1表示，灰度值11-20用灰度值11表示，以此类推！
 	

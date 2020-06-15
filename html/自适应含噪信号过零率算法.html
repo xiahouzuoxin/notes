@@ -49,11 +49,11 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <!---keywords:过零率-->
 <!---date:old-->
 <p>本文讨论的是实际使用过程中计算过零率的一种自适应方法。过零率常用于语音检测识别中，一般叫短时过零率更贴切些（指一段短时平稳信号才能计算过零率），简单有效，近期亦打算将这个简单的概念用于识别脚步声和卡车声（近似短时平稳）。过零率的定义计算一般通过下面的表达式描述：</p>
-<p><img src="http://www.forkosh.com/mathtex.cgi? \Large Z_n=\frac{1}{N}\sum_{m=0}^{N-1}\|{sgn[x_n(m+1)]-sgn[x_n(m)]}\|"></p>
+<p><img src="https://latex.codecogs.com/png.latex? \Large Z_n=\frac{1}{N}\sum_{m=0}^{N-1}\|{sgn[x_n(m+1)]-sgn[x_n(m)]}\|"></p>
 <p>过零率是对频率从时域进行的一种简单的度量，一般情况下，过零率越大频率近似越高，反正亦然，相关推倒可参考相关文献。</p>
 <h2 id="自适应噪声阈值">自适应噪声阈值</h2>
 <p>自然信号由于电路、环境引入的噪声会在0水平位置波动，直接按上式计算过零率，严重影响识别效果。因此，本文在计算过零率时，对信号的幅值进行阈值限定，阈值的计算方法是：</p>
-<p><img src="http://www.forkosh.com/mathtex.cgi? \Large THR(t)=\frac{1}{2}\{THR(t-1)+F*V_{pp}(t)\}, F=[0.1\ 0.2]"></p>
+<p><img src="https://latex.codecogs.com/png.latex? \Large THR(t)=\frac{1}{2}\{THR(t-1)+F*V_{pp}(t)\}, F=[0.1\ 0.2]"></p>
 <p>其中F为阈值与峰峰值的系数因子，一般F在0.1~0.2之间，Vpp表示当前短时信号的峰峰值，THR(t)表示t时段的阈值。</p>
 <p>因此增加阈值判别后计算过零率的流程图为：</p>
 <center>
@@ -112,7 +112,7 @@ void zerorate_thr_update(struct st_zerorate_thr thr, uint32_t peak_value)
     thr.cur = (uint32_t)(((thr.pre + TH_FACTOR * peak_value) / 2) );
 }</code></pre>
 <p>关于初始阈值的选择：</p>
-<p><img src="http://www.forkosh.com/mathtex.cgi? \Large THR(0)=F*V_{pp}(0), F=[0.1\ 0.2]"></p>
+<p><img src="https://latex.codecogs.com/png.latex? \Large THR(0)=F*V_{pp}(0), F=[0.1\ 0.2]"></p>
 <h2 id="改进增加能量阈值的策略">改进：增加能量阈值的策略</h2>
 <p>这时要考虑的情况有些复杂，除了噪声阈值外，还要考虑能量阈值（确定是否是信号段），如下图：</p>
 <div class="figure">
@@ -210,7 +210,7 @@ uint16_t zero_rate(int16_t x[], uint32_t n, struct st_zerorate_thr thr, uint16_t
 <p>因为卡车的采集信号高频都载波到低频信号上了，而在未判断实际目标之前，是无法使用低通滤波进行滤波（可能滤掉脚步声信号）。</p>
 <p>综上，我看过很多的论文，大都提到使用过零率对脚步声了卡车进行识别，而且识别效果还不错，我不知他们的实验环境是什么样的，至少从上面的实验分析，还是有问题的。</p>
 <p>因此，提出新的特征，用于区分两类信号——数字化占空比。其过程是：设定一个阈值，从头到尾扫描一帧信号，大于阈值的点设为1，否则设为0，我称之为数字化过程，然后计算高电平（即1）占所有一帧（512点）的百分比，用该百分比作为脚步声和卡车的识别数学特征。好了，我们用数学表述得专业些：</p>
-<p><img src="http://www.forkosh.com/mathtex.cgi? Dutycycle=\frac{x>=THR}{N}*100%&quot;&gt;</p>
+<p><img src="https://latex.codecogs.com/png.latex? Dutycycle=\frac{x>=THR}{N}*100%&quot;&gt;</p>
 <p>其中x&gt;=THR表示序列中值大于THR的点数。测试结果：取THR=0.4*Vpp，则计算脚步信号的Dutycycle=4，而卡车信号的Dutycycle=113，差异非常明显。</p>
 <div class="ds-thread" data-thread-key="自适应含噪信号过零率算法" data-title="自适应含噪信号过零率算法" data-url="xiahouzuoxin.github.io/notes/html/自适应含噪信号过零率算法.html"></div>
 <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"slide":{"type":"slide","bdImg":"5","bdPos":"right","bdTop":"300"},"image":{"viewList":["qzone","tsina","tqq","renren","weixin"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["qzone","tsina","tqq","renren","weixin"]}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>

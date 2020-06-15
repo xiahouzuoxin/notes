@@ -99,7 +99,7 @@ int main(int argc, char *argv[])
 
 1.	二维图像的DFT（离散傅里叶变换），
 
-	<img src="http://www.forkosh.com/mathtex.cgi? \Large F(k,l)={\sum_{i=0}^{i=N-1}}{\sum_{j=0}^{j=N-1}}f(i,j)e^{-j2\pi{(\frac{ki}{N}+\frac{lj}{N}})}">
+	<img src="https://latex.codecogs.com/png.latex? \Large F(k,l)={\sum_{i=0}^{i=N-1}}{\sum_{j=0}^{j=N-1}}f(i,j)e^{-j2\pi{(\frac{ki}{N}+\frac{lj}{N}})}">
 
 	图像的频域表示的是什么含义呢？又有什么用途呢？图像的频率是表征图像中灰度变化剧烈程度的指标，是灰度在平面空间上的梯度。图像的边缘部分是突变部分，变化较快，因此反应在频域上是高频分量；图像的噪声大部分情况下是高频部分；图像大部分平缓的灰度变化部分则为低频分量。也就是说，傅立叶变换提供另外一个角度来观察图像，可以将图像从灰度分布转化到频率分布上来观察图像的特征。
 

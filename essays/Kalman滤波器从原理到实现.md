@@ -32,29 +32,29 @@ Rudolph Kalman在1960年发现了离散时间系统的Kalman滤波器，这就�
 
 话说，有一辆质量为m的小车，受恒定的力F，沿着r方向做匀加速直线运动。已知小车在t-ΔT时刻的位移是s(t-1)，此时的速度为v(t-1)。求：t时刻的位移是s(t)，速度为v(t)？
 
-由牛顿第二定律，求得加速度：<img src="http://www.forkosh.com/mathtex.cgi? \large a=F/m">
+由牛顿第二定律，求得加速度：<img src="https://latex.codecogs.com/png.latex? \large a=F/m">
 
 那么就有下面的位移和速度关系：
 
-<img src="http://www.forkosh.com/mathtex.cgi? \large s(t)=s(t-1)+v(t-1)\Delta{T}+\frac{1}{2}\frac{F}{m}{(\Delta{T})}^2">
+<img src="https://latex.codecogs.com/png.latex? \large s(t)=s(t-1)+v(t-1)\Delta{T}+\frac{1}{2}\frac{F}{m}{(\Delta{T})}^2">
 
-<img src="http://www.forkosh.com/mathtex.cgi? \large v(t)=v(t-1)+\frac{F}{m}\Delta{T}">
+<img src="https://latex.codecogs.com/png.latex? \large v(t)=v(t-1)+\frac{F}{m}\Delta{T}">
 
 如果将上面的表达式用矩阵写在一起，就变成下面这样：
 
-<img src="http://www.forkosh.com/mathtex.cgi? \large \begin{pmatrix} s(t) \\ v(t) \end{pmatrix}={\begin{pmatrix} 1 & \Delta{T} \\ 0 & 1 \end{pmatrix}} {\begin{pmatrix} s(t-1) \\ v(t-1) \end{pmatrix}} + {\begin{pmatrix} \frac{(\Delta{T})^2}{2} \\ {\Delta{T}} \end{pmatrix}} {\frac{F}{m}}................................(1)">
+<img src="https://latex.codecogs.com/png.latex? \large \begin{pmatrix} s(t) \\ v(t) \end{pmatrix}={\begin{pmatrix} 1 & \Delta{T} \\ 0 & 1 \end{pmatrix}} {\begin{pmatrix} s(t-1) \\ v(t-1) \end{pmatrix}} + {\begin{pmatrix} \frac{(\Delta{T})^2}{2} \\ {\Delta{T}} \end{pmatrix}} {\frac{F}{m}}................................(1)">
 
 卡尔曼滤波器是建立在动态过程之上，由于物理量（位移，速度）的不可突变特性，这样就可以通过t-1时刻估计（预测）t时刻的状态，其__状态空间__模型为：
 
-<img src="http://www.forkosh.com/mathtex.cgi? \large \mathbf{x(t)=Ax(t-1)+Bu(t)+w(t)}................................(2)">
+<img src="https://latex.codecogs.com/png.latex? \large \mathbf{x(t)=Ax(t-1)+Bu(t)+w(t)}................................(2)">
 
 对比一下(1)(2)式，长得及其相似有木有：
 
-<img src="http://www.forkosh.com/mathtex.cgi? \large A={\begin{pmatrix} 1 & \Delta{T} \\ 0 & 1 \end{pmatrix}}, B={\begin{pmatrix} \frac{(\Delta{T})^2}{2} \\ {\Delta{T}} \end{pmatrix}}">
+<img src="https://latex.codecogs.com/png.latex? \large A={\begin{pmatrix} 1 & \Delta{T} \\ 0 & 1 \end{pmatrix}}, B={\begin{pmatrix} \frac{(\Delta{T})^2}{2} \\ {\Delta{T}} \end{pmatrix}}">
 
 匀加速直线运动过程就是卡尔曼滤波中状态空间模型的一个典型应用。下面我们重点关注(2)式，鉴于研究的计算机信号都是离散的，将(2)是表示成离散形式为：
 
-<center><img src="http://www.forkosh.com/mathtex.cgi? \large \mathbf{x(n)=Ax(n-1)+Bu(n)+w(n)}................................(3)"></center>
+<center><img src="https://latex.codecogs.com/png.latex? \large \mathbf{x(n)=Ax(n-1)+Bu(n)+w(n)}................................(3)"></center>
 
 其中各个量之间的含义是：
 
@@ -71,9 +71,9 @@ Rudolph Kalman在1960年发现了离散时间系统的Kalman滤波器，这就�
 
 然而，初中物理就告诉我们，“尺子是量不准的，物体的物理真实值无法获得”，测量存在误差，我们暂且将这个误差记为v(n)。这种通过直接测量的方式获得所需物理量的值构成__观测空间__：
 
-<center><img src="http://www.forkosh.com/mathtex.cgi? \large \mathbf{z(n)=H(n)x(n)+v(n)} ................................(4)"></center>
+<center><img src="https://latex.codecogs.com/png.latex? \large \mathbf{z(n)=H(n)x(n)+v(n)} ................................(4)"></center>
 
-z(n)就是测量结果，H(n)是观测矢量，x(n)就是要求的物理量（位移、速度），v(n)~N(0,R)为测量噪声，同状态空间方程中的过程噪声一样，这也是一个后面要讨论的量。大部分情况下，如果物理量能直接通过传感器测量，<img src="http://www.forkosh.com/mathtex.cgi? \small \mathbf{H(n)=I}">。
+z(n)就是测量结果，H(n)是观测矢量，x(n)就是要求的物理量（位移、速度），v(n)~N(0,R)为测量噪声，同状态空间方程中的过程噪声一样，这也是一个后面要讨论的量。大部分情况下，如果物理量能直接通过传感器测量，<img src="https://latex.codecogs.com/png.latex? \small \mathbf{H(n)=I}">。
 
 ![img1]
 ![img2]
@@ -92,25 +92,25 @@ z(n)就是测量结果，H(n)是观测矢量，x(n)就是要求的物理量（�
 
 	预测值：
 
-	<img src="http://www.forkosh.com/mathtex.cgi? \large \mathbf{\hat{x}(n|n-1)=A\hat{x}(n-1|n-1)+Bu(n)}................................(5)">
+	<img src="https://latex.codecogs.com/png.latex? \large \mathbf{\hat{x}(n|n-1)=A\hat{x}(n-1|n-1)+Bu(n)}................................(5)">
 
 	最小均方误差矩阵：
 
-	<img src="http://www.forkosh.com/mathtex.cgi? \large \mathbf{P(n|n-1)=AP(n-1|n-1)A^T+Q}................................(6)">
+	<img src="https://latex.codecogs.com/png.latex? \large \mathbf{P(n|n-1)=AP(n-1|n-1)A^T+Q}................................(6)">
 
 2.	修正
 
 	误差增益：
 
-	<img src="http://www.forkosh.com/mathtex.cgi? \large \mathbf{K(n)=P(n|n-1)H^T(n)[R(n)+H(n)P(n|n-1)H^T(n)]^{-1}}.............(7)">
+	<img src="https://latex.codecogs.com/png.latex? \large \mathbf{K(n)=P(n|n-1)H^T(n)[R(n)+H(n)P(n|n-1)H^T(n)]^{-1}}.............(7)">
 
 	修正值：
 
-	<img src="http://www.forkosh.com/mathtex.cgi? \large \mathbf{\hat{x}(n|n)=A\hat{x}(n|n-1)+K(n)[{z(n)-H(n)\hat{x}(n|n-1)}]}......................(8)">
+	<img src="https://latex.codecogs.com/png.latex? \large \mathbf{\hat{x}(n|n)=A\hat{x}(n|n-1)+K(n)[{z(n)-H(n)\hat{x}(n|n-1)}]}......................(8)">
 
 	最小均方误差矩阵：
 
-	<img src="http://www.forkosh.com/mathtex.cgi? \large \mathbf{P(n|n)=[I-K(n)H(n)]P(n|n-1)}................................(9)">
+	<img src="https://latex.codecogs.com/png.latex? \large \mathbf{P(n|n)=[I-K(n)H(n)]P(n|n-1)}................................(9)">
 
 
 从(5)~(9)中：
@@ -121,7 +121,7 @@ z(n)就是测量结果，H(n)是观测矢量，x(n)就是要求的物理量（�
 - x(n|n)：用n时刻及n时刻以前的数据对n时刻的估计结果，这也是Kalman滤波器的输出
 - P(n|n-1)：NxN，最小预测均方误差矩阵，其定义式为
 
-	<img src="http://www.forkosh.com/mathtex.cgi? \large \mathbf{P(n|n-1)=E\{[x(n)-\hat{x}(n|n-1)][x(n)-\hat{x}(n|n-1)]^T\}}">
+	<img src="https://latex.codecogs.com/png.latex? \large \mathbf{P(n|n-1)=E\{[x(n)-\hat{x}(n|n-1)][x(n)-\hat{x}(n|n-1)]^T\}}">
 
 	通过计算最终得到(6)式。
 - P(n|n)：NxN，修正后最小均方误差矩阵。
@@ -133,11 +133,11 @@ Kalman滤波算法的步骤是(5)(6)->(7)->(8)(9)。当然，建议找本教材�
 
 > __Example__:
 
-> 还可以更简单一些：设小车做匀速（而非匀加速）直线运动，方便计算，假设速度绝对的恒定（不波动，所以相关的方差都为0），则u(t)==0恒成立。设预测（过程）位移噪声w(n)~N(0,2^2)，测量位移噪声v(n)~N(0,1^2)，n-1状态的位移<img src="http://www.forkosh.com/mathtex.cgi? \Small \hat{x}(n-1|n-1)=50m}">，速度为v=10m/s，n时刻与n-1时刻的物理时差为ΔT=1s。同时，也用尺子测了一下，结果位移为z(n)=62m。
+> 还可以更简单一些：设小车做匀速（而非匀加速）直线运动，方便计算，假设速度绝对的恒定（不波动，所以相关的方差都为0），则u(t)==0恒成立。设预测（过程）位移噪声w(n)~N(0,2^2)，测量位移噪声v(n)~N(0,1^2)，n-1状态的位移<img src="https://latex.codecogs.com/png.latex? \small \hat{x}(n-1|n-1)=50m">，速度为v=10m/s，n时刻与n-1时刻的物理时差为ΔT=1s。同时，也用尺子测了一下，结果位移为z(n)=62m。
 
 > 则A = [1 ΔT; 0 1]=[1 1; 0 1]，根据(5)，预测值为
 
-> <img src="http://www.forkosh.com/mathtex.cgi? \Small \hat{x}(n|n-1)=1*\hat{x}(n-1|n-1)+v*\Delta{T}=[60m; 10m/s]}">。
+> <img src="https://latex.codecogs.com/png.latex? \small \hat{x}(n|n-1)=1*\hat{x}(n-1|n-1)+v*\Delta{T}=[60m; 10m/s]">。
 
 > 现在已经有了估计值和测量值，哪个更接近真值，这就通过最小均方误差矩阵来决定！
 
@@ -145,13 +145,13 @@ Kalman滤波算法的步骤是(5)(6)->(7)->(8)(9)。当然，建议找本教材�
 
 > 由物理量的关系知，H(n)=[1 1]，增益K(n)=[1;0]{1+[1 1][1 0; 0 0][1; 1]}^(-1)=[1/2;0]。
 
-> 所以，最后的n时刻估计值既不是用n-1得到的估计值，也不是测量值，而是：<img src="http://www.forkosh.com/mathtex.cgi? \Small \hat{x}(n|n)=[60;1]+[1/2;0]{62-[1 1][60;1]}=[60.5m; 1m/s]">，因此，最终的Kalman滤波器的输出位移是60.5m。
+> 所以，最后的n时刻估计值既不是用n-1得到的估计值，也不是测量值，而是：<img src="https://latex.codecogs.com/png.latex? \small \hat{x}(n|n)=[60;1]+[1/2;0]{62-[1 1][60;1]}=[60.5m; 1m/s]">，因此，最终的Kalman滤波器的输出位移是60.5m。
 
 从上面的递推关系知道，要估计n时刻就必须知道n-1时刻，那么n=0时刻该如何估计，因此，卡尔曼滤波要初始化的估计值x(-1|-1)和误差矩阵P(-1|-1)，设x(-1,-1)~N(Us, Cs)，则初始化：
 
-<img src="http://www.forkosh.com/mathtex.cgi? \large \mathbf{x(-1|-1)=\mu_s}">
+<img src="https://latex.codecogs.com/png.latex? \large \mathbf{x(-1|-1)=\mu_s}">
 
-<img src="http://www.forkosh.com/mathtex.cgi? \large \mathbf{P(-1|-1)=C_s}">
+<img src="https://latex.codecogs.com/png.latex? \large \mathbf{P(-1|-1)=C_s}">
 
 综上，借用一张图说明一下Kalman滤波算法的流程：
 
@@ -175,23 +175,23 @@ Kalman滤波算法的步骤是(5)(6)->(7)->(8)(9)。当然，建议找本教材�
 
 ![img4]
 
-<img src="http://www.forkosh.com/mathtex.cgi? \large y_f=\frac{1}{\sqrt{2\pi{\sigma^2_z}}}\exp^{-\frac{(r-uz)^2}{2\sigma^2_z}}*\frac{1}{\sqrt{2\pi{\sigma^2_x}}}\exp^{-\frac{(r-ux)^2}{2\sigma^2_x}}=\frac{1}{\sqrt{2\pi{\sigma^2}}}\exp^{-\frac{(r-\mu)^2}{2\sigma^2}}">
+<img src="https://latex.codecogs.com/png.latex? \large y_f=\frac{1}{\sqrt{2\pi{\sigma^2_z}}}\exp^{-\frac{(r-uz)^2}{2\sigma^2_z}}*\frac{1}{\sqrt{2\pi{\sigma^2_x}}}\exp^{-\frac{(r-ux)^2}{2\sigma^2_x}}=\frac{1}{\sqrt{2\pi{\sigma^2}}}\exp^{-\frac{(r-\mu)^2}{2\sigma^2}}">
 
 稍微计算一下，通过上式求出u和σ^2，
 
-<center><img src="http://www.forkosh.com/mathtex.cgi? \large \mu=\frac{u_x\sigma^2_z+u_z\sigma^2_x}{\sigma^2_z+\sigma^2_x}=u_x+\frac{\sigma^2_x}{\sigma^2_z+\sigma^2_x}(u_z-u_x)........(10)"></center>
+<center><img src="https://latex.codecogs.com/png.latex? \large \mu=\frac{u_x\sigma^2_z+u_z\sigma^2_x}{\sigma^2_z+\sigma^2_x}=u_x+\frac{\sigma^2_x}{\sigma^2_z+\sigma^2_x}(u_z-u_x)........(10)"></center>
 
-<center><img src="http://www.forkosh.com/mathtex.cgi? \large \sigma^2=\frac{\sigma^2_x\sigma^2_z}{\sigma^2_x+\sigma^2_z}=\sigma^2_x(1-\frac{\sigma^2_x}{\sigma^2_x+\sigma^2_z})........(11)"></center>
+<center><img src="https://latex.codecogs.com/png.latex? \large \sigma^2=\frac{\sigma^2_x\sigma^2_z}{\sigma^2_x+\sigma^2_z}=\sigma^2_x(1-\frac{\sigma^2_x}{\sigma^2_x+\sigma^2_z})........(11)"></center>
 
 现在令
 
-<center><img src="http://www.forkosh.com/mathtex.cgi? \large K=\frac{\sigma^2_x}{\sigma^2_x+\sigma^2_z}........(12)"></center>
+<center><img src="https://latex.codecogs.com/png.latex? \large K=\frac{\sigma^2_x}{\sigma^2_x+\sigma^2_z}........(12)"></center>
 
 则(10)(11)变成：
 
-<center><img src="http://www.forkosh.com/mathtex.cgi? \large \mu==u_x+K(u_z-u_x)........(13)"></center>
+<center><img src="https://latex.codecogs.com/png.latex? \large \mu==u_x+K(u_z-u_x)........(13)"></center>
 
-<center><img src="http://www.forkosh.com/mathtex.cgi? \large \sigma^2==\sigma^2_x(1-K)........(14)"></center>
+<center><img src="https://latex.codecogs.com/png.latex? \large \sigma^2==\sigma^2_x(1-K)........(14)"></center>
 
 到这里，请将(13)-(14)与(8)-(9)式对比！标量的情况下，在小车的应用中有：A=1，H=1，正态分布的均值u就是我们要的输出结果，正态分布的方差σz^2就是最小均方误差。推广到矢量的情况，最小均方误差矩阵就是多维正态分布的协方差矩阵。
 

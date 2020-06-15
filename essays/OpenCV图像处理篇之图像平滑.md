@@ -6,7 +6,7 @@
 
 图像平滑与图像模糊是同一概念，主要用于图像的去噪。平滑要使用滤波器，为不改变图像的相位信息，一般使用线性滤波器，其统一形式如下：
 
-<img src="http://www.forkosh.com/mathtex.cgi? \Large g(i,j)=\sum_{k,l}f(i+k,j+l)h(k,l)">
+<img src="https://latex.codecogs.com/png.latex? \Large g(i,j)=\sum_{k,l}f(i+k,j+l)h(k,l)">
 
 其中h称为滤波器的核函数，说白了就是权值。不同的核函数代表不同的滤波器，有不同的用途。
 
@@ -20,7 +20,7 @@
 
 	是实际中最常用的滤波器，高斯滤波是将输入数组的每一个像素点与 高斯内核 卷积将卷积和当作输出像素值。高斯核相当于对输出像素的邻域赋予不同的权值，输出像素点所在位置的权值最大（对应高斯函数的均值位置）。二维高斯函数为，
 
-	<img src="http://www.forkosh.com/mathtex.cgi? \Large G(x,y) = Ae^{\frac{-(x-u_x)^2}{2\delta_x^2}+\frac{-(y-y_x)^2}{2\delta_y^2}">
+	<img src="https://latex.codecogs.com/png.latex? \Large G(x,y) = Ae^{\frac{-(x-u_x)^2}{2\delta_x^2}+\frac{-(y-y_x)^2}{2\delta_y^2}">
 	
 
 3.	中值滤波器（median blur）
